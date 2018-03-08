@@ -64,7 +64,7 @@
                             <TextBlock Text="Supporting Link" FontWeight="Bold"/>
                             <HyperlinkButton Content="zwx.atomx@outlook.com" NavigateUri="mailto:zwx.atomx@outlook.com"/>
                             <HyperlinkButton Content="Blamder's BiliBili content" NavigateUri="https://space.bilibili.com/62426742/#/"/>
-                            <HyperlinkButton Content="Static website for TaskFlow" NavigateUri="https://blamder.github.io/Research-Flow/"/>
+                            <HyperlinkButton Content="Static website for Research Flow" NavigateUri="https://blamder.github.io/Research-Flow/"/>
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>

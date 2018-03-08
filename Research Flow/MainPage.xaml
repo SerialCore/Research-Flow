@@ -75,7 +75,7 @@
                         <TextBlock Style="{StaticResource TitleTextBlockStyle}" 
                                    FontSize="28"
                                    VerticalAlignment="Top"
-                                   Text="TaskFlow for Research"/>
+                                   Text="Research Flow"/>
                         <CommandBar Grid.Column="1"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Top"

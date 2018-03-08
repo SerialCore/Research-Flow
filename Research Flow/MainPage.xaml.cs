@@ -35,9 +35,33 @@ namespace Research_Flow
             this.InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             AccountsSettingsPane.GetForCurrentView().AccountCommandsRequested += BuildPaneAsync;
+
+            // get account info like first signing in
+            string json = await MicrosoftAccount.GetMsaJsonSilentlyAsync(MsaScope.Common);
+            if (json != null)
+            {
+                var jsonObject = JsonObject.Parse(json);
+                accountEmail.Text = jsonObject["emails"].GetObject()["account"].ToString().Replace("\"", "");
+
+                string photo = "https://apis.live.net/v5.0/" + jsonObject["id"].GetString() + "/picture";
+                using (var client=new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync(new Uri(photo));
+                    if (response != null && response.StatusCode == HttpStatusCode.Ok)
+                    {
+                        using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
+                        {
+                            await response.Content.WriteToStreamAsync(stream);
+                            BitmapImage bitmap = new BitmapImage();
+                            bitmap.SetSource(stream);
+                            accountPhoto.ProfilePicture = bitmap;
+                        }
+                    }
+                }
+            }
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -200,7 +224,7 @@ namespace Research_Flow
 
         private async void GetMsaTokenAsync(WebAccountProviderCommand command)
         {
-            WebTokenRequest request = new WebTokenRequest(command.WebAccountProvider, MsaScope.Basic, "000000004420C07D");
+            WebTokenRequest request = new WebTokenRequest(command.WebAccountProvider, MsaScope.Common, "000000004420C07D");
             WebTokenRequestResult result = await WebAuthenticationCoreManager.RequestTokenAsync(request);
 
             if (result.ResponseStatus == WebTokenRequestStatus.Success)
@@ -217,9 +241,11 @@ namespace Research_Flow
                     string content = await infoResult.Content.ReadAsStringAsync();
 
                     var jsonObject = JsonObject.Parse(content);
-                    accountEmail.Text = jsonObject["emails"].GetString();
+                    accountEmail.Text = jsonObject["emails"].GetObject()["account"].ToString().Replace("\"", "");
 
-                    HttpResponseMessage response = await client.GetAsync(new Uri(jsonObject["picture"].GetString()));
+                    string photo = "https://apis.live.net/v5.0/"+ jsonObject["id"].GetString()+"/picture";
+                    // just a client instance for any uri usage
+                    HttpResponseMessage response = await client.GetAsync(new Uri(photo));
                     if (response != null && response.StatusCode == HttpStatusCode.Ok)
                     {
                         using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
@@ -270,6 +296,9 @@ namespace Research_Flow
                 WebAccountProvider provider = await WebAuthenticationCoreManager.FindAccountProviderAsync(providerId);
                 WebAccount account = await WebAuthenticationCoreManager.FindAccountAsync(provider, accountId);
                 SignOutAccountAsync(account);
+
+                accountEmail.Text = "Sign in";
+                accountPhoto.ProfilePicture = null;
             }
             else
             {

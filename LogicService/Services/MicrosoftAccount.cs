@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Security.Authentication.Web.Core;
@@ -28,7 +29,7 @@ namespace LogicService.Services
             WebAccountProvider provider = await WebAuthenticationCoreManager.FindAccountProviderAsync(providerId);
             WebAccount account = await WebAuthenticationCoreManager.FindAccountAsync(provider, accountId);
 
-            WebTokenRequest request = new WebTokenRequest(provider, scope, "000000004C209B64");
+            WebTokenRequest request = new WebTokenRequest(provider, scope, "000000004420C07D");
             WebTokenRequestResult result = await WebAuthenticationCoreManager.GetTokenSilentlyAsync(request, account);
 
             if (result.ResponseStatus == WebTokenRequestStatus.UserInteractionRequired)
@@ -46,6 +47,24 @@ namespace LogicService.Services
                 // Other error 
                 return null;
             }
+        }
+
+        public static async Task<string> GetMsaJsonSilentlyAsync(string scope)
+        {
+            string token = await GetMsaTokenSilentlyAsync(scope);
+            if (token == null)
+            {
+                return null;
+            }
+
+            string content;
+            using (var client = new HttpClient())
+            {
+                var infoResult = await client.GetAsync(new Uri(@"https://apis.live.net/v5.0/me?access_token=" + token));
+                content = await infoResult.Content.ReadAsStringAsync();
+            }
+
+            return content;
         }
 
     }
@@ -73,7 +92,7 @@ namespace LogicService.Services
         {
             get
             {
-                return "wl.basic wl.emails wl.photos onedrive.readwrite offline_access";
+                return "wl.basic wl.emails onedrive.readwrite offline_access";
             }
         }
 
