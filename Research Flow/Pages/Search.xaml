@@ -1,0 +1,56 @@
+﻿<Page
+    x:Class="Research_Flow.Pages.Search"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Research_Flow.Pages"
+    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <Pivot>
+            <PivotItem Header="Task">
+
+            </PivotItem>
+            <PivotItem Header="RSS">
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <ListView x:Name="feedsource_list" Grid.Column="0" MinWidth="300" IsItemClickEnabled="True" ItemClick="RSS_SourceClick">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding SourceName}"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <ListView x:Name="feeditem_list" Grid.Column="1" IsItemClickEnabled="True" ItemClick="RSS_ItemClick">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel >
+                                    <TextBlock Text="{Binding Title}" FontSize="20"/>
+                                    <TextBlock Text="{Binding PublishedDate}"/>
+                                    <TextBlock />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="Bing">
+
+            </PivotItem>
+        </Pivot>
+
+        <toolkit:InAppNotification x:Name="InAppNotification" 
+                                    ShowDismissButton="True"
+                                    AnimationDuration="00:00:00.1000000"
+                                    VerticalOffset="100"
+                                    HorizontalOffset="0"/>
+
+    </Grid>
+
+</Page>

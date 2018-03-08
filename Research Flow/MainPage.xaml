@@ -1,0 +1,122 @@
+﻿<Page
+    x:Class="Research_Flow.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Research_Flow"
+    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid x:Name="FullPage" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <NavigationView x:Name="NavView"
+                        ItemInvoked="NavView_ItemInvoked"
+                        SelectionChanged="NavView_SelectionChanged"
+                        Loaded="NavView_Loaded"
+                        Canvas.ZIndex="0">
+
+            <NavigationView.MenuItems>
+                <NavigationViewItemHeader Content="      Knowledge"/>
+                <NavigationViewItem Content="Overview" Tag="Overview">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xEB68;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Contact" Tag="Contact">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xEA8F;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+
+                <NavigationViewItemSeparator/>
+                <NavigationViewItemHeader Content="      Skills Training"/>
+                <NavigationViewItem Content="Topic" Tag="Topic">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xEB50;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Search" Tag="Search">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xEDE4;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Learn" Tag="Learn">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE7BE;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+
+                <NavigationViewItemSeparator/>
+                <NavigationViewItemHeader Content="      Accessary"/>
+                <NavigationViewItem Content="Compose" Tag="Compose">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xEA86;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Tool" Tag="Tool">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xEC26;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+
+            <NavigationView.AutoSuggestBox>
+                <AutoSuggestBox x:Name="ASB" QueryIcon="Find"/>
+            </NavigationView.AutoSuggestBox>
+
+            <NavigationView.HeaderTemplate>
+                <DataTemplate>
+                    <Grid Margin="24,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource TitleTextBlockStyle}" 
+                                   FontSize="28"
+                                   VerticalAlignment="Top"
+                                   Text="TaskFlow for Research"/>
+                        <CommandBar Grid.Column="1"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    DefaultLabelPosition="Right"
+                                    Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
+                            <AppBarButton Label="ScreenShot" Icon="AttachCamera" Click="ScreenShot_Click"/>
+                            <AppBarButton Label="Refresh" Icon="Refresh" Click="Refresh_Click"/>
+                        </CommandBar>
+                    </Grid>
+                </DataTemplate>
+            </NavigationView.HeaderTemplate>
+
+            <NavigationView.PaneFooter>
+                <ListViewItem Tapped="Account_Tapped">
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="24"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <PersonPicture Grid.Column="0" x:Name="accountPhoto" Height="24" Width="24"/>
+                        <TextBlock Grid.Column="1" x:Name="accountEmail" Text="Sign In" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                    </Grid>
+                </ListViewItem>
+            </NavigationView.PaneFooter>
+
+            <Frame x:Name="ContentFrame" Margin="24,0">
+                <Frame.ContentTransitions>
+                    <TransitionCollection>
+                        <NavigationThemeTransition/>
+                    </TransitionCollection>
+                </Frame.ContentTransitions>
+            </Frame>
+
+        </NavigationView>
+
+        <toolkit:InAppNotification x:Name="InAppNotification" 
+                                    ShowDismissButton="True"
+                                    AnimationDuration="00:00:00.1000000"
+                                    VerticalOffset="100"
+                                    HorizontalOffset="0"/>
+
+    </Grid>
+
+</Page>

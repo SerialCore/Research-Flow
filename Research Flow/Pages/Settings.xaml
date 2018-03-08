@@ -1,0 +1,76 @@
+﻿<Page
+    x:Class="Research_Flow.Pages.Settings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Research_Flow.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <Pivot >
+            <PivotItem Header="Inform">
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <ScrollViewer Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="10" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto">
+                        <TextBlock >
+                            <Run Text="Application name:   " FontWeight="Bold"/>                          
+                            <Run x:Name="applicationName"/><LineBreak/><LineBreak/>
+                            <Run Text="Application version:   " FontWeight="Bold"/>
+                            <Run x:Name="applicationVersion"/><LineBreak/><LineBreak/>
+                            <Run Text="Culture info:   " FontWeight="Bold"/>
+                            <Run x:Name="cultureInfo"/><LineBreak/><LineBreak/>
+                            <Run Text="Operating system version:   " FontWeight="Bold"/>
+                            <Run x:Name="oSVersion"/><LineBreak/><LineBreak/>
+                            <Run Text="Device model:   " FontWeight="Bold"/>
+                            <Run x:Name="deviceModel"/><LineBreak/><LineBreak/>
+                            <Run Text="Available memory(MB):   " FontWeight="Bold"/>
+                            <Run x:Name="availableMemory"/><LineBreak/><LineBreak/>
+                            <Run Text="First version installed:   " FontWeight="Bold"/>
+                            <Run x:Name="firstVersionInstalled"/><LineBreak/><LineBreak/>
+                            <Run Text="First use time:   " FontWeight="Bold"/>
+                            <Run x:Name="firstUseTime"/><LineBreak/><LineBreak/>
+                            <Run Text="Launch time:   " FontWeight="Bold"/>
+                            <Run x:Name="launchTime"/><LineBreak/><LineBreak/>
+                            <Run Text="Last launch time:   " FontWeight="Bold"/>
+                            <Run x:Name="lastLaunchTime"/><LineBreak/><LineBreak/>
+                            <Run Text="Launch count:   " FontWeight="Bold"/>
+                            <Run x:Name="launchCount"/><LineBreak/><LineBreak/>
+                            <Run Text="App uptime:   " FontWeight="Bold"/>
+                            <Run x:Name="appUptime"/>
+                        </TextBlock>
+                    </ScrollViewer>
+                    <ScrollViewer Grid.Row="0" Grid.Column="1" Margin="10" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto">
+                        <TextBlock >
+                            <Run Text="Library References" FontWeight="Bold"/><LineBreak/><LineBreak/>
+                            <Run Text="HockeyApp"/><LineBreak/>
+                            <Run Text="Microsoft.Data.SQLite"/><LineBreak/>
+                            <Run Text="Microsoft.Toolkit.Services"/><LineBreak/>
+                            <Run Text="Microsoft.Toolkit.Uwp"/><LineBreak/>
+                            <Run Text="Microsoft.Toolkit.Uwp.Notifications"/><LineBreak/>
+                            <Run Text="Microsoft.Toolkit.Uwp.UI.Controls"/><LineBreak/>
+                        </TextBlock>
+                    </ScrollViewer>
+                    <ScrollViewer Grid.Row="1" Grid.Column="1" Margin="10" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto">
+                        <StackPanel >
+                            <TextBlock Text="Supporting Link" FontWeight="Bold"/>
+                            <HyperlinkButton Content="zwx.atomx@outlook.com" NavigateUri="mailto:zwx.atomx@outlook.com"/>
+                            <HyperlinkButton Content="Blamder's BiliBili content" NavigateUri="https://space.bilibili.com/62426742/#/"/>
+                            <HyperlinkButton Content="Static website for TaskFlow" NavigateUri="https://blamder.github.io/Research-Flow/"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </PivotItem>
+        </Pivot>
+
+    </Grid>
+
+</Page>
