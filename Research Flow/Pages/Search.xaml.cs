@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using LogicService.Encapsulates;
 using LogicService.Services;
+using Microsoft.Toolkit.Services.Bing;
 using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
@@ -34,6 +35,8 @@ namespace Research_Flow.Pages
 
         }
 
+        #region RSS
+
         private void SearchRss(string feedlink)
         {
             RssService.GetRssItems(
@@ -65,6 +68,31 @@ namespace Research_Flow.Pages
             var item = e.ClickedItem as FeedItem;
             await Launcher.LaunchUriAsync(new Uri(item.AbsoluteUri));
         }
+
+        #endregion
+
+        #region Bing
+
+        private async void SearchBing(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            var result = await BingQuery.QueryAsync(query.Text, 20,
+                async (items) =>
+                {
+                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        bingResult.ItemsSource = items;
+                    });
+                });
+            
+        }
+
+        private async void bingResult_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            BingResult result = e.ClickedItem as BingResult;
+            await Launcher.LaunchUriAsync(new Uri(result.Link));
+        }
+
+        #endregion
 
     }
 }

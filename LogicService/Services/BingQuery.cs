@@ -10,13 +10,8 @@ namespace LogicService.Services
     public class BingQuery
     {
 
-        /// <summary>
-        /// UnitedStates-English-Search
-        /// </summary>
-        /// <param name="text">Query Text</param>
-        /// <param name="count">Result Count</param>
-        /// <returns></returns>
-        public static async Task<List<BingResult>> QueryAsync(string text, int count)
+        public static async Task<List<BingResult>> QueryAsync(string text, int count, Action<List<BingResult>> onQueryCompleted = null, 
+            BingCountry country = BingCountry.UnitedStates, BingLanguage language = BingLanguage.English, BingQueryType type = BingQueryType.Search)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -25,61 +20,20 @@ namespace LogicService.Services
 
             var searchConfig = new BingSearchConfig
             {
-                Country = BingCountry.UnitedStates,
-                Language = BingLanguage.English,
+                Country = country,
+                Language = language,
                 Query = text,
-                QueryType = BingQueryType.Search
+                QueryType = type
             };
 
-            return await BingService.Instance.RequestAsync(searchConfig, count);
-        }
+            List<BingResult> result = await BingService.Instance.RequestAsync(searchConfig, count);
 
-        /// <summary>
-        /// Country-Language-Search
-        /// </summary>
-        /// <param name="text">Query Text</param>
-        /// <param name="count">Result Count</param>
-        /// <returns></returns>
-        public static async Task<List<BingResult>> QueryAsync(string text, int count, BingCountry country, BingLanguage language)
-        {
-            if (string.IsNullOrEmpty(text))
+            if (onQueryCompleted != null)
             {
-                return null;
+                onQueryCompleted(result);
             }
 
-            var searchConfig = new BingSearchConfig
-            {
-                Country = BingCountry.UnitedStates,
-                Language = BingLanguage.English,
-                Query = text,
-                QueryType = BingQueryType.Search
-            };
-
-            return await BingService.Instance.RequestAsync(searchConfig, count);
-        }
-
-        /// <summary>
-        /// Country-Language-QueryType
-        /// </summary>
-        /// <param name="text">Query Text</param>
-        /// <param name="count">Result Count</param>
-        /// <returns></returns>
-        public static async Task<List<BingResult>> QueryAsync(string text, int count, BingCountry country, BingLanguage language, BingQueryType type)
-        {
-            if (string.IsNullOrEmpty(text))
-            {
-                return null;
-            }
-
-            var searchConfig = new BingSearchConfig
-            {
-                Country = BingCountry.UnitedStates,
-                Language = BingLanguage.English,
-                Query = text,
-                QueryType = BingQueryType.Search
-            };
-
-            return await BingService.Instance.RequestAsync(searchConfig, count);
+            return result;
         }
 
     }

@@ -41,7 +41,17 @@
                 </Grid>
             </PivotItem>
             <PivotItem Header="Bing">
-
+                <StackPanel >
+                    <TextBox x:Name="query"/>
+                    <Button Content="Search" Click="SearchBing"/>
+                    <ListView x:Name="bingResult" IsItemClickEnabled="True" ItemClick="bingResult_ItemClick">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Title}" Style="{ThemeResource TitleTextBlockStyle}"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
             </PivotItem>
         </Pivot>
 
