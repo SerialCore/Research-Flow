@@ -67,7 +67,7 @@
 
             <NavigationView.HeaderTemplate>
                 <DataTemplate>
-                    <Grid Margin="24,10,0,0">
+                    <Grid Margin="24,4,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
@@ -89,16 +89,19 @@
             </NavigationView.HeaderTemplate>
 
             <NavigationView.PaneFooter>
-                <ListViewItem Tapped="Account_Tapped">
-                    <Grid >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="24"/>
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <PersonPicture Grid.Column="0" x:Name="accountPhoto" Height="24" Width="24"/>
-                        <TextBlock Grid.Column="1" x:Name="accountEmail" Text="Sign In" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
-                    </Grid>
-                </ListViewItem>
+                <Grid>
+                    <ProgressBar x:Name="signWait" IsIndeterminate="True" ShowPaused="False" ShowError="False"/>
+                    <ListViewItem x:Name="signPane" Tapped="Account_Tapped" Visibility="Collapsed">
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="24"/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <PersonPicture Grid.Column="0" x:Name="accountPhoto" Height="24" Width="24"/>
+                            <TextBlock Grid.Column="1" x:Name="accountEmail" Text="Sign In" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                        </Grid>
+                    </ListViewItem>
+                </Grid>
             </NavigationView.PaneFooter>
 
             <Frame x:Name="ContentFrame" Margin="24,0">

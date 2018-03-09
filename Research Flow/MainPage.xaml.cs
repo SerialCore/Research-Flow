@@ -52,16 +52,22 @@ namespace Research_Flow
                     HttpResponseMessage response = await client.GetAsync(new Uri(photo));
                     if (response != null && response.StatusCode == HttpStatusCode.Ok)
                     {
-                        using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
+                        BitmapImage bitmap = new BitmapImage();
+                        using (InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream())
                         {
                             await response.Content.WriteToStreamAsync(stream);
-                            BitmapImage bitmap = new BitmapImage();
+                            stream.Seek(0UL);
                             bitmap.SetSource(stream);
-                            accountPhoto.ProfilePicture = bitmap;
                         }
+                        accountPhoto.ProfilePicture = bitmap;
                     }
                 }
             }
+
+            // show user info after handling
+            signWait.ShowPaused = true;
+            signWait.Visibility = Visibility.Collapsed;
+            signPane.Visibility = Visibility.Visible;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -209,6 +215,8 @@ namespace Research_Flow
 
             if (ApplicationData.Current.LocalSettings.Values.ContainsKey("CurrentUserProviderId"))
             {
+                e.HeaderText = "Signing in lets you sync your preferences and settings across devices and helps us personalize your experience.";
+
                 string providerId = ApplicationData.Current.LocalSettings.Values["CurrentUserProviderId"]?.ToString();
                 string accountId = ApplicationData.Current.LocalSettings.Values["CurrentUserId"]?.ToString();
 
@@ -258,10 +266,17 @@ namespace Research_Flow
                     var jsonObject = JsonObject.Parse(content);
                     accountEmail.Text = jsonObject["emails"].GetObject()["account"].ToString().Replace("\"", "");
 
-                    using (IRandomAccessStream stream = await result.ResponseData[0].WebAccount.GetPictureAsync(WebAccountPictureSize.Size208x208))
+                    string photo = "https://apis.live.net/v5.0/" + jsonObject["id"].GetString() + "/picture";
+                    HttpResponseMessage response = await client.GetAsync(new Uri(photo));
+                    if (response != null && response.StatusCode == HttpStatusCode.Ok)
                     {
                         BitmapImage bitmap = new BitmapImage();
-                        bitmap.SetSource(stream);
+                        using (InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream())
+                        {
+                            await response.Content.WriteToStreamAsync(stream);
+                            stream.Seek(0UL);
+                            bitmap.SetSource(stream);
+                        }
                         accountPhoto.ProfilePicture = bitmap;
                     }
                 }

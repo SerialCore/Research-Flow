@@ -49,6 +49,23 @@ namespace LogicService.Services
             }
         }
 
+        public static async Task<WebTokenRequestResult> GetMsaResultSilentlyAsync(string scope)
+        {
+            string providerId = ApplicationData.Current.LocalSettings.Values["CurrentUserProviderId"]?.ToString();
+            string accountId = ApplicationData.Current.LocalSettings.Values["CurrentUserId"]?.ToString();
+
+            if (null == providerId || null == accountId)
+            {
+                return null;
+            }
+
+            WebAccountProvider provider = await WebAuthenticationCoreManager.FindAccountProviderAsync(providerId);
+            WebAccount account = await WebAuthenticationCoreManager.FindAccountAsync(provider, accountId);
+
+            WebTokenRequest request = new WebTokenRequest(provider, scope, "000000004420C07D");
+            return await WebAuthenticationCoreManager.GetTokenSilentlyAsync(request, account);
+        }
+
         public static async Task<string> GetMsaJsonSilentlyAsync(string scope)
         {
             string token = await GetMsaTokenSilentlyAsync(scope);
@@ -80,19 +97,35 @@ namespace LogicService.Services
             }
         }
 
-        public static string OneDrive
-        {
-            get
-            {
-                return "onedrive.readwrite offline_access";
-            }
-        }
-
         public static string Common
         {
             get
             {
                 return "wl.basic wl.emails onedrive.readwrite offline_access";
+            }
+        }
+
+        public static string OneNote
+        {
+            get
+            {
+                return "wl.office.onenote_create";
+            }
+        }
+
+        public static string SkyDrive
+        {
+            get
+            {
+                return "wl.skydrive_update";
+            }
+        }
+
+        public static string OneDrive
+        {
+            get
+            {
+                return "onedrive.readwrite offline_access";
             }
         }
 
