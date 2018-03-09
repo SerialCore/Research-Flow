@@ -47,7 +47,7 @@ namespace Research_Flow
                 accountEmail.Text = jsonObject["emails"].GetObject()["account"].ToString().Replace("\"", "");
 
                 string photo = "https://apis.live.net/v5.0/" + jsonObject["id"].GetString() + "/picture";
-                using (var client=new HttpClient())
+                using (var client = new HttpClient())
                 {
                     HttpResponseMessage response = await client.GetAsync(new Uri(photo));
                     if (response != null && response.StatusCode == HttpStatusCode.Ok)
@@ -207,17 +207,32 @@ namespace Research_Flow
         {
             var deferral = e.GetDeferral();
 
-            e.HeaderText = "TaskFlow works best if you're signed in.";
+            if (ApplicationData.Current.LocalSettings.Values.ContainsKey("CurrentUserProviderId"))
+            {
+                string providerId = ApplicationData.Current.LocalSettings.Values["CurrentUserProviderId"]?.ToString();
+                string accountId = ApplicationData.Current.LocalSettings.Values["CurrentUserId"]?.ToString();
 
-            var msaProvider = await WebAuthenticationCoreManager.FindAccountProviderAsync("https://login.microsoft.com", "consumers");
+                WebAccountProvider provider = await WebAuthenticationCoreManager.FindAccountProviderAsync(providerId);
+                WebAccount account = await WebAuthenticationCoreManager.FindAccountAsync(provider, accountId);
 
-            var command = new WebAccountProviderCommand(msaProvider, GetMsaTokenAsync);
+                WebAccountCommand command = new WebAccountCommand(account, WebAccountInvoked, SupportedWebAccountActions.Remove);
 
-            e.WebAccountProviderCommands.Add(command);
+                e.WebAccountCommands.Add(command);
+            }
+            else
+            {
+                e.HeaderText = "TaskFlow works best if you're signed in.";
 
-            var settingsCmd = new SettingsCommand("settings_privacy", "Privacy policy", async (x) => await Launcher.LaunchUriAsync(new Uri(@"https://privacy.microsoft.com/en-US/")));
+                var msaProvider = await WebAuthenticationCoreManager.FindAccountProviderAsync("https://login.microsoft.com", "consumers");
 
-            e.Commands.Add(settingsCmd);
+                var command = new WebAccountProviderCommand(msaProvider, GetMsaTokenAsync);
+
+                e.WebAccountProviderCommands.Add(command);
+
+                var settingsCmd = new SettingsCommand("settings_privacy", "Privacy policy", async (x) => await Launcher.LaunchUriAsync(new Uri(@"https://privacy.microsoft.com/en-US/")));
+
+                e.Commands.Add(settingsCmd);
+            }
 
             deferral.Complete();
         }
@@ -243,18 +258,11 @@ namespace Research_Flow
                     var jsonObject = JsonObject.Parse(content);
                     accountEmail.Text = jsonObject["emails"].GetObject()["account"].ToString().Replace("\"", "");
 
-                    string photo = "https://apis.live.net/v5.0/"+ jsonObject["id"].GetString()+"/picture";
-                    // just a client instance for any uri usage
-                    HttpResponseMessage response = await client.GetAsync(new Uri(photo));
-                    if (response != null && response.StatusCode == HttpStatusCode.Ok)
+                    using (IRandomAccessStream stream = await result.ResponseData[0].WebAccount.GetPictureAsync(WebAccountPictureSize.Size208x208))
                     {
-                        using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
-                        {
-                            await response.Content.WriteToStreamAsync(stream);
-                            BitmapImage bitmap = new BitmapImage();
-                            bitmap.SetSource(stream);
-                            accountPhoto.ProfilePicture = bitmap;
-                        }
+                        BitmapImage bitmap = new BitmapImage();
+                        bitmap.SetSource(stream);
+                        accountPhoto.ProfilePicture = bitmap;
                     }
                 }
             }
@@ -271,6 +279,18 @@ namespace Research_Flow
             }
         }
 
+
+        private void WebAccountInvoked(WebAccountCommand command, WebAccountInvokedArgs args)
+        {
+            if (args.Action == WebAccountAction.Remove)
+            {
+                SignOutAccountAsync(command.WebAccount);
+
+                accountEmail.Text = "Sign in";
+                accountPhoto.ProfilePicture = null;
+            }
+        }
+
         private void StoreWebAccount(WebAccount account)
         {
             ApplicationData.Current.LocalSettings.Values["CurrentUserProviderId"] = account.WebAccountProvider.Id;
@@ -284,26 +304,9 @@ namespace Research_Flow
             await account.SignOutAsync();
         }
 
-        private async void Account_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        private void Account_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-            string token = await MicrosoftAccount.GetMsaTokenSilentlyAsync(MsaScope.Basic);
-
-            if (token != null)
-            {
-                string providerId = ApplicationData.Current.LocalSettings.Values["CurrentUserProviderId"]?.ToString();
-                string accountId = ApplicationData.Current.LocalSettings.Values["CurrentUserId"]?.ToString();
-
-                WebAccountProvider provider = await WebAuthenticationCoreManager.FindAccountProviderAsync(providerId);
-                WebAccount account = await WebAuthenticationCoreManager.FindAccountAsync(provider, accountId);
-                SignOutAccountAsync(account);
-
-                accountEmail.Text = "Sign in";
-                accountPhoto.ProfilePicture = null;
-            }
-            else
-            {
-                AccountsSettingsPane.Show();
-            }
+            AccountsSettingsPane.Show();
         }
 
         #endregion
