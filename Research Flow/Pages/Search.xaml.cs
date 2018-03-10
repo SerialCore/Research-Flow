@@ -22,17 +22,25 @@ namespace Research_Flow.Pages
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
 
-            feedsource_list.ItemsSource = new List<FeedSource>()
-            {
-                new FeedSource{SourceName="ACS",SourceUri="https://pubs.acs.org/action/showFeed?ui=0&mi=4ta59b4&type=search&feed=rss&query=%2526AllField%253Dhydrogen%252Bbond%2526publication%253D40025988%2526sortBy%253DEarliest%2526target%253Ddefault%2526targetTab%253Dstd"},
-                new FeedSource{SourceName="科学网",SourceUri="http://www.sciencenet.cn/xml/paper.aspx?di=7"}
-            };
-            this.DataContext = this;
+            InitializeData();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
 
+        }
+
+        private void InitializeData()
+        {
+            // feed source
+            feedsource_list.ItemsSource = new List<FeedSource>()
+            {
+                new FeedSource{SourceName="ACS",SourceUri="https://pubs.acs.org/action/showFeed?ui=0&mi=4ta59b4&type=search&feed=rss&query=%2526AllField%253Dhydrogen%252Bbond%2526publication%253D40025988%2526sortBy%253DEarliest%2526target%253Ddefault%2526targetTab%253Dstd"},
+                new FeedSource{SourceName="科学网",SourceUri="http://www.sciencenet.cn/xml/paper.aspx?di=7"}
+            };
+
+            // Bing configure
+            
         }
 
         #region RSS
@@ -66,7 +74,7 @@ namespace Research_Flow.Pages
         private async void RSS_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as FeedItem;
-            await Launcher.LaunchUriAsync(new Uri(item.AbsoluteUri));
+            await Launcher.LaunchUriAsync(new Uri(item.Link));
         }
 
         #endregion
@@ -93,7 +101,7 @@ namespace Research_Flow.Pages
             
         }
 
-        private async void bingResult_ItemClick(object sender, ItemClickEventArgs e)
+        private async void BingResult_ItemClick(object sender, ItemClickEventArgs e)
         {
             BingResult result = e.ClickedItem as BingResult;
             await Launcher.LaunchUriAsync(new Uri(result.Link));

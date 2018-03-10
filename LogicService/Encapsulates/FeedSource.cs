@@ -31,11 +31,11 @@ namespace LogicService.Encapsulates
 
         public IList<SyndicationCategory> Categories { get; set; }
 
-        public string PublishedDate { get; set; }
+        public string Published { get; set; }
 
-        public string AbsoluteUri { get; set; }
+        public string Link { get; set; }
 
-        public string PlainSummary { get; set; }
+        public string Summary { get; set; }
 
         public string FullText { get; set; }
 

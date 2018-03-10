@@ -31,8 +31,9 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel >
-                                    <TextBlock Text="{Binding Title}" FontSize="20"/>
-                                    <TextBlock Text="{Binding PublishedDate}"/>
+                                    <TextBlock Text="{Binding Title}" FontSize="20" Style="{ThemeResource BodyTextBlockStyle}"/>
+                                    <TextBlock Text="{Binding Summary}" FontSize="16"/>
+                                    <TextBlock Text="{Binding Published}"/>
                                     <TextBlock />
                                 </StackPanel>
                             </DataTemplate>
@@ -44,20 +45,36 @@
                 <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Content="Search" Click="SearchBing" HorizontalAlignment="Stretch"/>
-                        <TextBox Grid.Column="1" x:Name="query" />
+                        <ComboBox Grid.Column="0" x:Name="country" Header="Country" HorizontalAlignment="Stretch"/>
+                        <ComboBox Grid.Column="1" x:Name="language" Header="Language" HorizontalAlignment="Stretch"/>
+                        <ComboBox Grid.Column="2" x:Name="queryType" Header="Query Type" HorizontalAlignment="Stretch"/>
                     </Grid>
-                    <ListView x:Name="bingResult" Grid.Row="1" IsItemClickEnabled="True" ItemClick="bingResult_ItemClick">
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" x:Name="query" Header="Query Text"/>
+                        <Button Grid.Column="1" Content="Search" Click="SearchBing" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                    </Grid>
+                    <ListView x:Name="bingResult" Grid.Row="2" IsItemClickEnabled="True" ItemClick="BingResult_ItemClick">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Title}" Style="{ThemeResource TitleTextBlockStyle}"/>
+                                <StackPanel >
+                                    <TextBlock Text="{Binding Title}" FontSize="20" Style="{ThemeResource BodyTextBlockStyle}"/>
+                                    <TextBlock Text="{Binding Summary}" FontSize="16"/>
+                                    <TextBlock Text="{Binding Published}"/>
+                                    <TextBlock />
+                                </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>

@@ -26,14 +26,14 @@
         <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="transparent" />
       </uap:VisualElements>
       <Extensions>
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="blamderrobot" />
+        </uap:Extension>
         <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.FeedTask">
           <BackgroundTasks>
             <Task Type="timer" />
           </BackgroundTasks>
         </Extension>
-        <uap:Extension Category="windows.protocol">
-          <uap:Protocol Name="blamderpaint" />
-        </uap:Extension>
       </Extensions>
     </Application>
   </Applications>

@@ -39,9 +39,9 @@ namespace LogicService.Services
                                     DOI = GetDoi(f),
                                     Authors = f.Authors,
                                     Categories = f.Categories,
-                                    PublishedDate = f.PublishedDate.ToString(),
-                                    AbsoluteUri = f.Links[0].Uri.AbsoluteUri,
-                                    PlainSummary = WebUtility.HtmlDecode(Regex.Replace(f.Summary.Text, "<[^>]+?>", ""))
+                                    Published = f.PublishedDate.ToString(),
+                                    Link = f.Links[0].Uri.AbsoluteUri,
+                                    Summary = WebUtility.HtmlDecode(Regex.Replace(f.Summary.Text, "<[^>]+?>", ""))
                                 });
                             }
                             if (onGetRssItemsCompleted != null)
