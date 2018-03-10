@@ -17,9 +17,27 @@ namespace LogicService.Services
         /// Get the root folder
         /// </summary>
         /// <returns>Root</returns>
-        public static async Task<OneDriveStorageFolder> GetRootAsync()
+        public static async Task<OneDriveStorageFolder> GetRootFolderAsync()
         {
             return await OneDriveService.Instance.RootFolderAsync();
+        }
+
+        /// <summary>
+        /// Get the photots folder
+        /// </summary>
+        /// <returns>Photots</returns>
+        public static async Task<OneDriveStorageFolder> GetPhotosFolderAsync()
+        {
+            return await OneDriveService.Instance.PhotosFolderAsync();
+        }
+
+        /// <summary>
+        /// Get the documents folder
+        /// </summary>
+        /// <returns>Documents</returns>
+        public static async Task<OneDriveStorageFolder> GetDocumentsFolderAsync()
+        {
+            return await OneDriveService.Instance.DocumentsFolderAsync();
         }
 
         /// <summary>
@@ -44,16 +62,16 @@ namespace LogicService.Services
             return OneDriveItems;
         }
 
-        ///// <summary>
-        ///// Create a folder in current folder
-        ///// </summary>
-        ///// <param name="folder">current folder</param>
-        ///// <param name="foldername">folder name</param>
-        ///// <returns>new folder</returns>
-        //public static async Task<OneDriveStorageFolder> CreateFolderAsync(OneDriveStorageFolder folder, string foldername)
-        //{
-        //    return await folder.CreateFolderAsync(foldername, CreationCollisionOption.GenerateUniqueName);
-        //}
+        /// <summary>
+        /// Create a folder in current folder
+        /// </summary>
+        /// <param name="folder">current folder</param>
+        /// <param name="foldername">folder name</param>
+        /// <returns>new folder</returns>
+        public static async Task<OneDriveStorageFolder> CreateFolderAsync(OneDriveStorageFolder folder, string foldername)
+        {          
+            return await folder.StorageFolderPlatformService.CreateFolderAsync(foldername, CreationCollisionOption.GenerateUniqueName);
+        }
 
         /// <summary>
         /// Retrieve a sub folder in current folder
@@ -101,43 +119,43 @@ namespace LogicService.Services
             return await folder.RenameAsync(newName);
         }
 
-        ///// <summary>
-        ///// Create new file
-        ///// </summary>
-        ///// <param name="folder">current folder</param>
-        ///// <param name="file">created file</param>
-        //public static async Task<OneDriveStorageFile> CreateFileAsync(OneDriveStorageFolder folder, StorageFile file)
-        //{
-        //    OneDriveStorageFile fileCreated = null;
-        //    // Create new file
-        //    if (file != null)
-        //    {
-        //        using (var localStream = await file.OpenReadAsync())
-        //        {
-        //            fileCreated = await folder.CreateFileAsync(file.Name, CreationCollisionOption.GenerateUniqueName, localStream);
-        //        }
-        //    }
-        //    return fileCreated;
-        //}
+        /// <summary>
+        /// Create new file
+        /// </summary>
+        /// <param name="folder">current folder</param>
+        /// <param name="file">created file</param>
+        public static async Task<OneDriveStorageFile> CreateFileAsync(OneDriveStorageFolder folder, StorageFile file)
+        {
+            OneDriveStorageFile fileCreated = null;
+            // Create new file
+            if (file != null)
+            {
+                using (var localStream = await file.OpenReadAsync())
+                {
+                    fileCreated = await folder.StorageFolderPlatformService.CreateFileAsync(file.Name, CreationCollisionOption.GenerateUniqueName, localStream);
+                }
+            }
+            return fileCreated;
+        }
 
-        ///// <summary>
-        ///// Create new file that exceed 4MB
-        ///// </summary>
-        ///// <param name="folder">current folder</param>
-        ///// <param name="file">created file</param>
-        //public static async Task<OneDriveStorageFile> CreateLargeFileAsync(OneDriveStorageFolder folder, StorageFile file)
-        //{
-        //    OneDriveStorageFile fileCreated = null;
-        //    // Create new file
-        //    if (file != null)
-        //    {
-        //        using (var localStream = await file.OpenReadAsync())
-        //        {
-        //            fileCreated = await folder.UploadFileAsync(file.Name, localStream, CreationCollisionOption.GenerateUniqueName, 320 * 1024);
-        //        }
-        //    }
-        //    return fileCreated;
-        //}
+        /// <summary>
+        /// Create new file that exceed 4MB
+        /// </summary>
+        /// <param name="folder">current folder</param>
+        /// <param name="file">created file</param>
+        public static async Task<OneDriveStorageFile> CreateLargeFileAsync(OneDriveStorageFolder folder, StorageFile file)
+        {
+            OneDriveStorageFile fileCreated = null;
+            // Create new file
+            if (file != null)
+            {
+                using (var localStream = await file.OpenReadAsync())
+                {
+                    fileCreated = await folder.StorageFolderPlatformService.UploadFileAsync(file.Name, localStream, CreationCollisionOption.GenerateUniqueName, 320 * 1024);
+                }
+            }
+            return fileCreated;
+        }
 
         /// <summary>
         /// Move a file
@@ -174,46 +192,46 @@ namespace LogicService.Services
             return await file.RenameAsync(newName);
         }
 
-        ///// <summary>
-        ///// Download a file and save the content in a local file
-        ///// </summary>
-        ///// <param name="folder">source folder</param>
-        ///// <param name="target">target folder</param>
-        ///// <param name="fileName">file name</param>
-        //public static async Task<StorageFile> DownloadFileAsync(OneDriveStorageFolder folder, StorageFolder target, string fileName)
-        //{
-        //    // Download a file and save the content in a local file
-        //    var remoteFile = await folder.GetFileAsync(fileName);
+        /// <summary>
+        /// Download a file and save the content in a local file
+        /// </summary>
+        /// <param name="folder">source folder</param>
+        /// <param name="target">target folder</param>
+        /// <param name="fileName">file name</param>
+        public static async Task<StorageFile> DownloadFileAsync(OneDriveStorageFolder folder, StorageFolder target, string fileName)
+        {
+            // Download a file and save the content in a local file
+            var remoteFile = await folder.GetFileAsync(fileName);
 
-        //    StorageFile myLocalFile = null;
-        //    using (var remoteStream = await remoteFile.OpenAsync())
-        //    {
-        //        byte[] buffer = new byte[remoteStream.Size];
-        //        var localBuffer = await remoteStream.ReadAsync(buffer.AsBuffer(), (uint)remoteStream.Size, InputStreamOptions.ReadAhead);
-        //        myLocalFile = await target.CreateFileAsync(fileName, CreationCollisionOption.GenerateUniqueName);
-        //        using (var localStream = await myLocalFile.OpenAsync(FileAccessMode.ReadWrite))
-        //        {
-        //            await localStream.WriteAsync(localBuffer);
-        //            await localStream.FlushAsync();
-        //        }
-        //    }
+            StorageFile myLocalFile = null;
+            using (var remoteStream = await remoteFile.StorageFilePlatformService.OpenAsync() as IRandomAccessStream)
+            {
+                byte[] buffer = new byte[remoteStream.Size];
+                var localBuffer = await remoteStream.ReadAsync(buffer.AsBuffer(), (uint)remoteStream.Size, InputStreamOptions.ReadAhead);
+                myLocalFile = await target.CreateFileAsync(fileName, CreationCollisionOption.GenerateUniqueName);
+                using (var localStream = await myLocalFile.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    await localStream.WriteAsync(localBuffer);
+                    await localStream.FlushAsync();
+                }
+            }
 
-        //    return myLocalFile;
-        //}
+            return myLocalFile;
+        }
 
-        ///// <summary>
-        ///// Get the thumbnail of a file
-        ///// </summary>
-        ///// <param name="file"></param>
-        ///// <returns>BitmapImage instance for Image source</returns>
-        //public static async Task<BitmapImage> RetrieveFileThumbnails(OneDriveStorageFile file)
-        //{
-        //    var stream = await file.GetThumbnailAsync(ThumbnailSize.Large);
-        //    BitmapImage bmp = new BitmapImage();
-        //    await bmp.SetSourceAsync(stream);
+        /// <summary>
+        /// Get the thumbnail of a file
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns>BitmapImage instance for Image source</returns>
+        public static async Task<BitmapImage> RetrieveFileThumbnails(OneDriveStorageFile file)
+        {
+            var stream = await file.StorageItemPlatformService.GetThumbnailAsync(ThumbnailSize.Large);
+            BitmapImage bmp = new BitmapImage();
+            await bmp.SetSourceAsync(stream as IRandomAccessStream);
 
-        //    return bmp;
-        //}
+            return bmp;
+        }
 
     }
 

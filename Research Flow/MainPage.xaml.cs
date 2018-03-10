@@ -192,10 +192,19 @@ namespace Research_Flow
 
             if (file != null)
             {
+                // confirm the app was associated with Microsoft account
                 string token = await MicrosoftAccount.GetMsaTokenSilentlyAsync(MsaScope.Basic);
                 if (token != null)
                 {
-                    // copy to OneDrive
+                    try
+                    {
+                        await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetRootFolderAsync(), file);
+                        ToastNotificationManager.CreateToastNotifier().Show(new ToastNotification(ToastGenerator.ScreenShotSaved("OneDrive").GetXml()));
+                    }
+                    catch(Exception ex)
+                    {
+                        InAppNotification.Show(ex.Message);
+                    }
                 }
                 else
                 {

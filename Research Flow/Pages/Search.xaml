@@ -41,17 +41,27 @@
                 </Grid>
             </PivotItem>
             <PivotItem Header="Bing">
-                <StackPanel >
-                    <TextBox x:Name="query"/>
-                    <Button Content="Search" Click="SearchBing"/>
-                    <ListView x:Name="bingResult" IsItemClickEnabled="True" ItemClick="bingResult_ItemClick">
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="Search" Click="SearchBing" HorizontalAlignment="Stretch"/>
+                        <TextBox Grid.Column="1" x:Name="query" />
+                    </Grid>
+                    <ListView x:Name="bingResult" Grid.Row="1" IsItemClickEnabled="True" ItemClick="bingResult_ItemClick">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Title}" Style="{ThemeResource TitleTextBlockStyle}"/>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                </StackPanel>
+                </Grid>
             </PivotItem>
         </Pivot>
 
