@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskFlow", "TaskFlow\TaskFlow.csproj", "{8A62F5FC-A097-47EE-93C8-0B60174F21B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreFlow", "TaskFlow\CoreFlow.csproj", "{8A62F5FC-A097-47EE-93C8-0B60174F21B4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicService", "LogicService\LogicService.csproj", "{E77FADC0-A4EA-4081-B574-F459C3549078}"
 EndProject

@@ -7,8 +7,8 @@
     <ProjectGuid>{8A62F5FC-A097-47EE-93C8-0B60174F21B4}</ProjectGuid>
     <OutputType>winmdobj</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TaskFlow</RootNamespace>
-    <AssemblyName>TaskFlow</AssemblyName>
+    <RootNamespace>CoreFlow</RootNamespace>
+    <AssemblyName>CoreFlow</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.16299.0</TargetPlatformVersion>

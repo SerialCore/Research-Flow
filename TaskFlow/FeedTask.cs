@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 
-namespace TaskFlow
+namespace CoreFlow
 {
     public sealed class FeedTask: IBackgroundTask
     {

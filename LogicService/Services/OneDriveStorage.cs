@@ -14,6 +14,27 @@ namespace LogicService.Services
     {
 
         /// <summary>
+        /// Login
+        /// </summary>
+        public async static void OneDriveLogin()
+        {
+            OneDriveService.Instance.Initialize("000000004420C07D", new string[] { "onedrive.readwrite", "offline_access" });
+
+            if (!await OneDriveService.Instance.LoginAsync())
+            {
+                throw new Exception("OneDrive unable to sign in");
+            }
+        }
+
+        /// <summary>
+        /// Logout
+        /// </summary>
+        public async static void OneDriveLogout()
+        {
+            await OneDriveService.Instance.LogoutAsync();
+        }
+
+        /// <summary>
         /// Get the root folder
         /// </summary>
         /// <returns>Root</returns>

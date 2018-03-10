@@ -73,14 +73,21 @@ namespace Research_Flow.Pages
 
         #region Bing
 
-        private async void SearchBing(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void SearchBing(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            var result = await BingQuery.QueryAsync(query.Text, 20,
+            BingQuery.QueryAsync(query.Text, 20,
                 async (items) =>
                 {
                     await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
                         bingResult.ItemsSource = items;
+                    });
+                },
+                async (exception) =>
+                {
+                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        InAppNotification.Show(exception);
                     });
                 });
             
