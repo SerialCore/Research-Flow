@@ -107,6 +107,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BingTask.cs" />
     <Compile Include="FeedTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

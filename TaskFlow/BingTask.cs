@@ -7,7 +7,7 @@ using Windows.ApplicationModel.Background;
 
 namespace CoreFlow
 {
-    public sealed class FeedTask : IBackgroundTask
+    public sealed class BingTask : IBackgroundTask
     {
 
         public void Run(IBackgroundTaskInstance taskInstance)

@@ -40,7 +40,12 @@ namespace Research_Flow.Pages
             };
 
             // Bing configure
-            
+            country.ItemsSource = Enum.GetValues(typeof(BingCountry));
+            language.ItemsSource = Enum.GetValues(typeof(BingLanguage));
+            queryType.ItemsSource = Enum.GetValues(typeof(BingQueryType));
+            country.SelectedItem = BingCountry.None;
+            language.SelectedItem = BingLanguage.None;
+            queryType.SelectedItem = BingQueryType.Search;
         }
 
         #region RSS
@@ -83,7 +88,9 @@ namespace Research_Flow.Pages
 
         private void SearchBing(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            BingQuery.QueryAsync(query.Text, 20,
+            int count = Convert.ToInt16(queryCount.Text);
+
+            BingQuery.QueryAsync(query.Text, count,
                 async (items) =>
                 {
                     await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -97,8 +104,9 @@ namespace Research_Flow.Pages
                     {
                         InAppNotification.Show(exception);
                     });
-                });
-            
+                }, 
+                (BingCountry)(country.SelectedItem), (BingLanguage)(language.SelectedItem), (BingQueryType)(queryType.SelectedItem));
+
         }
 
         private async void BingResult_ItemClick(object sender, ItemClickEventArgs e)
