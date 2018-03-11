@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using LogicService.Encapsulates;
 using LogicService.Services;
 using Microsoft.Toolkit.Services.Bing;
+using Research_Flow.Pages.SubPages;
 using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
@@ -22,7 +23,7 @@ namespace Research_Flow.Pages
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
 
-            InitializeData();
+            this.InitializeData();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -76,10 +77,10 @@ namespace Research_Flow.Pages
             SearchRss(item.SourceUri);
         }
 
-        private async void RSS_ItemClick(object sender, ItemClickEventArgs e)
+        private void RSS_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as FeedItem;
-            await Launcher.LaunchUriAsync(new Uri(item.Link));
+            this.Frame.Navigate(typeof(WebPage), item.Link);
         }
 
         #endregion
@@ -109,10 +110,10 @@ namespace Research_Flow.Pages
 
         }
 
-        private async void BingResult_ItemClick(object sender, ItemClickEventArgs e)
+        private void BingResult_ItemClick(object sender, ItemClickEventArgs e)
         {
             BingResult result = e.ClickedItem as BingResult;
-            await Launcher.LaunchUriAsync(new Uri(result.Link));
+            this.Frame.Navigate(typeof(WebPage), result.Link);
         }
 
         #endregion
