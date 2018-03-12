@@ -1,4 +1,4 @@
-﻿using Microsoft.Toolkit.Services.Bing;
+﻿using Microsoft.Toolkit.Uwp.Services.Bing;
 using System;
 using System.Collections.Generic;
 using System.Linq;

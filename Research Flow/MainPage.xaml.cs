@@ -62,6 +62,8 @@ namespace Research_Flow
                         accountPhoto.ProfilePicture = bitmap;
                     }
                 }
+
+                OneDriveStorage.OneDriveLogin();
             }
 
             // show user info after handling
@@ -198,7 +200,7 @@ namespace Research_Flow
                 {
                     try
                     {
-                        await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetRootFolderAsync(), file);
+                        await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetAppFolderAsync(), file);
                         ToastNotificationManager.CreateToastNotifier().Show(new ToastNotification(ToastGenerator.ScreenShotSaved("OneDrive").GetXml()));
                     }
                     catch(Exception ex)
@@ -309,6 +311,7 @@ namespace Research_Flow
             if (args.Action == WebAccountAction.Remove)
             {
                 SignOutAccountAsync(command.WebAccount);
+                OneDriveStorage.OneDriveLogout();
 
                 accountEmail.Text = "Sign in";
                 accountPhoto.ProfilePicture = null;

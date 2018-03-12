@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
-using Microsoft.Toolkit.Services.OneDrive;
-using static Microsoft.Toolkit.Services.MicrosoftGraph.MicrosoftGraphEnums;
 using System.Collections.Generic;
+using Microsoft.Toolkit.Uwp.Services.OneDrive;
+using static Microsoft.Toolkit.Uwp.Services.OneDrive.OneDriveEnums;
 
 namespace LogicService.Services
 {
@@ -18,7 +18,7 @@ namespace LogicService.Services
         /// </summary>
         public async static void OneDriveLogin()
         {
-            OneDriveService.Instance.Initialize("000000004420C07D", new string[] { "onedrive.readwrite", "offline_access" });
+            OneDriveService.Instance.Initialize(Microsoft.OneDrive.Sdk.OnlineIdAuthenticationProvider.PromptType.DoNotPrompt);
 
             if (!await OneDriveService.Instance.LoginAsync())
             {
@@ -41,6 +41,15 @@ namespace LogicService.Services
         public static async Task<OneDriveStorageFolder> GetRootFolderAsync()
         {
             return await OneDriveService.Instance.RootFolderAsync();
+        }
+
+        /// <summary>
+        /// Get the app root folder
+        /// </summary>
+        /// <returns>AppRoot</returns>
+        public static async Task<OneDriveStorageFolder> GetAppFolderAsync()
+        {
+            return await OneDriveService.Instance.AppRootFolderAsync();
         }
 
         /// <summary>
@@ -90,8 +99,8 @@ namespace LogicService.Services
         /// <param name="foldername">folder name</param>
         /// <returns>new folder</returns>
         public static async Task<OneDriveStorageFolder> CreateFolderAsync(OneDriveStorageFolder folder, string foldername)
-        {          
-            return await folder.StorageFolderPlatformService.CreateFolderAsync(foldername, CreationCollisionOption.GenerateUniqueName);
+        {
+            return await folder.CreateFolderAsync(foldername, CreationCollisionOption.GenerateUniqueName);
         }
 
         /// <summary>
@@ -153,26 +162,11 @@ namespace LogicService.Services
             {
                 using (var localStream = await file.OpenReadAsync())
                 {
-                    fileCreated = await folder.StorageFolderPlatformService.CreateFileAsync(file.Name, CreationCollisionOption.GenerateUniqueName, localStream);
-                }
-            }
-            return fileCreated;
-        }
-
-        /// <summary>
-        /// Create new file that exceed 4MB
-        /// </summary>
-        /// <param name="folder">current folder</param>
-        /// <param name="file">created file</param>
-        public static async Task<OneDriveStorageFile> CreateLargeFileAsync(OneDriveStorageFolder folder, StorageFile file)
-        {
-            OneDriveStorageFile fileCreated = null;
-            // Create new file
-            if (file != null)
-            {
-                using (var localStream = await file.OpenReadAsync())
-                {
-                    fileCreated = await folder.StorageFolderPlatformService.UploadFileAsync(file.Name, localStream, CreationCollisionOption.GenerateUniqueName, 320 * 1024);
+                    var prop = await file.GetBasicPropertiesAsync();
+                    if (prop.Size >= 4 * 1024 * 1024)
+                        fileCreated = await folder.UploadFileAsync(file.Name, localStream, CreationCollisionOption.GenerateUniqueName, 320 * 1024);
+                    else
+                        fileCreated = await folder.CreateFileAsync(file.Name, CreationCollisionOption.GenerateUniqueName, localStream);
                 }
             }
             return fileCreated;
@@ -225,7 +219,7 @@ namespace LogicService.Services
             var remoteFile = await folder.GetFileAsync(fileName);
 
             StorageFile myLocalFile = null;
-            using (var remoteStream = await remoteFile.StorageFilePlatformService.OpenAsync() as IRandomAccessStream)
+            using (var remoteStream = await remoteFile.OpenAsync() as IRandomAccessStream)
             {
                 byte[] buffer = new byte[remoteStream.Size];
                 var localBuffer = await remoteStream.ReadAsync(buffer.AsBuffer(), (uint)remoteStream.Size, InputStreamOptions.ReadAhead);
@@ -247,7 +241,7 @@ namespace LogicService.Services
         /// <returns>BitmapImage instance for Image source</returns>
         public static async Task<BitmapImage> RetrieveFileThumbnails(OneDriveStorageFile file)
         {
-            var stream = await file.StorageItemPlatformService.GetThumbnailAsync(ThumbnailSize.Large);
+            var stream = await file.GetThumbnailAsync(ThumbnailSize.Large);
             BitmapImage bmp = new BitmapImage();
             await bmp.SetSourceAsync(stream as IRandomAccessStream);
 

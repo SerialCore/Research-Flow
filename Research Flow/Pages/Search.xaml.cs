@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using LogicService.Encapsulates;
 using LogicService.Services;
-using Microsoft.Toolkit.Services.Bing;
+using Microsoft.Toolkit.Uwp.Services.Bing;
 using Research_Flow.Pages.SubPages;
 using Windows.System;
 using Windows.UI.Core;
@@ -23,7 +23,7 @@ namespace Research_Flow.Pages
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
 
-            this.InitializeData();
+            InitializeData();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

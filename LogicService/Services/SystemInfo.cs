@@ -1,7 +1,6 @@
 ﻿using Microsoft.Toolkit.Uwp.Helpers;
 using System;
 using System.Globalization;
-using Windows.ApplicationModel;
 using Windows.System;
 
 namespace LogicService.Services
