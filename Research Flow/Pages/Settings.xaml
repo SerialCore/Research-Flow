@@ -53,9 +53,9 @@
                             <Run Text="Library References" FontWeight="Bold"/><LineBreak/><LineBreak/>
                             <Run Text="HockeyApp"/><LineBreak/>
                             <Run Text="Microsoft.Data.SQLite"/><LineBreak/>
-                            <Run Text="Microsoft.Toolkit.Services"/><LineBreak/>
                             <Run Text="Microsoft.Toolkit.Uwp"/><LineBreak/>
                             <Run Text="Microsoft.Toolkit.Uwp.Notifications"/><LineBreak/>
+                            <Run Text="Microsoft.Toolkit.Uwp.Services"/><LineBreak/>
                             <Run Text="Microsoft.Toolkit.Uwp.UI.Controls"/><LineBreak/>
                         </TextBlock>
                     </ScrollViewer>

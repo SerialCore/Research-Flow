@@ -18,6 +18,7 @@ namespace LogicService.Services
         /// </summary>
         public async static void OneDriveLogin()
         {
+            //OneDriveService.Instance.Initialize("000000004420C07D", new string[] { "onedrive.readwrite", "offline_access" });
             OneDriveService.Instance.Initialize(Microsoft.OneDrive.Sdk.OnlineIdAuthenticationProvider.PromptType.DoNotPrompt);
 
             if (!await OneDriveService.Instance.LoginAsync())

@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Windows.Web.Http;
+using Windows.UI.Core;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -46,24 +47,31 @@ namespace Research_Flow
                 var jsonObject = JsonObject.Parse(json);
                 accountEmail.Text = jsonObject["emails"].GetObject()["account"].ToString().Replace("\"", "");
 
-                string photo = "https://apis.live.net/v5.0/" + jsonObject["id"].GetString() + "/picture";
-                using (var client = new HttpClient())
+                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 {
-                    HttpResponseMessage response = await client.GetAsync(new Uri(photo));
-                    if (response != null && response.StatusCode == HttpStatusCode.Ok)
+                    string photo = "https://apis.live.net/v5.0/" + jsonObject["id"].GetString() + "/picture";
+                    using (var client = new HttpClient())
                     {
-                        BitmapImage bitmap = new BitmapImage();
-                        using (InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream())
+                        HttpResponseMessage response = await client.GetAsync(new Uri(photo));
+                        if (response != null && response.StatusCode == HttpStatusCode.Ok)
                         {
-                            await response.Content.WriteToStreamAsync(stream);
-                            stream.Seek(0UL);
-                            bitmap.SetSource(stream);
+                            BitmapImage bitmap = new BitmapImage();
+                            using (InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream())
+                            {
+                                await response.Content.WriteToStreamAsync(stream);
+                                stream.Seek(0UL);
+                                bitmap.SetSource(stream);
+                            }
+                            accountPhoto.ProfilePicture = bitmap;
                         }
-                        accountPhoto.ProfilePicture = bitmap;
                     }
-                }
+                });
 
-                OneDriveStorage.OneDriveLogin();
+                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    OneDriveStorage.OneDriveLogin();
+                });
+                
             }
 
             // show user info after handling

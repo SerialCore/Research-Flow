@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using LogicService.Encapsulates;
 using LogicService.Services;
-using Microsoft.Toolkit.Uwp.Services.Bing;
+using Microsoft.Toolkit.Services.Bing;
 using Research_Flow.Pages.SubPages;
 using Windows.System;
 using Windows.UI.Core;
