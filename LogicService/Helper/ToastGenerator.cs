@@ -25,7 +25,7 @@ namespace LogicService.Helper
                         {
                             new AdaptiveText()
                             {
-                                Text = "Sceen Shot Saved"
+                                Text = "Screen Shot Saved"
                             },
 
                             new AdaptiveText()

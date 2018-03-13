@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using Microsoft.Toolkit.Uwp.Services.OneDrive;
 using static Microsoft.Toolkit.Uwp.Services.OneDrive.OneDriveEnums;
 
+#pragma warning disable 618   // will be enabled some day
+
 namespace LogicService.Services
 {
     public class OneDriveStorage
@@ -34,6 +36,8 @@ namespace LogicService.Services
         {
             await OneDriveService.Instance.LogoutAsync();
         }
+
+        #region Get folder
 
         /// <summary>
         /// Get the root folder
@@ -70,6 +74,26 @@ namespace LogicService.Services
         {
             return await OneDriveService.Instance.DocumentsFolderAsync();
         }
+
+        /// <summary>
+        /// Get the photos folder in app root
+        /// </summary>
+        /// <returns>Photos</returns>
+        public static async Task<OneDriveStorageFolder> GetAppPhotosAsync()
+        {
+            try
+            {
+                return await RetrieveSubFolderAsync(await GetAppFolderAsync(), "Photos");
+            }
+            catch
+            {
+                return await CreateFolderAsync(await GetAppFolderAsync(), "Photos");
+            }
+        }
+
+        #endregion
+
+        #region Operation
 
         /// <summary>
         /// List the Items from the current folder
@@ -248,6 +272,8 @@ namespace LogicService.Services
 
             return bmp;
         }
+
+        #endregion
 
     }
 

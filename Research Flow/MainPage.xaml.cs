@@ -182,7 +182,7 @@ namespace Research_Flow
         {
             var bitmap = new RenderTargetBitmap();
             // cache for being deleted
-            StorageFile file = await ApplicationData.Current.LocalCacheFolder.CreateFileAsync("TaskFlow-ScreenShot.png", CreationCollisionOption.GenerateUniqueName);
+            StorageFile file = await ApplicationData.Current.LocalCacheFolder.CreateFileAsync("TaskFlow-ScreenShot.png", CreationCollisionOption.ReplaceExisting);
             await bitmap.RenderAsync(FullPage);
             var buffer = await bitmap.GetPixelsAsync();
             using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
@@ -208,7 +208,7 @@ namespace Research_Flow
                 {
                     try
                     {
-                        await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetAppFolderAsync(), file);
+                        await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetAppPhotosAsync(), file);
                         ToastNotificationManager.CreateToastNotifier().Show(new ToastNotification(ToastGenerator.ScreenShotSaved("OneDrive").GetXml()));
                     }
                     catch(Exception ex)
