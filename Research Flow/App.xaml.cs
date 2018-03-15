@@ -9,6 +9,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -66,7 +67,7 @@ namespace Research_Flow
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
-                    if (SystemInfo.IsFirstUse)
+                    if (SystemInfo.IsFirstUse || !ApplicationData.Current.LocalSettings.Values.ContainsKey("Configured"))
                         rootFrame.Navigate(typeof(Configure), e.Arguments);
                     else
                         rootFrame.Navigate(typeof(MainPage), e.Arguments);

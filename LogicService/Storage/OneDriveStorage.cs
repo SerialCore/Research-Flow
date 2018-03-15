@@ -10,7 +10,7 @@ using static Microsoft.Toolkit.Uwp.Services.OneDrive.OneDriveEnums;
 
 #pragma warning disable 618   // will be enabled some day
 
-namespace LogicService.Services
+namespace LogicService.Storage
 {
     public class OneDriveStorage
     {
@@ -40,39 +40,12 @@ namespace LogicService.Services
         #region Get folder
 
         /// <summary>
-        /// Get the root folder
-        /// </summary>
-        /// <returns>Root</returns>
-        public static async Task<OneDriveStorageFolder> GetRootFolderAsync()
-        {
-            return await OneDriveService.Instance.RootFolderAsync();
-        }
-
-        /// <summary>
         /// Get the app root folder
         /// </summary>
         /// <returns>AppRoot</returns>
         public static async Task<OneDriveStorageFolder> GetAppFolderAsync()
         {
             return await OneDriveService.Instance.AppRootFolderAsync();
-        }
-
-        /// <summary>
-        /// Get the photots folder
-        /// </summary>
-        /// <returns>Photots</returns>
-        public static async Task<OneDriveStorageFolder> GetPhotosFolderAsync()
-        {
-            return await OneDriveService.Instance.PhotosFolderAsync();
-        }
-
-        /// <summary>
-        /// Get the documents folder
-        /// </summary>
-        /// <returns>Documents</returns>
-        public static async Task<OneDriveStorageFolder> GetDocumentsFolderAsync()
-        {
-            return await OneDriveService.Instance.DocumentsFolderAsync();
         }
 
         /// <summary>

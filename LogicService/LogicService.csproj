@@ -122,9 +122,10 @@
     <Compile Include="Services\BingQuery.cs" />
     <Compile Include="Services\Crawler.cs" />
     <Compile Include="Services\MicrosoftAccount.cs" />
-    <Compile Include="Services\OneDriveStorage.cs" />
+    <Compile Include="Storage\LocalStorage.cs" />
+    <Compile Include="Storage\OneDriveStorage.cs" />
     <Compile Include="Services\RssService.cs" />
-    <Compile Include="Services\SqlStorage.cs" />
+    <Compile Include="Storage\SqlStorage.cs" />
     <Compile Include="Services\SystemInfo.cs" />
     <EmbeddedResource Include="Properties\LogicService.rd.xml" />
   </ItemGroup>

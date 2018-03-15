@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Research_Flow"
+    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -11,9 +12,17 @@
 
         <FlipView Margin="100,50">
             <FlipViewItem>
-                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center">
-                    <Image Source="/Pages/Images/Logos/OneDrive_logo.png"/>
-                    <StackPanel x:Name="authenPane">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Image Source="/Pages/Images/Logos/OneDrive_logo.png"/>
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}">
                             A OneDrive account is required for the storage and synchronization of user data, learning data and papers. 
                             Please sign in OneDrive with Microsoft Account and ensure the OneDrive folder available or the TaskFlow will work abnormally. 
@@ -21,23 +30,39 @@
                         </TextBlock>
                         <HyperlinkButton Content="Know about OneDrive" 
                                          NavigateUri="https://support.office.com/en-us/article/onedrive-help-5943c2b9-fafc-4cb4-95c0-9cc73fcabb30"/>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Step 1   ->" VerticalAlignment="Center" FontWeight="Bold"/>
-                            <TextBlock Text="Ensure Windows has been associated with Microsoft Account."/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Step 2   ->" VerticalAlignment="Center" FontWeight="Bold"/>
-                            <TextBlock Text="Ensure OneDrive has been signed in."/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Step 3   ->" VerticalAlignment="Center" FontWeight="Bold"/>
-                            <TextBlock Text="Sign in your Microsoft account after finishing these configurations and the button will be at the corner."/>
-                        </StackPanel>
-                        <Button Click="AuthenticateMicrosoft" Content="Let's begin."/>
+                        <TextBlock >
+                            <Run Text="Step 1   ->" FontWeight="Bold"/>
+                            <Run Text="Ensure Windows has been associated with Microsoft Account."/>
+                        </TextBlock>
+                        <TextBlock >
+                            <Run Text="Step 2   ->" FontWeight="Bold"/>
+                            <Run Text="Ensure OneDrive has been signed in."/>
+                        </TextBlock>
+                        <TextBlock >
+                            <Run Text="Step 3   ->" FontWeight="Bold"/>
+                            <Run Text="Sign in your Microsoft account."/>
+                        </TextBlock>
+                        <Button Click="AuthenticateMicrosoft" Content="Sign in."/>
+                        <ListViewItem x:Name="signPane" Visibility="Collapsed">
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="24"/>
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <PersonPicture Grid.Column="0" x:Name="accountPhoto" Height="24" Width="24"/>
+                                <TextBlock Grid.Column="1" x:Name="accountEmail" Text="Sign In" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                            </Grid>
+                        </ListViewItem>
                     </StackPanel>
-                </StackPanel>
+                </Grid>
             </FlipViewItem>
         </FlipView>
+
+        <toolkit:InAppNotification x:Name="InAppNotification" 
+                                    ShowDismissButton="True"
+                                    AnimationDuration="00:00:00.1000000"
+                                    VerticalOffset="100"
+                                    HorizontalOffset="0"/>
 
     </Grid>
 

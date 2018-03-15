@@ -1,9 +1,10 @@
 ﻿using LogicService.Helper;
 using LogicService.Services;
+using LogicService.Storage;
+using Research_Flow.Pages;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using Research_Flow.Pages;
 using Windows.Data.Json;
 using Windows.Graphics.Display;
 using Windows.Graphics.Imaging;
@@ -13,13 +14,13 @@ using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.System;
 using Windows.UI.ApplicationSettings;
+using Windows.UI.Core;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Windows.Web.Http;
-using Windows.UI.Core;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
