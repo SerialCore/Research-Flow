@@ -307,10 +307,7 @@ namespace Research_Flow
                 {
                     InAppNotification.Show(result.ResponseError.ErrorMessage);
                 }
-                catch
-                {
-                    InAppNotification.Show("Extra exception");
-                }
+                catch { }
             }
         }
 

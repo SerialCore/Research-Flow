@@ -42,8 +42,12 @@
                             <Run x:Name="launchTime"/><LineBreak/><LineBreak/>
                             <Run Text="Last launch time:   " FontWeight="Bold"/>
                             <Run x:Name="lastLaunchTime"/><LineBreak/><LineBreak/>
-                            <Run Text="Launch count:   " FontWeight="Bold"/>
+                            <Run Text="Last reset time:   " FontWeight="Bold"/>
+                            <Run x:Name="lastResetTime"/><LineBreak/><LineBreak/>
+                            <Run Text="Current launch count:   " FontWeight="Bold"/>
                             <Run x:Name="launchCount"/><LineBreak/><LineBreak/>
+                            <Run Text="Total launch count:   " FontWeight="Bold"/>
+                            <Run x:Name="totalLaunchCount"/><LineBreak/><LineBreak/>
                             <Run Text="App uptime:   " FontWeight="Bold"/>
                             <Run x:Name="appUptime"/>
                         </TextBlock>
@@ -61,10 +65,11 @@
                     </ScrollViewer>
                     <ScrollViewer Grid.Row="1" Grid.Column="1" Margin="10" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto">
                         <StackPanel >
-                            <TextBlock Text="Supporting Link" FontWeight="Bold"/>
+                            <TextBlock Text="Supporting Links" FontWeight="Bold"/>
                             <HyperlinkButton Content="zwx.atomx@outlook.com" NavigateUri="mailto:zwx.atomx@outlook.com"/>
+                            <HyperlinkButton Content="Research Flow" NavigateUri="https://blamder.github.io/Research-Flow/"/>
                             <HyperlinkButton Content="Blamder's BiliBili content" NavigateUri="https://space.bilibili.com/62426742/#/"/>
-                            <HyperlinkButton Content="Static website for Research Flow" NavigateUri="https://blamder.github.io/Research-Flow/"/>
+                            <HyperlinkButton Content="Know about SystemInformation" NavigateUri="https://docs.microsoft.com/en-us/windows/uwpcommunitytoolkit/helpers/systeminformation"/>
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>

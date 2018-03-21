@@ -67,6 +67,8 @@ namespace Research_Flow
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
+
+                    SystemInfo.TrackAppUse(e);
                     if (SystemInfo.IsFirstUse || !ApplicationData.Current.LocalSettings.Values.ContainsKey("Configured"))
                         rootFrame.Navigate(typeof(Configure), e.Arguments);
                     else

@@ -53,7 +53,11 @@ namespace Research_Flow.Pages
 
             lastLaunchTime.Text = SystemInfo.LastLaunchTime.ToString();
 
+            lastResetTime.Text = SystemInfo.LastResetTime.ToString();
+
             launchCount.Text = SystemInfo.LaunchCount.ToString();
+
+            totalLaunchCount.Text = SystemInfo.TotalLaunchCount.ToString();
 
             appUptime.Text = SystemInfo.AppUptime.ToString("G");
         }

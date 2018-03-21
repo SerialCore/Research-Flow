@@ -24,9 +24,20 @@
           </uap:ShowNameOnTiles>
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="transparent" />
+        <uap:InitialRotationPreference>
+          <uap:Rotation Preference="portrait" />
+          <uap:Rotation Preference="landscape" />
+          <uap:Rotation Preference="portraitFlipped" />
+          <uap:Rotation Preference="landscapeFlipped" />
+        </uap:InitialRotationPreference>
       </uap:VisualElements>
       <Extensions>
-        <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.StorageTask">
+        <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.FeedTask">
+          <BackgroundTasks>
+            <Task Type="timer" />
+          </BackgroundTasks>
+        </Extension>
+        <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.BingTask">
           <BackgroundTasks>
             <Task Type="timer" />
           </BackgroundTasks>
@@ -34,12 +45,7 @@
         <uap:Extension Category="windows.protocol">
           <uap:Protocol Name="blamderrobot" />
         </uap:Extension>
-        <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.BingTask">
-          <BackgroundTasks>
-            <Task Type="timer" />
-          </BackgroundTasks>
-        </Extension>
-        <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.FeedTask">
+        <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.StorageTask">
           <BackgroundTasks>
             <Task Type="timer" />
           </BackgroundTasks>

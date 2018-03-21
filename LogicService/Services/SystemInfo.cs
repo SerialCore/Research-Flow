@@ -1,6 +1,8 @@
 ﻿using Microsoft.Toolkit.Uwp.Helpers;
 using System;
 using System.Globalization;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.Activation;
 using Windows.System;
 
 namespace LogicService.Services
@@ -89,14 +91,42 @@ namespace LogicService.Services
         public static DateTime LastLaunchTime => SystemInformation.LastLaunchTime;
 
         /// <summary>
-        /// To get the number of times the app has been launched
+        /// To get the time the launch count was reset, not including this instance
+        /// </summary>
+        public static DateTime LastResetTime => SystemInformation.LastResetTime;
+
+        /// <summary>
+        /// To get the number of times the app has been launched sicne the last reset.
         /// </summary>
         public static long LaunchCount => SystemInformation.LaunchCount;
+
+        /// <summary>
+        /// To get the number of times the app has been launched.
+        /// </summary>
+        public static long TotalLaunchCount => SystemInformation.TotalLaunchCount;
 
         /// <summary>
         /// To get how long the app has been running
         /// </summary>
         public static TimeSpan AppUptime => SystemInformation.AppUptime;
+
+        /// <summary>
+        /// Track app usage information
+        /// </summary>
+        /// <param name="args"></param>
+        public static void TrackAppUse(LaunchActivatedEventArgs args)
+        {
+            SystemInformation.TrackAppUse(args);
+        }
+
+        /// <summary>
+        /// Launch store for reviewAsync
+        /// </summary>
+        /// <returns></returns>
+        public static async Task LaunchReviewAsync()
+        {
+            await SystemInformation.LaunchStoreForReviewAsync();
+        }
 
     }
 }
