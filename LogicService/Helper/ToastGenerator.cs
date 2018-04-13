@@ -10,7 +10,12 @@ namespace LogicService.Helper
     public class ToastGenerator
     {
 
-        public static ToastContent ScreenShotSaved(string folder)
+        /// <summary>
+        /// Save Screen shot
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <returns></returns>
+        public static ToastContent TextToast(string title,string content)
         {
             return new ToastContent()
             {
@@ -25,12 +30,12 @@ namespace LogicService.Helper
                         {
                             new AdaptiveText()
                             {
-                                Text = "Screen Shot Saved"
+                                Text = title
                             },
 
                             new AdaptiveText()
                             {
-                                Text = "Please check out " + folder
+                                Text = content
                             }
                         }
                     }

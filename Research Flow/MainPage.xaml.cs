@@ -50,22 +50,26 @@ namespace Research_Flow
 
                 await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 {
-                    string photo = "https://apis.live.net/v5.0/" + jsonObject["id"].GetString() + "/picture";
-                    using (var client = new HttpClient())
+                    try
                     {
-                        HttpResponseMessage response = await client.GetAsync(new Uri(photo));
-                        if (response != null && response.StatusCode == HttpStatusCode.Ok)
+                        string photo = "https://apis.live.net/v5.0/" + jsonObject["id"].GetString() + "/picture";
+                        using (var client = new HttpClient())
                         {
-                            BitmapImage bitmap = new BitmapImage();
-                            using (InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream())
+                            HttpResponseMessage response = await client.GetAsync(new Uri(photo));
+                            if (response != null && response.StatusCode == HttpStatusCode.Ok)
                             {
-                                await response.Content.WriteToStreamAsync(stream);
-                                stream.Seek(0UL);
-                                bitmap.SetSource(stream);
+                                BitmapImage bitmap = new BitmapImage();
+                                using (InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream())
+                                {
+                                    await response.Content.WriteToStreamAsync(stream);
+                                    stream.Seek(0UL);
+                                    bitmap.SetSource(stream);
+                                }
+                                accountPhoto.ProfilePicture = bitmap;
                             }
-                            accountPhoto.ProfilePicture = bitmap;
                         }
                     }
+                    catch { InAppNotification.Show("Account Icon: Network Error"); }
                 });
 
                 await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -189,7 +193,6 @@ namespace Research_Flow
         private async void ScreenShot_Click(object sender, RoutedEventArgs e)
         {
             var bitmap = new RenderTargetBitmap();
-            // cache for being deleted
             StorageFile file = await (await LocalStorage.GetAppPhotosAsync()).CreateFileAsync("TaskFlow-ScreenShot.png", CreationCollisionOption.ReplaceExisting);
             await bitmap.RenderAsync(FullPage);
             var buffer = await bitmap.GetPixelsAsync();
@@ -210,6 +213,9 @@ namespace Research_Flow
 
             if (file != null)
             {
+                ToastNotificationManager.CreateToastNotifier().Show(
+                    new ToastNotification(ToastGenerator.TextToast("Screen Shot Captured", "Waiting for network").GetXml()));
+
                 // confirm the app was associated with Microsoft account
                 string token = await MicrosoftAccount.GetMsaTokenSilentlyAsync(MsaScope.Basic);
                 if (token != null)
@@ -217,7 +223,8 @@ namespace Research_Flow
                     try
                     {
                         await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetAppPhotosAsync(), file);
-                        ToastNotificationManager.CreateToastNotifier().Show(new ToastNotification(ToastGenerator.ScreenShotSaved("OneDrive").GetXml()));
+                        ToastNotificationManager.CreateToastNotifier().Show(
+                            new ToastNotification(ToastGenerator.TextToast("Screen Shot Saved", "Please check out OneDrive").GetXml()));
                     }
                     catch(Exception ex)
                     {
@@ -227,7 +234,8 @@ namespace Research_Flow
                 else
                 {
                     await file.CopyAsync(KnownFolders.PicturesLibrary, "TaskFlow-ScreenShot.png", NameCollisionOption.GenerateUniqueName);
-                    ToastNotificationManager.CreateToastNotifier().Show(new ToastNotification(ToastGenerator.ScreenShotSaved("Pictures Library").GetXml()));
+                    ToastNotificationManager.CreateToastNotifier().Show(
+                        new ToastNotification(ToastGenerator.TextToast("Screen Shot Saved", "Please check out Pictures Library").GetXml()));
                 }
             }
         }
