@@ -23,16 +23,9 @@ namespace LogicService.Storage
             //OneDriveService.Instance.Initialize("000000004420C07D", new string[] { "onedrive.readwrite", "offline_access" });
             OneDriveService.Instance.Initialize(Microsoft.OneDrive.Sdk.OnlineIdAuthenticationProvider.PromptType.DoNotPrompt);
 
-            try
+            if (!await OneDriveService.Instance.LoginAsync())
             {
-                if (!await OneDriveService.Instance.LoginAsync())
-                {
-                    throw new Exception("OneDrive unable to sign in");
-                }
-            }
-            catch(Exception ex)
-            {
-                throw ex;
+                throw new Exception("OneDrive unable to sign in");
             }
         }
 
@@ -84,6 +77,22 @@ namespace LogicService.Storage
             catch
             {
                 return await CreateFolderAsync(await GetAppFolderAsync(), "Feeds");
+            }
+        }
+
+        /// <summary>
+        /// Get the settings folder in app root
+        /// </summary>
+        /// <returns>Feed</returns>
+        public static async Task<OneDriveStorageFolder> GetSettingsAsync()
+        {
+            try
+            {
+                return await RetrieveSubFolderAsync(await GetAppFolderAsync(), "Settings");
+            }
+            catch
+            {
+                return await CreateFolderAsync(await GetAppFolderAsync(), "Settings");
             }
         }
 

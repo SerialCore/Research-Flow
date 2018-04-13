@@ -70,7 +70,14 @@ namespace Research_Flow
 
                 await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    OneDriveStorage.OneDriveLogin();
+                    try
+                    {
+                        OneDriveStorage.OneDriveLogin();
+                    }
+                    catch(Exception ex)
+                    {
+                        InAppNotification.Show("OneDrive: " + ex.Message);
+                    }
                 });
                 
             }
@@ -183,7 +190,7 @@ namespace Research_Flow
         {
             var bitmap = new RenderTargetBitmap();
             // cache for being deleted
-            StorageFile file = await ApplicationData.Current.LocalCacheFolder.CreateFileAsync("TaskFlow-ScreenShot.png", CreationCollisionOption.ReplaceExisting);
+            StorageFile file = await (await LocalStorage.GetAppPhotosAsync()).CreateFileAsync("TaskFlow-ScreenShot.png", CreationCollisionOption.ReplaceExisting);
             await bitmap.RenderAsync(FullPage);
             var buffer = await bitmap.GetPixelsAsync();
             using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
@@ -300,6 +307,18 @@ namespace Research_Flow
                         accountPhoto.ProfilePicture = bitmap;
                     }
                 }
+
+                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    try
+                    {
+                        OneDriveStorage.OneDriveLogin();
+                    }
+                    catch (Exception ex)
+                    {
+                        InAppNotification.Show("OneDrive: " + ex.Message);
+                    }
+                });
             }
             else
             {
@@ -307,10 +326,12 @@ namespace Research_Flow
                 {
                     InAppNotification.Show(result.ResponseError.ErrorMessage);
                 }
-                catch { }
+                catch
+                {
+                    InAppNotification.Show("Sign in: Network Error");
+                }
             }
         }
-
 
         private void WebAccountInvoked(WebAccountCommand command, WebAccountInvokedArgs args)
         {

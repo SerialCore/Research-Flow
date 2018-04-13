@@ -32,13 +32,21 @@ namespace Research_Flow
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             AccountsSettingsPane.GetForCurrentView().AccountCommandsRequested += BuildPaneAsync;
+
+            ConfigureLocalStorage();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             AccountsSettingsPane.GetForCurrentView().AccountCommandsRequested -= BuildPaneAsync;
 
+            // get configured in term of navigation
             ApplicationData.Current.LocalSettings.Values["Configured"] = 1;
+        }
+
+        private void NavigateMainPage()
+        {
+            this.Frame.Navigate(typeof(MainPage));
         }
 
         #region Microsoft account log in
@@ -96,6 +104,7 @@ namespace Research_Flow
                         }
                         accountPhoto.ProfilePicture = bitmap;
                     }
+                    NavigateMainPage();
                 }
 
                 await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -130,7 +139,11 @@ namespace Research_Flow
 
         #region local and cloud Storage
 
-
+        private async void ConfigureLocalStorage()
+        {
+            await LocalStorage.GetAppPhotosAsync();
+            await LocalStorage.GetFeedsAsync();
+        }
 
         #endregion
 

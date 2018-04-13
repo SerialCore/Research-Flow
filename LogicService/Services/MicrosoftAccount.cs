@@ -74,14 +74,20 @@ namespace LogicService.Services
                 return null;
             }
 
-            string content;
-            using (var client = new HttpClient())
+            try
             {
-                var infoResult = await client.GetAsync(new Uri(@"https://apis.live.net/v5.0/me?access_token=" + token));
-                content = await infoResult.Content.ReadAsStringAsync();
+                string content;
+                using (var client = new HttpClient())
+                {
+                    var infoResult = await client.GetAsync(new Uri(@"https://apis.live.net/v5.0/me?access_token=" + token));
+                    content = await infoResult.Content.ReadAsStringAsync();
+                }
+                return content;
             }
-
-            return content;
+            catch
+            {
+                return null;
+            }
         }
 
     }
