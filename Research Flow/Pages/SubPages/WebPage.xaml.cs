@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
@@ -26,15 +27,18 @@ namespace Research_Flow.Pages.SubPages
         public WebPage()
         {
             this.InitializeComponent();
-            webView.FrameNavigationCompleted += WebView_FrameNavigationCompleted;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             webWaiting.IsActive = true;
-            string[] site = e.Parameter as string[];
-            webTitle.Text = site[0];
-            webView.Navigate(new Uri(site[1]));
+            string link = e.Parameter as string;
+            webView.Navigate(new Uri(link));
+        }
+
+        private void webView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
+        {
+            webWaiting.IsActive = true;
         }
 
         private void WebView_FrameNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
@@ -45,11 +49,6 @@ namespace Research_Flow.Pages.SubPages
         private void Return_Navigate(object sender, RoutedEventArgs e)
         {
             this.Frame.GoBack();
-        }
-
-        private void SavetoLearn(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void Back(object sender, RoutedEventArgs e)
@@ -68,6 +67,34 @@ namespace Research_Flow.Pages.SubPages
         {
             webWaiting.IsActive = true;
             webView.Refresh();
+        }
+
+        private void SavetoLearn(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ShareLink(object sender, RoutedEventArgs e)
+        {
+            DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
+            dataTransferManager.DataRequested += DataTransferManager_DataRequested;
+            DataTransferManager.ShowShareUI();
+        }
+
+        private void DataTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
+        {
+            // deferral code for catching data
+            DataRequestDeferral deferral = args.Request.GetDeferral();
+            
+            // info of share request
+            DataRequest request = args.Request;
+            request.Data.Properties.Title = "Search Result";
+            request.Data.Properties.Description = "Share your search result";
+
+            request.Data.SetWebLink(webView.Source);
+
+            // end if deferral
+            deferral.Complete();
         }
     }
 }
