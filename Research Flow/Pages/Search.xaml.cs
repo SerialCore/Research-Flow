@@ -80,7 +80,7 @@ namespace Research_Flow.Pages
         private void RSS_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as FeedItem;
-            this.Frame.Navigate(typeof(WebPage), item.Link);
+            this.Frame.Navigate(typeof(WebPage), new string[] { item.Title, item.Link });
         }
 
         #endregion
@@ -113,7 +113,7 @@ namespace Research_Flow.Pages
         private void BingResult_ItemClick(object sender, ItemClickEventArgs e)
         {
             BingResult result = e.ClickedItem as BingResult;
-            this.Frame.Navigate(typeof(WebPage), result.Link);
+            this.Frame.Navigate(typeof(WebPage), new string[] { result.Title, result.Link });
         }
 
         #endregion

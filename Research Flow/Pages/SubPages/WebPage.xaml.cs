@@ -32,8 +32,9 @@ namespace Research_Flow.Pages.SubPages
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             webWaiting.IsActive = true;
-            string uri = e.Parameter as string;
-            webView.Navigate(new Uri(uri));
+            string[] site = e.Parameter as string[];
+            webTitle.Text = site[0];
+            webView.Navigate(new Uri(site[1]));
         }
 
         private void WebView_FrameNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
@@ -41,5 +42,32 @@ namespace Research_Flow.Pages.SubPages
             webWaiting.IsActive = false;
         }
 
+        private void Return_Navigate(object sender, RoutedEventArgs e)
+        {
+            this.Frame.GoBack();
+        }
+
+        private void SavetoLearn(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Back(object sender, RoutedEventArgs e)
+        {
+            if (webView.CanGoBack)
+                webView.GoBack();
+        }
+
+        private void Forward(object sender, RoutedEventArgs e)
+        {
+            if (webView.CanGoForward)
+                webView.GoForward();
+        }
+
+        private void Refresh(object sender, RoutedEventArgs e)
+        {
+            webWaiting.IsActive = true;
+            webView.Refresh();
+        }
     }
 }

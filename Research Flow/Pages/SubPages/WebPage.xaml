@@ -9,7 +9,26 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <WebView x:Name="webView"/>
+        <Grid >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition />
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="webTitle" Grid.Row="0" FontSize="20" Style="{ThemeResource TitleTextBlockStyle}"/>
+            <WebView x:Name="webView" Grid.Row="1"/>
+            <CommandBar Grid.Row="2"
+                        HorizontalAlignment="Left"
+                        DefaultLabelPosition="Right"
+                        Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
+                <AppBarButton Label="Return" Icon="BackToWindow" Click="Return_Navigate"/>
+                <AppBarButton Label="Learn" Icon="Favorite" Click="SavetoLearn"/>
+                <AppBarSeparator/>
+                <AppBarButton Label="Back" Icon="Previous" Click="Back"/>
+                <AppBarButton Label="Forward" Icon="Next" Click="Forward"/>
+                <AppBarButton Label="Refresh" Icon="Refresh" Click="Refresh"/>
+            </CommandBar>
+        </Grid>
 
         <ProgressRing x:Name="webWaiting" IsActive="False" Height="100" Width="100"/>
 

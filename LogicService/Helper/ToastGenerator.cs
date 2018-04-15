@@ -10,16 +10,11 @@ namespace LogicService.Helper
     public class ToastGenerator
     {
 
-        /// <summary>
-        /// Save Screen shot
-        /// </summary>
-        /// <param name="folder"></param>
-        /// <returns></returns>
         public static ToastContent TextToast(string title,string content)
         {
             return new ToastContent()
             {
-                Launch = "action=viewEvent&eventId=1983",
+                Launch = "action=viewEvent&eventId=1983", // how to launch target app
                 Scenario = ToastScenario.Default,
 
                 Visual = new ToastVisual()
