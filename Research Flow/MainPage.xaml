@@ -82,6 +82,7 @@
                                     DefaultLabelPosition="Right"
                                     Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
                             <AppBarButton Label="ScreenShot" Icon="AttachCamera" Click="ScreenShot_Click"/>
+                            <AppBarButton Label="WebPage" Icon="Link" Click="WebPage_Click"/>
                             <AppBarButton Label="Refresh" Icon="Refresh" Click="Refresh_Click"/>
                         </CommandBar>
                     </Grid>

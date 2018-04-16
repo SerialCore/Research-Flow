@@ -14,7 +14,7 @@
                 <RowDefinition />
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <WebView x:Name="webView" Grid.Row="0" NavigationStarting="webView_NavigationStarting" FrameNavigationCompleted="WebView_FrameNavigationCompleted"/>
+            <WebView x:Name="webView" Grid.Row="0" NavigationStarting="WebView_NavigationStarting" FrameNavigationCompleted="WebView_FrameNavigationCompleted"/>
             <CommandBar Grid.Row="1"
                         HorizontalAlignment="Left"
                         DefaultLabelPosition="Right"
@@ -24,6 +24,7 @@
                 <AppBarButton Label="Back" Icon="Previous" Click="Back"/>
                 <AppBarButton Label="Forward" Icon="Next" Click="Forward"/>
                 <AppBarButton Label="Refresh" Icon="Refresh" Click="Refresh"/>
+                <AppBarButton Label="Histroy" Icon="Clock" />
                 <AppBarSeparator/>
                 <AppBarButton Label="Learn" Icon="Favorite" Click="SavetoLearn"/>
                 <AppBarButton Label="Share" Icon="Share" Click="ShareLink"/>

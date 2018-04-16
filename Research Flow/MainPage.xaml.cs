@@ -2,6 +2,7 @@
 using LogicService.Services;
 using LogicService.Storage;
 using Research_Flow.Pages;
+using Research_Flow.Pages.SubPages;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -188,6 +189,11 @@ namespace Research_Flow
             {
                 NavView_Navigate(NavView.SelectedItem as NavigationViewItem);
             }
+        }
+
+        private void WebPage_Click(object sender, RoutedEventArgs e)
+        {
+            ContentFrame.Navigate(typeof(WebPage));
         }
 
         private async void ScreenShot_Click(object sender, RoutedEventArgs e)

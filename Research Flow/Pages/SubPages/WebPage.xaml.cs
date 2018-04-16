@@ -6,6 +6,9 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Graphics.Display;
+using Windows.Graphics.Imaging;
+using Windows.Storage.Streams;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -13,6 +16,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -27,16 +31,17 @@ namespace Research_Flow.Pages.SubPages
         public WebPage()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            webWaiting.IsActive = true;
             string link = e.Parameter as string;
-            webView.Navigate(new Uri(link));
+            if (!string.IsNullOrEmpty(link))
+                webView.Navigate(new Uri(link));
         }
 
-        private void webView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
+        private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
         {
             webWaiting.IsActive = true;
         }
