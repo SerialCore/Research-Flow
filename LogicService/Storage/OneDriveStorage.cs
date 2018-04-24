@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using Microsoft.Toolkit.Uwp.Services.OneDrive;
 using static Microsoft.Toolkit.Uwp.Services.OneDrive.OneDriveEnums;
 
-#pragma warning disable 618   // will be enabled some day
+#pragma warning disable 618
 
 namespace LogicService.Storage
 {
@@ -18,16 +18,24 @@ namespace LogicService.Storage
         /// <summary>
         /// Login
         /// </summary>
-        public async static void OneDriveLogin()
+        public async static Task<bool> OneDriveLogin()
         {
-            //OneDriveService.Instance.Initialize("000000004420C07D", new string[] { "onedrive.readwrite", "offline_access" });
-            OneDriveService.Instance.Initialize(Microsoft.OneDrive.Sdk.OnlineIdAuthenticationProvider.PromptType.DoNotPrompt);
+            // a specific id used for any microsoft account
+            //OneDriveService.Instance.Initialize("000000004420C07D", new string[] { "onedrive.readwrite offline_access" });
+            //OneDriveService.Instance.Initialize("000000004420C07D", AccountProviderType.Msa, OneDriveScopes.OfflineAccess | OneDriveScopes.ReadWrite);
 
-            if (!await OneDriveService.Instance.LoginAsync())
+            // OnLineID means microsoft account associated with current Windows device
+            OneDriveService.Instance.Initialize(Microsoft.OneDrive.Sdk.OnlineIdAuthenticationProvider.PromptType.DoNotPrompt);
+            try
             {
-                throw new Exception("OneDrive unable to sign in");
+                return await OneDriveService.Instance.LoginAsync() ? true : false;
+            }
+            catch
+            {
+                return false;
             }
         }
+
 
         /// <summary>
         /// Logout

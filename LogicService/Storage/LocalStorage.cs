@@ -15,6 +15,7 @@ namespace LogicService.Storage
 
         public static StorageFolder GetAppFolderAsync()
         {
+            // discrete folders for different users
             return ApplicationData.Current.LocalFolder;
         }
 

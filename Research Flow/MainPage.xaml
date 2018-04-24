@@ -92,7 +92,7 @@
             <NavigationView.PaneFooter>
                 <Grid>
                     <ProgressBar x:Name="signWait" IsIndeterminate="True" ShowPaused="False" ShowError="False"/>
-                    <ListViewItem x:Name="signPane" Tapped="Account_Tapped" Visibility="Collapsed">
+                    <ListViewItem x:Name="signPane" Tapped="OneDrive_Tapped" Visibility="Collapsed">
                         <Grid >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="24"/>

@@ -13,47 +13,7 @@
         <FlipView Margin="100,50">
             <FlipViewItem>
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Image Source="/Pages/Images/Logos/OneDrive_logo.png"/>
-                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}">
-                            A OneDrive account is required for the storage and synchronization of user data, learning data and papers. 
-                            Please sign in OneDrive with Microsoft Account and ensure the OneDrive folder available or the TaskFlow will work abnormally. 
-                            And do remember OneDrive also serves IOS and Android, so this's definitely a good choice.
-                        </TextBlock>
-                        <HyperlinkButton Content="Know about OneDrive" 
-                                         NavigateUri="https://support.office.com/en-us/article/onedrive-help-5943c2b9-fafc-4cb4-95c0-9cc73fcabb30"/>
-                        <TextBlock >
-                            <Run Text="Step 1   ->" FontWeight="Bold"/>
-                            <Run Text="Ensure Windows has been associated with Microsoft Account."/>
-                        </TextBlock>
-                        <TextBlock >
-                            <Run Text="Step 2   ->" FontWeight="Bold"/>
-                            <Run Text="Ensure OneDrive has been signed in."/>
-                        </TextBlock>
-                        <TextBlock >
-                            <Run Text="Step 3   ->" FontWeight="Bold"/>
-                            <Run Text="Sign in your Microsoft account."/>
-                        </TextBlock>
-                        <Button Click="AuthenticateMicrosoft" Content="Sign in."/>
-                        <ListViewItem x:Name="signPane" Visibility="Collapsed">
-                            <Grid >
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="24"/>
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-                                <PersonPicture Grid.Column="0" x:Name="accountPhoto" Height="24" Width="24"/>
-                                <TextBlock Grid.Column="1" x:Name="accountEmail" Text="Sign In" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
-                            </Grid>
-                        </ListViewItem>
-                    </StackPanel>
+                    <Button Click="Button_Click"  Content="Navigate."/>
                 </Grid>
             </FlipViewItem>
         </FlipView>
