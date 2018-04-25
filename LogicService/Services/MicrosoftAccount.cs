@@ -171,7 +171,7 @@ namespace LogicService.Services
 
                 try
                 {
-                    OneDriveStorage.OneDriveLogin();
+                    await OneDriveStorage.OneDriveLogin();
                 }
                 catch
                 {

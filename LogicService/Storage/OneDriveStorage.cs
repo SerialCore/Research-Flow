@@ -28,7 +28,7 @@ namespace LogicService.Storage
             OneDriveService.Instance.Initialize(Microsoft.OneDrive.Sdk.OnlineIdAuthenticationProvider.PromptType.DoNotPrompt);
             try
             {
-                return await OneDriveService.Instance.LoginAsync() ? true : false;
+                return await OneDriveService.Instance.LoginAsync();
             }
             catch
             {

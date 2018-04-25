@@ -98,8 +98,8 @@
                                 <ColumnDefinition Width="24"/>
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <PersonPicture Grid.Column="0" x:Name="accountPhoto" Height="24" Width="24"/>
-                            <TextBlock Grid.Column="1" x:Name="accountEmail" Text="Sign In" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                            <PersonPicture Grid.Column="0" x:Name="accountIcon" Height="24" Width="24"/>
+                            <TextBlock Grid.Column="1" x:Name="accountStatu" Text="Offline" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
                         </Grid>
                     </ListViewItem>
                 </Grid>

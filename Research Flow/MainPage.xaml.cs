@@ -40,13 +40,16 @@ namespace Research_Flow
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            try
+            if (await OneDriveStorage.OneDriveLogin())
             {
-                await OneDriveStorage.OneDriveLogin();
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.UriSource = new Uri("ms-appx:///Pages/Images/Logos/OneDrive_icon.png");
+                accountIcon.ProfilePicture = bitmap;
+                accountStatu.Text = "Windows account signed";
             }
-            catch(Exception ex)
+            else
             {
-                InAppNotification.Show(ex.Message);
+                accountStatu.Text = "OneDrive Offline";
             }
 
             // show user info after handling
@@ -160,6 +163,8 @@ namespace Research_Flow
 
         #endregion
 
+        #region Content
+
         private async void ScreenShot_Click(object sender, RoutedEventArgs e)
         {
             var bitmap = new RenderTargetBitmap();
@@ -202,6 +207,8 @@ namespace Research_Flow
                 }
             }
         }
+
+        #endregion
 
     }
 
