@@ -14,6 +14,8 @@ namespace LogicService.Encapsulates
 
         public string SourceUri { get; set; }
 
+        public int Star { get; set; }
+
         public bool IsJournal { get; set; }
 
         public DateTime LastUpdateTime { get; set; }

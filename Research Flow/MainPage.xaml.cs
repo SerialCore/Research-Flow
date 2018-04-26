@@ -6,6 +6,7 @@ using Research_Flow.Pages.SubPages;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Data.Json;
 using Windows.Graphics.Display;
 using Windows.Graphics.Imaging;
@@ -19,6 +20,7 @@ using Windows.UI.Core;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Windows.Web.Http;
@@ -165,7 +167,53 @@ namespace Research_Flow
 
         #region Content
 
-        private async void ScreenShot_Click(object sender, RoutedEventArgs e)
+        private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+        }
+
+        private void ScreenShot_Share(object sender, RoutedEventArgs e)
+        {
+            DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
+            dataTransferManager.DataRequested += DataTransferManager_DataRequested;
+            DataTransferManager.ShowShareUI();
+        }
+
+        private async void DataTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
+        {
+            DataRequestDeferral deferral = args.Request.GetDeferral();
+
+            DataRequest request = args.Request;
+            request.Data.Properties.Title = "ScreenShot";
+            request.Data.Properties.Description = "Share your current idea";
+
+            var bitmap = new RenderTargetBitmap();
+            StorageFile file = await (await LocalStorage.GetAppPhotosAsync()).CreateFileAsync("TaskFlow-ScreenShot.png", CreationCollisionOption.ReplaceExisting);
+            await bitmap.RenderAsync(FullPage);
+            var buffer = await bitmap.GetPixelsAsync();
+            using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
+            {
+                var encode = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, stream);
+                encode.SetPixelData(
+                    BitmapPixelFormat.Bgra8,
+                    BitmapAlphaMode.Ignore,
+                    (uint)bitmap.PixelWidth,
+                    (uint)bitmap.PixelHeight,
+                    DisplayInformation.GetForCurrentView().LogicalDpi,
+                    DisplayInformation.GetForCurrentView().LogicalDpi,
+                    buffer.ToArray()
+                   );
+                await encode.FlushAsync();
+            }
+
+            RandomAccessStreamReference imageStreamRef = RandomAccessStreamReference.CreateFromFile(file);
+            request.Data.Properties.Thumbnail = imageStreamRef;
+            request.Data.SetBitmap(imageStreamRef);
+
+            deferral.Complete();
+        }
+
+        private async void ScreenShot_Save(object sender, RoutedEventArgs e)
         {
             var bitmap = new RenderTargetBitmap();
             StorageFile file = await (await LocalStorage.GetAppPhotosAsync()).CreateFileAsync("TaskFlow-ScreenShot.png", CreationCollisionOption.ReplaceExisting);

@@ -81,7 +81,14 @@
                                     VerticalAlignment="Top"
                                     DefaultLabelPosition="Right"
                                     Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
-                            <AppBarButton Label="ScreenShot" Icon="AttachCamera" Click="ScreenShot_Click"/>
+                            <AppBarButton Label="ScreenShot" Icon="AttachCamera" Tapped="Flyout_Tapped">
+                                <FlyoutBase.AttachedFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="Share your idea" Click="ScreenShot_Share"/>
+                                        <MenuFlyoutItem Text="Upload to OneDrive" Click="ScreenShot_Save"/>
+                                    </MenuFlyout>
+                                </FlyoutBase.AttachedFlyout>
+                            </AppBarButton>
                             <AppBarButton Label="WebPage" Icon="Link" Click="WebPage_Click"/>
                             <AppBarButton Label="Refresh" Icon="Refresh" Click="Refresh_Click"/>
                         </CommandBar>
