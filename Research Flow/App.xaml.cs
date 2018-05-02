@@ -44,6 +44,7 @@ namespace Research_Flow
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
+            Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
             if (rootFrame == null)
@@ -85,6 +86,7 @@ namespace Research_Flow
             if(args.Kind==ActivationKind.Protocol)
             {
                 Frame rootFrame = Window.Current.Content as Frame;
+                Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
                 if (rootFrame == null)
                 {
                     rootFrame = new Frame();

@@ -67,7 +67,7 @@
 
             <NavigationView.HeaderTemplate>
                 <DataTemplate>
-                    <Grid Margin="24,4,0,0">
+                    <Grid Margin="24,32,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
