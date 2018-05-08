@@ -67,7 +67,8 @@
 
             <NavigationView.HeaderTemplate>
                 <DataTemplate>
-                    <Grid Margin="24,32,0,0">
+                    <Grid Background="#FF007ACC">
+                        <Grid Margin="24,32,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
@@ -80,8 +81,8 @@
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Top"
                                     DefaultLabelPosition="Right"
-                                    Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
-                            <AppBarButton Label="ScreenShot" Icon="AttachCamera" Tapped="Flyout_Tapped">
+                                    Background="Transparent">
+                            <AppBarButton Label="ScreenShot" Icon="AttachCamera" Tapped="Flyout_Tapped" Background="Transparent">
                                 <FlyoutBase.AttachedFlyout>
                                     <MenuFlyout>
                                         <MenuFlyoutItem Text="Share your idea" Click="ScreenShot_Share"/>
@@ -89,9 +90,10 @@
                                     </MenuFlyout>
                                 </FlyoutBase.AttachedFlyout>
                             </AppBarButton>
-                            <AppBarButton Label="WebPage" Icon="Link" Click="WebPage_Click"/>
-                            <AppBarButton Label="Refresh" Icon="Refresh" Click="Refresh_Click"/>
+                                <AppBarButton Label="WebPage" Icon="Link" Click="WebPage_Click" Background="Transparent"/>
+                                <AppBarButton Label="Refresh" Icon="Refresh" Click="Refresh_Click" Background="Transparent"/>
                         </CommandBar>
+                        </Grid>
                     </Grid>
                 </DataTemplate>
             </NavigationView.HeaderTemplate>

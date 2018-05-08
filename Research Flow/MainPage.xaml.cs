@@ -188,7 +188,7 @@ namespace Research_Flow
             request.Data.Properties.Description = "Share your current idea";
 
             var bitmap = new RenderTargetBitmap();
-            StorageFile file = await (await LocalStorage.GetAppPhotosAsync()).CreateFileAsync("TaskFlow-ScreenShot.png", CreationCollisionOption.ReplaceExisting);
+            StorageFile file = await (await LocalStorage.GetAppPhotosAsync()).CreateFileAsync("ResearchFlow-ScreenShot.png", CreationCollisionOption.ReplaceExisting);
             await bitmap.RenderAsync(FullPage);
             var buffer = await bitmap.GetPixelsAsync();
             using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
@@ -216,7 +216,7 @@ namespace Research_Flow
         private async void ScreenShot_Save(object sender, RoutedEventArgs e)
         {
             var bitmap = new RenderTargetBitmap();
-            StorageFile file = await (await LocalStorage.GetAppPhotosAsync()).CreateFileAsync("TaskFlow-ScreenShot.png", CreationCollisionOption.ReplaceExisting);
+            StorageFile file = await (await LocalStorage.GetAppPhotosAsync()).CreateFileAsync("ResearchFlow-ScreenShot.png", CreationCollisionOption.ReplaceExisting);
             await bitmap.RenderAsync(FullPage);
             var buffer = await bitmap.GetPixelsAsync();
             using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
@@ -249,7 +249,7 @@ namespace Research_Flow
                 }
                 catch
                 {
-                    await file.CopyAsync(KnownFolders.PicturesLibrary, "TaskFlow-ScreenShot.png", NameCollisionOption.GenerateUniqueName);
+                    await file.CopyAsync(KnownFolders.PicturesLibrary, "ResearchFlow-ScreenShot.png", NameCollisionOption.GenerateUniqueName);
                     ToastNotificationManager.CreateToastNotifier().Show(
                         new ToastNotification(ToastGenerator.TextToast("Pictures Library", "Screen Shot Saved").GetXml()));
                 }

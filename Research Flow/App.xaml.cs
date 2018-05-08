@@ -10,6 +10,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -44,7 +45,7 @@ namespace Research_Flow
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
-            Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
+            ConfigureUI();
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
             if (rootFrame == null)
@@ -86,7 +87,7 @@ namespace Research_Flow
             if(args.Kind==ActivationKind.Protocol)
             {
                 Frame rootFrame = Window.Current.Content as Frame;
-                Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
+                ConfigureUI();
                 if (rootFrame == null)
                 {
                     rootFrame = new Frame();
@@ -102,6 +103,21 @@ namespace Research_Flow
                 }
                 Window.Current.Activate();
             }
+        }
+
+        private void ConfigureUI()
+        {
+            var coreTitleBar = Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar;
+            var appTitleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
+
+            coreTitleBar.ExtendViewIntoTitleBar = true;
+            appTitleBar.ButtonBackgroundColor = Colors.Transparent;
+            //appTitleBar.ButtonForegroundColor = Colors.Transparent;
+            appTitleBar.ButtonHoverBackgroundColor = Colors.Transparent;
+            //appTitleBar.ButtonHoverForegroundColor = Colors.Transparent;
+            appTitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+            //appTitleBar.ButtonInactiveForegroundColor = Colors.Transparent;
+
         }
 
         /// <summary>
