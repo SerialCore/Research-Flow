@@ -9,6 +9,7 @@ using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
 using Windows.Graphics.Imaging;
 using Windows.Storage.Streams;
+using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -74,6 +75,11 @@ namespace Research_Flow.Pages.SubPages
             webView.Refresh();
         }
 
+        private async void OpenBrowser(object sender, RoutedEventArgs e)
+        {
+            await Launcher.LaunchUriAsync(webView.Source);
+        }
+
         private void SavetoLearn(object sender, RoutedEventArgs e)
         {
             
@@ -101,5 +107,6 @@ namespace Research_Flow.Pages.SubPages
             // end if deferral
             deferral.Complete();
         }
+
     }
 }

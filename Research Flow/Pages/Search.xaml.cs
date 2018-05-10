@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using LogicService.Encapsulates;
+﻿using LogicService.Encapsulates;
 using LogicService.Services;
 using Microsoft.Toolkit.Services.Bing;
 using Research_Flow.Pages.SubPages;
+using System;
+using System.Collections.ObjectModel;
 using Windows.System;
 using Windows.UI.Core;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -34,11 +35,12 @@ namespace Research_Flow.Pages
         private void InitializeData()
         {
             // feed source
-            feedsource_list.ItemsSource = new List<FeedSource>()
+            feedSources = new ObservableCollection<FeedSource>()
             {
                 new FeedSource{SourceName="ACS",SourceUri="https://pubs.acs.org/action/showFeed?ui=0&mi=4ta59b4&type=search&feed=rss&query=%2526AllField%253Dhydrogen%252Bbond%2526publication%253D40025988%2526sortBy%253DEarliest%2526target%253Ddefault%2526targetTab%253Dstd",Star=5,IsJournal=true},
                 new FeedSource{SourceName="科学网",SourceUri="http://www.sciencenet.cn/xml/paper.aspx?di=7",Star=4,IsJournal=false}
             };
+            feedsource_list.ItemsSource = feedSources;
 
             // Bing configure
             country.ItemsSource = Enum.GetValues(typeof(BingCountry));
@@ -50,6 +52,15 @@ namespace Research_Flow.Pages
         }
 
         #region RSS
+
+        public ObservableCollection<FeedSource> feedSources { get; set; }
+
+        private void ChangeRssSource(object sender, RoutedEventArgs e)
+        {
+            if (feedSources == null)
+                feedSources = new ObservableCollection<FeedSource>();
+            
+        }
 
         private void SearchRss(string feedlink)
         {
@@ -86,6 +97,12 @@ namespace Research_Flow.Pages
         #endregion
 
         #region Bing
+
+        private void query_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.Enter)
+                SearchBing(null, null);
+        }
 
         private void SearchBing(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {

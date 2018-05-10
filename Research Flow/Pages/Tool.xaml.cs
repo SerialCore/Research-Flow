@@ -7,6 +7,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using LogicService.Encapsulates;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -45,7 +46,7 @@ namespace Research_Flow.Pages
         private async void AppList_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as StoreApp;
-            await Windows.System.Launcher.LaunchUriAsync(item.AppUri);
+            await Launcher.LaunchUriAsync(item.AppUri);
         }
     }
 }

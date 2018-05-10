@@ -51,6 +51,7 @@ namespace Research_Flow
         {
             await LocalStorage.GetAppPhotosAsync();
             await LocalStorage.GetFeedsAsync();
+            await LocalStorage.GetSettingsAsync();
         }
 
         #endregion

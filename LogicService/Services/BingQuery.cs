@@ -14,6 +14,9 @@ namespace LogicService.Services
         public static async void QueryAsync(string text, int count, Action<List<BingResult>> onQueryCompleted = null, Action<string> onError = null, 
             BingCountry country = BingCountry.UnitedStates, BingLanguage language = BingLanguage.English, BingQueryType type = BingQueryType.Search)
         {
+            if (string.IsNullOrEmpty(text))
+                return;
+
             var searchConfig = new BingSearchConfig
             {
                 Country = country,

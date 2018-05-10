@@ -25,6 +25,7 @@
                 <AppBarButton Label="Forward" Icon="Next" Click="Forward"/>
                 <AppBarButton Label="Refresh" Icon="Refresh" Click="Refresh"/>
                 <AppBarButton Label="Histroy" Icon="Clock" />
+                <AppBarButton Label="Browser" Icon="Link" Click="OpenBrowser"/>
                 <AppBarSeparator/>
                 <AppBarButton Label="Learn" Icon="Favorite" Click="SavetoLearn"/>
                 <AppBarButton Label="Share" Icon="Share" Click="ShareLink"/>
