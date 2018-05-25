@@ -38,7 +38,11 @@ namespace Research_Flow.Pages
             feedSources = new ObservableCollection<FeedSource>()
             {
                 new FeedSource{SourceName="ACS",SourceUri="https://pubs.acs.org/action/showFeed?ui=0&mi=4ta59b4&type=search&feed=rss&query=%2526AllField%253Dhydrogen%252Bbond%2526publication%253D40025988%2526sortBy%253DEarliest%2526target%253Ddefault%2526targetTab%253Dstd",Star=5,IsJournal=true},
-                new FeedSource{SourceName="科学网",SourceUri="http://www.sciencenet.cn/xml/paper.aspx?di=7",Star=4,IsJournal=false}
+                new FeedSource{SourceName="科学网",SourceUri="http://www.sciencenet.cn/xml/paper.aspx?di=7",Star=4,IsJournal=false},
+                new FeedSource{SourceName="PRA",SourceUri="http://feeds.aps.org/rss/recent/pra.xml",Star=5,IsJournal=true},
+                new FeedSource{SourceName="PRB",SourceUri="http://feeds.aps.org/rss/recent/prb.xml",Star=5,IsJournal=true},
+                new FeedSource{SourceName="PRC",SourceUri="http://feeds.aps.org/rss/recent/prc.xml",Star=5,IsJournal=true},
+                new FeedSource{SourceName="PRD",SourceUri="http://feeds.aps.org/rss/recent/prd.xml",Star=5,IsJournal=true}
             };
             feedsource_list.ItemsSource = feedSources;
 
