@@ -1,49 +1,17 @@
-﻿using System;
+﻿using Microsoft.Toolkit.Services.OneDrive;
+using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
-using System.Collections.Generic;
-using Microsoft.Toolkit.Uwp.Services.OneDrive;
-using static Microsoft.Toolkit.Uwp.Services.OneDrive.OneDriveEnums;
-
-#pragma warning disable 618
+using static Microsoft.Toolkit.Services.MicrosoftGraph.MicrosoftGraphEnums;
 
 namespace LogicService.Storage
 {
     public class OneDriveStorage
     {
-
-        /// <summary>
-        /// Login
-        /// </summary>
-        public async static Task<bool> OneDriveLogin()
-        {
-            // a specific id used for any microsoft account
-            //OneDriveService.Instance.Initialize("000000004420C07D", new string[] { "onedrive.readwrite offline_access" });
-            //OneDriveService.Instance.Initialize("000000004420C07D", AccountProviderType.Msa, OneDriveScopes.OfflineAccess | OneDriveScopes.ReadWrite);
-
-            // OnLineID means microsoft account associated with current Windows device
-            OneDriveService.Instance.Initialize(Microsoft.OneDrive.Sdk.OnlineIdAuthenticationProvider.PromptType.DoNotPrompt);
-            try
-            {
-                return await OneDriveService.Instance.LoginAsync();
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-
-        /// <summary>
-        /// Logout
-        /// </summary>
-        public async static void OneDriveLogout()
-        {
-            await OneDriveService.Instance.LogoutAsync();
-        }
 
         #region Get folder
 
@@ -138,7 +106,7 @@ namespace LogicService.Storage
         /// <returns>new folder</returns>
         public static async Task<OneDriveStorageFolder> CreateFolderAsync(OneDriveStorageFolder folder, string foldername)
         {
-            return await folder.CreateFolderAsync(foldername, CreationCollisionOption.GenerateUniqueName);
+            return await folder.StorageFolderPlatformService.CreateFolderAsync(foldername, CreationCollisionOption.GenerateUniqueName);
         }
 
         /// <summary>
@@ -202,9 +170,9 @@ namespace LogicService.Storage
                 {
                     var prop = await file.GetBasicPropertiesAsync();
                     if (prop.Size >= 4 * 1024 * 1024)
-                        fileCreated = await folder.UploadFileAsync(file.Name, localStream, CreationCollisionOption.GenerateUniqueName, 320 * 1024);
+                        fileCreated = await folder.StorageFolderPlatformService.UploadFileAsync(file.Name, localStream, CreationCollisionOption.GenerateUniqueName, 320 * 1024);
                     else
-                        fileCreated = await folder.CreateFileAsync(file.Name, CreationCollisionOption.GenerateUniqueName, localStream);
+                        fileCreated = await folder.StorageFolderPlatformService.CreateFileAsync(file.Name, CreationCollisionOption.GenerateUniqueName, localStream);
                 }
             }
             return fileCreated;
@@ -257,7 +225,7 @@ namespace LogicService.Storage
             var remoteFile = await folder.GetFileAsync(fileName);
 
             StorageFile myLocalFile = null;
-            using (var remoteStream = await remoteFile.OpenAsync() as IRandomAccessStream)
+            using (var remoteStream = await remoteFile.StorageFilePlatformService.OpenAsync() as IRandomAccessStream)
             {
                 byte[] buffer = new byte[remoteStream.Size];
                 var localBuffer = await remoteStream.ReadAsync(buffer.AsBuffer(), (uint)remoteStream.Size, InputStreamOptions.ReadAhead);
@@ -279,7 +247,7 @@ namespace LogicService.Storage
         /// <returns>BitmapImage instance for Image source</returns>
         public static async Task<BitmapImage> RetrieveFileThumbnails(OneDriveStorageFile file)
         {
-            var stream = await file.GetThumbnailAsync(ThumbnailSize.Large);
+            var stream = await file.StorageItemPlatformService.GetThumbnailAsync(ThumbnailSize.Large);
             BitmapImage bmp = new BitmapImage();
             await bmp.SetSourceAsync(stream as IRandomAccessStream);
 

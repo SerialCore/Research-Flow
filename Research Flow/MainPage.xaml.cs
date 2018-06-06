@@ -7,23 +7,16 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.Data.Json;
 using Windows.Graphics.Display;
 using Windows.Graphics.Imaging;
-using Windows.Security.Authentication.Web.Core;
-using Windows.Security.Credentials;
 using Windows.Storage;
 using Windows.Storage.Streams;
-using Windows.System;
-using Windows.UI.ApplicationSettings;
-using Windows.UI.Core;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
-using Windows.Web.Http;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -42,7 +35,7 @@ namespace Research_Flow
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (await OneDriveStorage.OneDriveLogin())
+            if (await GraphService.OneDriveLogin())
             {
                 BitmapImage bitmap = new BitmapImage();
                 bitmap.UriSource = new Uri("ms-appx:///Pages/Images/Logos/OneDrive_icon.png");
@@ -51,6 +44,7 @@ namespace Research_Flow
             }
             else
             {
+                accountIcon.ProfilePicture = null;
                 accountStatu.Text = "OneDrive Offline";
             }
 

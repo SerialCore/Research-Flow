@@ -171,7 +171,7 @@ namespace LogicService.Services
 
                 try
                 {
-                    await OneDriveStorage.OneDriveLogin();
+                    await GraphService.OneDriveLogin();
                 }
                 catch
                 {
@@ -184,7 +184,7 @@ namespace LogicService.Services
             if (args.Action == WebAccountAction.Remove)
             {
                 SignOutAccountAsync(command.WebAccount);
-                OneDriveStorage.OneDriveLogout();
+                GraphService.OneDriveLogout();
             }
         }
 
