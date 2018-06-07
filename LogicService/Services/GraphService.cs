@@ -12,6 +12,8 @@ namespace LogicService.Services
 
         private static MicrosoftGraphUserService User = null;
 
+        public static bool IsSignedIn = false;
+
         public async static Task<bool> OneDriveLogin()
         {
             // a specific id used for any microsoft account
@@ -19,9 +21,9 @@ namespace LogicService.Services
 
             try
             {
-                bool login = await OneDriveService.Instance.LoginAsync();
-                if (login) User = OneDriveService.Instance.Provider.User;
-                return login;
+                IsSignedIn = await OneDriveService.Instance.LoginAsync();
+                if (IsSignedIn) User = OneDriveService.Instance.Provider.User;
+                return IsSignedIn;
             }
             catch
             {
@@ -33,6 +35,7 @@ namespace LogicService.Services
         {
             await OneDriveService.Instance.LogoutAsync();
             User = null;
+            IsSignedIn = false;
         }
 
         public async static Task<IRandomAccessStream> GetUserPhoto()

@@ -52,6 +52,11 @@ namespace Research_Flow
             signWait.ShowPaused = true;
             signWait.Visibility = Visibility.Collapsed;
             signPane.Visibility = Visibility.Visible;
+
+            if (SystemInfo.IsFirstUse || !ApplicationData.Current.LocalSettings.Values.ContainsKey("Configured"))
+            {
+                ;
+            }
         }
 
         #region NavView
@@ -234,7 +239,6 @@ namespace Research_Flow
                     new ToastNotification(ToastGenerator.TextToast("Screen Shot Captured", "Waiting for network").GetXml()));
 
                 // confirm the app was associated with Microsoft account
-                string token = await MicrosoftAccount.GetMsaTokenSilentlyAsync(MsaScope.Basic);
                 try
                 {
                     await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetAppPhotosAsync(), file);

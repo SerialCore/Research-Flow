@@ -71,10 +71,8 @@ namespace Research_Flow
                     // parameter
 
                     SystemInfo.TrackAppUse(e);
-                    if (SystemInfo.IsFirstUse || !ApplicationData.Current.LocalSettings.Values.ContainsKey("Configured"))
-                        rootFrame.Navigate(typeof(Configure), e.Arguments);
-                    else
-                        rootFrame.Navigate(typeof(MainPage), e.Arguments);
+
+                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
 
                 // Ensure the current window is active
@@ -96,10 +94,7 @@ namespace Research_Flow
                 }
                 if (rootFrame.Content == null)
                 {
-                    if (SystemInfo.IsFirstUse)
-                        rootFrame.Navigate(typeof(Configure));
-                    else
-                        rootFrame.Navigate(typeof(MainPage));
+                    rootFrame.Navigate(typeof(MainPage));
                 }
                 Window.Current.Activate();
             }

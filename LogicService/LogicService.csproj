@@ -122,7 +122,6 @@
     <Compile Include="Services\BingQuery.cs" />
     <Compile Include="Services\Crawler.cs" />
     <Compile Include="Services\GraphService.cs" />
-    <Compile Include="Services\MicrosoftAccount.cs" />
     <Compile Include="Storage\LocalStorage.cs" />
     <Compile Include="Storage\OneDriveStorage.cs" />
     <Compile Include="Services\RssService.cs" />
