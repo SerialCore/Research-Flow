@@ -35,17 +35,14 @@ namespace Research_Flow
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (await GraphService.OneDriveLogin())
+            if (await GraphService.ServiceLogin())
             {
-                BitmapImage bitmap = new BitmapImage();
-                bitmap.UriSource = new Uri("ms-appx:///Pages/Images/Logos/OneDrive_icon.png");
-                accountIcon.ProfilePicture = bitmap;
-                accountStatu.Text = "Windows account signed";
+                accountStatu.Text = await GraphService.GetDisplayName();
             }
             else
             {
                 accountIcon.ProfilePicture = null;
-                accountStatu.Text = "OneDrive Offline";
+                accountStatu.Text = "Serivce Offline";
             }
 
             // show user info after handling
@@ -235,9 +232,6 @@ namespace Research_Flow
 
             if (file != null)
             {
-                ToastNotificationManager.CreateToastNotifier().Show(
-                    new ToastNotification(ToastGenerator.TextToast("Screen Shot Captured", "Waiting for network").GetXml()));
-
                 // confirm the app was associated with Microsoft account
                 try
                 {

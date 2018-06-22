@@ -1,4 +1,5 @@
-﻿using Microsoft.Toolkit.Services.MicrosoftGraph;
+﻿using Microsoft.Graph;
+using Microsoft.Toolkit.Services.MicrosoftGraph;
 using Microsoft.Toolkit.Services.OneDrive;
 using Microsoft.Toolkit.Services.Services.MicrosoftGraph;
 using System;
@@ -10,18 +11,23 @@ namespace LogicService.Services
     public class GraphService
     {
 
-        private static MicrosoftGraphUserService User = null;
+        #region profile
+
+        public static MicrosoftGraphUserService User = null;
 
         public static bool IsSignedIn = false;
 
-        public async static Task<bool> OneDriveLogin()
+        public async static Task<bool> ServiceLogin()
         {
             // a specific id used for any microsoft account
-            OneDriveService.Instance.Initialize("3bd1af71-d8ad-41f8-b1c9-22bef7a7028a", new string[] { MicrosoftGraphScope.FilesReadWriteAll });
+            OneDriveService.Instance.Initialize("3bd1af71-d8ad-41f8-b1c9-22bef7a7028a",
+                new string[] { MicrosoftGraphScope.FilesReadWriteAll });
+            MicrosoftGraphService.Instance.Initialize("3bd1af71-d8ad-41f8-b1c9-22bef7a7028a", MicrosoftGraphEnums.ServicesToInitialize.OneDrive | MicrosoftGraphEnums.ServicesToInitialize.UserProfile,
+                new string[] { MicrosoftGraphScope.UserRead });
 
             try
             {
-                IsSignedIn = await OneDriveService.Instance.LoginAsync();
+                IsSignedIn = await MicrosoftGraphService.Instance.LoginAsync() && await OneDriveService.Instance.LoginAsync();
                 if (IsSignedIn) User = OneDriveService.Instance.Provider.User;
                 return IsSignedIn;
             }
@@ -31,7 +37,7 @@ namespace LogicService.Services
             }
         }
 
-        public async static void OneDriveLogout()
+        public async static void ServiceLogout()
         {
             await OneDriveService.Instance.LogoutAsync();
             User = null;
@@ -47,5 +53,8 @@ namespace LogicService.Services
         {
             return (await User.GetProfileAsync()).DisplayName;
         }
+
+        #endregion
+
     }
 }
