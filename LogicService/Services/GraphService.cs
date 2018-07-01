@@ -54,6 +54,11 @@ namespace LogicService.Services
             return (await User.GetProfileAsync()).DisplayName;
         }
 
+        public async static Task<string> GetPrincipalName()
+        {
+            return (await User.GetProfileAsync()).UserPrincipalName;
+        }
+
         #endregion
 
     }

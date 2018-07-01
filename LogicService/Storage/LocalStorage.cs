@@ -1,4 +1,5 @@
-﻿using Microsoft.Toolkit.Uwp.Helpers;
+﻿using LogicService.Services;
+using Microsoft.Toolkit.Uwp.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,23 +16,27 @@ namespace LogicService.Storage
 
         public static StorageFolder GetAppFolderAsync()
         {
-            // discrete folders for different users
             return ApplicationData.Current.LocalFolder;
         }
 
-        public static async Task<StorageFolder> GetAppPhotosAsync()
+        public async static Task<StorageFolder> GetUserFolderAsync()
         {
-            return await GetAppFolderAsync().CreateFolderAsync("Photos",CreationCollisionOption.OpenIfExists);
+            return await GetAppFolderAsync().CreateFolderAsync(await GraphService.GetPrincipalName(), CreationCollisionOption.OpenIfExists);
+        }
+
+        public static async Task<StorageFolder> GetPhotosAsync()
+        {
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Photos",CreationCollisionOption.OpenIfExists);
         }
 
         public static async Task<StorageFolder> GetFeedsAsync()
         {
-            return await GetAppFolderAsync().CreateFolderAsync("Feeds", CreationCollisionOption.OpenIfExists);
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Feeds", CreationCollisionOption.OpenIfExists);
         }
 
         public static async Task<StorageFolder> GetSettingsAsync()
         {
-            return await GetAppFolderAsync().CreateFolderAsync("Settings", CreationCollisionOption.OpenIfExists);
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Settings", CreationCollisionOption.OpenIfExists);
         }
 
 

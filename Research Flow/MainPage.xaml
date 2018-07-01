@@ -99,13 +99,13 @@
             <NavigationView.PaneFooter>
                 <Grid>
                     <ProgressBar x:Name="signWait" IsIndeterminate="True" ShowPaused="False" ShowError="False"/>
-                    <ListViewItem x:Name="signPane" Tapped="OneDrive_Tapped" Visibility="Collapsed">
+                    <ListViewItem x:Name="signPane" Tapped="OneDrive_Tapped" Visibility="Visible">
                         <Grid >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="24"/>
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <PersonPicture Grid.Column="0" x:Name="accountIcon" Height="24" Width="24"/>
+                            <PersonPicture Grid.Column="0" x:Name="accountIcon" ProfilePicture="/Assets/Microsoft_logo.jpg" Height="24" Width="24"/>
                             <TextBlock Grid.Column="1" x:Name="accountStatu" Text="Offline" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
                         </Grid>
                     </ListViewItem>

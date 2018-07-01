@@ -184,7 +184,7 @@ namespace Research_Flow
             request.Data.Properties.Description = "Share your current idea";
 
             var bitmap = new RenderTargetBitmap();
-            StorageFile file = await (await LocalStorage.GetAppPhotosAsync()).CreateFileAsync("ResearchFlow-ScreenShot.png", CreationCollisionOption.ReplaceExisting);
+            StorageFile file = await (await LocalStorage.GetPhotosAsync()).CreateFileAsync("ResearchFlow-ScreenShot.png", CreationCollisionOption.ReplaceExisting);
             await bitmap.RenderAsync(FullPage);
             var buffer = await bitmap.GetPixelsAsync();
             using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
@@ -212,7 +212,7 @@ namespace Research_Flow
         private async void ScreenShot_Save(object sender, RoutedEventArgs e)
         {
             var bitmap = new RenderTargetBitmap();
-            StorageFile file = await (await LocalStorage.GetAppPhotosAsync()).CreateFileAsync("ResearchFlow-ScreenShot.png", CreationCollisionOption.ReplaceExisting);
+            StorageFile file = await (await LocalStorage.GetPhotosAsync()).CreateFileAsync("ResearchFlow-ScreenShot.png", CreationCollisionOption.ReplaceExisting);
             await bitmap.RenderAsync(FullPage);
             var buffer = await bitmap.GetPixelsAsync();
             using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))

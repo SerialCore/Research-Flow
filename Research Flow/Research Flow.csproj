@@ -146,6 +146,7 @@
   <ItemGroup>
     <None Include="Package.xml" />
     <Content Include="Assets\LargeTile.scale-200.png" />
+    <Content Include="Assets\Microsoft_logo.jpg" />
     <Content Include="Assets\SmallTile.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />
@@ -158,9 +159,9 @@
     <Content Include="Pages\Images\hint.png" />
     <Content Include="Pages\Images\Logos\blackbox_logo.png" />
     <Content Include="Pages\Images\Logos\enGJFer_logo.png" />
-    <Content Include="Pages\Images\Logos\OneDrive_icon.png" />
-    <Content Include="Pages\Images\Logos\OneDrive_icon_trans.png" />
-    <Content Include="Pages\Images\Logos\OneDrive_logo.png" />
+    <Content Include="Assets\OneDrive_icon.png" />
+    <Content Include="Assets\OneDrive_icon_trans.png" />
+    <Content Include="Assets\OneDrive_logo.png" />
     <Content Include="Pages\Images\Logos\paintpanel_logo.png" />
     <Content Include="Pages\Images\Logos\phyMylab_logo.png" />
     <Content Include="Properties\Default.rd.xml" />
