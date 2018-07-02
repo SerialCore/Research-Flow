@@ -33,27 +33,16 @@ namespace Research_Flow
             this.InitializeComponent();
         }
 
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (await GraphService.ServiceLogin())
+            if (SystemInfo.IsFirstUse)
             {
-                accountStatu.Text = await GraphService.GetDisplayName();
+                account_panel.Visibility = Visibility.Visible;
+                NavView.IsEnabled = false;
             }
             else
-            {
-                accountIcon.ProfilePicture = null;
-                accountStatu.Text = "Serivce Offline";
-            }
+                login();
 
-            // show user info after handling
-            signWait.ShowPaused = true;
-            signWait.Visibility = Visibility.Collapsed;
-            signPane.Visibility = Visibility.Visible;
-
-            if (SystemInfo.IsFirstUse || !ApplicationData.Current.LocalSettings.Values.ContainsKey("Configured"))
-            {
-                ;
-            }
         }
 
         #region NavView
@@ -154,9 +143,46 @@ namespace Research_Flow
             ContentFrame.Navigate(typeof(WebPage));
         }
 
-        private void OneDrive_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {
+        #endregion
 
+        #region Account
+
+        private async void login()
+        {
+            if (await GraphService.ServiceLogin())
+            {
+                accountStatu.Text = await GraphService.GetDisplayName();
+            }
+            else
+            {
+                accountIcon.ProfilePicture = null;
+                accountStatu.Text = "Serivce Offline";
+            }
+
+            // show user info after handling
+            signWait.ShowPaused = true;
+            signWait.Visibility = Visibility.Collapsed;
+            signPane.Visibility = Visibility.Visible;
+        }
+
+        private void logout()
+        {
+            GraphService.ServiceLogout();
+            accountIcon.ProfilePicture = null;
+            accountStatu.Text = "Serivce Offline";
+        }
+
+        private void Service_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            account_panel.Visibility = Visibility.Visible;
+            NavView.IsEnabled = false;
+
+        }
+
+        private void exit_Click(object sender, RoutedEventArgs e)
+        {
+            account_panel.Visibility = Visibility.Collapsed;
+            NavView.IsEnabled = true;
         }
 
         #endregion
@@ -235,7 +261,7 @@ namespace Research_Flow
                 // confirm the app was associated with Microsoft account
                 try
                 {
-                    await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetAppPhotosAsync(), file);
+                    await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetPhotosAsync(), file);
                     ToastNotificationManager.CreateToastNotifier().Show(
                         new ToastNotification(ToastGenerator.TextToast("OneDrive", "Screen Shot Saved").GetXml()));
                 }

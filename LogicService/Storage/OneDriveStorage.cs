@@ -28,7 +28,7 @@ namespace LogicService.Storage
         /// Get the photos folder in app root
         /// </summary>
         /// <returns>Photos</returns>
-        public static async Task<OneDriveStorageFolder> GetAppPhotosAsync()
+        public static async Task<OneDriveStorageFolder> GetPhotosAsync()
         {
             try
             {

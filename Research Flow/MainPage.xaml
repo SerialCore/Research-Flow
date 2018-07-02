@@ -99,7 +99,7 @@
             <NavigationView.PaneFooter>
                 <Grid>
                     <ProgressBar x:Name="signWait" IsIndeterminate="True" ShowPaused="False" ShowError="False"/>
-                    <ListViewItem x:Name="signPane" Tapped="OneDrive_Tapped" Visibility="Visible">
+                    <ListViewItem x:Name="signPane" Tapped="Service_Tapped" Visibility="Collapsed">
                         <Grid >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="24"/>
@@ -121,6 +121,22 @@
             </Frame>
 
         </NavigationView>
+
+        <Grid x:Name="account_panel" Height="580" Width="560" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="1" BorderBrush="Blue" Visibility="Collapsed">
+            <Image Source="/Assets/OneDrive_logo.png" Margin="40" VerticalAlignment="Top"/>
+            <Button x:Name="account_exit" Click="exit_Click" Content="OK" Height="32" Width="200" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+        </Grid>
+
+        <Grid x:Name="config_panel_background" Background="Black" Opacity="0.5" Visibility="Visible"/>
+        <Grid x:Name="config_panel" Height="500" Width="600" Background="Transparent" Visibility="Visible">
+            <TextBlock Text="Research Flow" Foreground="White" FontSize="40" Margin="10" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+            <FlipView Margin="0,80,0,50">
+                <FlipViewItem Background="AliceBlue"/>
+                <FlipViewItem Background="AntiqueWhite"/>
+                <FlipViewItem Background="Azure"/>
+                <FlipViewItem Background="Beige"/>
+            </FlipView>
+        </Grid>
 
         <toolkit:InAppNotification x:Name="InAppNotification" 
                                     ShowDismissButton="True"

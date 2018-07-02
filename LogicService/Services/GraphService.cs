@@ -13,7 +13,7 @@ namespace LogicService.Services
 
         #region profile
 
-        public static MicrosoftGraphUserService User = null;
+        private static MicrosoftGraphUserService User = null;
 
         public static bool IsSignedIn = false;
 
@@ -28,7 +28,7 @@ namespace LogicService.Services
             try
             {
                 IsSignedIn = await MicrosoftGraphService.Instance.LoginAsync() && await OneDriveService.Instance.LoginAsync();
-                if (IsSignedIn) User = OneDriveService.Instance.Provider.User;
+                if (IsSignedIn) User = MicrosoftGraphService.Instance.User;
                 return IsSignedIn;
             }
             catch
@@ -46,7 +46,7 @@ namespace LogicService.Services
 
         public async static Task<IRandomAccessStream> GetUserPhoto()
         {
-            return await User.GetPhotoAsync();
+            return (IRandomAccessStream)(await User.PhotosService.GetPhotoAsync());
         }
 
         public async static Task<string> GetDisplayName()
