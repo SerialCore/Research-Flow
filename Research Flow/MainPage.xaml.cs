@@ -35,7 +35,9 @@ namespace Research_Flow
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if(!ApplicationData.Current.LocalSettings.Values.ContainsKey("HasAccount"))
+            if(ApplicationData.Current.LocalSettings.Values.ContainsKey("HasAccount"))
+                login();
+            else
             {
                 account_panel.Visibility = Visibility.Visible;
                 NavView.IsEnabled = false;
@@ -43,8 +45,6 @@ namespace Research_Flow
                 logout_panel.Visibility = Visibility.Collapsed;
                 account_exit.IsEnabled = false;
             }
-            else
-                login();
 
         }
 
@@ -157,6 +157,8 @@ namespace Research_Flow
                 accountStatu.Text = await GraphService.GetDisplayName();
                 ApplicationData.Current.LocalSettings.Values["HasAccount"] = 1;
                 account_exit.IsEnabled = true;
+                login_panel.Visibility = Visibility.Collapsed;
+                logout_panel.Visibility = Visibility.Visible;
             }
             else
             {
@@ -176,6 +178,8 @@ namespace Research_Flow
 
             ApplicationData.Current.LocalSettings.Values.Remove("HasAccount");
             account_exit.IsEnabled = false;
+            login_panel.Visibility = Visibility.Visible;
+            logout_panel.Visibility = Visibility.Collapsed;
             accountIcon.ProfilePicture = null;
             accountStatu.Text = "Serivce Offline";
         }
@@ -192,15 +196,11 @@ namespace Research_Flow
         private void login_Click(object sender, RoutedEventArgs e)
         {
             login();
-            login_panel.Visibility = Visibility.Collapsed;
-            logout_panel.Visibility = Visibility.Visible;
         }
 
         private void logout_Click(object sender, RoutedEventArgs e)
         {
             logout();
-            login_panel.Visibility = Visibility.Visible;
-            logout_panel.Visibility = Visibility.Collapsed;
         }
 
         private void account_exit_Click(object sender, RoutedEventArgs e)
