@@ -4,6 +4,7 @@ using Microsoft.Toolkit.Services.OneDrive;
 using Microsoft.Toolkit.Services.Services.MicrosoftGraph;
 using System;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.Storage.Streams;
 
 namespace LogicService.Services
