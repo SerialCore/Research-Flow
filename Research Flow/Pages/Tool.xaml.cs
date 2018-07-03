@@ -25,7 +25,7 @@ namespace Research_Flow.Pages
     /// </summary>
     public sealed partial class Tool : Page
     {
-        public ObservableCollection<StoreApp> AppList { get; set; }
+        public List<StoreApp> AppList { get; set; }
 
         public Tool()
         {
@@ -33,7 +33,7 @@ namespace Research_Flow.Pages
             this.NavigationCacheMode = NavigationCacheMode.Required;
 
             // 此部分数据应放在静态数据集里
-            AppList = new ObservableCollection<StoreApp>
+            AppList = new List<StoreApp>
             {
                 new StoreApp { Name = "物理实验助手", AppUri = new Uri("blamderphylab:"), LogoUri = new Uri("ms-appx:///Pages/Images/Logos/phyMylab_logo.png") },
                 new StoreApp { Name = "力学量采集器", AppUri = new Uri("blamderblackbox:"), LogoUri = new Uri("ms-appx:///Pages/Images/Logos/blackbox_logo.png") },
