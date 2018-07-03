@@ -105,7 +105,7 @@
                                 <ColumnDefinition Width="24"/>
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <PersonPicture Grid.Column="0" x:Name="accountIcon" ProfilePicture="/Assets/Microsoft_logo.jpg" Height="24" Width="24"/>
+                            <PersonPicture Grid.Column="0" x:Name="accountIcon" ProfilePicture="/Assets/Logos/Microsoft_logo.jpg" Height="24" Width="24"/>
                             <TextBlock Grid.Column="1" x:Name="accountStatu" Text="Offline" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
                         </Grid>
                     </ListViewItem>
@@ -123,7 +123,7 @@
         </NavigationView>
 
         <Grid x:Name="account_panel" Height="580" Width="560" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="1" BorderBrush="Blue" Visibility="Collapsed">
-            <Image Source="/Assets/OneDrive_logo.png" Margin="40" VerticalAlignment="Top"/>
+            <Image Source="/Assets/Logos/OneDrive_logo.png" Margin="40" VerticalAlignment="Top"/>
             <Grid x:Name="login_panel">
                 <Button Content="Connect" Click="login_Click"/>
             </Grid>
@@ -131,19 +131,6 @@
                 <Button Content="Leave" Click="logout_Click"/>
             </Grid>
             <Button x:Name="account_exit" Click="account_exit_Click" Content="OK" Height="32" Width="200" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
-        </Grid>
-
-        <Grid x:Name="config_panel_background" Background="Black" Opacity="0.5" Visibility="Collapsed"/>
-        <Grid x:Name="config_panel" Height="500" Width="600" Background="Transparent" Visibility="Collapsed">
-            <TextBlock Text="Research Flow" Foreground="White" FontSize="40" Margin="10" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-            <FlipView Margin="0,80,0,50">
-                <FlipViewItem Background="AliceBlue"/>
-                <FlipViewItem Background="AntiqueWhite"/>
-                <FlipViewItem Background="Azure"/>
-                <FlipViewItem Background="Beige">
-                    <Button x:Name="config_exit" Click="config_exit_Click" Content="OK" Height="32" Width="200" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
-                </FlipViewItem>
-            </FlipView>
         </Grid>
 
         <toolkit:InAppNotification x:Name="InAppNotification" 

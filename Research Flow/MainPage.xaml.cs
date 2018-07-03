@@ -35,17 +35,13 @@ namespace Research_Flow
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (SystemInfo.IsFirstUse)
-            {
-                config_panel.Visibility = Visibility.Visible;
-                config_panel_background.Visibility = Visibility.Visible;
-            }
-            else if(!ApplicationData.Current.LocalSettings.Values.ContainsKey("HasAccount"))
+            if(!ApplicationData.Current.LocalSettings.Values.ContainsKey("HasAccount"))
             {
                 account_panel.Visibility = Visibility.Visible;
                 NavView.IsEnabled = false;
                 login_panel.Visibility = Visibility.Visible;
                 logout_panel.Visibility = Visibility.Collapsed;
+                account_exit.IsEnabled = false;
             }
             else
                 login();
@@ -160,6 +156,7 @@ namespace Research_Flow
             {
                 accountStatu.Text = await GraphService.GetDisplayName();
                 ApplicationData.Current.LocalSettings.Values["HasAccount"] = 1;
+                account_exit.IsEnabled = true;
             }
             else
             {
@@ -178,6 +175,7 @@ namespace Research_Flow
             GraphService.ServiceLogout();
 
             ApplicationData.Current.LocalSettings.Values.Remove("HasAccount");
+            account_exit.IsEnabled = false;
             accountIcon.ProfilePicture = null;
             accountStatu.Text = "Serivce Offline";
         }
@@ -187,16 +185,8 @@ namespace Research_Flow
             account_panel.Visibility = Visibility.Visible;
             NavView.IsEnabled = false;
 
-            if(ApplicationData.Current.LocalSettings.Values.ContainsKey("HasAccount"))
-            {
-                login_panel.Visibility = Visibility.Collapsed;
-                logout_panel.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                login_panel.Visibility = Visibility.Visible;
-                logout_panel.Visibility = Visibility.Collapsed;
-            }
+            login_panel.Visibility = Visibility.Collapsed;
+            logout_panel.Visibility = Visibility.Visible;
         }
 
         private void login_Click(object sender, RoutedEventArgs e)
@@ -211,14 +201,6 @@ namespace Research_Flow
             logout();
             login_panel.Visibility = Visibility.Visible;
             logout_panel.Visibility = Visibility.Collapsed;
-        }
-
-        private void config_exit_Click(object sender, RoutedEventArgs e)
-        {
-            config_panel.Visibility = Visibility.Collapsed;
-            config_panel_background.Visibility = Visibility.Collapsed;
-            account_panel.Visibility = Visibility.Visible;
-            NavView.IsEnabled = false;
         }
 
         private void account_exit_Click(object sender, RoutedEventArgs e)

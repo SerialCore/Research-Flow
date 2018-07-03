@@ -103,6 +103,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Config.xaml.cs">
+      <DependentUpon>Config.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -146,7 +149,7 @@
   <ItemGroup>
     <None Include="Package.xml" />
     <Content Include="Assets\LargeTile.scale-200.png" />
-    <Content Include="Assets\Microsoft_logo.jpg" />
+    <Content Include="Assets\Logos\Microsoft_logo.jpg" />
     <Content Include="Assets\SmallTile.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />
@@ -159,9 +162,9 @@
     <Content Include="Pages\Images\hint.png" />
     <Content Include="Pages\Images\Logos\blackbox_logo.png" />
     <Content Include="Pages\Images\Logos\enGJFer_logo.png" />
-    <Content Include="Assets\OneDrive_icon.png" />
-    <Content Include="Assets\OneDrive_icon_trans.png" />
-    <Content Include="Assets\OneDrive_logo.png" />
+    <Content Include="Assets\Logos\OneDrive_icon.png" />
+    <Content Include="Assets\Logos\OneDrive_icon_trans.png" />
+    <Content Include="Assets\Logos\OneDrive_logo.png" />
     <Content Include="Pages\Images\Logos\paintpanel_logo.png" />
     <Content Include="Pages\Images\Logos\phyMylab_logo.png" />
     <Content Include="Properties\Default.rd.xml" />
@@ -171,6 +174,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Config.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
