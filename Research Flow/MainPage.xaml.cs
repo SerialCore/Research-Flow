@@ -36,7 +36,7 @@ namespace Research_Flow
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             if(ApplicationData.Current.LocalSettings.Values.ContainsKey("HasAccount"))
-                login();
+                Login();
             else
             {
                 account_panel.Visibility = Visibility.Visible;
@@ -150,7 +150,7 @@ namespace Research_Flow
 
         #region Account
 
-        private async void login()
+        private async void Login()
         {
             if (await GraphService.ServiceLogin())
             {
@@ -172,7 +172,7 @@ namespace Research_Flow
             signPane.Visibility = Visibility.Visible;
         }
 
-        private void logout()
+        private void Logout()
         {
             GraphService.ServiceLogout();
 
@@ -193,14 +193,14 @@ namespace Research_Flow
             logout_panel.Visibility = Visibility.Visible;
         }
 
-        private void login_Click(object sender, RoutedEventArgs e)
+        private void Login_Click(object sender, RoutedEventArgs e)
         {
-            login();
+            Login();
         }
 
-        private void logout_Click(object sender, RoutedEventArgs e)
+        private void Logout_Click(object sender, RoutedEventArgs e)
         {
-            logout();
+            Logout();
         }
 
         private void account_exit_Click(object sender, RoutedEventArgs e)

@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid x:Name="FullPage" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid x:Name="FullPage" Background="LightSkyBlue">
 
         <NavigationView x:Name="NavView"
                         ItemInvoked="NavView_ItemInvoked"
@@ -112,7 +112,7 @@
                 </Grid>
             </NavigationView.PaneFooter>
 
-            <Frame x:Name="ContentFrame" Margin="20,0">
+            <Frame x:Name="ContentFrame" >
                 <Frame.ContentTransitions>
                     <TransitionCollection>
                         <NavigationThemeTransition/>
@@ -125,10 +125,10 @@
         <Grid x:Name="account_panel" Height="580" Width="560" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="1" BorderBrush="Blue" Visibility="Collapsed">
             <Image Source="/Assets/Logos/OneDrive_logo.png" Margin="40" VerticalAlignment="Top"/>
             <Grid x:Name="login_panel">
-                <Button Content="Connect" Click="login_Click"/>
+                <Button Content="Connect" Click="Login_Click"/>
             </Grid>
             <Grid x:Name="logout_panel">
-                <Button Content="Leave" Click="logout_Click"/>
+                <Button Content="Leave" Click="Logout_Click"/>
             </Grid>
             <Button x:Name="account_exit" Click="account_exit_Click" Content="OK" Height="32" Width="200" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
         </Grid>

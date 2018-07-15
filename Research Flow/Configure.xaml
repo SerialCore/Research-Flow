@@ -110,7 +110,7 @@
                 <FlipViewItem Background="AntiqueWhite"/>
                 <FlipViewItem Background="Azure"/>
                 <FlipViewItem Background="Beige">
-                    <Button x:Name="finish_config" Content="Let's begin" Click="finish_config_Click" Height="32" Width="200" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20"/>
+                    <Button x:Name="finish_config" Content="Let's begin" Click="Finish_config_Click" Height="32" Width="200" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20"/>
                 </FlipViewItem>
             </FlipView>
         </Grid>

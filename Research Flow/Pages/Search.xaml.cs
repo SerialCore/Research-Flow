@@ -35,7 +35,7 @@ namespace Research_Flow.Pages
         private void InitializeData()
         {
             // feed source
-            feedSources = new ObservableCollection<FeedSource>()
+            FeedSources = new ObservableCollection<FeedSource>()
             {
                 new FeedSource{SourceName="ACS",SourceUri="https://pubs.acs.org/action/showFeed?ui=0&mi=4ta59b4&type=search&feed=rss&query=%2526AllField%253Dhydrogen%252Bbond%2526publication%253D40025988%2526sortBy%253DEarliest%2526target%253Ddefault%2526targetTab%253Dstd",Star=5,IsJournal=true},
                 new FeedSource{SourceName="科学网",SourceUri="http://www.sciencenet.cn/xml/paper.aspx?di=7",Star=4,IsJournal=false},
@@ -44,7 +44,7 @@ namespace Research_Flow.Pages
                 new FeedSource{SourceName="PRC",SourceUri="http://feeds.aps.org/rss/recent/prc.xml",Star=5,IsJournal=true},
                 new FeedSource{SourceName="PRD",SourceUri="http://feeds.aps.org/rss/recent/prd.xml",Star=5,IsJournal=true}
             };
-            feedsource_list.ItemsSource = feedSources;
+            feedsource_list.ItemsSource = FeedSources;
 
             // Bing configure
             country.ItemsSource = Enum.GetValues(typeof(BingCountry));
@@ -57,13 +57,28 @@ namespace Research_Flow.Pages
 
         #region RSS
 
-        public ObservableCollection<FeedSource> feedSources { get; set; }
+        public ObservableCollection<FeedSource> FeedSources { get; set; }
 
-        private void ChangeRssSource(object sender, RoutedEventArgs e)
+        private void Open_feedsource(object sender, RoutedEventArgs e)
         {
-            if (feedSources == null)
-                feedSources = new ObservableCollection<FeedSource>();
-            
+            feedsource_view.IsPaneOpen = true;
+        }
+
+        private void Source_modify(object sender, RoutedEventArgs e)
+        {
+            source_panel.Visibility = Visibility.Visible;
+        }
+
+        private void RSS_SourceClick(object sender, ItemClickEventArgs e)
+        {
+            var item = e.ClickedItem as FeedSource;
+            SearchRss(item.SourceUri);
+        }
+
+        private void RSS_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var item = e.ClickedItem as FeedItem;
+            this.Frame.Navigate(typeof(WebPage), item.Link);
         }
 
         private void SearchRss(string feedlink)
@@ -86,23 +101,11 @@ namespace Research_Flow.Pages
                 }, null);
         }
 
-        private void RSS_SourceClick(object sender, ItemClickEventArgs e)
-        {
-            var item = e.ClickedItem as FeedSource;
-            SearchRss(item.SourceUri);
-        }
-
-        private void RSS_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            var item = e.ClickedItem as FeedItem;
-            this.Frame.Navigate(typeof(WebPage), item.Link);
-        }
-
         #endregion
 
         #region Bing
 
-        private void query_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+        private void Query_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             if (e.Key == VirtualKey.Enter)
                 SearchBing(null, null);

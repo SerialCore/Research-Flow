@@ -33,7 +33,7 @@ namespace Research_Flow
             ApplicationData.Current.LocalSettings.Values["Configured"] = 1;
         }
 
-        private void finish_config_Click(object sender, RoutedEventArgs e)
+        private void Finish_config_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(MainPage));
         }

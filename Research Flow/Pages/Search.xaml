@@ -10,29 +10,25 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <Pivot>
+        <Pivot Margin="20,0">
             <PivotItem Header="Flow">
 
             </PivotItem>
             <PivotItem Header="RSS">
                 <Grid >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="300"/>
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                        <ListView x:Name="feedsource_list" IsItemClickEnabled="True" ItemClick="RSS_SourceClick">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel >
-                                        <TextBlock Text="{Binding SourceName}"/>
-                                        <RatingControl PlaceholderValue="{Binding Star}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </Grid>
-                    <ListView x:Name="feeditem_list" Grid.Column="1" IsItemClickEnabled="True" ItemClick="RSS_ItemClick">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                        <AppBarButton Label="Source" Click="Open_feedsource">
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE88E;" />
+                        </AppBarButton>
+                        <AppBarButton Label="Newest" >
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE82F;" />
+                        </AppBarButton>
+                    </StackPanel>
+                    <ListView x:Name="feeditem_list" Grid.Row="1" IsItemClickEnabled="True" ItemClick="RSS_ItemClick">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel >
@@ -44,6 +40,24 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
+                    <SplitView x:Name="feedsource_view" Grid.Row="1" >
+                        <SplitView.Pane>
+                            <Grid>
+                                <ListView x:Name="feedsource_list" IsItemClickEnabled="True" ItemClick="RSS_SourceClick" Margin="0,0,0,72">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding SourceName}"/>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                                <Button Grid.Row="1" Content="Modify" Click="Source_modify"
+                                    Height="32" Width="250" VerticalAlignment="Bottom" Margin="20"/>
+                                <Grid x:Name="source_panel" VerticalAlignment="Bottom" Height="400" Visibility="Collapsed" Background="{ThemeResource AppBarBackgroundThemeBrush}">
+                                    
+                                </Grid>
+                            </Grid>
+                        </SplitView.Pane>
+                    </SplitView>
                 </Grid>
             </PivotItem>
             <PivotItem Header="Bing">
@@ -70,7 +84,7 @@
                             <ColumnDefinition />
                             <ColumnDefinition Width="100"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="0" x:Name="query" Header="Query Text" KeyDown="query_KeyDown"/>
+                        <TextBox Grid.Column="0" x:Name="query" Header="Query Text" KeyDown="Query_KeyDown"/>
                         <Button Grid.Column="1" Content="Bing" Click="SearchBing" Margin="4,4,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                     </Grid>
                     <ListView x:Name="bingResult" Grid.Row="2" IsItemClickEnabled="True" ItemClick="BingResult_ItemClick" Margin="0,10">

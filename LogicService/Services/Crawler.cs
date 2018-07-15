@@ -34,7 +34,7 @@ namespace LogicService.Services
         /// 这私有方法从网页的HTML代码中分析出链接信息
         /// </summary>
         /// <returns>List<Link></returns>
-        private List<ElementLink> getLinks()
+        private List<ElementLink> GetLinks()
         {
             if (m_links.Count == 0)
             {
@@ -72,7 +72,7 @@ namespace LogicService.Services
         /// <param name="firstN">提取从头数多少个字</param>
         /// <param name="withLink">是否要链接里面的字</param>
         /// <returns>纯文本</returns>
-        private string getFirstNchar(string instr, int firstN, bool withLink)
+        private string GetFirstNchar(string instr, int firstN, bool withLink)
         {
             if (m_outstr == "")
             {
@@ -94,7 +94,7 @@ namespace LogicService.Services
         /// </summary>
         /// <param name="x">IP地址</param>
         /// <returns></returns>
-        private uint getuintFromIP(IPAddress x)
+        private uint GetuintFromIP(IPAddress x)
         {
             Byte[] bt = x.GetAddressBytes();
             uint i = (uint)(bt[0] * 256 * 256 * 256);
@@ -113,9 +113,9 @@ namespace LogicService.Services
         /// </summary>
         /// <param name="firstN">字数</param>
         /// <returns></returns>
-        public string getContext(int firstN)
+        public string GetContext(int firstN)
         {
-            return getFirstNchar(m_html, firstN, true);
+            return GetFirstNchar(m_html, firstN, true);
         }
 
         /// <summary>
@@ -123,9 +123,9 @@ namespace LogicService.Services
         /// </summary>
         /// <param name="firstN"></param>
         /// <returns></returns>
-        public string getContextWithOutLink(int firstN)
+        public string GetContextWithOutLink(int firstN)
         {
-            return getFirstNchar(m_html, firstN, false);
+            return GetFirstNchar(m_html, firstN, false);
         }
 
         /// <summary>
@@ -134,9 +134,9 @@ namespace LogicService.Services
         /// <param name="pattern">正则式</param>
         /// <param name="count">返回的链接的个数</param>
         /// <returns>List<Link></returns>
-        public List<ElementLink> getSpecialLinksByUrl(string pattern, int count)
+        public List<ElementLink> GetSpecialLinksByUrl(string pattern, int count)
         {
-            if (m_links.Count == 0) getLinks();
+            if (m_links.Count == 0) GetLinks();
             List<ElementLink> SpecialLinks = new List<ElementLink>();
             List<ElementLink>.Enumerator i;
             i = m_links.GetEnumerator();
@@ -160,7 +160,7 @@ namespace LogicService.Services
         /// <returns>List<Link></returns>
         public List<ElementLink> getSpecialLinksByText(string pattern, int count)
         {
-            if (m_links.Count == 0) getLinks();
+            if (m_links.Count == 0) GetLinks();
             List<ElementLink> SpecialLinks = new List<ElementLink>();
             List<ElementLink>.Enumerator i;
             i = m_links.GetEnumerator();
@@ -186,7 +186,7 @@ namespace LogicService.Services
         {
             IPAddress ip_start = IPAddress.Parse(_ip_start);
             IPAddress ip_end = IPAddress.Parse(_ip_end);
-            if (m_links.Count == 0) getLinks();
+            if (m_links.Count == 0) GetLinks();
             List<ElementLink> SpecialLinks = new List<ElementLink>();
             List<ElementLink>.Enumerator i;
             i = m_links.GetEnumerator();
@@ -198,7 +198,7 @@ namespace LogicService.Services
                     ip = Dns.GetHostEntry(new Uri(i.Current.Url).Host).AddressList[0];
                 }
                 catch { continue; }
-                if (getuintFromIP(ip) >= getuintFromIP(ip_start) && getuintFromIP(ip) <= getuintFromIP(ip_end))
+                if (GetuintFromIP(ip) >= GetuintFromIP(ip_start) && GetuintFromIP(ip) <= GetuintFromIP(ip_end))
                 {
                     SpecialLinks.Add(i.Current);
                 }
@@ -213,7 +213,7 @@ namespace LogicService.Services
         /// <returns>返回文字</returns>
         public string getSpecialWords(string pattern)
         {
-            if (m_outstr == "") getContext(Int16.MaxValue);
+            if (m_outstr == "") GetContext(Int16.MaxValue);
             Regex regex = new Regex(pattern, RegexOptions.Multiline | RegexOptions.IgnoreCase);
             Match mc = regex.Match(m_outstr);
             if (mc.Success)
@@ -498,7 +498,7 @@ namespace LogicService.Services
         {
             get
             {
-                if (m_links.Count == 0) getLinks();
+                if (m_links.Count == 0) GetLinks();
                 return m_links;
             }
         }
@@ -510,7 +510,7 @@ namespace LogicService.Services
         {
             get
             {
-                if (m_outstr == "") getContext(Int16.MaxValue);
+                if (m_outstr == "") GetContext(Int16.MaxValue);
                 return m_outstr;
             }
         }
@@ -533,7 +533,7 @@ namespace LogicService.Services
         {
             get
             {
-                return getSpecialLinksByUrl("^http://" + m_uri.Host, Int16.MaxValue);
+                return GetSpecialLinksByUrl("^http://" + m_uri.Host, Int16.MaxValue);
             }
         }
 
