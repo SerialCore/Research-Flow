@@ -10,11 +10,13 @@ namespace LogicService.Encapsulates
     public class FeedSource
     {
 
-        public string SourceName { get; set; }
+        public int ID { get; set; }
 
-        public string SourceUri { get; set; }
+        public string Name { get; set; }
 
-        public int Star { get; set; }
+        public string Uri { get; set; }
+
+        public double Star { get; set; }
 
         public bool IsJournal { get; set; }
 

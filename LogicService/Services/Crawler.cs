@@ -158,7 +158,7 @@ namespace LogicService.Services
         /// <param name="pattern">正则式</param>
         /// <param name="count">返回的链接的个数</param>
         /// <returns>List<Link></returns>
-        public List<ElementLink> getSpecialLinksByText(string pattern, int count)
+        public List<ElementLink> GetSpecialLinksByText(string pattern, int count)
         {
             if (m_links.Count == 0) GetLinks();
             List<ElementLink> SpecialLinks = new List<ElementLink>();
@@ -182,7 +182,7 @@ namespace LogicService.Services
         /// <param name="_ip_start">起始IP</param>
         /// <param name="_ip_end">终止IP</param>
         /// <returns></returns>
-        public List<ElementLink> getSpecialLinksByIP(string _ip_start, string _ip_end)
+        public List<ElementLink> GetSpecialLinksByIP(string _ip_start, string _ip_end)
         {
             IPAddress ip_start = IPAddress.Parse(_ip_start);
             IPAddress ip_end = IPAddress.Parse(_ip_end);
@@ -211,7 +211,7 @@ namespace LogicService.Services
         /// </summary>
         /// <param name="pattern">正则式</param>
         /// <returns>返回文字</returns>
-        public string getSpecialWords(string pattern)
+        public string GetSpecialWords(string pattern)
         {
             if (m_outstr == "") GetContext(Int16.MaxValue);
             Regex regex = new Regex(pattern, RegexOptions.Multiline | RegexOptions.IgnoreCase);

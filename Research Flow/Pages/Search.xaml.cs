@@ -3,6 +3,7 @@ using LogicService.Services;
 using Microsoft.Toolkit.Services.Bing;
 using Research_Flow.Pages.SubPages;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.System;
 using Windows.UI.Core;
@@ -37,12 +38,12 @@ namespace Research_Flow.Pages
             // feed source
             FeedSources = new ObservableCollection<FeedSource>()
             {
-                new FeedSource{SourceName="ACS",SourceUri="https://pubs.acs.org/action/showFeed?ui=0&mi=4ta59b4&type=search&feed=rss&query=%2526AllField%253Dhydrogen%252Bbond%2526publication%253D40025988%2526sortBy%253DEarliest%2526target%253Ddefault%2526targetTab%253Dstd",Star=5,IsJournal=true},
-                new FeedSource{SourceName="科学网",SourceUri="http://www.sciencenet.cn/xml/paper.aspx?di=7",Star=4,IsJournal=false},
-                new FeedSource{SourceName="PRA",SourceUri="http://feeds.aps.org/rss/recent/pra.xml",Star=5,IsJournal=true},
-                new FeedSource{SourceName="PRB",SourceUri="http://feeds.aps.org/rss/recent/prb.xml",Star=5,IsJournal=true},
-                new FeedSource{SourceName="PRC",SourceUri="http://feeds.aps.org/rss/recent/prc.xml",Star=5,IsJournal=true},
-                new FeedSource{SourceName="PRD",SourceUri="http://feeds.aps.org/rss/recent/prd.xml",Star=5,IsJournal=true}
+                new FeedSource{Name="ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=4ta59b4&type=search&feed=rss&query=%2526AllField%253Dhydrogen%252Bbond%2526publication%253D40025988%2526sortBy%253DEarliest%2526target%253Ddefault%2526targetTab%253Dstd",Star=5,IsJournal=true},
+                new FeedSource{Name="科学网",Uri="http://www.sciencenet.cn/xml/paper.aspx?di=7",Star=4,IsJournal=false},
+                new FeedSource{Name="PRA",Uri="http://feeds.aps.org/rss/recent/pra.xml",Star=5,IsJournal=true},
+                new FeedSource{Name="PRB",Uri="http://feeds.aps.org/rss/recent/prb.xml",Star=5,IsJournal=true},
+                new FeedSource{Name="PRC",Uri="http://feeds.aps.org/rss/recent/prc.xml",Star=5,IsJournal=true},
+                new FeedSource{Name="PRD",Uri="http://feeds.aps.org/rss/recent/prd.xml",Star=5,IsJournal=true}
             };
             feedsource_list.ItemsSource = FeedSources;
 
@@ -59,20 +60,67 @@ namespace Research_Flow.Pages
 
         public ObservableCollection<FeedSource> FeedSources { get; set; }
 
-        private void Open_feedsource(object sender, RoutedEventArgs e)
+        private FeedSource currentFeed = null;
+
+        private void Open_Feedsource(object sender, RoutedEventArgs e) => feedsource_view.IsPaneOpen = true;
+
+        private void Source_Modify(object sender, RoutedEventArgs e) => source_panel.Visibility = Visibility.Visible;
+
+        private void Confirm_FeedSetting(object sender, RoutedEventArgs e)
         {
-            feedsource_view.IsPaneOpen = true;
+            if (!string.IsNullOrEmpty(feedUrl.Text))
+            {
+                FeedSource newFeed = new FeedSource
+                {
+                    ID = feedUrl.Text.GetHashCode(),
+                    Name = feedName.Text,
+                    Uri = feedUrl.Text,
+                    Star = feedStar.Value,
+                    IsJournal = (bool)(isJournal.IsChecked)
+                };
+                if (currentFeed != null)
+                {
+                    FeedSources[FeedSources.IndexOf(currentFeed)] = newFeed;
+                }
+                else
+                {
+                    FeedSources.Add(newFeed);
+                }
+            }
+            ClearSettings();
         }
 
-        private void Source_modify(object sender, RoutedEventArgs e)
+        private void Delete_FeedSetting(object sender, RoutedEventArgs e)
         {
-            source_panel.Visibility = Visibility.Visible;
+            FeedSources.Remove(currentFeed);
+            ClearSettings();
+        }
+
+        private void Leave_FeedSetting(object sender, RoutedEventArgs e) => ClearSettings();
+
+        private void ClearSettings()
+        {
+            currentFeed = null;
+            feedName.Text = "";
+            feedUrl.Text = "";
+            feedStar.Value = -1;
+            isJournal.IsChecked = false;
+            source_panel.Visibility = Visibility.Collapsed;
         }
 
         private void RSS_SourceClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as FeedSource;
-            SearchRss(item.SourceUri);
+            if (source_panel.Visibility == Visibility.Collapsed)
+                SearchRss(item.Uri);
+            else
+            {
+                currentFeed = item;
+                feedName.Text = item.Name;
+                feedUrl.Text = item.Uri;
+                feedStar.Value = item.Star;
+                isJournal.IsChecked = item.IsJournal;
+            }
         }
 
         private void RSS_ItemClick(object sender, ItemClickEventArgs e)

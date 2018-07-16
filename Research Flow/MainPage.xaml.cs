@@ -193,17 +193,11 @@ namespace Research_Flow
             logout_panel.Visibility = Visibility.Visible;
         }
 
-        private void Login_Click(object sender, RoutedEventArgs e)
-        {
-            Login();
-        }
+        private void Login_Click(object sender, RoutedEventArgs e) => Login();
 
-        private void Logout_Click(object sender, RoutedEventArgs e)
-        {
-            Logout();
-        }
+        private void Logout_Click(object sender, RoutedEventArgs e) => Logout();
 
-        private void account_exit_Click(object sender, RoutedEventArgs e)
+        private void Account_exit_Click(object sender, RoutedEventArgs e)
         {
             account_panel.Visibility = Visibility.Collapsed;
             NavView.IsEnabled = true;
