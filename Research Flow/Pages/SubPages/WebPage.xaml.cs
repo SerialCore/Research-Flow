@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -42,20 +41,29 @@ namespace Research_Flow.Pages.SubPages
                 webView.Navigate(new Uri(link));
         }
 
-        private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
+        private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            webWaiting.IsActive = true;
+            try
+            {
+                webView.Navigate(new Uri(siteUrl.Text));
+            }
+            catch
+            {
+
+            }
         }
+
+        private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
+            => webWaiting.IsActive = true;
+
+        private void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+            => webWaiting.IsActive = false;
 
         private void WebView_FrameNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
-        {
-            webWaiting.IsActive = false;
-        }
+            => webWaiting.IsActive = false;
 
         private void Return_Navigate(object sender, RoutedEventArgs e)
-        {
-            this.Frame.GoBack();
-        }
+            => this.Frame.GoBack();
 
         private void Back(object sender, RoutedEventArgs e)
         {
@@ -70,15 +78,7 @@ namespace Research_Flow.Pages.SubPages
         }
 
         private void Refresh(object sender, RoutedEventArgs e)
-        {
-            webWaiting.IsActive = true;
-            webView.Refresh();
-        }
-
-        private async void OpenBrowser(object sender, RoutedEventArgs e)
-        {
-            await Launcher.LaunchUriAsync(webView.Source);
-        }
+            => webView.Refresh();
 
         private void SavetoLearn(object sender, RoutedEventArgs e)
         {

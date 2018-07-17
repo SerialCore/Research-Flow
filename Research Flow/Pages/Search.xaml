@@ -21,10 +21,10 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Orientation="Horizontal">
-                        <AppBarButton Label="Source" Click="Open_Feedsource">
+                        <AppBarButton Label="Source" Click="Open_Feedsource" Style="{ThemeResource AppBarButtonRevealStyle}">
                             <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE88E;" />
                         </AppBarButton>
-                        <AppBarButton Label="Newest" >
+                        <AppBarButton Label="Newest" Style="{ThemeResource AppBarButtonRevealStyle}">
                             <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE82F;" />
                         </AppBarButton>
                     </StackPanel>

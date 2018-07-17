@@ -14,22 +14,29 @@
                 <RowDefinition />
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <WebView x:Name="webView" Grid.Row="0" NavigationStarting="WebView_NavigationStarting" FrameNavigationCompleted="WebView_FrameNavigationCompleted"/>
-            <CommandBar Grid.Row="1"
+            <WebView x:Name="webView" Grid.Row="0" NavigationStarting="WebView_NavigationStarting" 
+                     FrameNavigationCompleted="WebView_FrameNavigationCompleted"
+                     NavigationCompleted="WebView_NavigationCompleted"/>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <CommandBar Grid.Column="0"
                         HorizontalAlignment="Left"
                         DefaultLabelPosition="Right"
                         Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
-                <AppBarButton Label="Return" Icon="BackToWindow" Click="Return_Navigate"/>
-                <AppBarSeparator/>
-                <AppBarButton Label="Back" Icon="Previous" Click="Back"/>
-                <AppBarButton Label="Forward" Icon="Next" Click="Forward"/>
-                <AppBarButton Label="Refresh" Icon="Refresh" Click="Refresh"/>
-                <AppBarButton Label="Histroy" Icon="Clock" />
-                <AppBarButton Label="Browser" Icon="Link" Click="OpenBrowser"/>
-                <AppBarSeparator/>
-                <AppBarButton Label="Learn" Icon="Favorite" Click="SavetoLearn"/>
-                <AppBarButton Label="Share" Icon="Share" Click="ShareLink"/>
-            </CommandBar>
+                    <AppBarButton Label="Return" Icon="BackToWindow" Click="Return_Navigate"/>
+                    <AppBarSeparator/>
+                    <AppBarButton Label="Back" Icon="Previous" Click="Back"/>
+                    <AppBarButton Label="Forward" Icon="Next" Click="Forward"/>
+                    <AppBarButton Label="Refresh" Icon="Refresh" Click="Refresh"/>
+                    <AppBarSeparator/>
+                    <AppBarButton Label="Learn" Icon="Favorite" Click="SavetoLearn"/>
+                    <AppBarButton Label="Share" Icon="Share" Click="ShareLink"/>
+                </CommandBar>
+                <AutoSuggestBox Grid.Column="1" x:Name="siteUrl" QueryIcon="Find" Text="http://" QuerySubmitted="AutoSuggestBox_QuerySubmitted" Margin="10"/>
+            </Grid>
         </Grid>
 
         <ProgressRing x:Name="webWaiting" IsActive="False" Height="100" Width="100"/>

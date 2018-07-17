@@ -9,7 +9,7 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <Pivot >
+        <Pivot Margin="20,0">
             <PivotItem Header="Inform">
                 <Grid >
                     <Grid.RowDefinitions>

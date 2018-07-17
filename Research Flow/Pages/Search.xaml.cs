@@ -96,7 +96,11 @@ namespace Research_Flow.Pages
             ClearSettings();
         }
 
-        private void Leave_FeedSetting(object sender, RoutedEventArgs e) => ClearSettings();
+        private void Leave_FeedSetting(object sender, RoutedEventArgs e)
+        {
+            ClearSettings();
+            source_panel.Visibility = Visibility.Collapsed;
+        }
 
         private void ClearSettings()
         {
@@ -105,7 +109,6 @@ namespace Research_Flow.Pages
             feedUrl.Text = "";
             feedStar.Value = -1;
             isJournal.IsChecked = false;
-            source_panel.Visibility = Visibility.Collapsed;
         }
 
         private void RSS_SourceClick(object sender, ItemClickEventArgs e)
@@ -124,10 +127,7 @@ namespace Research_Flow.Pages
         }
 
         private void RSS_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            var item = e.ClickedItem as FeedItem;
-            this.Frame.Navigate(typeof(WebPage), item.Link);
-        }
+            => this.Frame.Navigate(typeof(WebPage), (e.ClickedItem as FeedItem).Link);
 
         private void SearchRss(string feedlink)
         {
