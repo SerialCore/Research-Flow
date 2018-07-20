@@ -35,7 +35,7 @@ namespace Research_Flow
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if(!(ApplicationData.Current.LocalSettings.Values["AccountName"] as string).Equals("guest"))
+            if(ApplicationData.Current.LocalSettings.Values.ContainsKey("AccountName"))
                 Login();
             else
             {
@@ -164,7 +164,6 @@ namespace Research_Flow
             {
                 accountIcon.ProfilePicture = null;
                 accountStatu.Text = "Serivce Offline";
-                ApplicationData.Current.LocalSettings.Values["AccountName"] = "guest";
             }
 
             // show user info after handling
@@ -177,7 +176,7 @@ namespace Research_Flow
         {
             GraphService.ServiceLogout();
 
-            ApplicationData.Current.LocalSettings.Values["AccountName"] = "guest";
+            ApplicationData.Current.LocalSettings.Values.Remove("AccountName");
             account_exit.IsEnabled = false;
             login_panel.Visibility = Visibility.Visible;
             logout_panel.Visibility = Visibility.Collapsed;

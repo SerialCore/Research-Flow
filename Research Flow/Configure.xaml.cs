@@ -35,7 +35,6 @@ namespace Research_Flow
 
         private void Finish_config_Click(object sender, RoutedEventArgs e)
         {
-            ApplicationData.Current.LocalSettings.Values["AccountName"] = "guest";
             this.Frame.Navigate(typeof(MainPage));
         }
     }
