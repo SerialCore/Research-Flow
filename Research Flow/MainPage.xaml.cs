@@ -40,9 +40,9 @@ namespace Research_Flow
             else
             {
                 account_panel.Visibility = Visibility.Visible;
+                account_panel_background.Visibility = Visibility.Visible;
                 NavView.IsEnabled = false;
-                login_panel.Visibility = Visibility.Visible;
-                logout_panel.Visibility = Visibility.Collapsed;
+                accountToggle.IsOn = false;
                 account_exit.IsEnabled = false;
             }
 
@@ -156,13 +156,12 @@ namespace Research_Flow
             {
                 accountStatu.Text = await GraphService.GetDisplayName();
                 ApplicationData.Current.LocalSettings.Values["AccountName"] = await GraphService.GetPrincipalName();
+                accountToggle.OnContent = await GraphService.GetPrincipalName();
+                accountToggle.IsOn = true;
                 account_exit.IsEnabled = true;
-                login_panel.Visibility = Visibility.Collapsed;
-                logout_panel.Visibility = Visibility.Visible;
             }
             else
             {
-                accountIcon.ProfilePicture = null;
                 accountStatu.Text = "Serivce Offline";
             }
 
@@ -177,29 +176,35 @@ namespace Research_Flow
             GraphService.ServiceLogout();
 
             ApplicationData.Current.LocalSettings.Values.Remove("AccountName");
+            accountToggle.OnContent = "On";
+            accountToggle.IsOn = false;
             account_exit.IsEnabled = false;
-            login_panel.Visibility = Visibility.Visible;
-            logout_panel.Visibility = Visibility.Collapsed;
-            accountIcon.ProfilePicture = null;
             accountStatu.Text = "Serivce Offline";
         }
 
         private void Service_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             account_panel.Visibility = Visibility.Visible;
+            account_panel_background.Visibility = Visibility.Visible;
             NavView.IsEnabled = false;
 
-            login_panel.Visibility = Visibility.Collapsed;
-            logout_panel.Visibility = Visibility.Visible;
+            accountToggle.OnContent = ApplicationData.Current.LocalSettings.Values["AccountName"] as string;
+            accountToggle.IsOn = true;
         }
 
-        private void Login_Click(object sender, RoutedEventArgs e) => Login();
-
-        private void Logout_Click(object sender, RoutedEventArgs e) => Logout();
+        private void AccountToggle_Toggled(object sender, RoutedEventArgs e)
+        {
+            ToggleSwitch toggleSwitch = sender as ToggleSwitch;
+            if (toggleSwitch.IsOn == true)
+                Login();
+            else
+                Logout();
+        }
 
         private void Account_exit_Click(object sender, RoutedEventArgs e)
         {
             account_panel.Visibility = Visibility.Collapsed;
+            account_panel_background.Visibility = Visibility.Collapsed;
             NavView.IsEnabled = true;
         }
 

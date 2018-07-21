@@ -105,7 +105,7 @@
                                 <ColumnDefinition Width="24"/>
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <PersonPicture Grid.Column="0" x:Name="accountIcon" ProfilePicture="/Assets/Logos/Microsoft_logo.jpg" Height="24" Width="24"/>
+                            <PersonPicture Grid.Column="0" ProfilePicture="/Assets/Logos/Microsoft_logo.jpg" Height="24" Width="24"/>
                             <TextBlock Grid.Column="1" x:Name="accountStatu" Text="Offline" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
                         </Grid>
                     </ListViewItem>
@@ -122,13 +122,20 @@
 
         </NavigationView>
 
+        <Grid x:Name="account_panel_background" Background="Black" Opacity="0.5" Visibility="Collapsed"/>
         <Grid x:Name="account_panel" Height="580" Width="560" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="1" BorderBrush="Blue" Visibility="Collapsed">
             <Image Source="/Assets/Logos/OneDrive_logo.png" Margin="40" VerticalAlignment="Top"/>
-            <Grid x:Name="login_panel">
-                <Button Content="Connect" Click="Login_Click"/>
-            </Grid>
-            <Grid x:Name="logout_panel">
-                <Button Content="Leave" Click="Logout_Click"/>
+            <Grid Margin="0,150,0,70">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <ToggleSwitch Grid.Row="0" Grid.Column="0" x:Name="accountToggle" Header="Account Switch" OffContent="account requested" Toggled="AccountToggle_Toggled" HorizontalAlignment="Center"/>
             </Grid>
             <Button x:Name="account_exit" Click="Account_exit_Click" Content="OK" Height="32" Width="200" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
         </Grid>
