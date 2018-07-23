@@ -97,19 +97,16 @@
             </NavigationView.HeaderTemplate>
 
             <NavigationView.PaneFooter>
-                <Grid>
-                    <ProgressBar x:Name="signWait" IsIndeterminate="True" ShowPaused="False" ShowError="False"/>
-                    <ListViewItem x:Name="signPane" Tapped="Service_Tapped" Visibility="Collapsed">
-                        <Grid >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="24"/>
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-                            <PersonPicture Grid.Column="0" ProfilePicture="/Assets/Logos/Microsoft_logo.jpg" Height="24" Width="24"/>
-                            <TextBlock Grid.Column="1" x:Name="accountStatu" Text="Offline" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
-                        </Grid>
-                    </ListViewItem>
-                </Grid>
+                <ListViewItem Tapped="Service_Tapped">
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="24"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <PersonPicture Grid.Column="0" ProfilePicture="/Assets/Logos/Microsoft_logo.jpg" Height="24" Width="24"/>
+                        <TextBlock Grid.Column="1" x:Name="accountStatu" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                    </Grid>
+                </ListViewItem>
             </NavigationView.PaneFooter>
 
             <Frame x:Name="ContentFrame" >
@@ -135,9 +132,9 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <ToggleSwitch Grid.Row="0" Grid.Column="0" x:Name="accountToggle" Header="Account Switch" OffContent="account requested" Toggled="AccountToggle_Toggled" HorizontalAlignment="Center"/>
+                <ToggleSwitch Grid.Row="0" Grid.Column="0" x:Name="accountToggle" Header="Account Switch" OffContent="account requested" OnContent="waiting account" Toggled="AccountToggle_Toggled" HorizontalAlignment="Center"/>
             </Grid>
-            <Button x:Name="account_exit" Click="Account_exit_Click" Content="OK" Height="32" Width="200" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+            <Button x:Name="account_exit" Click="Account_exit_Click" Content="OK" Height="32" Width="250" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="LightSkyBlue"/>
         </Grid>
 
         <toolkit:InAppNotification x:Name="InAppNotification" 

@@ -164,11 +164,6 @@ namespace Research_Flow
             {
                 accountStatu.Text = "Serivce Offline";
             }
-
-            // show user info after handling
-            signWait.ShowPaused = true;
-            signWait.Visibility = Visibility.Collapsed;
-            signPane.Visibility = Visibility.Visible;
         }
 
         private void Logout()
@@ -176,7 +171,6 @@ namespace Research_Flow
             GraphService.ServiceLogout();
 
             ApplicationData.Current.LocalSettings.Values.Remove("AccountName");
-            accountToggle.OnContent = "On";
             accountToggle.IsOn = false;
             account_exit.IsEnabled = false;
             accountStatu.Text = "Serivce Offline";

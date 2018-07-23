@@ -62,9 +62,26 @@ namespace Research_Flow.Pages
 
         private FeedSource currentFeed = null;
 
-        private void Open_Feedsource(object sender, RoutedEventArgs e) => feedsource_view.IsPaneOpen = true;
+        private void Open_Source(object sender, RoutedEventArgs e) => feedsource_view.IsPaneOpen = true;
 
-        private void Source_Modify(object sender, RoutedEventArgs e) => source_panel.Visibility = Visibility.Visible;
+        private void Add_Source(object sender, RoutedEventArgs e) => source_panel.Visibility = Visibility.Visible;
+
+        private void Modify_Source(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            foreach (var item in FeedSources)
+            {
+                if (item.ID == (int)(button.Tag))
+                {
+                    source_panel.Visibility = Visibility.Visible;
+                    currentFeed = item;
+                    feedName.Text = item.Name;
+                    feedUrl.Text = item.Uri;
+                    feedStar.Value = item.Star;
+                    isJournal.IsChecked = item.IsJournal;
+                }
+            }
+        }
 
         private void Confirm_FeedSetting(object sender, RoutedEventArgs e)
         {
@@ -96,11 +113,7 @@ namespace Research_Flow.Pages
             ClearSettings();
         }
 
-        private void Leave_FeedSetting(object sender, RoutedEventArgs e)
-        {
-            ClearSettings();
-            source_panel.Visibility = Visibility.Collapsed;
-        }
+        private void Leave_FeedSetting(object sender, RoutedEventArgs e) => ClearSettings();
 
         private void ClearSettings()
         {
@@ -109,22 +122,11 @@ namespace Research_Flow.Pages
             feedUrl.Text = "";
             feedStar.Value = -1;
             isJournal.IsChecked = false;
+            source_panel.Visibility = Visibility.Collapsed;
         }
 
         private void RSS_SourceClick(object sender, ItemClickEventArgs e)
-        {
-            var item = e.ClickedItem as FeedSource;
-            if (source_panel.Visibility == Visibility.Collapsed)
-                SearchRss(item.Uri);
-            else
-            {
-                currentFeed = item;
-                feedName.Text = item.Name;
-                feedUrl.Text = item.Uri;
-                feedStar.Value = item.Star;
-                isJournal.IsChecked = item.IsJournal;
-            }
-        }
+            => SearchRss((e.ClickedItem as FeedSource).Uri);
 
         private void RSS_ItemClick(object sender, ItemClickEventArgs e)
             => this.Frame.Navigate(typeof(WebPage), (e.ClickedItem as FeedItem).Link);
