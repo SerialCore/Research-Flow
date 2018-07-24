@@ -28,19 +28,7 @@
                             <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE82F;" />
                         </AppBarButton>
                     </StackPanel>
-                    <ListView x:Name="feeditem_list" Grid.Row="1" IsItemClickEnabled="True" ItemClick="RSS_ItemClick">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel >
-                                    <TextBlock Text="{Binding Title}" FontSize="20" Style="{ThemeResource BodyTextBlockStyle}"/>
-                                    <TextBlock Text="{Binding Summary}" FontSize="16"/>
-                                    <TextBlock Text="{Binding Published}"/>
-                                    <HyperlinkButton Content="{Binding Link}" NavigateUri="{Binding Link}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                    <SplitView x:Name="feedsource_view" Grid.Row="1" OpenPaneLength="300">
+                    <SplitView x:Name="feedsource_view" Grid.Row="1" OpenPaneLength="300" IsPaneOpen="True" DisplayMode="Inline">
                         <SplitView.Pane>
                             <Grid>
                                 <ListView x:Name="feedsource_list" IsItemClickEnabled="True" ItemClick="RSS_SourceClick" Margin="0,0,0,72">
@@ -59,15 +47,16 @@
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
                                 </ListView>
-                                <Button Grid.Row="1" Content="Add Source" Click="Add_Source"
+                                <Button Content="Add Source" Click="Add_Source"
                                     Height="32" Width="250" VerticalAlignment="Bottom" Margin="20" Background="LightBlue"/>
-                                <Grid x:Name="source_panel" VerticalAlignment="Bottom" Visibility="Collapsed" Background="{ThemeResource AppBarBackgroundThemeBrush}" Margin="5">
+                                <Grid x:Name="source_panel" Visibility="Collapsed" Background="{ThemeResource AppBarBackgroundThemeBrush}" Padding="5">
                                     <Grid.RowDefinitions>
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                        <RowDefinition />
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
@@ -78,11 +67,25 @@
                                     <TextBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedUrl" IsSpellCheckEnabled="False" Header="Url"/>
                                     <RatingControl Grid.Row="3" Grid.Column="0" x:Name="feedStar"/>
                                     <CheckBox Grid.Row="3" Grid.Column="1" x:Name="isJournal" Content="Is journal"/>
-                                    <Button Grid.Row="4" Grid.Column="0" Click="Confirm_FeedSetting" Content="Confirm" Margin="0,5,5,5" HorizontalAlignment="Stretch" Background="LightSkyBlue"/>
-                                    <Button Grid.Row="4" Grid.Column="1" Click="Leave_FeedSetting" Content="Cancel" Margin="0,5,5,5" HorizontalAlignment="Stretch" Background="Red"/>
+                                    <Button Grid.Row="5" Grid.Column="0" Click="Confirm_FeedSetting" Content="Confirm" Margin="0,5,5,5" HorizontalAlignment="Stretch" Background="LightSkyBlue"/>
+                                    <Button Grid.Row="5" Grid.Column="1" Click="Leave_FeedSetting" Content="Cancel" Margin="0,5,5,5" HorizontalAlignment="Stretch" Background="Red"/>
                                 </Grid>
                             </Grid>
                         </SplitView.Pane>
+                        <SplitView.Content>
+                            <ListView x:Name="feeditem_list" IsItemClickEnabled="True" ItemClick="RSS_ItemClick">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel >
+                                            <TextBlock Text="{Binding Title}" FontSize="20" Style="{ThemeResource BodyTextBlockStyle}"/>
+                                            <TextBlock Text="{Binding Summary}" FontSize="16"/>
+                                            <TextBlock Text="{Binding Published}"/>
+                                            <HyperlinkButton Content="{Binding Link}" NavigateUri="{Binding Link}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </SplitView.Content>
                     </SplitView>
                 </Grid>
             </PivotItem>
