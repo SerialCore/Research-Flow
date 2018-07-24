@@ -1,4 +1,5 @@
 ﻿using LogicService.Helper;
+using LogicService.Security;
 using LogicService.Services;
 using Microsoft.Toolkit.Uwp.Helpers;
 using System;
@@ -14,6 +15,12 @@ namespace LogicService.Storage
     {
 
         #region Folders
+
+        public static StorageFolder AppFolder;
+        public static StorageFolder UserFolder;
+        public static StorageFolder PhotoFolder;
+        public static StorageFolder FeedFolder;
+        public static StorageFolder SettingFolder;
 
         public static StorageFolder GetAppFolderAsync()
         {
@@ -61,7 +68,7 @@ namespace LogicService.Storage
         {
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.ReplaceExisting);
             string content = JsonHelper.SerializeObject(o);
-            await FileIO.WriteTextAsync(file, content);
+            await FileIO.WriteTextAsync(file, DEncrypt.Encrypt(content));
             return file;
         }
 
@@ -69,7 +76,7 @@ namespace LogicService.Storage
         {
             StorageFile file = await folder.GetFileAsync(name);
             string content = await FileIO.ReadTextAsync(file);
-            return JsonHelper.DeserializeJsonToObject<T>(content);
+            return JsonHelper.DeserializeJsonToObject<T>(DEncrypt.Decrypt(content));
         }
 
         #endregion

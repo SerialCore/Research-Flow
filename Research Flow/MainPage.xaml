@@ -104,7 +104,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <PersonPicture Grid.Column="0" ProfilePicture="/Assets/Logos/Microsoft_logo.jpg" Height="24" Width="24"/>
-                        <TextBlock Grid.Column="1" x:Name="accountStatu" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" x:Name="accountStatu" Text="Waiting" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
                     </Grid>
                 </ListViewItem>
             </NavigationView.PaneFooter>
