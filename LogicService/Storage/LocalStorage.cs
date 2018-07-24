@@ -1,4 +1,5 @@
-﻿using LogicService.Services;
+﻿using LogicService.Helper;
+using LogicService.Services;
 using Microsoft.Toolkit.Uwp.Helpers;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace LogicService.Storage
     public class LocalStorage
     {
 
-        private static readonly LocalObjectStorageHelper localObject = new LocalObjectStorageHelper();
+        #region Folders
 
         public static StorageFolder GetAppFolderAsync()
         {
@@ -40,16 +41,38 @@ namespace LogicService.Storage
             return await (await GetUserFolderAsync()).CreateFolderAsync("Settings", CreationCollisionOption.OpenIfExists);
         }
 
+        #endregion
 
-        public static async Task<StorageFile> WriteObjectAsync(string path, Type o)
+        #region Operator
+
+        private static readonly LocalObjectStorageHelper localObject = new LocalObjectStorageHelper();
+
+        public static async Task<StorageFile> WriteTypeAsync(string path, Type o)
         {
             return await localObject.SaveFileAsync<Type>(path, o);
         }
 
-        public static async Task<Type> ReadObjectAsync(string path, Type t)
+        public static async Task<Type> ReadTypeAsync(string path, Type t)
         {
             return await localObject.ReadFileAsync<Type>(path, t);
         }
+
+        public static async Task<StorageFile> WriteObjectAsync(StorageFolder folder, string name, object o)
+        {
+            StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.ReplaceExisting);
+            string content = JsonHelper.SerializeObject(o);
+            await FileIO.WriteTextAsync(file, content);
+            return file;
+        }
+
+        public static async Task<object> ReadObjectAsync<T>(StorageFolder folder, string name) where T : class
+        {
+            StorageFile file = await folder.GetFileAsync(name);
+            string content = await FileIO.ReadTextAsync(file);
+            return JsonHelper.DeserializeJsonToObject<T>(content);
+        }
+
+        #endregion
 
     }
 }

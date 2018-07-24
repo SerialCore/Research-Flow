@@ -37,5 +37,10 @@ namespace Research_Flow
         {
             this.Frame.Navigate(typeof(MainPage));
         }
+
+        private void ConfigFiles()
+        {
+            // Configure pre-installed files like RSS source
+        }
     }
 }

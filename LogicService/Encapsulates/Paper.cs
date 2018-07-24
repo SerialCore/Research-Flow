@@ -13,13 +13,30 @@ namespace LogicService.Encapsulates
 
         public string DOI { get; set; }
 
-        public List<string> Author { get; set; }
+        public List<People> Author { get; set; }
 
         public StringBuilder Abstract { get; set; }
 
         public List<string> Topic { get; set; }
 
         public List<Cite> Reference { get; set; }
+
+    }
+
+    public class People
+    {
+
+        public string FirstName { get; set; }
+
+        public string MiddleName { get; set; }
+
+        public string LastName { get; set; }
+
+        public string Email { get; set; }
+
+        public string Tele { get; set; }
+
+        public string Organization { get; set; }
 
     }
 

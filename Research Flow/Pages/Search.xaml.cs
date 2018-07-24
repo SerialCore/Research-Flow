@@ -1,5 +1,6 @@
 ﻿using LogicService.Encapsulates;
 using LogicService.Services;
+using LogicService.Storage;
 using Microsoft.Toolkit.Services.Bing;
 using Research_Flow.Pages.SubPages;
 using System;
@@ -33,18 +34,11 @@ namespace Research_Flow.Pages
 
         }
 
-        private void InitializeData()
+        private async void InitializeData()
         {
             // feed source
-            FeedSources = new ObservableCollection<FeedSource>()
-            {
-                new FeedSource{ID=1,Name="ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=4ta59b4&type=search&feed=rss&query=%2526AllField%253Dhydrogen%252Bbond%2526publication%253D40025988%2526sortBy%253DEarliest%2526target%253Ddefault%2526targetTab%253Dstd",Star=5,IsJournal=true},
-                new FeedSource{ID=2,Name="科学网",Uri="http://www.sciencenet.cn/xml/paper.aspx?di=7",Star=4,IsJournal=false},
-                new FeedSource{ID=3,Name="PRA",Uri="http://feeds.aps.org/rss/recent/pra.xml",Star=5,IsJournal=true},
-                new FeedSource{ID=4,Name="PRB",Uri="http://feeds.aps.org/rss/recent/prb.xml",Star=5,IsJournal=true},
-                new FeedSource{ID=5,Name="PRC",Uri="http://feeds.aps.org/rss/recent/prc.xml",Star=5,IsJournal=true},
-                new FeedSource{ID=6,Name="PRD",Uri="http://feeds.aps.org/rss/recent/prd.xml",Star=5,IsJournal=true}
-            };
+            FeedSources = await LocalStorage.ReadObjectAsync<ObservableCollection<FeedSource>>(
+                await LocalStorage.GetFeedsAsync(), "RSS") as ObservableCollection<FeedSource>;
             feedsource_list.ItemsSource = FeedSources;
 
             // Bing configure
@@ -86,7 +80,7 @@ namespace Research_Flow.Pages
             }
         }
 
-        private void Confirm_FeedSetting(object sender, RoutedEventArgs e)
+        private async void Confirm_FeedSetting(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(feedUrl.Text))
             {
@@ -106,6 +100,7 @@ namespace Research_Flow.Pages
                 {
                     FeedSources.Add(newFeed);
                 }
+                await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
             }
             ClearSettings();
         }

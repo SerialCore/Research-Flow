@@ -48,5 +48,19 @@ namespace Research_Flow.Pages
             var item = e.ClickedItem as StoreApp;
             await Launcher.LaunchUriAsync(item.AppUri);
         }
+
+    }
+
+    public class StoreApp
+    {
+
+        public string Name { get; set; }
+
+        public Uri AppUri { get; set; }
+
+        public Uri LogoUri { get; set; }
+
+        public string Abstract { get; set; }
+
     }
 }
