@@ -16,12 +16,6 @@ namespace LogicService.Storage
 
         #region Folders
 
-        public static StorageFolder AppFolder;
-        public static StorageFolder UserFolder;
-        public static StorageFolder PhotoFolder;
-        public static StorageFolder FeedFolder;
-        public static StorageFolder SettingFolder;
-
         public static StorageFolder GetAppFolderAsync()
         {
             return ApplicationData.Current.LocalFolder;
@@ -64,19 +58,19 @@ namespace LogicService.Storage
             return await localObject.ReadFileAsync<Type>(path, t);
         }
 
-        public static async Task<StorageFile> WriteObjectAsync(StorageFolder folder, string name, object o)
+        public static async Task<StorageFile> WriteObjectAsync(StorageFolder folder, string name, object o, string key = null)
         {
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.ReplaceExisting);
             string content = JsonHelper.SerializeObject(o);
-            await FileIO.WriteTextAsync(file, DEncrypt.Encrypt(content));
+            await FileIO.WriteTextAsync(file, DEncrypt.Encrypt(content, key));
             return file;
         }
 
-        public static async Task<object> ReadObjectAsync<T>(StorageFolder folder, string name) where T : class
+        public static async Task<object> ReadObjectAsync<T>(StorageFolder folder, string name, string key = null) where T : class
         {
             StorageFile file = await folder.GetFileAsync(name);
             string content = await FileIO.ReadTextAsync(file);
-            return JsonHelper.DeserializeJsonToObject<T>(DEncrypt.Decrypt(content));
+            return JsonHelper.DeserializeJsonToObject<T>(DEncrypt.Decrypt(content, key));
         }
 
         #endregion

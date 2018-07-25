@@ -17,52 +17,31 @@ namespace LogicService.Security
 
         }
 
-        #region 使用 缺省密钥字符串 加密/解密string
-
+        #region 加密/解密string
         /// <summary>
-        /// 使用缺省密钥字符串加密string
+        /// 加密string
         /// </summary>
         /// <param name="original">明文</param>
-        /// <returns>密文</returns>
-        public static string Encrypt(string original)
-        {
-            return Encrypt(original, "blamder");
-        }
-        /// <summary>
-        /// 使用缺省密钥字符串解密string
-        /// </summary>
-        /// <param name="original">密文</param>
-        /// <returns>明文</returns>
-        public static string Decrypt(string original)
-        {
-            return Decrypt(original, "blamder", System.Text.Encoding.Default);
-            
-        }
-
-        #endregion
-
-        #region 使用 给定密钥字符串 加密/解密string
-        /// <summary>
-        /// 使用给定密钥字符串加密string
-        /// </summary>
-        /// <param name="original">原始文字</param>
         /// <param name="key">密钥</param>
-        /// <param name="encoding">字符编码方案</param>
         /// <returns>密文</returns>
         public static string Encrypt(string original, string key)
         {
+            if (key == null)
+                key = "blamder";
             byte[] buff = System.Text.Encoding.Default.GetBytes(original);
             byte[] kb = System.Text.Encoding.Default.GetBytes(key);
             return Convert.ToBase64String(Encrypt(buff, kb));
         }
         /// <summary>
-        /// 使用给定密钥字符串解密string
+        /// 解密string
         /// </summary>
         /// <param name="original">密文</param>
         /// <param name="key">密钥</param>
         /// <returns>明文</returns>
         public static string Decrypt(string original, string key)
         {
+            if (key == null)
+                key = "blamder";
             return Decrypt(original, key, System.Text.Encoding.Default);
         }
 
@@ -81,32 +60,7 @@ namespace LogicService.Security
         }
         #endregion
 
-        #region 使用 缺省密钥字符串 加密/解密/byte[]
-        /// <summary>
-        /// 使用缺省密钥字符串解密byte[]
-        /// </summary>
-        /// <param name="encrypted">密文</param>
-        /// <param name="key">密钥</param>
-        /// <returns>明文</returns>
-        public static byte[] Decrypt(byte[] encrypted)
-        {
-            byte[] key = System.Text.Encoding.Default.GetBytes("MATICSOFT");
-            return Decrypt(encrypted, key);
-        }
-        /// <summary>
-        /// 使用缺省密钥字符串加密
-        /// </summary>
-        /// <param name="original">原始数据</param>
-        /// <param name="key">密钥</param>
-        /// <returns>密文</returns>
-        public static byte[] Encrypt(byte[] original)
-        {
-            byte[] key = System.Text.Encoding.Default.GetBytes("MATICSOFT");
-            return Encrypt(original, key);
-        }
-        #endregion
-
-        #region  使用 给定密钥 加密/解密/byte[]
+        #region  加密/解密/byte[]
 
         /// <summary>
         /// 生成MD5摘要
@@ -122,13 +76,15 @@ namespace LogicService.Security
         }
 
         /// <summary>
-        /// 使用给定密钥加密
+        /// 加密数据
         /// </summary>
         /// <param name="original">明文</param>
         /// <param name="key">密钥</param>
         /// <returns>密文</returns>
-        public static byte[] Encrypt(byte[] original, byte[] key)
+        public static byte[] Encrypt(byte[] original, byte[] key = null)
         {
+            if (key == null)
+                key = System.Text.Encoding.Default.GetBytes("blamder");
             TripleDESCryptoServiceProvider des = new TripleDESCryptoServiceProvider();
             des.Key = MakeMD5(key);
             des.Mode = CipherMode.ECB;
@@ -137,13 +93,15 @@ namespace LogicService.Security
         }
 
         /// <summary>
-        /// 使用给定密钥解密数据
+        /// 解密数据
         /// </summary>
         /// <param name="encrypted">密文</param>
         /// <param name="key">密钥</param>
         /// <returns>明文</returns>
-        public static byte[] Decrypt(byte[] encrypted, byte[] key)
+        public static byte[] Decrypt(byte[] encrypted, byte[] key = null)
         {
+            if (key == null)
+                key = System.Text.Encoding.Default.GetBytes("blamder");
             TripleDESCryptoServiceProvider des = new TripleDESCryptoServiceProvider();
             des.Key = MakeMD5(key);
             des.Mode = CipherMode.ECB;

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LogicService.Encapsulates;
+using LogicService.Storage;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -38,9 +40,15 @@ namespace Research_Flow
             this.Frame.Navigate(typeof(MainPage));
         }
 
-        private void ConfigFiles()
+        private async void ConfigFiles()
         {
-            // Configure pre-installed files like RSS source
+            // RSS source
+            var FeedSources = new List<FeedSource>()
+            {
+                new FeedSource{ID=12345678,Name="Hydrogen Bond in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd",Star=5,IsJournal=true},
+                new FeedSource{ID=87654321,Name="Physical Review Letters",Uri="http://feeds.aps.org/rss/recent/prl.xml",Star=5,IsJournal=true},
+            };
+            await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
         }
     }
 }
