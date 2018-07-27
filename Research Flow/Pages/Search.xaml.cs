@@ -1,4 +1,5 @@
 ﻿using LogicService.Encapsulates;
+using LogicService.Security;
 using LogicService.Services;
 using LogicService.Storage;
 using Microsoft.Toolkit.Services.Bing;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.System;
 using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -37,17 +39,8 @@ namespace Research_Flow.Pages
         private async void InitializeData()
         {
             //there must be feed source file
-            //FeedSources = new ObservableCollection<FeedSource>()
-            //{
-            //    new FeedSource{ID=1,Name="ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=4ta59b4&type=search&feed=rss&query=%2526AllField%253Dhydrogen%252Bbond%2526publication%253D40025988%2526sortBy%253DEarliest%2526target%253Ddefault%2526targetTab%253Dstd",Star=5,IsJournal=true},
-            //    new FeedSource{ID=2,Name="科学网",Uri="http://www.sciencenet.cn/xml/paper.aspx?di=7",Star=4,IsJournal=false},
-            //    new FeedSource{ID=3,Name="PRA",Uri="http://feeds.aps.org/rss/recent/pra.xml",Star=5,IsJournal=true},
-            //    new FeedSource{ID=4,Name="PRB",Uri="http://feeds.aps.org/rss/recent/prb.xml",Star=5,IsJournal=true},
-            //    new FeedSource{ID=5,Name="PRC",Uri="http://feeds.aps.org/rss/recent/prc.xml",Star=5,IsJournal=true},
-            //    new FeedSource{ID=6,Name="PRD",Uri="http://feeds.aps.org/rss/recent/prd.xml",Star=5,IsJournal=true}
-            //};
             FeedSources = await LocalStorage.ReadObjectAsync<ObservableCollection<FeedSource>>(
-            await LocalStorage.GetFeedsAsync(), "RSS") as ObservableCollection<FeedSource>;
+                await LocalStorage.GetFeedsAsync(), "RSS") as ObservableCollection<FeedSource>;
             feedsource_list.ItemsSource = FeedSources;
 
             // Bing configure
@@ -74,7 +67,7 @@ namespace Research_Flow.Pages
             var button = (Button)sender;
             foreach (var item in FeedSources)
             {
-                if (item.ID == (int)(button.Tag))
+                if (item.ID.Equals((string)(button.Tag)))
                 {
                     source_panel.Visibility = Visibility.Visible;
                     currentFeed = item;
@@ -95,7 +88,7 @@ namespace Research_Flow.Pages
             {
                 FeedSource newFeed = new FeedSource
                 {
-                    ID = feedUrl.Text.GetHashCode(),
+                    ID = feedUrl.Text.GetHashCode().ToString(),
                     Name = feedName.Text,
                     Uri = feedUrl.Text,
                     Star = feedStar.Value,
@@ -114,11 +107,30 @@ namespace Research_Flow.Pages
             ClearSettings();
         }
 
-        private void Delete_FeedSetting(object sender, RoutedEventArgs e)
+        private async void Delete_FeedSetting(object sender, RoutedEventArgs e)
+        {
+            var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.", "Operation confirming");
+            messageDialog.Commands.Add(new UICommand(
+                "True",
+                new UICommandInvokedHandler(this.DeleteInvokedHandler)));
+            messageDialog.Commands.Add(new UICommand(
+                "Joke",
+                new UICommandInvokedHandler(this.CancelInvokedHandler)));
+
+            messageDialog.DefaultCommandIndex = 0;
+            messageDialog.CancelCommandIndex = 1;
+            await messageDialog.ShowAsync();
+        }
+
+        private async void DeleteInvokedHandler(IUICommand command)
         {
             FeedSources.Remove(currentFeed);
+            await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
             ClearSettings();
         }
+
+        private void CancelInvokedHandler(IUICommand command)
+            => ClearSettings();
 
         private void Leave_FeedSetting(object sender, RoutedEventArgs e) => ClearSettings();
 
@@ -135,29 +147,39 @@ namespace Research_Flow.Pages
         }
 
         private void RSS_SourceClick(object sender, ItemClickEventArgs e)
-            => SearchRss((e.ClickedItem as FeedSource).Uri);
+            => SearchRss((e.ClickedItem as FeedSource));
 
         private void RSS_ItemClick(object sender, ItemClickEventArgs e)
             => this.Frame.Navigate(typeof(WebPage), (e.ClickedItem as FeedItem).Link);
 
-        private void SearchRss(string feedlink)
+        private async void SearchRss(FeedSource source)
         {
-            RssService.GetRssItems(
-                feedlink,
-                async (items) =>
-                {
-                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            try
+            {
+                List<FeedItem> feedItems = await LocalStorage.ReadObjectAsync<List<FeedItem>>(
+                    await LocalStorage.GetFeedsAsync(), source.ID, source.ID) as List<FeedItem>;
+                feeditem_list.ItemsSource = feedItems;
+            }
+            catch
+            {
+                RssService.GetRssItems(
+                    source.Uri,
+                    async (items) =>
                     {
-                        feeditem_list.ItemsSource = items;
-                    });
-                },
-                async (exception) =>
-                {
-                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        {
+                            feeditem_list.ItemsSource = items;
+                        });
+                        await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), source.ID, items, source.ID);
+                    },
+                    async (exception) =>
                     {
-                        InAppNotification.Show("RssException: " + exception);
-                    });
-                }, null);
+                        await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        {
+                            InAppNotification.Show("RssException: " + exception);
+                        });
+                    }, null);
+            }
         }
 
         #endregion

@@ -10,11 +10,13 @@ namespace LogicService.Encapsulates
     public class FeedSource
     {
 
-        public int ID { get; set; }
+        public string ID { get; set; }
 
         public string Name { get; set; }
 
         public string Uri { get; set; }
+
+        public int MaxCount { get; set; }
 
         public double Star { get; set; }
 
@@ -30,10 +32,6 @@ namespace LogicService.Encapsulates
         public string Title { get; set; }
 
         public string DOI { get; set; }
-
-        public IList<SyndicationPerson> Authors { get; set; }
-
-        public IList<SyndicationCategory> Categories { get; set; }
 
         public string Published { get; set; }
 

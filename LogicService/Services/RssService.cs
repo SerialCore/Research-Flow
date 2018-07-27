@@ -37,8 +37,6 @@ namespace LogicService.Services
                                 {
                                     Title = f.Title.Text,
                                     DOI = GetDoi(f),
-                                    Authors = f.Authors,
-                                    Categories = f.Categories,
                                     Published = f.PublishedDate.ToString(),
                                     Link = f.Links[0].Uri.AbsoluteUri,
                                     Summary = WebUtility.HtmlDecode(Regex.Replace(f.Summary.Text, "<[^>]+?>", ""))
