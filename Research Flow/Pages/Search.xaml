@@ -57,18 +57,20 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="*"/>
                                         <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
                                         <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
-                                    <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Click="Delete_FeedSetting" Content="Delete" Margin="0,5" HorizontalAlignment="Stretch" Background="Red"/>
-                                    <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedName" IsSpellCheckEnabled="False" Header="Title"/>
-                                    <TextBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedUrl" IsSpellCheckEnabled="False" Header="Url"/>
-                                    <RatingControl Grid.Row="3" Grid.Column="0" x:Name="feedStar"/>
-                                    <CheckBox Grid.Row="3" Grid.Column="1" x:Name="isJournal" Content="Is journal"/>
+                                    <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedName" Header="Title" IsSpellCheckEnabled="False"/>
+                                    <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedUrl" Header="Url" IsSpellCheckEnabled="False"/>
+                                    <Slider Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedCount" Header="Max count of items" Minimum="20" Maximum="100" TickFrequency="10" TickPlacement="Outside"/>
+                                    <CheckBox Grid.Row="3" Grid.Column="0" x:Name="isJournal" Content="Is journal"/>
+                                    <RatingControl Grid.Row="3" Grid.Column="1" x:Name="feedStar"/>
                                     <Button Grid.Row="5" Grid.Column="0" Click="Confirm_FeedSetting" Content="Confirm" Margin="10" HorizontalAlignment="Stretch" Background="LightSkyBlue"/>
-                                    <Button Grid.Row="5" Grid.Column="1" Click="Leave_FeedSetting" Content="Cancel" Margin="10" HorizontalAlignment="Stretch" Background="Red"/>
+                                    <Button Grid.Row="5" Grid.Column="1" Click="Leave_FeedSetting" Content="Cancel" Margin="10" HorizontalAlignment="Stretch" Background="LightGray"/>
+                                    <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedDelete" Click="Delete_FeedSetting" Content="Delete" Margin="10" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
                                 </Grid>
                             </Grid>
                         </SplitView.Pane>
@@ -86,6 +88,7 @@
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
                                 </ListView>
+                                <ProgressRing x:Name="waiting_feed" Height="100" Width="100"/>
                             </Grid>
                         </SplitView.Content>
                     </SplitView>

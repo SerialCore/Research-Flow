@@ -40,16 +40,5 @@ namespace Research_Flow
             this.Frame.Navigate(typeof(MainPage));
         }
 
-        private async void ConfigFiles()
-        {
-            // RSS source
-            var FeedSources = new List<FeedSource>()
-            {
-                new FeedSource{ID="12345678",Name="Hydrogen Bond in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd",Star=5,IsJournal=true},
-                new FeedSource{ID="87654321",Name="Physical Review Letters",Uri="http://feeds.aps.org/rss/recent/prl.xml",Star=5,IsJournal=true},
-                new FeedSource{ID="32536485",Name="科学网-数理科学",Uri="http://www.sciencenet.cn/xml/paper.aspx?di=7",Star=5,IsJournal=false}
-            };
-            await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
-        }
     }
 }

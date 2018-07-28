@@ -39,8 +39,24 @@ namespace Research_Flow.Pages
         private async void InitializeData()
         {
             //there must be feed source file
-            FeedSources = await LocalStorage.ReadObjectAsync<ObservableCollection<FeedSource>>(
-                await LocalStorage.GetFeedsAsync(), "RSS") as ObservableCollection<FeedSource>;
+            try
+            {
+                FeedSources = await LocalStorage.ReadObjectAsync<ObservableCollection<FeedSource>>(
+                    await LocalStorage.GetFeedsAsync(), "RSS") as ObservableCollection<FeedSource>;
+            }
+            catch
+            {
+                FeedSources = new ObservableCollection<FeedSource>()
+                {
+                    new FeedSource{ID="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd".GetHashCode().ToString(),
+                        Name ="Hydrogen Bond in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,Star=5,IsJournal=true},
+                    new FeedSource{ID="http://feeds.aps.org/rss/recent/prl.xml".GetHashCode().ToString(),
+                        Name ="Physical Review Letters",Uri="http://feeds.aps.org/rss/recent/prl.xml",MaxCount=50,Star=5,IsJournal=true},
+                    new FeedSource{ID="http://www.sciencenet.cn/xml/paper.aspx?di=7".GetHashCode().ToString(),
+                        Name ="科学网-数理科学",Uri="http://www.sciencenet.cn/xml/paper.aspx?di=7",MaxCount=50,Star=5,IsJournal=false}
+                };
+                await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
+            }
             feedsource_list.ItemsSource = FeedSources;
 
             // Bing configure
@@ -73,10 +89,12 @@ namespace Research_Flow.Pages
                     currentFeed = item;
                     feedName.Text = item.Name;
                     feedUrl.Text = item.Uri;
+                    feedCount.Value = item.MaxCount;
                     feedStar.Value = item.Star;
                     isJournal.IsChecked = item.IsJournal;
 
                     feedUrl.IsReadOnly = true;
+                    feedDelete.Visibility = Visibility;
                     source_panel.Visibility = Visibility.Visible;
                 }
             }
@@ -91,6 +109,7 @@ namespace Research_Flow.Pages
                     ID = feedUrl.Text.GetHashCode().ToString(),
                     Name = feedName.Text,
                     Uri = feedUrl.Text,
+                    MaxCount = feedCount.Value,
                     Star = feedStar.Value,
                     IsJournal = (bool)(isJournal.IsChecked)
                 };
@@ -126,6 +145,7 @@ namespace Research_Flow.Pages
         {
             FeedSources.Remove(currentFeed);
             await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
+            LocalStorage.DeleteFile(await LocalStorage.GetFeedsAsync(), currentFeed.ID);
             ClearSettings();
         }
 
@@ -139,10 +159,12 @@ namespace Research_Flow.Pages
             currentFeed = null;
             feedName.Text = "";
             feedUrl.Text = "";
+            feedCount.Value = 20;
             feedStar.Value = -1;
             isJournal.IsChecked = false;
 
             feedUrl.IsReadOnly = false;
+            feedDelete.Visibility = Visibility.Collapsed;
             source_panel.Visibility = Visibility.Collapsed;
         }
 
@@ -150,18 +172,19 @@ namespace Research_Flow.Pages
             => SearchRss((e.ClickedItem as FeedSource));
 
         private void RSS_ItemClick(object sender, ItemClickEventArgs e)
-            => this.Frame.Navigate(typeof(WebPage), (e.ClickedItem as FeedItem).Link);
+            => this.Frame.Navigate(typeof(WebPage), (e.ClickedItem as FeedItem));
 
         private async void SearchRss(FeedSource source)
         {
             try
             {
                 List<FeedItem> feedItems = await LocalStorage.ReadObjectAsync<List<FeedItem>>(
-                    await LocalStorage.GetFeedsAsync(), source.ID, source.ID) as List<FeedItem>;
+                    await LocalStorage.GetFeedsAsync(), source.ID, "blamder" + source.ID) as List<FeedItem>;
                 feeditem_list.ItemsSource = feedItems;
             }
             catch
             {
+                waiting_feed.IsActive = true;
                 RssService.GetRssItems(
                     source.Uri,
                     async (items) =>
@@ -169,14 +192,16 @@ namespace Research_Flow.Pages
                         await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                         {
                             feeditem_list.ItemsSource = items;
+                            waiting_feed.IsActive = false;
                         });
-                        await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), source.ID, items, source.ID);
+                        await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), source.ID, items, "blamder" + source.ID);
                     },
                     async (exception) =>
                     {
                         await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                         {
                             InAppNotification.Show("RssException: " + exception);
+                            waiting_feed.IsActive = false;
                         });
                     }, null);
             }

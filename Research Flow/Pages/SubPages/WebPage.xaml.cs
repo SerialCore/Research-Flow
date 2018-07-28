@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LogicService.Encapsulates;
+using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -36,9 +37,8 @@ namespace Research_Flow.Pages.SubPages
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            string link = e.Parameter as string;
-            if (!string.IsNullOrEmpty(link))
-                webView.Navigate(new Uri(link));
+            FeedItem feed = e.Parameter as FeedItem;
+            webView.Navigate(new Uri(feed.Link));
         }
 
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)

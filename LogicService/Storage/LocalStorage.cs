@@ -23,13 +23,13 @@ namespace LogicService.Storage
 
         public async static Task<StorageFolder> GetUserFolderAsync()
         {
-            return await GetAppFolderAsync().CreateFolderAsync(ApplicationData.Current.LocalSettings.Values["AccountName"] as string, 
+            return await GetAppFolderAsync().CreateFolderAsync(ApplicationData.Current.LocalSettings.Values["AccountName"] as string,
                 CreationCollisionOption.OpenIfExists);
         }
 
         public static async Task<StorageFolder> GetPhotosAsync()
         {
-            return await (await GetUserFolderAsync()).CreateFolderAsync("Photos",CreationCollisionOption.OpenIfExists);
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Photos", CreationCollisionOption.OpenIfExists);
         }
 
         public static async Task<StorageFolder> GetFeedsAsync()
@@ -71,6 +71,13 @@ namespace LogicService.Storage
             StorageFile file = await folder.GetFileAsync(name);
             string content = await FileIO.ReadTextAsync(file);
             return JsonHelper.DeserializeJsonToObject<T>(DEncrypt.Decrypt(content, key));
+        }
+
+        public static async void DeleteFile(StorageFolder folder, string name)
+        {
+            StorageFile file = await folder.GetFileAsync(name);
+            if (file != null)
+                await file.DeleteAsync();
         }
 
         #endregion
