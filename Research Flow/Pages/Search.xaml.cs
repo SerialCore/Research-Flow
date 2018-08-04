@@ -48,12 +48,14 @@ namespace Research_Flow.Pages
             {
                 FeedSources = new ObservableCollection<FeedSource>()
                 {
-                    new FeedSource{ID="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd".GetHashCode().ToString(),
-                        Name ="Hydrogen Bond in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,Star=5,IsJournal=true},
-                    new FeedSource{ID="http://feeds.aps.org/rss/recent/prl.xml".GetHashCode().ToString(),
-                        Name ="Physical Review Letters",Uri="http://feeds.aps.org/rss/recent/prl.xml",MaxCount=50,Star=5,IsJournal=true},
-                    new FeedSource{ID="http://www.sciencenet.cn/xml/paper.aspx?di=7".GetHashCode().ToString(),
-                        Name ="科学网-数理科学",Uri="http://www.sciencenet.cn/xml/paper.aspx?di=7",MaxCount=50,Star=5,IsJournal=false}
+                    new FeedSource{ID=DEncrypt.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd"),
+                        Name="Hydrogen Bond in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,Star=5,IsJournal=true},
+                    new FeedSource{ID=DEncrypt.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd"),
+                        Name="Pedal Motion in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,Star=5,IsJournal=true},
+                    new FeedSource{ID=DEncrypt.MakeMD5("http://feeds.aps.org/rss/recent/prl.xml").GetHashCode().ToString(),
+                        Name="Physical Review Letters",Uri="http://feeds.aps.org/rss/recent/prl.xml",MaxCount=50,Star=5,IsJournal=true},
+                    new FeedSource{ID=DEncrypt.MakeMD5("http://www.sciencenet.cn/xml/paper.aspx?di=7"),
+                        Name="科学网-数理科学",Uri="http://www.sciencenet.cn/xml/paper.aspx?di=7",MaxCount=50,Star=5,IsJournal=false}
                 };
                 await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
             }
@@ -106,7 +108,7 @@ namespace Research_Flow.Pages
             {
                 FeedSource newFeed = new FeedSource
                 {
-                    ID = feedUrl.Text.GetHashCode().ToString(),
+                    ID = DEncrypt.MakeMD5(feedUrl.Text),
                     Name = feedName.Text,
                     Uri = feedUrl.Text,
                     MaxCount = feedCount.Value,
@@ -145,7 +147,11 @@ namespace Research_Flow.Pages
         {
             FeedSources.Remove(currentFeed);
             await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
-            LocalStorage.DeleteFile(await LocalStorage.GetFeedsAsync(), currentFeed.ID);
+            try
+            {
+                LocalStorage.DeleteFile(await LocalStorage.GetFeedsAsync(), currentFeed.ID);
+            }
+            catch { }
             ClearSettings();
         }
 
@@ -172,7 +178,7 @@ namespace Research_Flow.Pages
             => SearchRss((e.ClickedItem as FeedSource));
 
         private void RSS_ItemClick(object sender, ItemClickEventArgs e)
-            => this.Frame.Navigate(typeof(WebPage), (e.ClickedItem as FeedItem));
+            => this.Frame.Navigate(typeof(WebPage), (e.ClickedItem as FeedItem).Link);
 
         private async void SearchRss(FeedSource source)
         {

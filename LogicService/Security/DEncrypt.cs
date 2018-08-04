@@ -63,19 +63,6 @@ namespace LogicService.Security
         #region  加密/解密/byte[]
 
         /// <summary>
-        /// 生成MD5摘要
-        /// </summary>
-        /// <param name="original">数据源</param>
-        /// <returns>摘要</returns>
-        public static byte[] MakeMD5(byte[] original)
-        {
-            MD5CryptoServiceProvider hashmd5 = new MD5CryptoServiceProvider();
-            byte[] keyhash = hashmd5.ComputeHash(original);
-            hashmd5 = null;
-            return keyhash;
-        }
-
-        /// <summary>
         /// 加密数据
         /// </summary>
         /// <param name="original">明文</param>
@@ -107,6 +94,52 @@ namespace LogicService.Security
             des.Mode = CipherMode.ECB;
 
             return des.CreateDecryptor().TransformFinalBlock(encrypted, 0, encrypted.Length);
+        }
+
+        #endregion
+
+        #region HashCode
+
+        public static string GetRandomValue()
+        {
+            Random Seed = new Random();
+            string RandomVaule = Seed.Next(1, int.MaxValue).ToString();
+            return RandomVaule;
+        }
+
+        public static byte[] MakeMD5(byte[] original)
+        {
+            MD5CryptoServiceProvider hashmd5 = new MD5CryptoServiceProvider();
+            byte[] Value = hashmd5.ComputeHash(original);
+            hashmd5 = null;
+            return Value;
+        }
+
+        public static string MakeMD5(string Security)
+        {
+            byte[] Message = Encoding.Default.GetBytes(Security);
+            MD5CryptoServiceProvider hashmd5 = new MD5CryptoServiceProvider();
+            byte[] Value = hashmd5.ComputeHash(Message);
+            hashmd5 = null;
+            Security = "";
+            foreach (byte o in Value)
+            {
+                Security += o.ToString("x2");
+            }
+            return Security;
+        }
+
+        public static string MakeSHA512(string Security)
+        {
+            byte[] Message = Encoding.Default.GetBytes(Security);
+            SHA512Managed Arithmetic = new SHA512Managed();
+            byte[] Value = Arithmetic.ComputeHash(Message);
+            Security = "";
+            foreach (byte o in Value)
+            {
+                Security += o.ToString("x2");
+            }
+            return Security;
         }
 
         #endregion

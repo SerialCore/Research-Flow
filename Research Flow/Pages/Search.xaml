@@ -21,10 +21,10 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Orientation="Horizontal">
-                        <AppBarButton Label="Source" Click="Open_Source">
+                        <AppBarButton Label="Source" Click="Open_Source" LabelPosition="Default">
                             <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE88E;" />
                         </AppBarButton>
-                        <AppBarButton Label="Newest">
+                        <AppBarButton Label="Newest" LabelPosition="Default">
                             <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE82F;" />
                         </AppBarButton>
                     </StackPanel>
@@ -63,10 +63,10 @@
                                         <ColumnDefinition />
                                         <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
-                                    <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedName" Header="Title" IsSpellCheckEnabled="False"/>
-                                    <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedUrl" Header="Url" IsSpellCheckEnabled="False"/>
-                                    <Slider Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedCount" Header="Max count of items" Minimum="20" Maximum="100" TickFrequency="10" TickPlacement="Outside"/>
-                                    <CheckBox Grid.Row="3" Grid.Column="0" x:Name="isJournal" Content="Is journal"/>
+                                    <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedName" Header="Title" IsSpellCheckEnabled="False" Margin="0,4"/>
+                                    <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedUrl" Header="Url" IsSpellCheckEnabled="False" Margin="0,4"/>
+                                    <Slider Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedCount" Header="Max count of items" Minimum="20" Maximum="100" TickFrequency="10" TickPlacement="Outside" Margin="0,4"/>
+                                    <CheckBox Grid.Row="3" Grid.Column="0" x:Name="isJournal" Content="Is journal" Margin="0,4"/>
                                     <RatingControl Grid.Row="3" Grid.Column="1" x:Name="feedStar"/>
                                     <Button Grid.Row="5" Grid.Column="0" Click="Confirm_FeedSetting" Content="Confirm" Margin="10" HorizontalAlignment="Stretch" Background="LightSkyBlue"/>
                                     <Button Grid.Row="5" Grid.Column="1" Click="Leave_FeedSetting" Content="Cancel" Margin="10" HorizontalAlignment="Stretch" Background="LightGray"/>

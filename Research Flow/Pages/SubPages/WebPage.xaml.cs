@@ -37,8 +37,9 @@ namespace Research_Flow.Pages.SubPages
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            FeedItem feed = e.Parameter as FeedItem;
-            webView.Navigate(new Uri(feed.Link));
+            string link = e.Parameter as string;
+            if (!string.IsNullOrEmpty(link))
+                webView.Navigate(new Uri(link));
         }
 
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
