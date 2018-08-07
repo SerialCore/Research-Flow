@@ -7,12 +7,12 @@ namespace LogicService.Security
     /// <summary>
     /// Encrypt 的摘要说明。
     /// </summary>
-    public class DEncrypt
+    public class TripleDES
     {
         /// <summary>
         /// 构造方法
         /// </summary>
-        public DEncrypt()
+        public TripleDES()
         {
 
         }

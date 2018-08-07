@@ -62,7 +62,7 @@ namespace LogicService.Storage
         {
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.ReplaceExisting);
             string content = JsonHelper.SerializeObject(o);
-            await FileIO.WriteTextAsync(file, DEncrypt.Encrypt(content, key));
+            await FileIO.WriteTextAsync(file, TripleDES.Encrypt(content, key));
             return file;
         }
 
@@ -70,7 +70,7 @@ namespace LogicService.Storage
         {
             StorageFile file = await folder.GetFileAsync(name);
             string content = await FileIO.ReadTextAsync(file);
-            return JsonHelper.DeserializeJsonToObject<T>(DEncrypt.Decrypt(content, key));
+            return JsonHelper.DeserializeJsonToObject<T>(TripleDES.Decrypt(content, key));
         }
 
         public static async void DeleteFile(StorageFolder folder, string name)

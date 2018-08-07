@@ -55,6 +55,7 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
                                         <RowDefinition Height="*"/>
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
@@ -66,16 +67,18 @@
                                     <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedName" Header="Title" IsSpellCheckEnabled="False" Margin="0,4"/>
                                     <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedUrl" Header="Url" IsSpellCheckEnabled="False" Margin="0,4"/>
                                     <Slider Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedCount" Header="Max count of items" Minimum="20" Maximum="100" TickFrequency="10" TickPlacement="Outside" Margin="0,4"/>
-                                    <CheckBox Grid.Row="3" Grid.Column="0" x:Name="isJournal" Content="Is journal" Margin="0,4"/>
-                                    <RatingControl Grid.Row="3" Grid.Column="1" x:Name="feedStar"/>
-                                    <Button Grid.Row="5" Grid.Column="0" Click="Confirm_FeedSetting" Content="Confirm" Margin="10" HorizontalAlignment="Stretch" Background="LightSkyBlue"/>
-                                    <Button Grid.Row="5" Grid.Column="1" Click="Leave_FeedSetting" Content="Cancel" Margin="10" HorizontalAlignment="Stretch" Background="LightGray"/>
-                                    <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedDelete" Click="Delete_FeedSetting" Content="Delete" Margin="10" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
+                                    <Slider Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedDays" Header="Days for update" Minimum="1" Maximum="10" TickFrequency="1" TickPlacement="Outside" Margin="0,4"/>
+                                    <CheckBox Grid.Row="4" Grid.Column="0" x:Name="isJournal" Content="Is journal" Margin="0,4"/>
+                                    <RatingControl Grid.Row="4" Grid.Column="1" x:Name="feedStar"/>
+                                    <Button Grid.Row="6" Grid.Column="0" Click="Confirm_FeedSetting" Content="Confirm" Margin="10" HorizontalAlignment="Stretch" Background="LightSkyBlue"/>
+                                    <Button Grid.Row="6" Grid.Column="1" Click="Leave_FeedSetting" Content="Cancel" Margin="10" HorizontalAlignment="Stretch" Background="LightGray"/>
+                                    <Button Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedDelete" Click="Delete_FeedSetting" Content="Delete" Margin="10" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
                                 </Grid>
                             </Grid>
                         </SplitView.Pane>
                         <SplitView.Content>
                             <Grid>
+                                
                                 <ListView x:Name="feeditem_list" IsItemClickEnabled="True" ItemClick="RSS_ItemClick">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
@@ -111,7 +114,7 @@
                         <ComboBox Grid.Column="0" x:Name="country" Header="Region" HorizontalAlignment="Stretch"/>
                         <ComboBox Grid.Column="1" x:Name="language" Header="Language" HorizontalAlignment="Stretch"/>
                         <ComboBox Grid.Column="2" x:Name="queryType" Header="Query Type" HorizontalAlignment="Stretch"/>
-                        <TextBox Grid.Column="3" x:Name="queryCount" Header="Query Count" Text="30" HorizontalAlignment="Stretch"/>
+                        <TextBox Grid.Column="3" x:Name="queryCount" Header="Query Count" Text="50" HorizontalAlignment="Stretch"/>
                     </Grid>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>

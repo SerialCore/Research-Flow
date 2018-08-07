@@ -18,6 +18,8 @@ namespace LogicService.Encapsulates
 
         public double MaxCount { get; set; }
 
+        public double DaysforUpdate { get; set; }
+
         public double Star { get; set; }
 
         public bool IsJournal { get; set; }

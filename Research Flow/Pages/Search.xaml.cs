@@ -48,14 +48,16 @@ namespace Research_Flow.Pages
             {
                 FeedSources = new ObservableCollection<FeedSource>()
                 {
-                    new FeedSource{ID=DEncrypt.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd"),
-                        Name="Hydrogen Bond in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,Star=5,IsJournal=true},
-                    new FeedSource{ID=DEncrypt.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd"),
-                        Name="Pedal Motion in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,Star=5,IsJournal=true},
-                    new FeedSource{ID=DEncrypt.MakeMD5("http://feeds.aps.org/rss/recent/prl.xml").GetHashCode().ToString(),
-                        Name="Physical Review Letters",Uri="http://feeds.aps.org/rss/recent/prl.xml",MaxCount=50,Star=5,IsJournal=true},
-                    new FeedSource{ID=DEncrypt.MakeMD5("http://www.sciencenet.cn/xml/paper.aspx?di=7"),
-                        Name="科学网-数理科学",Uri="http://www.sciencenet.cn/xml/paper.aspx?di=7",MaxCount=50,Star=5,IsJournal=false}
+                    new FeedSource{ID=TripleDES.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd"),
+                        Name="Hydrogen Bond in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
+                    new FeedSource{ID=TripleDES.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd"),
+                        Name="Pedal Motion in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
+                    new FeedSource{ID=TripleDES.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DFuyang%252BLi%2526target%253Ddefault%2526targetTab%253Dstd"),
+                        Name="Fuyang Li in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DFuyang%252BLi%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
+                    new FeedSource{ID=TripleDES.MakeMD5("http://feeds.aps.org/rss/recent/prl.xml").GetHashCode().ToString(),
+                        Name="Physical Review Letters",Uri="http://feeds.aps.org/rss/recent/prl.xml",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
+                    new FeedSource{ID=TripleDES.MakeMD5("http://www.sciencenet.cn/xml/paper.aspx?di=7"),
+                        Name="科学网-数理科学",Uri="http://www.sciencenet.cn/xml/paper.aspx?di=7",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=false}
                 };
                 await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
             }
@@ -92,6 +94,7 @@ namespace Research_Flow.Pages
                     feedName.Text = item.Name;
                     feedUrl.Text = item.Uri;
                     feedCount.Value = item.MaxCount;
+                    feedDays.Value = item.DaysforUpdate;
                     feedStar.Value = item.Star;
                     isJournal.IsChecked = item.IsJournal;
 
@@ -108,10 +111,11 @@ namespace Research_Flow.Pages
             {
                 FeedSource newFeed = new FeedSource
                 {
-                    ID = DEncrypt.MakeMD5(feedUrl.Text),
+                    ID = TripleDES.MakeMD5(feedUrl.Text),
                     Name = feedName.Text,
                     Uri = feedUrl.Text,
                     MaxCount = feedCount.Value,
+                    DaysforUpdate = feedDays.Value,
                     Star = feedStar.Value,
                     IsJournal = (bool)(isJournal.IsChecked)
                 };
@@ -182,13 +186,10 @@ namespace Research_Flow.Pages
 
         private async void SearchRss(FeedSource source)
         {
-            try
-            {
-                List<FeedItem> feedItems = await LocalStorage.ReadObjectAsync<List<FeedItem>>(
-                    await LocalStorage.GetFeedsAsync(), source.ID, "blamder" + source.ID) as List<FeedItem>;
-                feeditem_list.ItemsSource = feedItems;
-            }
-            catch
+            TimeSpan ts1 = new TimeSpan(DateTime.Now.Ticks);
+            TimeSpan ts2 = new TimeSpan(source.LastUpdateTime.Ticks);
+            TimeSpan ts = ts1.Subtract(ts2).Duration();
+            if (ts.Days >= source.DaysforUpdate)
             {
                 waiting_feed.IsActive = true;
                 RssService.GetRssItems(
@@ -201,6 +202,8 @@ namespace Research_Flow.Pages
                             waiting_feed.IsActive = false;
                         });
                         await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), source.ID, items, "blamder" + source.ID);
+                        FeedSources[FeedSources.IndexOf(source)].LastUpdateTime = DateTime.Now;
+                        await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
                     },
                     async (exception) =>
                     {
@@ -210,6 +213,12 @@ namespace Research_Flow.Pages
                             waiting_feed.IsActive = false;
                         });
                     }, null);
+            }
+            else
+            {
+                List<FeedItem> feedItems = await LocalStorage.ReadObjectAsync<List<FeedItem>>(
+                    await LocalStorage.GetFeedsAsync(), source.ID, "blamder" + source.ID) as List<FeedItem>;
+                feeditem_list.ItemsSource = feedItems;
             }
         }
 
