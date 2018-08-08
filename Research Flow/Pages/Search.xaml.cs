@@ -109,23 +109,28 @@ namespace Research_Flow.Pages
         {
             if (!string.IsNullOrEmpty(feedUrl.Text))
             {
-                FeedSource newFeed = new FeedSource
-                {
-                    ID = TripleDES.MakeMD5(feedUrl.Text),
-                    Name = feedName.Text,
-                    Uri = feedUrl.Text,
-                    MaxCount = feedCount.Value,
-                    DaysforUpdate = feedDays.Value,
-                    Star = feedStar.Value,
-                    IsJournal = (bool)(isJournal.IsChecked)
-                };
                 if (currentFeed != null)
                 {
-                    FeedSources[FeedSources.IndexOf(currentFeed)] = newFeed;
+                    FeedSources[FeedSources.IndexOf(currentFeed)].ID = TripleDES.MakeMD5(feedUrl.Text);
+                    FeedSources[FeedSources.IndexOf(currentFeed)].Name = feedName.Text;
+                    FeedSources[FeedSources.IndexOf(currentFeed)].Uri = feedUrl.Text;
+                    FeedSources[FeedSources.IndexOf(currentFeed)].MaxCount = feedCount.Value;
+                    FeedSources[FeedSources.IndexOf(currentFeed)].DaysforUpdate = feedDays.Value;
+                    FeedSources[FeedSources.IndexOf(currentFeed)].Star = feedStar.Value;
+                    FeedSources[FeedSources.IndexOf(currentFeed)].IsJournal = (bool)(isJournal.IsChecked);
                 }
                 else
                 {
-                    FeedSources.Add(newFeed);
+                    FeedSources.Add(new FeedSource
+                    {
+                        ID = TripleDES.MakeMD5(feedUrl.Text),
+                        Name = feedName.Text,
+                        Uri = feedUrl.Text,
+                        MaxCount = feedCount.Value,
+                        DaysforUpdate = feedDays.Value,
+                        Star = feedStar.Value,
+                        IsJournal = (bool)(isJournal.IsChecked)
+                    });
                 }
                 await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
             }
