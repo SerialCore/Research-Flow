@@ -52,6 +52,8 @@ namespace Research_Flow.Pages
                         Name="Hydrogen Bond in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
                     new FeedSource{ID=TripleDES.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd"),
                         Name="Pedal Motion in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
+                    new FeedSource{ID=TripleDES.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPaul%252BPopelier%2526target%253Ddefault%2526targetTab%253Dstd"),
+                        Name="Paul L. A. Popelier in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPaul%252BPopelier%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
                     new FeedSource{ID=TripleDES.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DFuyang%252BLi%2526target%253Ddefault%2526targetTab%253Dstd"),
                         Name="Fuyang Li in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DFuyang%252BLi%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
                     new FeedSource{ID=TripleDES.MakeMD5("http://feeds.aps.org/rss/recent/prl.xml").GetHashCode().ToString(),
@@ -76,7 +78,10 @@ namespace Research_Flow.Pages
 
         public ObservableCollection<FeedSource> FeedSources { get; set; }
 
+        // Used for item modification, not clicked item.
         private FeedSource currentFeed = null;
+        // Used for item clicking, and conflict with modification
+        private int selectedFeedIndex;
 
         private void Open_Source(object sender, RoutedEventArgs e) => feedsource_view.IsPaneOpen = !feedsource_view.IsPaneOpen;
 
@@ -97,7 +102,7 @@ namespace Research_Flow.Pages
                     feedDays.Value = item.DaysforUpdate;
                     feedStar.Value = item.Star;
                     isJournal.IsChecked = item.IsJournal;
-
+                    
                     feedUrl.IsReadOnly = true;
                     feedDelete.Visibility = Visibility;
                     source_panel.Visibility = Visibility.Visible;
@@ -109,28 +114,34 @@ namespace Research_Flow.Pages
         {
             if (!string.IsNullOrEmpty(feedUrl.Text))
             {
+                FeedSource source = new FeedSource
+                {
+                    ID = TripleDES.MakeMD5(feedUrl.Text),
+                    Name = feedName.Text,
+                    Uri = feedUrl.Text,
+                    MaxCount = (int)(feedCount.Value),
+                    DaysforUpdate = feedDays.Value,
+                    Star = feedStar.Value,
+                    IsJournal = (bool)(isJournal.IsChecked)
+                };
                 if (currentFeed != null)
                 {
-                    FeedSources[FeedSources.IndexOf(currentFeed)].ID = TripleDES.MakeMD5(feedUrl.Text);
-                    FeedSources[FeedSources.IndexOf(currentFeed)].Name = feedName.Text;
-                    FeedSources[FeedSources.IndexOf(currentFeed)].Uri = feedUrl.Text;
-                    FeedSources[FeedSources.IndexOf(currentFeed)].MaxCount = feedCount.Value;
-                    FeedSources[FeedSources.IndexOf(currentFeed)].DaysforUpdate = feedDays.Value;
-                    FeedSources[FeedSources.IndexOf(currentFeed)].Star = feedStar.Value;
-                    FeedSources[FeedSources.IndexOf(currentFeed)].IsJournal = (bool)(isJournal.IsChecked);
+                    // create new and remain other data
+                    source.LastUpdateTime = currentFeed.LastUpdateTime;
+                    FeedSources[FeedSources.IndexOf(currentFeed)] = source;
                 }
                 else
                 {
-                    FeedSources.Add(new FeedSource
+                    foreach (FeedSource item in FeedSources)
                     {
-                        ID = TripleDES.MakeMD5(feedUrl.Text),
-                        Name = feedName.Text,
-                        Uri = feedUrl.Text,
-                        MaxCount = feedCount.Value,
-                        DaysforUpdate = feedDays.Value,
-                        Star = feedStar.Value,
-                        IsJournal = (bool)(isJournal.IsChecked)
-                    });
+                        if (item.Uri.Equals(feedUrl.Text))
+                        {
+                            InAppNotification.Show("There has been the same url.");
+                            ClearSettings();
+                            return;
+                        }
+                    }
+                    FeedSources.Add(source);
                 }
                 await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
             }
@@ -164,8 +175,7 @@ namespace Research_Flow.Pages
             ClearSettings();
         }
 
-        private void CancelInvokedHandler(IUICommand command)
-            => ClearSettings();
+        private void CancelInvokedHandler(IUICommand command) => ClearSettings();
 
         private void Leave_FeedSetting(object sender, RoutedEventArgs e) => ClearSettings();
 
@@ -177,7 +187,7 @@ namespace Research_Flow.Pages
             feedCount.Value = 20;
             feedStar.Value = -1;
             isJournal.IsChecked = false;
-
+            
             feedUrl.IsReadOnly = false;
             feedDelete.Visibility = Visibility.Collapsed;
             source_panel.Visibility = Visibility.Collapsed;
@@ -191,6 +201,8 @@ namespace Research_Flow.Pages
 
         private async void SearchRss(FeedSource source)
         {
+            // now you can modify source while fetching feed
+            selectedFeedIndex = FeedSources.IndexOf(source);
             TimeSpan ts1 = new TimeSpan(DateTime.Now.Ticks);
             TimeSpan ts2 = new TimeSpan(source.LastUpdateTime.Ticks);
             TimeSpan ts = ts1.Subtract(ts2).Duration();
@@ -201,13 +213,16 @@ namespace Research_Flow.Pages
                     source.Uri,
                     async (items) =>
                     {
+                        List<FeedItem> feeds = items as List<FeedItem>;
                         await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                         {
-                            feeditem_list.ItemsSource = items;
+                            feeditem_list.ItemsSource = feeds;
                             waiting_feed.IsActive = false;
                         });
+                        if (feeds.Count > source.MaxCount)
+                            feeds.RemoveRange(source.MaxCount, feeds.Count - source.MaxCount);
                         await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), source.ID, items, "blamder" + source.ID);
-                        FeedSources[FeedSources.IndexOf(source)].LastUpdateTime = DateTime.Now;
+                        FeedSources[selectedFeedIndex].LastUpdateTime = DateTime.Now;
                         await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
                     },
                     async (exception) =>

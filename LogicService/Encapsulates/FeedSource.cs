@@ -16,7 +16,7 @@ namespace LogicService.Encapsulates
 
         public string Uri { get; set; }
 
-        public double MaxCount { get; set; }
+        public int MaxCount { get; set; }
 
         public double DaysforUpdate { get; set; }
 

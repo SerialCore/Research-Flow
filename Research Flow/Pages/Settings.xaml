@@ -74,6 +74,22 @@
                     </ScrollViewer>
                 </Grid>
             </PivotItem>
+            <PivotItem Header="Tutorials">
+                <SplitView>
+                    <SplitView.Pane>
+                        <ListView>
+                            
+                        </ListView>
+                    </SplitView.Pane>
+                    <SplitView.Content>
+                        <ScrollViewer>
+                            <StackPanel>
+                                
+                            </StackPanel>
+                        </ScrollViewer>
+                    </SplitView.Content>
+                </SplitView>
+            </PivotItem>
         </Pivot>
 
     </Grid>

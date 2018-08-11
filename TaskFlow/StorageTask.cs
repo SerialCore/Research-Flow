@@ -12,7 +12,21 @@ namespace CoreFlow
 
         public void Run(IBackgroundTaskInstance taskInstance)
         {
-            ;
+            var deferral = taskInstance.GetDeferral();
+            
+
+
+            deferral.Complete();
+        }
+
+        private void UptoOneDrive()
+        {
+
+        }
+
+        private void DowntoLcal()
+        {
+
         }
 
     }
