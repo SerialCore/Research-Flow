@@ -2,7 +2,6 @@
 using LogicService.Security;
 using LogicService.Services;
 using LogicService.Storage;
-using Microsoft.Toolkit.Services.Bing;
 using Research_Flow.Pages.SubPages;
 using System;
 using System.Collections.Generic;
@@ -64,14 +63,6 @@ namespace Research_Flow.Pages
                 await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
             }
             feedsource_list.ItemsSource = FeedSources;
-
-            // Bing configure
-            country.ItemsSource = Enum.GetValues(typeof(BingCountry));
-            language.ItemsSource = Enum.GetValues(typeof(BingLanguage));
-            queryType.ItemsSource = Enum.GetValues(typeof(BingQueryType));
-            country.SelectedItem = BingCountry.None;
-            language.SelectedItem = BingLanguage.None;
-            queryType.SelectedItem = BingQueryType.Search;
         }
 
         #region RSS
@@ -238,45 +229,6 @@ namespace Research_Flow.Pages
                     await LocalStorage.GetFeedsAsync(), source.ID, "blamder" + source.ID) as List<FeedItem>;
                 feeditem_list.ItemsSource = feedItems;
             }
-        }
-
-        #endregion
-
-        #region Bing
-
-        private void Query_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
-        {
-            if (e.Key == VirtualKey.Enter)
-                SearchBing(null, null);
-        }
-
-        private void SearchBing(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            int count = Convert.ToInt16(queryCount.Text);
-
-            BingQuery.QueryAsync(query.Text, count,
-                async (items) =>
-                {
-                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    {
-                        bingResult.ItemsSource = items;
-                    });
-                },
-                async (exception) =>
-                {
-                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    {
-                        InAppNotification.Show(exception);
-                    });
-                }, 
-                (BingCountry)(country.SelectedItem), (BingLanguage)(language.SelectedItem), (BingQueryType)(queryType.SelectedItem));
-
-        }
-
-        private void BingResult_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            BingResult result = e.ClickedItem as BingResult;
-            this.Frame.Navigate(typeof(WebPage), result.Link);
         }
 
         #endregion

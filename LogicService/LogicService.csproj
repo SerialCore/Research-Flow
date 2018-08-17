@@ -113,7 +113,6 @@
     <Compile Include="Helper\ToastGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\TripleDES.cs" />
-    <Compile Include="Services\BingQuery.cs" />
     <Compile Include="Services\Crawler.cs" />
     <Compile Include="Services\GraphService.cs" />
     <Compile Include="Storage\LocalStorage.cs" />
