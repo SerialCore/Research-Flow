@@ -75,7 +75,7 @@
                 </Grid>
             </PivotItem>
             <PivotItem Header="Tutorials">
-                <SplitView>
+                <SplitView IsPaneOpen="True" OpenPaneLength="300">
                     <SplitView.Pane>
                         <ListView>
                             

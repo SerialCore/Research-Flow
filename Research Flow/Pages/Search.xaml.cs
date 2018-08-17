@@ -52,8 +52,8 @@ namespace Research_Flow.Pages
                         Name="Hydrogen Bond in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
                     new FeedSource{ID=TripleDES.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd"),
                         Name="Pedal Motion in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
-                    new FeedSource{ID=TripleDES.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPaul%252BPopelier%2526target%253Ddefault%2526targetTab%253Dstd"),
-                        Name="Paul L. A. Popelier in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPaul%252BPopelier%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
+                    new FeedSource{ID=TripleDES.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526field1%253DContrib%2526target%253Ddefault%2526targetTab%253Dstd%2526text1%253DPaul%252BL.%252BA.%252BPopelier"),
+                        Name="Paul L. A. Popelier in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526field1%253DContrib%2526target%253Ddefault%2526targetTab%253Dstd%2526text1%253DPaul%252BL.%252BA.%252BPopelier",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
                     new FeedSource{ID=TripleDES.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DFuyang%252BLi%2526target%253Ddefault%2526targetTab%253Dstd"),
                         Name="Fuyang Li in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DFuyang%252BLi%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
                     new FeedSource{ID=TripleDES.MakeMD5("http://feeds.aps.org/rss/recent/prl.xml").GetHashCode().ToString(),
@@ -80,8 +80,6 @@ namespace Research_Flow.Pages
 
         // Used for item modification, not clicked item.
         private FeedSource currentFeed = null;
-        // Used for item clicking, and conflict with modification
-        private int selectedFeedIndex;
 
         private void Open_Source(object sender, RoutedEventArgs e) => feedsource_view.IsPaneOpen = !feedsource_view.IsPaneOpen;
 
@@ -202,7 +200,7 @@ namespace Research_Flow.Pages
         private async void SearchRss(FeedSource source)
         {
             // now you can modify source while fetching feed
-            selectedFeedIndex = FeedSources.IndexOf(source);
+            int selectedFeedIndex = FeedSources.IndexOf(source);
             TimeSpan ts1 = new TimeSpan(DateTime.Now.Ticks);
             TimeSpan ts2 = new TimeSpan(source.LastUpdateTime.Ticks);
             TimeSpan ts = ts1.Subtract(ts2).Duration();
