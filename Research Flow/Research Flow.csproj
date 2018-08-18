@@ -109,31 +109,31 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Compose.xaml.cs">
+    <Compile Include="Compose.xaml.cs">
       <DependentUpon>Compose.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Contact.xaml.cs">
+    <Compile Include="Contact.xaml.cs">
       <DependentUpon>Contact.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Learn.xaml.cs">
+    <Compile Include="Learn.xaml.cs">
       <DependentUpon>Learn.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Overview.xaml.cs">
+    <Compile Include="Overview.xaml.cs">
       <DependentUpon>Overview.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Search.xaml.cs">
+    <Compile Include="Search.xaml.cs">
       <DependentUpon>Search.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Settings.xaml.cs">
+    <Compile Include="Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\SubPages\WebPage.xaml.cs">
+    <Compile Include="Pages\WebPage.xaml.cs">
       <DependentUpon>WebPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Tool.xaml.cs">
+    <Compile Include="Tool.xaml.cs">
       <DependentUpon>Tool.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Topic.xaml.cs">
+    <Compile Include="Topic.xaml.cs">
       <DependentUpon>Topic.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -149,7 +149,11 @@
   <ItemGroup>
     <None Include="Package.xml" />
     <Content Include="Assets\LargeTile.scale-200.png" />
+    <Content Include="Assets\Logos\blackbox_logo.png" />
+    <Content Include="Assets\Logos\enGJFer_logo.png" />
     <Content Include="Assets\Logos\Microsoft_logo.jpg" />
+    <Content Include="Assets\Logos\paintpanel_logo.png" />
+    <Content Include="Assets\Logos\phyMylab_logo.png" />
     <Content Include="Assets\SmallTile.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />
@@ -159,14 +163,9 @@
     <Content Include="Assets\StoreLogo.scale-200.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <None Include="Package.StoreAssociation.xml" />
-    <Content Include="Pages\Images\hint.png" />
-    <Content Include="Pages\Images\Logos\blackbox_logo.png" />
-    <Content Include="Pages\Images\Logos\enGJFer_logo.png" />
     <Content Include="Assets\Logos\OneDrive_icon.png" />
     <Content Include="Assets\Logos\OneDrive_icon_trans.png" />
     <Content Include="Assets\Logos\OneDrive_logo.png" />
-    <Content Include="Pages\Images\Logos\paintpanel_logo.png" />
-    <Content Include="Pages\Images\Logos\phyMylab_logo.png" />
     <Content Include="Properties\Default.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -182,39 +181,43 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Compose.xaml">
+    <Page Include="Compose.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Contact.xaml">
+    <Page Include="Contact.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Learn.xaml">
+    <Page Include="Learn.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Overview.xaml">
+    <Page Include="Overview.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Search.xaml">
+    <Page Include="Search.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Settings.xaml">
+    <Page Include="Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\SubPages\WebPage.xaml">
+    <Page Include="Pages\TutorialsRSS.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Tool.xaml">
+    <Page Include="Pages\WebPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Topic.xaml">
+    <Page Include="Tool.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Topic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -244,7 +247,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Pages\SubPages\Images\" />
+    <Folder Include="Pages\Images\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

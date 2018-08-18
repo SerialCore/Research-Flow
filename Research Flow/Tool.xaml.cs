@@ -18,7 +18,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace Research_Flow.Pages
+namespace Research_Flow
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -35,10 +35,10 @@ namespace Research_Flow.Pages
             // 此部分数据应放在静态数据集里
             AppList = new List<StoreApp>
             {
-                new StoreApp { Name = "物理实验助手", AppUri = new Uri("blamderphylab:"), LogoUri = new Uri("ms-appx:///Pages/Images/Logos/phyMylab_logo.png") },
-                new StoreApp { Name = "力学量采集器", AppUri = new Uri("blamderblackbox:"), LogoUri = new Uri("ms-appx:///Pages/Images/Logos/blackbox_logo.png") },
-                new StoreApp { Name = "enGJFer", AppUri = new Uri("blamderengjfer:"), LogoUri = new Uri("ms-appx:///Pages/Images/Logos/enGJFer_logo.png") },
-                new StoreApp { Name = "Paint Panel", AppUri = new Uri("blamderpaint:"), LogoUri = new Uri("ms-appx:///Pages/Images/Logos/paintpanel_logo.png") }
+                new StoreApp { Name = "物理实验助手", AppUri = new Uri("blamderphylab:"), LogoUri = new Uri("ms-appx:///Assets/Logos/phyMylab_logo.png") },
+                new StoreApp { Name = "力学量采集器", AppUri = new Uri("blamderblackbox:"), LogoUri = new Uri("ms-appx:///Assets/Logos/blackbox_logo.png") },
+                new StoreApp { Name = "enGJFer", AppUri = new Uri("blamderengjfer:"), LogoUri = new Uri("ms-appx:///Assets/Logos/enGJFer_logo.png") },
+                new StoreApp { Name = "Paint Panel", AppUri = new Uri("blamderpaint:"), LogoUri = new Uri("ms-appx:///Assets/Logos/paintpanel_logo.png") }
             };
             this.DataContext = this;
         }
