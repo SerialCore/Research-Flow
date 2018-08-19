@@ -119,7 +119,7 @@
     <Compile Include="Storage\OneDriveStorage.cs" />
     <Compile Include="Services\RssService.cs" />
     <Compile Include="Storage\SqlStorage.cs" />
-    <Compile Include="Services\SystemInfo.cs" />
+    <Compile Include="Services\ApplicationService.cs" />
     <EmbeddedResource Include="Properties\LogicService.rd.xml" />
   </ItemGroup>
   <ItemGroup>

@@ -85,13 +85,20 @@
                                 <FlyoutBase.AttachedFlyout>
                                     <MenuFlyout>
                                         <MenuFlyoutItem Text="Share your idea" Click="ScreenShot_Share"/>
-                                            <MenuFlyoutItem Text="Upload to OneDrive" Click="ScreenShot_Save"/>
-                                        </MenuFlyout>
-                                    </FlyoutBase.AttachedFlyout>
-                                </AppBarButton>
+                                        <MenuFlyoutItem Text="Upload to OneDrive" Click="ScreenShot_Save"/>
+                                    </MenuFlyout>
+                                </FlyoutBase.AttachedFlyout>
+                            </AppBarButton>
                             <AppBarButton Label="WebPage" Icon="Link" Click="WebPage_Click" Background="Transparent"/>
-                            <AppBarButton Label="Refresh" Icon="Refresh" Click="Refresh_Click" Background="Transparent"/>
-                            </CommandBar>
+                            <AppBarButton Label="Application" Icon="Shop" Tapped="Flyout_Tapped" Background="Transparent">
+                                <FlyoutBase.AttachedFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="Tutorials" Click="Open_Tutorials"/>
+                                        <MenuFlyoutItem Text="Rate this App" Click="Give_Rate"/>
+                                    </MenuFlyout>
+                                </FlyoutBase.AttachedFlyout>
+                            </AppBarButton>
+                        </CommandBar>
                         </Grid>
                 </DataTemplate>
             </NavigationView.HeaderTemplate>

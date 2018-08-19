@@ -27,7 +27,7 @@ namespace LogicService.Security
         public static string Encrypt(string original, string key)
         {
             if (key == null)
-                key = "blamder";
+                key = "hashashin";
             byte[] buff = System.Text.Encoding.Default.GetBytes(original);
             byte[] kb = System.Text.Encoding.Default.GetBytes(key);
             return Convert.ToBase64String(Encrypt(buff, kb));
@@ -41,7 +41,7 @@ namespace LogicService.Security
         public static string Decrypt(string original, string key)
         {
             if (key == null)
-                key = "blamder";
+                key = "hashashin";
             return Decrypt(original, key, System.Text.Encoding.Default);
         }
 
@@ -71,7 +71,7 @@ namespace LogicService.Security
         public static byte[] Encrypt(byte[] original, byte[] key = null)
         {
             if (key == null)
-                key = System.Text.Encoding.Default.GetBytes("blamder");
+                key = System.Text.Encoding.Default.GetBytes("hashashin");
             TripleDESCryptoServiceProvider des = new TripleDESCryptoServiceProvider();
             des.Key = MakeMD5(key);
             des.Mode = CipherMode.ECB;
@@ -88,7 +88,7 @@ namespace LogicService.Security
         public static byte[] Decrypt(byte[] encrypted, byte[] key = null)
         {
             if (key == null)
-                key = System.Text.Encoding.Default.GetBytes("blamder");
+                key = System.Text.Encoding.Default.GetBytes("hashashin");
             TripleDESCryptoServiceProvider des = new TripleDESCryptoServiceProvider();
             des.Key = MakeMD5(key);
             des.Mode = CipherMode.ECB;

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using LogicService.Services;
+using Research_Flow.Pages;
 using Windows.Data.Json;
 using Windows.Security.Authentication.Web.Core;
 using Windows.Security.Credentials;
@@ -33,34 +35,35 @@ namespace Research_Flow
 
         private void DisplaySystemInfo()
         {
-            applicationName.Text = SystemInfo.ApplicationName;
+            applicationName.Text = ApplicationService.ApplicationName;
 
-            applicationVersion.Text = SystemInfo.ApplicationVersion;
+            applicationVersion.Text = ApplicationService.ApplicationVersion;
 
-            cultureInfo.Text = SystemInfo.Culture.DisplayName;
+            cultureInfo.Text = ApplicationService.Culture.DisplayName;
 
-            oSVersion.Text = SystemInfo.OperatingSystemVersion.ToString();
+            oSVersion.Text = ApplicationService.OperatingSystemVersion.ToString();
 
-            deviceModel.Text = SystemInfo.DeviceModel;
+            deviceModel.Text = ApplicationService.DeviceModel;
 
-            availableMemory.Text = SystemInfo.AvailableMemory.ToString();
+            availableMemory.Text = ApplicationService.AvailableMemory.ToString();
 
-            firstVersionInstalled.Text = SystemInfo.FirstVersionInstalled;
+            firstVersionInstalled.Text = ApplicationService.FirstVersionInstalled;
 
-            firstUseTime.Text = SystemInfo.FirstUseTime.ToString();
+            firstUseTime.Text = ApplicationService.FirstUseTime.ToString();
 
-            launchTime.Text = SystemInfo.LaunchTime.ToString();
+            launchTime.Text = ApplicationService.LaunchTime.ToString();
 
-            lastLaunchTime.Text = SystemInfo.LastLaunchTime.ToString();
+            lastLaunchTime.Text = ApplicationService.LastLaunchTime.ToString();
 
-            lastResetTime.Text = SystemInfo.LastResetTime.ToString();
+            lastResetTime.Text = ApplicationService.LastResetTime.ToString();
 
-            launchCount.Text = SystemInfo.LaunchCount.ToString();
+            launchCount.Text = ApplicationService.LaunchCount.ToString();
 
-            totalLaunchCount.Text = SystemInfo.TotalLaunchCount.ToString();
+            totalLaunchCount.Text = ApplicationService.TotalLaunchCount.ToString();
 
-            appUptime.Text = SystemInfo.AppUptime.ToString("G");
+            appUptime.Text = ApplicationService.AppUptime.ToString("G");
         }
-
+        
     }
+
 }

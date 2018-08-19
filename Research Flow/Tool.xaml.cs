@@ -35,19 +35,16 @@ namespace Research_Flow
             // 此部分数据应放在静态数据集里
             AppList = new List<StoreApp>
             {
-                new StoreApp { Name = "物理实验助手", AppUri = new Uri("blamderphylab:"), LogoUri = new Uri("ms-appx:///Assets/Logos/phyMylab_logo.png") },
-                new StoreApp { Name = "力学量采集器", AppUri = new Uri("blamderblackbox:"), LogoUri = new Uri("ms-appx:///Assets/Logos/blackbox_logo.png") },
-                new StoreApp { Name = "enGJFer", AppUri = new Uri("blamderengjfer:"), LogoUri = new Uri("ms-appx:///Assets/Logos/enGJFer_logo.png") },
-                new StoreApp { Name = "Paint Panel", AppUri = new Uri("blamderpaint:"), LogoUri = new Uri("ms-appx:///Assets/Logos/paintpanel_logo.png") }
+                new StoreApp{ Name = "物理实验助手", AppUri = new Uri("blamderphylab:"), LogoUri = new Uri("ms-appx:///Assets/Logos/phyMylab_logo.png") },
+                new StoreApp{ Name = "力学量采集器", AppUri = new Uri("blamderblackbox:"), LogoUri = new Uri("ms-appx:///Assets/Logos/blackbox_logo.png") },
+                new StoreApp{ Name = "enGJFer", AppUri = new Uri("blamderengjfer:"), LogoUri = new Uri("ms-appx:///Assets/Logos/enGJFer_logo.png") },
+                new StoreApp{ Name = "Paint Panel", AppUri = new Uri("blamderpaint:"), LogoUri = new Uri("ms-appx:///Assets/Logos/paintpanel_logo.png") }
             };
             this.DataContext = this;
         }
 
         private async void AppList_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            var item = e.ClickedItem as StoreApp;
-            await Launcher.LaunchUriAsync(item.AppUri);
-        }
+            => await Launcher.LaunchUriAsync((e.ClickedItem as StoreApp).AppUri);
 
     }
 

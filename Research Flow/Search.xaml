@@ -78,7 +78,6 @@
                         </SplitView.Pane>
                         <SplitView.Content>
                             <Grid>
-
                                 <ListView x:Name="feeditem_list" IsItemClickEnabled="True" ItemClick="RSS_ItemClick">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>

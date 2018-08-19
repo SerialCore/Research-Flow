@@ -1,22 +1,15 @@
-﻿using LogicService.Services;
+﻿using LogicService.Helper;
+using LogicService.Services;
 using Microsoft.HockeyApp;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using Windows.ApplicationModel.Background;
 using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace Research_Flow
@@ -42,10 +35,11 @@ namespace Research_Flow
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name = "e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected async override void OnLaunched(LaunchActivatedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
             ConfigureUI();
+            await RegisterBackgroundTask();
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
             if (rootFrame == null)
@@ -70,9 +64,9 @@ namespace Research_Flow
                     // configuring the new page by passing required information as a navigation
                     // parameter
 
-                    SystemInfo.TrackAppUse(e);
+                    ApplicationService.TrackAppUse(e);
 
-                    if (SystemInfo.IsFirstUse || !ApplicationData.Current.LocalSettings.Values.ContainsKey("Configured"))
+                    if (ApplicationService.IsFirstUse || !ApplicationData.Current.LocalSettings.Values.ContainsKey("Configured"))
                         rootFrame.Navigate(typeof(Configure), e.Arguments);
                     else
                         rootFrame.Navigate(typeof(MainPage), e.Arguments);
@@ -83,12 +77,13 @@ namespace Research_Flow
             }
         }
 
-        protected override void OnActivated(IActivatedEventArgs args)
+        protected async override void OnActivated(IActivatedEventArgs args)
         {
             if(args.Kind==ActivationKind.Protocol)
             {
                 Frame rootFrame = Window.Current.Content as Frame;
                 ConfigureUI();
+                await RegisterBackgroundTask();
                 if (rootFrame == null)
                 {
                     rootFrame = new Frame();
@@ -97,7 +92,7 @@ namespace Research_Flow
                 }
                 if (rootFrame.Content == null)
                 {
-                    if (SystemInfo.IsFirstUse || !ApplicationData.Current.LocalSettings.Values.ContainsKey("Configured"))
+                    if (ApplicationService.IsFirstUse || !ApplicationData.Current.LocalSettings.Values.ContainsKey("Configured"))
                         rootFrame.Navigate(typeof(Configure));
                     else
                         rootFrame.Navigate(typeof(MainPage));
@@ -118,7 +113,18 @@ namespace Research_Flow
             //appTitleBar.ButtonHoverForegroundColor = Colors.Transparent;
             appTitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
             //appTitleBar.ButtonInactiveForegroundColor = Colors.Transparent;
+        }
 
+        private async Task RegisterBackgroundTask()
+        {
+            var task = await ApplicationService.RegisterBackgroundTask(
+                typeof(CoreFlow.StorageTask),
+                "StorageTask",
+                new TimeTrigger(30, false),
+                null);
+
+            //task.Progress += TaskOnProgress;
+            //task.Completed += TaskOnCompleted;
         }
 
         /// <summary>

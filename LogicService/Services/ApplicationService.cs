@@ -3,12 +3,15 @@ using System;
 using System.Globalization;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Background;
 using Windows.System;
 
 namespace LogicService.Services
 {
-    public class SystemInfo
+    public class ApplicationService
     {
+
+        #region Info
 
         /// <summary>
         /// To get application's name
@@ -119,6 +122,8 @@ namespace LogicService.Services
             SystemInformation.TrackAppUse(args);
         }
 
+        #endregion
+
         /// <summary>
         /// Launch store for reviewAsync
         /// </summary>
@@ -126,6 +131,49 @@ namespace LogicService.Services
         public static async Task LaunchReviewAsync()
         {
             await SystemInformation.LaunchStoreForReviewAsync();
+        }
+
+        /// <summary>
+        /// To register a background task
+        /// </summary>
+        /// <param name="taskEntryPoint"></param>
+        /// <param name="taskName"></param>
+        /// <param name="trigger"></param>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        public static async Task<BackgroundTaskRegistration> RegisterBackgroundTask(Type taskEntryPoint,
+            string taskName, IBackgroundTrigger trigger, IBackgroundCondition condition)
+        {
+            var status = await BackgroundExecutionManager.RequestAccessAsync();
+            if (status == BackgroundAccessStatus.Unspecified || status == BackgroundAccessStatus.DeniedByUser
+                || status == BackgroundAccessStatus.DeniedByUser)
+            {
+                return null;
+            }
+
+            foreach (var cur in BackgroundTaskRegistration.AllTasks)
+            {
+                if (cur.Value.Name == taskName)
+                {
+                    cur.Value.Unregister(true);
+                }
+            }
+
+            var builder = new BackgroundTaskBuilder
+            {
+                Name = taskName,
+                TaskEntryPoint = taskEntryPoint.FullName
+            };
+
+            builder.SetTrigger(trigger);
+
+            if (condition != null)
+            {
+                builder.AddCondition(condition);
+            }
+
+            BackgroundTaskRegistration task = builder.Register();
+            return task;
         }
 
     }

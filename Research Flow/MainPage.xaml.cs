@@ -10,6 +10,7 @@ using Windows.Graphics.Display;
 using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Windows.System;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -128,22 +129,8 @@ namespace Research_Flow
             }
         }
 
-        private void Refresh_Click(object sender, RoutedEventArgs e)
-        {
-            if (NavView.SelectedItem == NavView.SettingsItem)
-            {
-                ContentFrame.Navigate(typeof(Settings));
-            }
-            else
-            {
-                NavView_Navigate(NavView.SelectedItem as NavigationViewItem);
-            }
-        }
-
         private void WebPage_Click(object sender, RoutedEventArgs e)
-        {
-            ContentFrame.Navigate(typeof(WebPage));
-        }
+            => ContentFrame.Navigate(typeof(WebPage));
 
         #endregion
 
@@ -206,9 +193,7 @@ namespace Research_Flow
         #region Content
 
         private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {
-            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
-        }
+            => FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
 
         private void ScreenShot_Share(object sender, RoutedEventArgs e)
         {
@@ -289,6 +274,12 @@ namespace Research_Flow
                 }
             }
         }
+
+        private void Open_Tutorials(object sender, RoutedEventArgs e)
+            => ContentFrame.Navigate(typeof(Tutorials));
+
+        private async void Give_Rate(object sender, RoutedEventArgs e)
+            => await ApplicationService.LaunchReviewAsync();
 
         #endregion
 

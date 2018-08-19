@@ -210,7 +210,7 @@ namespace Research_Flow
                         });
                         if (feeds.Count > source.MaxCount)
                             feeds.RemoveRange(source.MaxCount, feeds.Count - source.MaxCount);
-                        await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), source.ID, items, "blamder" + source.ID);
+                        await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), source.ID, items, "hashashin" + source.ID);
                         FeedSources[selectedFeedIndex].LastUpdateTime = DateTime.Now;
                         await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
                     },
@@ -226,7 +226,7 @@ namespace Research_Flow
             else
             {
                 List<FeedItem> feedItems = await LocalStorage.ReadObjectAsync<List<FeedItem>>(
-                    await LocalStorage.GetFeedsAsync(), source.ID, "blamder" + source.ID) as List<FeedItem>;
+                    await LocalStorage.GetFeedsAsync(), source.ID, "hashashin" + source.ID) as List<FeedItem>;
                 feeditem_list.ItemsSource = feedItems;
             }
         }
