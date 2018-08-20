@@ -5,12 +5,14 @@ using Research_Flow.Pages;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Graphics.Display;
 using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.System;
+using Windows.UI.Core;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -35,17 +37,7 @@ namespace Research_Flow
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if(ApplicationData.Current.LocalSettings.Values.ContainsKey("AccountName"))
-                Login();
-            else
-            {
-                account_panel.Visibility = Visibility.Visible;
-                account_panel_background.Visibility = Visibility.Visible;
-                NavView.IsEnabled = false;
-                accountToggle.IsOn = false;
-                account_exit.IsEnabled = false;
-            }
-
+            Login();
         }
 
         #region NavView
@@ -140,15 +132,17 @@ namespace Research_Flow
         {
             if (await GraphService.ServiceLogin())
             {
-                accountStatu.Text = await GraphService.GetDisplayName();
+                string name = await GraphService.GetDisplayName();
+                string email = await GraphService.GetPrincipalName();
+                accountName.Text = name;
+                accountEmail.Text = email;
                 ApplicationData.Current.LocalSettings.Values["AccountName"] = await GraphService.GetPrincipalName();
-                accountToggle.OnContent = await GraphService.GetPrincipalName();
-                accountToggle.IsOn = true;
                 account_exit.IsEnabled = true;
             }
             else
             {
-                accountStatu.Text = "Serivce Offline";
+                accountName.Text = "Offline";
+                accountEmail.Text = ApplicationData.Current.LocalSettings.Values["AccountName"] as string;
             }
         }
 
@@ -157,9 +151,10 @@ namespace Research_Flow
             GraphService.ServiceLogout();
 
             ApplicationData.Current.LocalSettings.Values.Remove("AccountName");
-            accountToggle.IsOn = false;
             account_exit.IsEnabled = false;
-            accountStatu.Text = "Serivce Offline";
+            accountLogout.Content = "require relaunch";
+            accountName.Text = "";
+            accountEmail.Text = "";
         }
 
         private void Service_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
@@ -167,18 +162,14 @@ namespace Research_Flow
             account_panel.Visibility = Visibility.Visible;
             account_panel_background.Visibility = Visibility.Visible;
             NavView.IsEnabled = false;
-
-            accountToggle.OnContent = ApplicationData.Current.LocalSettings.Values["AccountName"] as string;
-            accountToggle.IsOn = true;
         }
 
-        private void AccountToggle_Toggled(object sender, RoutedEventArgs e)
+        private async void AccountLogout_Click(object sender, RoutedEventArgs e)
         {
-            ToggleSwitch toggleSwitch = sender as ToggleSwitch;
-            if (toggleSwitch.IsOn == true)
-                Login();
-            else
+            if (ApplicationData.Current.LocalSettings.Values.ContainsKey("AccountName"))
                 Logout();
+            else
+                await CoreApplication.RequestRestartAsync(string.Empty);
         }
 
         private void Account_exit_Click(object sender, RoutedEventArgs e)

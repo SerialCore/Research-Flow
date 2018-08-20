@@ -66,7 +66,8 @@ namespace Research_Flow
 
                     ApplicationService.TrackAppUse(e);
 
-                    if (ApplicationService.IsFirstUse || !ApplicationData.Current.LocalSettings.Values.ContainsKey("Configured"))
+                    if (!ApplicationData.Current.LocalSettings.Values.ContainsKey("AccountName")
+                        || !ApplicationData.Current.LocalSettings.Values.ContainsKey("Configured"))
                         rootFrame.Navigate(typeof(Configure), e.Arguments);
                     else
                         rootFrame.Navigate(typeof(MainPage), e.Arguments);
@@ -92,7 +93,8 @@ namespace Research_Flow
                 }
                 if (rootFrame.Content == null)
                 {
-                    if (ApplicationService.IsFirstUse || !ApplicationData.Current.LocalSettings.Values.ContainsKey("Configured"))
+                    if (!ApplicationData.Current.LocalSettings.Values.ContainsKey("AccountName")
+                        || !ApplicationData.Current.LocalSettings.Values.ContainsKey("Configured"))
                         rootFrame.Navigate(typeof(Configure));
                     else
                         rootFrame.Navigate(typeof(MainPage));

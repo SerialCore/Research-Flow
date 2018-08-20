@@ -79,26 +79,11 @@
                                     Background="Transparent">
                             <AppBarButton Label="ScreenShot" Icon="AttachCamera" Background="Transparent"/>
                             <AppBarButton Label="WebPage" Icon="Link" Background="Transparent"/>
-                            <AppBarButton Label="Refresh" Icon="Refresh" Background="Transparent"/>
+                            <AppBarButton Label="Application" Icon="Shop" Background="Transparent"/>
                         </CommandBar>
                     </Grid>
                 </DataTemplate>
             </NavigationView.HeaderTemplate>
-
-            <NavigationView.PaneFooter>
-                <Grid>
-                    <ListViewItem>
-                        <Grid >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="24"/>
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-                            <PersonPicture Grid.Column="0" ProfilePicture="/Assets/Logos/Microsoft_logo.jpg" Height="24" Width="24"/>
-                            <TextBlock Grid.Column="1" Text="Service Offline" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
-                        </Grid>
-                    </ListViewItem>
-                </Grid>
-            </NavigationView.PaneFooter>
 
         </NavigationView>
 
@@ -106,11 +91,23 @@
         <Grid x:Name="config_panel" Height="500" Width="600" Background="Transparent">
             <TextBlock Text="Research Flow" Foreground="White" FontSize="40" Margin="10" VerticalAlignment="Top" HorizontalAlignment="Center"/>
             <FlipView Margin="0,80,0,50">
-                <FlipViewItem Background="AliceBlue"/>
+                <FlipViewItem Background="AliceBlue">
+                    <ListViewItem Tapped="Login_Tapped" Height="24">
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="24"/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <PersonPicture Grid.Column="0" ProfilePicture="/Assets/Logos/Microsoft_logo.jpg" Height="24" Width="24"/>
+                            <TextBlock Grid.Column="1" x:Name="accountStatu" Text="Log in" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                        </Grid>
+                    </ListViewItem>
+                </FlipViewItem>
                 <FlipViewItem Background="AntiqueWhite"/>
                 <FlipViewItem Background="Azure"/>
                 <FlipViewItem Background="Beige">
-                    <Button x:Name="finish_config" Content="Let's begin" Click="Finish_config_Click" Height="32" Width="200" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20"/>
+                    <Button x:Name="finish_config" Content="Let's begin" IsEnabled="False" Click="Finish_config_Click" 
+                            Height="32" Width="200" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20"/>
                 </FlipViewItem>
             </FlipView>
         </Grid>
