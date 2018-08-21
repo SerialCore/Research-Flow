@@ -36,9 +36,10 @@ namespace LogicService.Services
                                 rssItems.Add(new FeedItem
                                 {
                                     Title = f.Title.Text,
-                                    DOI = GetDoi(f),
                                     Published = f.PublishedDate.ToString(),
+                                    DOI = GetDoi(f),
                                     Link = f.Links[0].Uri.AbsoluteUri,
+                                    Xml = f.GetXmlDocument(SyndicationFormat.Rss20).GetXml(),
                                     Summary = WebUtility.HtmlDecode(Regex.Replace(f.Summary.Text, "<[^>]+?>", ""))
                                 });
                             }

@@ -21,26 +21,30 @@ namespace LogicService.Storage
             return ApplicationData.Current.LocalFolder;
         }
 
-        public async static Task<StorageFolder> GetUserFolderAsync(string user = null)
+        public static StorageFolder GetRoamingFolderAsync()
         {
-            if (user == null)
-                user = ApplicationData.Current.LocalSettings.Values["AccountName"] as string;
-            return await GetAppFolderAsync().CreateFolderAsync(user, CreationCollisionOption.OpenIfExists);
+            return ApplicationData.Current.RoamingFolder;
         }
 
-        public static async Task<StorageFolder> GetPhotosAsync(string user = null)
+        public async static Task<StorageFolder> GetUserFolderAsync()
         {
-            return await (await GetUserFolderAsync(user)).CreateFolderAsync("Photos", CreationCollisionOption.OpenIfExists);
+            return await GetAppFolderAsync().CreateFolderAsync((ApplicationData.Current.LocalSettings.Values["AccountName"] as string), 
+                CreationCollisionOption.OpenIfExists);
         }
 
-        public static async Task<StorageFolder> GetFeedsAsync(string user = null)
+        public static async Task<StorageFolder> GetPhotosAsync()
         {
-            return await (await GetUserFolderAsync(user)).CreateFolderAsync("Feeds", CreationCollisionOption.OpenIfExists);
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Photos", CreationCollisionOption.OpenIfExists);
         }
 
-        public static async Task<StorageFolder> GetSettingsAsync(string user = null)
+        public static async Task<StorageFolder> GetFeedsAsync()
         {
-            return await (await GetUserFolderAsync(user)).CreateFolderAsync("Settings", CreationCollisionOption.OpenIfExists);
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Feeds", CreationCollisionOption.OpenIfExists);
+        }
+
+        public static async Task<StorageFolder> GetSettingsAsync()
+        {
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Settings", CreationCollisionOption.OpenIfExists);
         }
 
         #endregion

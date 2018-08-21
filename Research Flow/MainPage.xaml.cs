@@ -134,10 +134,12 @@ namespace Research_Flow
             {
                 string name = await GraphService.GetDisplayName();
                 string email = await GraphService.GetPrincipalName();
+                BitmapImage image = new BitmapImage();
+                image.UriSource = new Uri("ms-appx:///Assets/Logos/Microsoft_logo.jpg");
                 accountName.Text = name;
                 accountEmail.Text = email;
+                accountPhoto.ProfilePicture = image;
                 ApplicationData.Current.LocalSettings.Values["AccountName"] = await GraphService.GetPrincipalName();
-                account_exit.IsEnabled = true;
             }
             else
             {
@@ -152,7 +154,7 @@ namespace Research_Flow
 
             ApplicationData.Current.LocalSettings.Values.Remove("AccountName");
             account_exit.IsEnabled = false;
-            accountLogout.Content = "require relaunch";
+            accountLogout.Content = "restart this app";
             accountName.Text = "";
             accountEmail.Text = "";
         }

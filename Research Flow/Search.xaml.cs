@@ -37,7 +37,8 @@ namespace Research_Flow
 
         private async void InitializeData()
         {
-            //there must be feed source file
+            // there must be feed source file
+            // if someone delete the file
             try
             {
                 FeedSources = await LocalStorage.ReadObjectAsync<ObservableCollection<FeedSource>>(
@@ -207,9 +208,14 @@ namespace Research_Flow
             }
             else
             {
-                List<FeedItem> feedItems = await LocalStorage.ReadObjectAsync<List<FeedItem>>(
-                    await LocalStorage.GetFeedsAsync(), source.ID, "hashashin" + source.ID) as List<FeedItem>;
-                feeditem_list.ItemsSource = feedItems;
+                // if someone delete the file, then try
+                try
+                {
+                    List<FeedItem> feedItems = await LocalStorage.ReadObjectAsync<List<FeedItem>>(
+                        await LocalStorage.GetFeedsAsync(), source.ID, "hashashin" + source.ID) as List<FeedItem>;
+                    feeditem_list.ItemsSource = feedItems;
+                }
+                catch { }
             }
         }
 

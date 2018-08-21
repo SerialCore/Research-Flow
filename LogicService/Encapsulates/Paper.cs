@@ -13,13 +13,13 @@ namespace LogicService.Encapsulates
 
         public string DOI { get; set; }
 
-        public List<People> Author { get; set; }
+        public List<People> Authors { get; set; }
 
-        public StringBuilder Abstract { get; set; }
+        public string Abstract { get; set; }
 
         public List<string> Topic { get; set; }
 
-        public List<Cite> Reference { get; set; }
+        public List<Paper> References { get; set; }
 
     }
 
@@ -40,14 +40,4 @@ namespace LogicService.Encapsulates
 
     }
 
-    public class Cite
-    {
-
-        public Paper Article { get; set; }
-
-        public string Expression { get; set; }
-
-        public string Reason { get; set; }
-
-    }
 }

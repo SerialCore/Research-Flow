@@ -33,11 +33,13 @@ namespace LogicService.Encapsulates
 
         public string Title { get; set; }
 
-        public string DOI { get; set; }
-
         public string Published { get; set; }
 
+        public string DOI { get; set; }
+
         public string Link { get; set; }
+
+        public string Xml { get; set; }
 
         public string Summary { get; set; }
 

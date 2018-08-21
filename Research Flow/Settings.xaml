@@ -10,6 +10,9 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <Pivot Margin="20,0">
+            <PivotItem Header="Panel">
+                
+            </PivotItem>
             <PivotItem Header="Inform">
                 <Grid >
                     <Grid.RowDefinitions>
