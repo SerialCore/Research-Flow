@@ -83,7 +83,7 @@
                                         <DataTemplate>
                                             <StackPanel >
                                                 <TextBlock Text="{Binding Title}" FontSize="20" Style="{ThemeResource BodyTextBlockStyle}"/>
-                                                <TextBlock Text="{Binding Summary}" FontSize="16"/>
+                                                <TextBlock Text="{Binding Summary}" FontSize="16" MaxLines="2"/>
                                                 <TextBlock Text="{Binding Published}"/>
                                                 <HyperlinkButton Content="{Binding Link}" NavigateUri="{Binding Link}"/>
                                             </StackPanel>
