@@ -62,7 +62,13 @@ namespace Research_Flow
 
         private async void ConfigureFile()
         {
-            var FeedSources = new ObservableCollection<FeedSource>()
+            try
+            {
+                await Synchronization.DownloadAll();
+            }
+            catch
+            {
+                var FeedSources = new ObservableCollection<FeedSource>()
                 {
                     new FeedSource{ID=TripleDES.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd"),
                         Name="Hydrogen Bond in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
@@ -77,7 +83,8 @@ namespace Research_Flow
                     new FeedSource{ID=TripleDES.MakeMD5("http://www.sciencenet.cn/xml/paper.aspx?di=7"),
                         Name="科学网-数理科学",Uri="http://www.sciencenet.cn/xml/paper.aspx?di=7",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=false}
                 };
-            await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
+                await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
+            }
         }
 
         private void Finish_config_Click(object sender, RoutedEventArgs e)

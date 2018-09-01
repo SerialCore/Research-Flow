@@ -15,19 +15,11 @@ namespace LogicService.Storage
 
         #region Get folder
 
-        /// <summary>
-        /// Get the app root folder
-        /// </summary>
-        /// <returns>AppRoot</returns>
         public static async Task<OneDriveStorageFolder> GetAppFolderAsync()
         {
             return await OneDriveService.Instance.AppRootFolderAsync();
         }
 
-        /// <summary>
-        /// Get the photos folder in app root
-        /// </summary>
-        /// <returns>Photos</returns>
         public static async Task<OneDriveStorageFolder> GetPhotosAsync()
         {
             try
@@ -40,10 +32,6 @@ namespace LogicService.Storage
             }
         }
 
-        /// <summary>
-        /// Get the feed folder in app root
-        /// </summary>
-        /// <returns>Feed</returns>
         public static async Task<OneDriveStorageFolder> GetFeedsAsync()
         {
             try
@@ -56,10 +44,6 @@ namespace LogicService.Storage
             }
         }
 
-        /// <summary>
-        /// Get the settings folder in app root
-        /// </summary>
-        /// <returns>Feed</returns>
         public static async Task<OneDriveStorageFolder> GetSettingsAsync()
         {
             try
@@ -76,90 +60,55 @@ namespace LogicService.Storage
 
         #region Operation
 
-        /// <summary>
-        /// List the Items from the current folder
-        /// </summary>
-        /// <param name="folder">current folder</param>
-        /// <param name="top">top</param>
-        /// <param name="order">order type</param>
-        /// /// <param name="filter">filter</param>
-        /// <returns></returns>
-        public static async Task<IReadOnlyList<OneDriveStorageItem>> RetrieveFilesAsync(OneDriveStorageFolder folder, int top, OrderBy order, string filter = null)
+        public static async Task<IReadOnlyList<OneDriveStorageItem>> RetrieveItemsAsync(OneDriveStorageFolder folder, int top = 20, OrderBy order = OrderBy.None, string filter = null)
         {
-            // List the Items from the current folder
-            var OneDriveItems = await folder.GetItemsAsync(top, order, filter);
-            do
-            {
-                // Get the next page of items
-                OneDriveItems = await folder.NextItemsAsync();
-            }
-            while (OneDriveItems != null);
-
-            return OneDriveItems;
+            return await folder.GetItemsAsync(top, order, filter);
         }
 
-        /// <summary>
-        /// Create a folder in current folder
-        /// </summary>
-        /// <param name="folder">current folder</param>
-        /// <param name="foldername">folder name</param>
-        /// <returns>new folder</returns>
+        public static async Task<IReadOnlyList<OneDriveStorageItem>> RetrieveFilesAsync(OneDriveStorageFolder folder, int top = 20, OrderBy order = OrderBy.None, string filter = null)
+        {
+            return await folder.GetFilesAsync(top, order, filter);
+        }
+
+        public static async Task<OneDriveStorageFile> RetrieveFileAsync(OneDriveStorageFolder folder, string name)
+        {
+            return await folder.GetFileAsync(name);
+        }
+
+        public static async Task<BitmapImage> RetrieveFileThumbnails(OneDriveStorageFile file)
+        {
+            var stream = await file.StorageItemPlatformService.GetThumbnailAsync(ThumbnailSize.Large);
+            BitmapImage bmp = new BitmapImage();
+            await bmp.SetSourceAsync(stream as IRandomAccessStream);
+
+            return bmp;
+        }
+
         public static async Task<OneDriveStorageFolder> CreateFolderAsync(OneDriveStorageFolder folder, string foldername)
         {
             return await folder.StorageFolderPlatformService.CreateFolderAsync(foldername, CreationCollisionOption.GenerateUniqueName);
         }
 
-        /// <summary>
-        /// Retrieve a sub folder in current folder
-        /// </summary>
-        /// <param name="folder">current folder</param>
-        /// <param name="path">relative path</param>
-        /// <returns>sub folder</returns>
         public static async Task<OneDriveStorageFolder> RetrieveSubFolderAsync(OneDriveStorageFolder folder, string path)
         {
             return await folder.GetFolderAsync(path);
         }
 
-        /// <summary>
-        /// Move folder
-        /// </summary>
-        /// <param name="folder">current folder</param>
-        /// <param name="target">target</param>
-        /// <param name="newName">new name</param>
-        /// <returns>bool</returns>
         public static async Task<bool> MoveFolderAsync(OneDriveStorageFolder folder, OneDriveStorageFolder target, string newName = null)
         {
             return await folder.MoveAsync(target, newName);
         }
 
-        /// <summary>
-        /// Copy folder
-        /// </summary>
-        /// <param name="folder">current folder</param>
-        /// <param name="target">target</param>
-        /// <param name="newName">new name</param>
-        /// <returns>bool</returns>
         public static async Task<bool> CopyFolderAsync(OneDriveStorageFolder folder, OneDriveStorageFolder target, string newName = null)
         {
             return await folder.CopyAsync(target, newName);
         }
 
-        /// <summary>
-        /// Rename folder
-        /// </summary>
-        /// <param name="folder">current folder</param>
-        /// <param name="newName">new name</param>
-        /// <returns>named folder</returns>
         public static async Task<OneDriveStorageFolder> RenameFolderAsync(OneDriveStorageFolder folder, string newName)
         {
             return await folder.RenameAsync(newName);
         }
 
-        /// <summary>
-        /// Create new file
-        /// </summary>
-        /// <param name="folder">current folder</param>
-        /// <param name="file">created file</param>
         public static async Task<OneDriveStorageFile> CreateFileAsync(OneDriveStorageFolder folder, StorageFile file)
         {
             OneDriveStorageFile fileCreated = null;
@@ -170,55 +119,34 @@ namespace LogicService.Storage
                 {
                     var prop = await file.GetBasicPropertiesAsync();
                     if (prop.Size >= 4 * 1024 * 1024)
-                        fileCreated = await folder.StorageFolderPlatformService.UploadFileAsync(file.Name, localStream, CreationCollisionOption.GenerateUniqueName, 320 * 1024);
+                        fileCreated = await folder.StorageFolderPlatformService.UploadFileAsync(file.Name, localStream, CreationCollisionOption.ReplaceExisting, 320 * 1024);
                     else
-                        fileCreated = await folder.StorageFolderPlatformService.CreateFileAsync(file.Name, CreationCollisionOption.GenerateUniqueName, localStream);
+                        fileCreated = await folder.StorageFolderPlatformService.CreateFileAsync(file.Name, CreationCollisionOption.ReplaceExisting, localStream);
                 }
             }
             return fileCreated;
         }
 
-        /// <summary>
-        /// Move a file
-        /// </summary>
-        /// <param name="file">file</param>
-        /// <param name="target">target folder</param>
-        /// <param name="newName">new name</param>
-        /// <returns></returns>
+        public static async void DeleteFileAsync(OneDriveStorageFolder folder, OneDriveStorageFile file)
+        {
+            await file.DeleteAsync();
+        }
+
         public static async Task<bool> MoveFileAsync(OneDriveStorageFile file,OneDriveStorageFolder target, string newName = null)
         {
             return await file.MoveAsync(target, newName);
         }
 
-        /// <summary>
-        /// Copy a file
-        /// </summary>
-        /// <param name="file">file</param>
-        /// <param name="target">target folder</param>
-        /// <param name="newName">new name</param>
-        /// <returns></returns>
         public static async Task<bool> CopyFileAsync(OneDriveStorageFile file, OneDriveStorageFolder target, string newName = null)
         {
             return await file.CopyAsync(target, newName);
         }
 
-        /// <summary>
-        /// Rename a file
-        /// </summary>
-        /// <param name="file">file</param>
-        /// <param name="newName">new name</param>
-        /// <returns></returns>
         public static async Task<OneDriveStorageFile> RenameFileAsync(OneDriveStorageFile file, string newName)
         {
             return await file.RenameAsync(newName);
         }
 
-        /// <summary>
-        /// Download a file and save the content in a local file
-        /// </summary>
-        /// <param name="folder">source folder</param>
-        /// <param name="target">target folder</param>
-        /// <param name="fileName">file name</param>
         public static async Task<StorageFile> DownloadFileAsync(OneDriveStorageFolder folder, StorageFolder target, string fileName)
         {
             // Download a file and save the content in a local file
@@ -229,7 +157,7 @@ namespace LogicService.Storage
             {
                 byte[] buffer = new byte[remoteStream.Size];
                 var localBuffer = await remoteStream.ReadAsync(buffer.AsBuffer(), (uint)remoteStream.Size, InputStreamOptions.ReadAhead);
-                myLocalFile = await target.CreateFileAsync(fileName, CreationCollisionOption.GenerateUniqueName);
+                myLocalFile = await target.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
                 using (var localStream = await myLocalFile.OpenAsync(FileAccessMode.ReadWrite))
                 {
                     await localStream.WriteAsync(localBuffer);
@@ -238,20 +166,6 @@ namespace LogicService.Storage
             }
 
             return myLocalFile;
-        }
-
-        /// <summary>
-        /// Get the thumbnail of a file
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns>BitmapImage instance for Image source</returns>
-        public static async Task<BitmapImage> RetrieveFileThumbnails(OneDriveStorageFile file)
-        {
-            var stream = await file.StorageItemPlatformService.GetThumbnailAsync(ThumbnailSize.Large);
-            BitmapImage bmp = new BitmapImage();
-            await bmp.SetSourceAsync(stream as IRandomAccessStream);
-
-            return bmp;
         }
 
         #endregion

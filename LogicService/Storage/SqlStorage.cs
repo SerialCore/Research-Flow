@@ -67,14 +67,4 @@ namespace LogicService.Storage
 
     }
 
-    public class FileQueue
-    {
-        public string FileName { get; set; }
-
-        public string Path { get; set; }
-
-        public string User { get; set; }
-
-        public bool Writing { get; set; }
-    }
 }

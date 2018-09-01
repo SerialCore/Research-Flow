@@ -120,6 +120,7 @@
     <Compile Include="Services\RssService.cs" />
     <Compile Include="Storage\SqlStorage.cs" />
     <Compile Include="Services\ApplicationService.cs" />
+    <Compile Include="Storage\Synchronization.cs" />
     <EmbeddedResource Include="Properties\LogicService.rd.xml" />
   </ItemGroup>
   <ItemGroup>

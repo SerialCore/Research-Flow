@@ -6,8 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Windows.System.Threading;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.UI.Core;
 
 namespace LogicService.Storage
 {
@@ -68,7 +70,17 @@ namespace LogicService.Storage
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.ReplaceExisting);
             string content = JsonHelper.SerializeObject(o);
             await FileIO.WriteTextAsync(file, TripleDES.Encrypt(content, key));
-            // sql log
+            await ThreadPool.RunAsync(async e =>
+            {
+                try
+                {
+                    if (folder.Name.Equals("Feeds"))
+                        await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetFeedsAsync(), file);
+                    else
+                        await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetSettingsAsync(), file);
+                }
+                catch { }
+            });
             return file;
         }
 
@@ -84,7 +96,19 @@ namespace LogicService.Storage
             StorageFile file = await folder.GetFileAsync(name);
             if (file != null)
                 await file.DeleteAsync();
-            // sql log
+            await ThreadPool.RunAsync(async e =>
+            {
+                try
+                {
+                    if (folder.Name.Equals("Feeds"))
+                        OneDriveStorage.DeleteFileAsync(await OneDriveStorage.GetFeedsAsync(),
+                            await OneDriveStorage.RetrieveFileAsync(await OneDriveStorage.GetFeedsAsync(), file.Name));
+                    else
+                        OneDriveStorage.DeleteFileAsync(await OneDriveStorage.GetSettingsAsync(),
+                            await OneDriveStorage.RetrieveFileAsync(await OneDriveStorage.GetSettingsAsync(), file.Name));
+                }
+                catch { }
+            });
         }
 
         #endregion
