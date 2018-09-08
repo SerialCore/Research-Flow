@@ -11,12 +11,23 @@ namespace LogicService.Storage
 
         public static void ScanChanges()
         {
-
+            // especially for the case when onedrive files were deleted manually
         }
 
-        public static void UploadAll()
+        public static async Task<bool> UploadAll()
         {
-
+            try
+            {
+                foreach(var item in await (await LocalStorage.GetFeedsAsync()).GetFilesAsync())
+                {
+                    await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetFeedsAsync(), item);
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public async static Task<bool> DownloadAll()

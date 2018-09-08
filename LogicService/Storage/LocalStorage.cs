@@ -79,7 +79,10 @@ namespace LogicService.Storage
                     else
                         await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetSettingsAsync(), file);
                 }
-                catch { }
+                catch
+                {
+                    // write log
+                }
             });
             return file;
         }
@@ -107,7 +110,10 @@ namespace LogicService.Storage
                         OneDriveStorage.DeleteFileAsync(await OneDriveStorage.GetSettingsAsync(),
                             await OneDriveStorage.RetrieveFileAsync(await OneDriveStorage.GetSettingsAsync(), file.Name));
                 }
-                catch { }
+                catch
+                {
+                    // write log
+                }
             });
         }
 

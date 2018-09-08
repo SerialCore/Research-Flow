@@ -64,7 +64,8 @@ namespace Research_Flow
         {
             try
             {
-                await Synchronization.DownloadAll();
+                if (await Synchronization.DownloadAll())
+                    finish_config.IsEnabled = true;
             }
             catch
             {
