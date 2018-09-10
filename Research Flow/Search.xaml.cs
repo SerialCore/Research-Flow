@@ -42,7 +42,7 @@ namespace Research_Flow
             try
             {
                 FeedSources = await LocalStorage.ReadObjectAsync<ObservableCollection<FeedSource>>(
-                    await LocalStorage.GetFeedsAsync(), "RSS") as ObservableCollection<FeedSource>;
+                    await LocalStorage.GetDataAsync(), "RSS") as ObservableCollection<FeedSource>;
             }
             catch { }
             feedsource_list.ItemsSource = FeedSources;
@@ -115,7 +115,7 @@ namespace Research_Flow
                     }
                     FeedSources.Add(source);
                 }
-                await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
+                await LocalStorage.WriteObjectAsync(await LocalStorage.GetDataAsync(), "RSS", FeedSources);
             }
             ClearSettings();
         }
@@ -138,10 +138,10 @@ namespace Research_Flow
         private async void DeleteInvokedHandler(IUICommand command)
         {
             FeedSources.Remove(currentFeed);
-            await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
+            await LocalStorage.WriteObjectAsync(await LocalStorage.GetDataAsync(), "RSS", FeedSources);
             try
             {
-                LocalStorage.DeleteFile(await LocalStorage.GetFeedsAsync(), currentFeed.ID);
+                LocalStorage.DeleteFile(await LocalStorage.GetDataAsync(), currentFeed.ID);
             }
             catch { }
             ClearSettings();
@@ -193,9 +193,9 @@ namespace Research_Flow
                         });
                         if (feeds.Count > source.MaxCount)
                             feeds.RemoveRange(source.MaxCount, feeds.Count - source.MaxCount);
-                        await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), source.ID, items, "hashashin" + source.ID);
+                        await LocalStorage.WriteObjectAsync(await LocalStorage.GetDataAsync(), source.ID, items, "hashashin" + source.ID);
                         FeedSources[selectedFeedIndex].LastUpdateTime = DateTime.Now;
-                        await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedsAsync(), "RSS", FeedSources);
+                        await LocalStorage.WriteObjectAsync(await LocalStorage.GetDataAsync(), "RSS", FeedSources);
                     },
                     async (exception) =>
                     {
@@ -212,7 +212,7 @@ namespace Research_Flow
                 try
                 {
                     List<FeedItem> feedItems = await LocalStorage.ReadObjectAsync<List<FeedItem>>(
-                        await LocalStorage.GetFeedsAsync(), source.ID, "hashashin" + source.ID) as List<FeedItem>;
+                        await LocalStorage.GetDataAsync(), source.ID, "hashashin" + source.ID) as List<FeedItem>;
                     feeditem_list.ItemsSource = feedItems;
                 }
                 catch { }

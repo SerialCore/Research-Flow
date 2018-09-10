@@ -22,17 +22,9 @@ namespace LogicService.Storage
                 {
                     await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetPhotosAsync(), item);
                 }
-                foreach (var item in await (await LocalStorage.GetFeedsAsync()).GetFilesAsync())
+                foreach (var item in await (await LocalStorage.GetDataAsync()).GetFilesAsync())
                 {
-                    await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetFeedsAsync(), item);
-                }
-                foreach (var item in await (await LocalStorage.GetLearingAsync()).GetFilesAsync())
-                {
-                    await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetLearingAsync(), item);
-                }
-                foreach (var item in await (await LocalStorage.GetSettingsAsync()).GetFilesAsync())
-                {
-                    await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetSettingsAsync(), item);
+                    await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetDataAsync(), item);
                 }
                 return true;
             }
@@ -44,33 +36,26 @@ namespace LogicService.Storage
 
         public async static Task<bool> DownloadAll()
         {
+            bool sign = false;
             try
             {
                 foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetPhotosAsync()))
                 {
                     await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetPhotosAsync(),
-                        await LocalStorage.GetFeedsAsync(), item.Name);
+                        await LocalStorage.GetPhotosAsync(), item.Name);
+                    sign = true;
                 }
-                foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetFeedsAsync()))
+                foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetDataAsync()))
                 {
-                    await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetFeedsAsync(),
-                        await LocalStorage.GetFeedsAsync(), item.Name);
+                    await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetDataAsync(),
+                        await LocalStorage.GetDataAsync(), item.Name);
+                    sign = true;
                 }
-                foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetLearingAsync()))
-                {
-                    await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetLearingAsync(),
-                        await LocalStorage.GetFeedsAsync(), item.Name);
-                }
-                foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetSettingsAsync()))
-                {
-                    await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetSettingsAsync(),
-                        await LocalStorage.GetFeedsAsync(), item.Name);
-                }
-                return true;
+                return sign;
             }
             catch
             {
-                return false;
+                return sign;
             }
         }
 

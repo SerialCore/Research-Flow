@@ -39,19 +39,9 @@ namespace LogicService.Storage
             return await (await GetUserFolderAsync()).CreateFolderAsync("Photos", CreationCollisionOption.OpenIfExists);
         }
 
-        public static async Task<StorageFolder> GetFeedsAsync()
+        public static async Task<StorageFolder> GetDataAsync()
         {
-            return await (await GetUserFolderAsync()).CreateFolderAsync("Feeds", CreationCollisionOption.OpenIfExists);
-        }
-
-        public static async Task<StorageFolder> GetLearingAsync()
-        {
-            return await (await GetUserFolderAsync()).CreateFolderAsync("Learing", CreationCollisionOption.OpenIfExists);
-        }
-
-        public static async Task<StorageFolder> GetSettingsAsync()
-        {
-            return await (await GetUserFolderAsync()).CreateFolderAsync("Settings", CreationCollisionOption.OpenIfExists);
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Data", CreationCollisionOption.OpenIfExists);
         }
 
         #endregion
@@ -79,10 +69,8 @@ namespace LogicService.Storage
             {
                 try
                 {
-                    if (folder.Name.Equals("Feeds"))
-                        await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetFeedsAsync(), file);
-                    else
-                        await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetSettingsAsync(), file);
+                    if (folder.Name.Equals("Data"))
+                        await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetDataAsync(), file);
                 }
                 catch
                 {
@@ -108,12 +96,9 @@ namespace LogicService.Storage
             {
                 try
                 {
-                    if (folder.Name.Equals("Feeds"))
-                        OneDriveStorage.DeleteFileAsync(await OneDriveStorage.GetFeedsAsync(),
-                            await OneDriveStorage.RetrieveFileAsync(await OneDriveStorage.GetFeedsAsync(), file.Name));
-                    else
-                        OneDriveStorage.DeleteFileAsync(await OneDriveStorage.GetSettingsAsync(),
-                            await OneDriveStorage.RetrieveFileAsync(await OneDriveStorage.GetSettingsAsync(), file.Name));
+                    if (folder.Name.Equals("Data"))
+                        OneDriveStorage.DeleteFileAsync(await OneDriveStorage.GetDataAsync(),
+                            await OneDriveStorage.RetrieveFileAsync(await OneDriveStorage.GetDataAsync(), file.Name));
                 }
                 catch
                 {
