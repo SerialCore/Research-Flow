@@ -44,6 +44,11 @@ namespace LogicService.Storage
             return await (await GetUserFolderAsync()).CreateFolderAsync("Feeds", CreationCollisionOption.OpenIfExists);
         }
 
+        public static async Task<StorageFolder> GetLearingAsync()
+        {
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Learing", CreationCollisionOption.OpenIfExists);
+        }
+
         public static async Task<StorageFolder> GetSettingsAsync()
         {
             return await (await GetUserFolderAsync()).CreateFolderAsync("Settings", CreationCollisionOption.OpenIfExists);

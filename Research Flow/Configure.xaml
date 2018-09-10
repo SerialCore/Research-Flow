@@ -90,8 +90,8 @@
         <Grid x:Name="config_panel_background" Background="Black" Opacity="0.5"/>
         <Grid x:Name="config_panel" Height="500" Width="600" Background="Transparent">
             <TextBlock Text="Research Flow" Foreground="White" FontSize="40" Margin="10" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-            <FlipView Margin="0,80,0,50">
-                <FlipViewItem Background="AliceBlue">
+            <Grid Margin="0,80,0,50" Background="Beige">
+                <StackPanel>
                     <ListViewItem Tapped="Login_Tapped" Height="24">
                         <Grid >
                             <Grid.ColumnDefinitions>
@@ -102,14 +102,11 @@
                             <TextBlock Grid.Column="1" x:Name="accountStatu" Text="Log in" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
                         </Grid>
                     </ListViewItem>
-                </FlipViewItem>
-                <FlipViewItem Background="AntiqueWhite"/>
-                <FlipViewItem Background="Azure"/>
-                <FlipViewItem Background="Beige">
-                    <Button x:Name="finish_config" Content="Let's begin" IsEnabled="False" Click="Finish_config_Click" 
+                    <TextBlock Text="Acqueiring files form OneDrive"/>
+                </StackPanel>
+                <Button x:Name="finish_config" Content="Let's begin" IsEnabled="False" Click="Finish_config_Click" 
                             Height="32" Width="200" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20"/>
-                </FlipViewItem>
-            </FlipView>
+            </Grid>
         </Grid>
 
     </Grid>

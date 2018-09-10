@@ -274,7 +274,10 @@ namespace Research_Flow
             => ContentFrame.Navigate(typeof(Tutorials));
 
         private async void Give_Rate(object sender, RoutedEventArgs e)
-            => await ApplicationService.LaunchReviewAsync();
+            => await ApplicationService.ShowRatingReviewDialog();
+
+        private async void Give_Feedback(object sender, RoutedEventArgs e)
+            => await ApplicationService.LaunchFeedbackAsync();
 
         #endregion
 

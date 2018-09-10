@@ -93,8 +93,9 @@
                             <AppBarButton Label="Application" Icon="Shop" Tapped="Flyout_Tapped" Background="Transparent">
                                 <FlyoutBase.AttachedFlyout>
                                     <MenuFlyout>
+                                        <MenuFlyoutItem Text="Review" Click="Give_Rate"/>
+                                        <MenuFlyoutItem Text="FeedBack" Click="Give_Feedback"/>
                                         <MenuFlyoutItem Text="Tutorials" Click="Open_Tutorials"/>
-                                        <MenuFlyoutItem Text="Rate this App" Click="Give_Rate"/>
                                     </MenuFlyout>
                                 </FlyoutBase.AttachedFlyout>
                             </AppBarButton>

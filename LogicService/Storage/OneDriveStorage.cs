@@ -44,6 +44,18 @@ namespace LogicService.Storage
             }
         }
 
+        public static async Task<OneDriveStorageFolder> GetLearingAsync()
+        {
+            try
+            {
+                return await RetrieveSubFolderAsync(await GetAppFolderAsync(), "Learing");
+            }
+            catch
+            {
+                return await CreateFolderAsync(await GetAppFolderAsync(), "Learing");
+            }
+        }
+
         public static async Task<OneDriveStorageFolder> GetSettingsAsync()
         {
             try
@@ -151,7 +163,7 @@ namespace LogicService.Storage
         {
             // Download a file and save the content in a local file
             var remoteFile = await folder.GetFileAsync(fileName);
-
+            
             StorageFile myLocalFile = null;
             using (var remoteStream = await remoteFile.StorageFilePlatformService.OpenAsync() as IRandomAccessStream)
             {

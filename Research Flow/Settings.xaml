@@ -60,6 +60,7 @@
                             <Run Text="Library References" FontWeight="Bold"/><LineBreak/><LineBreak/>
                             <Run Text="HockeyApp"/><LineBreak/>
                             <Run Text="Microsoft.Data.SQLite"/><LineBreak/>
+                            <Run Text="Microsoft.Services.Store.Engagement"/><LineBreak/>
                             <Run Text="Microsoft.Toolkit.Uwp"/><LineBreak/>
                             <Run Text="Microsoft.Toolkit.Uwp.Notifications"/><LineBreak/>
                             <Run Text="Microsoft.Toolkit.Uwp.Services"/><LineBreak/>

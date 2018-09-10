@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -50,9 +51,9 @@ namespace Research_Flow
             {
                 accountStatu.Text = await GraphService.GetPrincipalName();
                 ApplicationData.Current.LocalSettings.Values["AccountName"] = await GraphService.GetPrincipalName();
-                finish_config.IsEnabled = true;
-
                 ConfigureFile();
+
+                finish_config.IsEnabled = true;
             }
             else
             {
@@ -64,8 +65,7 @@ namespace Research_Flow
         {
             try
             {
-                if (await Synchronization.DownloadAll())
-                    finish_config.IsEnabled = true;
+                await Synchronization.DownloadAll();
             }
             catch
             {
