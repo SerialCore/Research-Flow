@@ -51,22 +51,30 @@ namespace Research_Flow
             {
                 accountStatu.Text = await GraphService.GetPrincipalName();
                 ApplicationData.Current.LocalSettings.Values["AccountName"] = await GraphService.GetPrincipalName();
-                ConfigureFile();
-
-                finish_config.IsEnabled = true;
+                Configuration();
             }
             else
             {
-
+                configState.Text = "Fail to log in, please try again.";
             }
+        }
+
+        private void Configuration()
+        {
+            ConfigureFile();
+
+            configState.Text += "\nNow enjoy this application.";
+            finish_config.IsEnabled = true;
         }
 
         private async void ConfigureFile()
         {
+            configState.Text = "Acquiring files from OneDrive...";
             try
             {
                 if (!await Synchronization.DownloadAll())
                 {
+                    configState.Text += "\nTrying to use local files instead...";
                     var FeedSources = new ObservableCollection<FeedSource>()
                     {
                         new FeedSource{ID=TripleDES.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd"),

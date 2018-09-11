@@ -204,7 +204,7 @@ namespace Research_Flow
             request.Data.Properties.Description = "Share your current idea";
 
             var bitmap = new RenderTargetBitmap();
-            StorageFile file = await (await LocalStorage.GetPhotosAsync()).CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", 
+            StorageFile file = await (await LocalStorage.GetPhotoAsync()).CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", 
                 CreationCollisionOption.ReplaceExisting);
             await bitmap.RenderAsync(FullPage);
             var buffer = await bitmap.GetPixelsAsync();
@@ -233,7 +233,7 @@ namespace Research_Flow
         private async void ScreenShot_Save(object sender, RoutedEventArgs e)
         {
             var bitmap = new RenderTargetBitmap();
-            StorageFile file = await (await LocalStorage.GetPhotosAsync()).CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", 
+            StorageFile file = await (await LocalStorage.GetPhotoAsync()).CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", 
                 CreationCollisionOption.ReplaceExisting);
             await bitmap.RenderAsync(FullPage);
             var buffer = await bitmap.GetPixelsAsync();
@@ -257,7 +257,7 @@ namespace Research_Flow
                 // confirm the app was associated with Microsoft account
                 try
                 {
-                    await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetPhotosAsync(), file);
+                    await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetPhotoAsync(), file);
                     ToastNotificationManager.CreateToastNotifier().Show(
                         new ToastNotification(ToastGenerator.TextToast("OneDrive", "Screen Shot Saved").GetXml()));
                 }

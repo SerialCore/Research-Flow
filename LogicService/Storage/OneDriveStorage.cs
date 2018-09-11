@@ -20,15 +20,15 @@ namespace LogicService.Storage
             return await OneDriveService.Instance.AppRootFolderAsync();
         }
 
-        public static async Task<OneDriveStorageFolder> GetPhotosAsync()
+        public static async Task<OneDriveStorageFolder> GetPhotoAsync()
         {
             try
             {
-                return await RetrieveSubFolderAsync(await GetAppFolderAsync(), "Photos");
+                return await RetrieveSubFolderAsync(await GetAppFolderAsync(), "Photo");
             }
             catch
             {
-                return await CreateFolderAsync(await GetAppFolderAsync(), "Photos");
+                return await CreateFolderAsync(await GetAppFolderAsync(), "Photo");
             }
         }
 

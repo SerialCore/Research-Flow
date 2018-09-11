@@ -34,9 +34,9 @@ namespace LogicService.Storage
                 CreationCollisionOption.OpenIfExists);
         }
 
-        public static async Task<StorageFolder> GetPhotosAsync()
+        public static async Task<StorageFolder> GetPhotoAsync()
         {
-            return await (await GetUserFolderAsync()).CreateFolderAsync("Photos", CreationCollisionOption.OpenIfExists);
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Photo", CreationCollisionOption.OpenIfExists);
         }
 
         public static async Task<StorageFolder> GetDataAsync()
@@ -105,6 +105,16 @@ namespace LogicService.Storage
                     // write log
                 }
             });
+        }
+
+        public static void CombineFiles(StorageFolder origin, List<StorageFile> files, StorageFolder target, string name)
+        {
+
+        }
+
+        public static void SeparateFiles(StorageFolder origin, string name, StorageFolder target)
+        {
+
         }
 
         #endregion

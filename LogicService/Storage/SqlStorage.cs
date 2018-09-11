@@ -40,7 +40,7 @@ namespace LogicService.Storage
             }
         }
 
-        private List<string> Grab_Entries()
+        private List<string> GetEntries()
         {
             List<string> entries = new List<string>();
             using (SqliteConnection db = new SqliteConnection("Filename=sqliteSample.db"))
@@ -64,6 +64,20 @@ namespace LogicService.Storage
             }
             return entries;
         }
+
+    }
+
+    public class FileManager
+    {
+        public string FileName { get; set; }
+
+        public string Folder { get; set; }
+
+        public DateTimeOffset RecentDate { get; set; }
+
+        public bool Synced { get; set; }
+
+        public bool Deleting { get; set; }
 
     }
 

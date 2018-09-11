@@ -11,16 +11,16 @@ namespace LogicService.Storage
 
         public static void ScanChanges()
         {
-            // especially for the case when onedrive files were deleted
+            // access database
         }
 
         public static async Task<bool> UploadAll()
         {
             try
             {
-                foreach(var item in await (await LocalStorage.GetPhotosAsync()).GetFilesAsync())
+                foreach(var item in await (await LocalStorage.GetPhotoAsync()).GetFilesAsync())
                 {
-                    await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetPhotosAsync(), item);
+                    await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetPhotoAsync(), item);
                 }
                 foreach (var item in await (await LocalStorage.GetDataAsync()).GetFilesAsync())
                 {
@@ -39,10 +39,10 @@ namespace LogicService.Storage
             bool sign = false;
             try
             {
-                foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetPhotosAsync()))
+                foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetPhotoAsync()))
                 {
-                    await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetPhotosAsync(),
-                        await LocalStorage.GetPhotosAsync(), item.Name);
+                    await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetPhotoAsync(),
+                        await LocalStorage.GetPhotoAsync(), item.Name);
                     sign = true;
                 }
                 foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetDataAsync()))

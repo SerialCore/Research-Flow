@@ -65,6 +65,7 @@
                             <Run Text="Microsoft.Toolkit.Uwp.Notifications"/><LineBreak/>
                             <Run Text="Microsoft.Toolkit.Uwp.Services"/><LineBreak/>
                             <Run Text="Microsoft.Toolkit.Uwp.UI.Controls"/><LineBreak/>
+                            <Run Text="SharpZipLib"/><LineBreak/>
                         </TextBlock>
                     </ScrollViewer>
                     <ScrollViewer Grid.Row="1" Grid.Column="1" Margin="10" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto">
