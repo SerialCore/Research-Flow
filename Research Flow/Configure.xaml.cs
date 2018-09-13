@@ -90,7 +90,7 @@ namespace Research_Flow
                         new FeedSource{ID=TripleDES.MakeMD5("http://www.sciencenet.cn/xml/paper.aspx?di=7"),
                             Name ="科学网-数理科学",Uri="http://www.sciencenet.cn/xml/paper.aspx?di=7",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=false}
                     };
-                    await LocalStorage.WriteObjectAsync(await LocalStorage.GetDataAsync(), "RSS", FeedSources);
+                    await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedAsync(), "RSS", FeedSources);
                 }
             }
             catch { }

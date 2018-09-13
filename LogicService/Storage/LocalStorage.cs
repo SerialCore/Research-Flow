@@ -10,6 +10,7 @@ using Windows.System.Threading;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI.Core;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace LogicService.Storage
 {
@@ -34,14 +35,21 @@ namespace LogicService.Storage
                 CreationCollisionOption.OpenIfExists);
         }
 
+        // synchronization
         public static async Task<StorageFolder> GetPhotoAsync()
         {
             return await (await GetUserFolderAsync()).CreateFolderAsync("Photo", CreationCollisionOption.OpenIfExists);
         }
 
+        // synchronization
         public static async Task<StorageFolder> GetDataAsync()
         {
             return await (await GetUserFolderAsync()).CreateFolderAsync("Data", CreationCollisionOption.OpenIfExists);
+        }
+
+        public static async Task<StorageFolder> GetFeedAsync()
+        {
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Feed", CreationCollisionOption.OpenIfExists);
         }
 
         #endregion
@@ -65,18 +73,6 @@ namespace LogicService.Storage
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.ReplaceExisting);
             string content = JsonHelper.SerializeObject(o);
             await FileIO.WriteTextAsync(file, TripleDES.Encrypt(content, key));
-            await ThreadPool.RunAsync(async e =>
-            {
-                try
-                {
-                    if (folder.Name.Equals("Data"))
-                        await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetDataAsync(), file);
-                }
-                catch
-                {
-                    // write log
-                }
-            });
             return file;
         }
 
@@ -92,29 +88,130 @@ namespace LogicService.Storage
             StorageFile file = await folder.GetFileAsync(name);
             if (file != null)
                 await file.DeleteAsync();
+        }
+
+        // files package will be with synchronization together
+        public static async Task<bool> CombineFiles(StorageFolder origin, List<StorageFile> files, StorageFolder target, string name)
+        {
+            ////压缩文件名为空时使用文件夹名＋.zip
+            //if (zipFilePath == string.Empty)
+            //{
+            //    if (dirPath.EndsWith("\\"))
+            //    {
+            //        dirPath = dirPath.Substring(0, dirPath.Length - 1);
+            //    }
+            //    zipFilePath = dirPath + ".zip";
+            //}
+
+            //try
+            //{
+            //    string[] filenames = Directory.GetFiles(dirPath);
+            //    using (ZipOutputStream s = new ZipOutputStream(File.Create(zipFilePath)))
+            //    {
+            //        s.SetLevel(9);
+            //        byte[] buffer = new byte[4096];
+            //        foreach (string file in filenames)
+            //        {
+            //            ZipEntry entry = new ZipEntry(Path.GetFileName(file));
+            //            entry.DateTime = DateTime.Now;
+            //            s.PutNextEntry(entry);
+            //            using (FileStream fs = File.OpenRead(file))
+            //            {
+            //                int sourceBytes;
+            //                do
+            //                {
+            //                    sourceBytes = fs.Read(buffer, 0, buffer.Length);
+            //                    s.Write(buffer, 0, sourceBytes);
+            //                } while (sourceBytes > 0);
+            //            }
+            //        }
+            //        s.Finish();
+            //        s.Close();
+            //    }
+            //}
+            //catch { }
+
+
+
+            StorageFile file = await target.CreateFileAsync(name);
             await ThreadPool.RunAsync(async e =>
             {
                 try
                 {
-                    if (folder.Name.Equals("Data"))
-                        OneDriveStorage.DeleteFileAsync(await OneDriveStorage.GetDataAsync(),
-                            await OneDriveStorage.RetrieveFileAsync(await OneDriveStorage.GetDataAsync(), file.Name));
+                    if (target.Name.Equals("Data"))
+                        await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetDataAsync(), file);
                 }
                 catch
                 {
                     // write log
                 }
             });
+
+            return true;
         }
 
-        public static void CombineFiles(StorageFolder origin, List<StorageFile> files, StorageFolder target, string name)
+        public static bool SeparateFiles(StorageFolder origin, string name, StorageFolder target)
         {
+            //if (zipFilePath == string.Empty)
+            //{
+            //    err = "压缩文件不能为空！";
+            //    return false;
+            //}
+            //if (!File.Exists(zipFilePath))
+            //{
+            //    err = "压缩文件不存在！";
+            //    return false;
+            //}
+            ////解压文件夹为空时默认与压缩文件同一级目录下，跟压缩文件同名的文件夹
+            //if (unZipDir == string.Empty)
+            //    unZipDir = zipFilePath.Replace(Path.GetFileName(zipFilePath), Path.GetFileNameWithoutExtension(zipFilePath));
+            //if (!unZipDir.EndsWith("\\"))
+            //    unZipDir += "\\";
+            //if (!Directory.Exists(unZipDir))
+            //    Directory.CreateDirectory(unZipDir);
 
-        }
+            //try
+            //{
+            //    using (ZipInputStream s = new ZipInputStream(File.OpenRead(zipFilePath)))
+            //    {
 
-        public static void SeparateFiles(StorageFolder origin, string name, StorageFolder target)
-        {
+            //        ZipEntry theEntry;
+            //        while ((theEntry = s.GetNextEntry()) != null)
+            //        {
+            //            string directoryName = Path.GetDirectoryName(theEntry.Name);
+            //            string fileName = Path.GetFileName(theEntry.Name);
+            //            if (directoryName.Length > 0)
+            //            {
+            //                Directory.CreateDirectory(unZipDir + directoryName);
+            //            }
+            //            if (!directoryName.EndsWith("\\"))
+            //                directoryName += "\\";
+            //            if (fileName != String.Empty)
+            //            {
+            //                using (FileStream streamWriter = File.Create(unZipDir + theEntry.Name))
+            //                {
 
+            //                    int size = 2048;
+            //                    byte[] data = new byte[2048];
+            //                    while (true)
+            //                    {
+            //                        size = s.Read(data, 0, data.Length);
+            //                        if (size > 0)
+            //                        {
+            //                            streamWriter.Write(data, 0, size);
+            //                        }
+            //                        else
+            //                        {
+            //                            break;
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }//while
+            //    }
+            //}
+            //catch { }
+            return true;
         }
 
         #endregion
