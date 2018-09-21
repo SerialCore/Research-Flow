@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Windows.UI.Core;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -51,7 +52,7 @@ namespace Research_Flow
             {
                 accountStatu.Text = await GraphService.GetPrincipalName();
                 ApplicationData.Current.LocalSettings.Values["AccountName"] = await GraphService.GetPrincipalName();
-                Configuration();
+                ConfigureFile();
             }
             else
             {
@@ -59,23 +60,19 @@ namespace Research_Flow
             }
         }
 
-        private void Configuration()
-        {
-            ConfigureFile();
-
-            configState.Text += "\nNow enjoy this application.";
-            finish_config.IsEnabled = true;
-        }
-
         private async void ConfigureFile()
         {
             configState.Text = "Acquiring files from OneDrive...";
             try
             {
-                if (!await Synchronization.DownloadAll())
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 {
-                    configState.Text += "\nTrying to use local files instead...";
-                    var FeedSources = new ObservableCollection<FeedSource>()
+                    bool IsDownloaded = await Synchronization.DownloadAll();
+                    configState.Text += "\n\nAcquire files successfully.";
+                    if (!IsDownloaded)
+                    {
+                        configState.Text += "\n\nTrying to use local files instead...";
+                        var FeedSources = new ObservableCollection<FeedSource>()
                     {
                         new FeedSource{ID=TripleDES.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd"),
                             Name ="Hydrogen Bond in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
@@ -90,10 +87,17 @@ namespace Research_Flow
                         new FeedSource{ID=TripleDES.MakeMD5("http://www.sciencenet.cn/xml/paper.aspx?di=7"),
                             Name ="科学网-数理科学",Uri="http://www.sciencenet.cn/xml/paper.aspx?di=7",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=false}
                     };
-                    await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedAsync(), "RSS", FeedSources);
-                }
+                        await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedAsync(), "RSS", FeedSources);
+                    }
+
+                    configState.Text += "\n\nNow enjoy this application.";
+                    finish_config.IsEnabled = true;
+                });
             }
-            catch { }
+            catch (Exception ex)
+            {
+                configState.Text += "\n\nFail: " + ex.Message;
+            }
         }
 
         private void Finish_config_Click(object sender, RoutedEventArgs e)

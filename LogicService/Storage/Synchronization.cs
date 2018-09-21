@@ -18,10 +18,6 @@ namespace LogicService.Storage
         {
             try
             {
-                foreach(var item in await (await LocalStorage.GetPhotoAsync()).GetFilesAsync())
-                {
-                    await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetPhotoAsync(), item);
-                }
                 foreach (var item in await (await LocalStorage.GetDataAsync()).GetFilesAsync())
                 {
                     await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetDataAsync(), item);
@@ -39,12 +35,6 @@ namespace LogicService.Storage
             bool sign = false;
             try
             {
-                foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetPhotoAsync()))
-                {
-                    await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetPhotoAsync(),
-                        await LocalStorage.GetPhotoAsync(), item.Name);
-                    sign = true;
-                }
                 foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetDataAsync()))
                 {
                     await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetDataAsync(),
