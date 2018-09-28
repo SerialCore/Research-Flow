@@ -58,10 +58,10 @@ namespace Research_Flow
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 {
                     bool IsDownloaded = await Synchronization.DownloadAll();
-                    configState.Text += "\n\nAcquire files successfully.";
+                    configState.Text += "\nAcquire files successfully.";
                     if (!IsDownloaded)
                     {
-                        configState.Text += "\n\nTrying to use local files instead...";
+                        configState.Text += "\nTrying to use local files instead...";
                         var FeedSources = new ObservableCollection<FeedSource>()
                     {
                         new FeedSource{ID=TripleDES.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd"),
@@ -80,13 +80,13 @@ namespace Research_Flow
                         await LocalStorage.WriteObjectAsync(await LocalStorage.GetFeedAsync(), "RSS", FeedSources);
                     }
 
-                    configState.Text += "\n\nNow enjoy this application.";
+                    configState.Text += "\nNow enjoy this application.";
                     finish_config.IsEnabled = true;
                 });
             }
             catch (Exception ex)
             {
-                configState.Text += "\n\nFail: " + ex.Message;
+                configState.Text += "\nFail: " + ex.Message;
             }
         }
 
