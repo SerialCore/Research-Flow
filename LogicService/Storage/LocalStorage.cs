@@ -1,12 +1,9 @@
-﻿using ICSharpCode.SharpZipLib.Zip;
-using LogicService.Helper;
+﻿using LogicService.Helper;
 using LogicService.Security;
 using Microsoft.Toolkit.Uwp.Helpers;
 using System;
-using System.IO.Compression;
 using System.Threading.Tasks;
 using Windows.Storage;
-using ZipFile = ICSharpCode.SharpZipLib.Zip.ZipFile;
 
 namespace LogicService.Storage
 {
@@ -29,6 +26,11 @@ namespace LogicService.Storage
         {
             return await GetAppFolderAsync().CreateFolderAsync((ApplicationData.Current.LocalSettings.Values["AccountName"] as string),
                 CreationCollisionOption.OpenIfExists);
+        }
+
+        public static async Task<StorageFolder> GetFolderAsync(string folder)
+        {
+            return await (await GetUserFolderAsync()).CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
         }
 
         // synchronization
@@ -86,24 +88,6 @@ namespace LogicService.Storage
                 await file.DeleteAsync();
         }
 
-        // files package will be with synchronization together
-        public static async void CombineFiles(StorageFolder origin, StorageFolder target, string name)
-        {
-            using (ZipFile zip = ZipFile.Create(target.Path + "\\" + name))
-            {
-                zip.BeginUpdate();
-                foreach (StorageFile file in await origin.GetFilesAsync())
-                {
-                    zip.Add(origin.Path + "\\" + file.Name, file.Name);
-                }
-                zip.CommitUpdate();
-            }
-        }
-
-        public static void SeparateFiles(StorageFolder origin, string name, StorageFolder target)
-        {
-            new FastZip().ExtractZip(origin.Path + "\\" + name, target.Path, "");
-        }
     }
 
     #endregion
