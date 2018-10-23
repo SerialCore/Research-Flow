@@ -106,10 +106,11 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Encapsulates\FeedSource.cs" />
-    <Compile Include="Encapsulates\Paper.cs" />
-    <Compile Include="Helper\JsonHelper.cs" />
     <Compile Include="Helper\RegexHelper.cs" />
+    <Compile Include="Helper\UrlOperator.cs" />
+    <Compile Include="Objects\FeedSource.cs" />
+    <Compile Include="Objects\Paper.cs" />
+    <Compile Include="Helper\JsonHelper.cs" />
     <Compile Include="Helper\ToastGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\TripleDES.cs" />

@@ -35,11 +35,10 @@ namespace Research_Flow
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name = "e">Details about the launch request and process.</param>
-        protected async override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
             ConfigureUI();
-            await RegisterBackgroundTask();
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
             if (rootFrame == null)
@@ -78,13 +77,12 @@ namespace Research_Flow
             }
         }
 
-        protected async override void OnActivated(IActivatedEventArgs args)
+        protected override void OnActivated(IActivatedEventArgs args)
         {
             if(args.Kind==ActivationKind.Protocol)
             {
                 Frame rootFrame = Window.Current.Content as Frame;
                 ConfigureUI();
-                await RegisterBackgroundTask();
                 if (rootFrame == null)
                 {
                     rootFrame = new Frame();
@@ -115,18 +113,6 @@ namespace Research_Flow
             //appTitleBar.ButtonHoverForegroundColor = Colors.Transparent;
             appTitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
             //appTitleBar.ButtonInactiveForegroundColor = Colors.Transparent;
-        }
-
-        private async Task RegisterBackgroundTask()
-        {
-            var task = await ApplicationService.RegisterBackgroundTask(
-                typeof(CoreFlow.StorageTask),
-                "StorageTask",
-                new TimeTrigger(30, false),
-                null);
-
-            //task.Progress += TaskOnProgress;
-            //task.Completed += TaskOnCompleted;
         }
 
         /// <summary>

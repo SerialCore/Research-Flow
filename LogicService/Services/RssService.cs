@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using LogicService.Encapsulates;
+using LogicService.Objects;
 using Windows.Web.Syndication;
 
 namespace LogicService.Services

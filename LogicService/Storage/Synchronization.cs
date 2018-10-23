@@ -1,4 +1,5 @@
 ﻿using ICSharpCode.SharpZipLib.Zip;
+using LogicService.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,19 @@ namespace LogicService.Storage
     public class Synchronization
     {
 
-        public static void ScanChanges()
+        public async static void ScanChanges()
         {
-            // access database
+            try
+            {
+                if ((await OneDriveStorage.GetDataAsync()).DateModified > ApplicationService.LastLaunchTime)
+                    await DownloadAll();
+                else
+                    await UploadAll();
+            }
+            catch
+            {
+                // network
+            }
         }
 
         public static async Task<bool> UploadAll()
@@ -34,7 +45,7 @@ namespace LogicService.Storage
             }
         }
 
-        public static async void Compression(StorageFolder origin)
+        private static async void Compression(StorageFolder origin)
         {
             using (ZipFile zip = ZipFile.Create((await LocalStorage.GetDataAsync()).Path + "\\" + origin.Name))
             {
@@ -70,7 +81,7 @@ namespace LogicService.Storage
             }
         }
 
-        public static async void UnCompression(StorageFolder target)
+        private static async void UnCompression(StorageFolder target)
         {
             new FastZip().ExtractZip((await LocalStorage.GetDataAsync()).Path + "\\" + target.Name, target.Path, "");
         }

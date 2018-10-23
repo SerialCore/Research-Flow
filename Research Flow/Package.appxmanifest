@@ -37,11 +37,6 @@
             <Task Type="timer" />
           </BackgroundTasks>
         </Extension>
-        <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.BingTask">
-          <BackgroundTasks>
-            <Task Type="timer" />
-          </BackgroundTasks>
-        </Extension>
         <uap:Extension Category="windows.protocol">
           <uap:Protocol Name="blamderrobot" />
         </uap:Extension>

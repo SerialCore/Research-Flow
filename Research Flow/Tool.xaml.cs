@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using LogicService.Encapsulates;
+using LogicService.Objects;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.System;

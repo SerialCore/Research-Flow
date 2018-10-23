@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Web.Syndication;
 
-namespace LogicService.Encapsulates
+namespace LogicService.Objects
 {
     public class FeedSource
     {

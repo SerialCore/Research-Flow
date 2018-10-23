@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LogicService.Storage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace CoreFlow
         {
             var deferral = taskInstance.GetDeferral();
 
-
+            Synchronization.ScanChanges();
 
             deferral.Complete();
         }

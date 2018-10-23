@@ -1,10 +1,13 @@
-﻿using LogicService.Helper;
+﻿using CoreFlow;
+using LogicService.Helper;
 using LogicService.Services;
 using LogicService.Storage;
 using Research_Flow.Pages;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Graphics.Display;
@@ -33,9 +36,16 @@ namespace Research_Flow
             this.InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             Login();
+            //await ApplicationService.RegisterBackgroundTask(typeof(StorageTask), "CoreFlow.StorageTask",
+            //    new SystemTrigger(SystemTriggerType.UserPresent, false),
+            //    new SystemCondition(SystemConditionType.UserPresent));
+            await Task.Run(() =>
+            {
+                Synchronization.ScanChanges();
+            });
         }
 
         #region NavView

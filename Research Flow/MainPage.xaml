@@ -9,7 +9,7 @@
     mc:Ignorable="d">
 
     <Grid x:Name="FullPage" Background="LightSkyBlue">
-
+        
         <NavigationView x:Name="NavView"
                         ItemInvoked="NavView_ItemInvoked"
                         SelectionChanged="NavView_SelectionChanged"
@@ -95,7 +95,7 @@
                                     <MenuFlyout>
                                         <MenuFlyoutItem Text="Review" Click="Give_Rate"/>
                                         <MenuFlyoutItem Text="FeedBack" Click="Give_Feedback"/>
-                                        <MenuFlyoutItem Text="Tutorials" Click="Open_Tutorials"/>
+                                        <MenuFlyoutItem Text="How-Tos" Click="Open_Tutorials"/>
                                     </MenuFlyout>
                                 </FlyoutBase.AttachedFlyout>
                             </AppBarButton>

@@ -1,4 +1,4 @@
-﻿using LogicService.Encapsulates;
+﻿using LogicService.Objects;
 using LogicService.Security;
 using LogicService.Services;
 using LogicService.Storage;
