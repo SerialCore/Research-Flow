@@ -4,7 +4,6 @@ using LogicService.Services;
 using LogicService.Storage;
 using System;
 using System.Collections.ObjectModel;
-using Windows.Storage;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -27,13 +26,13 @@ namespace Research_Flow
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (ApplicationData.Current.LocalSettings.Values.ContainsKey("AccountName"))
+            if (ApplicationService.ContainsKey("AccountName"))
                 Login_Tapped(null, null);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            ApplicationData.Current.LocalSettings.Values["Configured"] = 1;
+            ApplicationService.Configured = 1;
         }
 
         private async void Login_Tapped(object sender, TappedRoutedEventArgs e)
@@ -41,7 +40,7 @@ namespace Research_Flow
             if (await GraphService.ServiceLogin())
             {
                 accountStatu.Text = await GraphService.GetPrincipalName();
-                ApplicationData.Current.LocalSettings.Values["AccountName"] = await GraphService.GetPrincipalName();
+                ApplicationService.AccountName = await GraphService.GetPrincipalName();
                 ConfigureFile();
             }
             else

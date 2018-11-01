@@ -16,7 +16,7 @@ namespace LogicService.Storage
         {
             try
             {
-                if ((await OneDriveStorage.GetDataAsync()).DateModified > ApplicationService.LastLaunchTime)
+                if ((await OneDriveStorage.GetDataAsync()).DateModified > DateTime.FromBinary((long)ApplicationService.LocalDateModified))
                     await DownloadAll();
                 else
                     await UploadAll();
@@ -73,6 +73,8 @@ namespace LogicService.Storage
                         sign = true;
                     }
                 });
+                if (sign == true)
+                    ApplicationService.LocalDateModified = DateTime.Now.ToBinary();
                 return sign;
             }
             catch

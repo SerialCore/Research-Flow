@@ -11,10 +11,10 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <Pivot Margin="20,0">
-            <PivotItem Header="Flow">
+            <PivotItem Header="Project">
 
             </PivotItem>
-            <PivotItem Header="Paper">
+            <PivotItem Header="Flow">
 
             </PivotItem>
         </Pivot>

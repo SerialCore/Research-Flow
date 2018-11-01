@@ -1,5 +1,4 @@
-﻿using CoreFlow;
-using LogicService.Helper;
+﻿using LogicService.Helper;
 using LogicService.Services;
 using LogicService.Storage;
 using Research_Flow.Pages;
@@ -7,7 +6,6 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Graphics.Display;
@@ -39,9 +37,6 @@ namespace Research_Flow
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             Login();
-            //await ApplicationService.RegisterBackgroundTask(typeof(StorageTask), "CoreFlow.StorageTask",
-            //    new SystemTrigger(SystemTriggerType.UserPresent, false),
-            //    new SystemCondition(SystemConditionType.UserPresent));
             await Task.Run(() =>
             {
                 Synchronization.ScanChanges();
@@ -132,6 +127,9 @@ namespace Research_Flow
         private void WebPage_Click(object sender, RoutedEventArgs e)
             => ContentFrame.Navigate(typeof(WebPage));
 
+        private void Open_Tutorials(object sender, RoutedEventArgs e)
+            => ContentFrame.Navigate(typeof(Tutorials));
+
         #endregion
 
         #region Account
@@ -147,12 +145,12 @@ namespace Research_Flow
                 accountName.Text = name;
                 accountEmail.Text = email;
                 accountPhoto.ProfilePicture = image;
-                ApplicationData.Current.LocalSettings.Values["AccountName"] = await GraphService.GetPrincipalName();
+                ApplicationService.AccountName = await GraphService.GetPrincipalName();
             }
             else
             {
                 accountName.Text = "Offline";
-                accountEmail.Text = ApplicationData.Current.LocalSettings.Values["AccountName"] as string;
+                accountEmail.Text = ApplicationService.AccountName as string;
             }
         }
 
@@ -160,7 +158,7 @@ namespace Research_Flow
         {
             GraphService.ServiceLogout();
 
-            ApplicationData.Current.LocalSettings.Values.Remove("AccountName");
+            ApplicationService.RemoveKey("AccountName");
             account_exit.IsEnabled = false;
             accountLogout.Content = "restart this app";
             accountName.Text = "";
@@ -176,10 +174,18 @@ namespace Research_Flow
 
         private async void AccountLogout_Click(object sender, RoutedEventArgs e)
         {
-            if (ApplicationData.Current.LocalSettings.Values.ContainsKey("AccountName"))
+            if (ApplicationService.ContainsKey("AccountName"))
                 Logout();
             else
                 await CoreApplication.RequestRestartAsync(string.Empty);
+        }
+
+        private async void AccountSync_Click(object sender, RoutedEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                Synchronization.ScanChanges();
+            });
         }
 
         private void Account_exit_Click(object sender, RoutedEventArgs e)
@@ -277,9 +283,6 @@ namespace Research_Flow
                 }
             }
         }
-
-        private void Open_Tutorials(object sender, RoutedEventArgs e)
-            => ContentFrame.Navigate(typeof(Tutorials));
 
         private async void Give_Rate(object sender, RoutedEventArgs e)
             => await ApplicationService.ShowRatingReviewDialog();

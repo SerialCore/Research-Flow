@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Background;
 using Windows.Services.Store;
+using Windows.Storage;
 using Windows.System;
 
 namespace LogicService.Services
@@ -59,6 +60,25 @@ namespace LogicService.Services
         public static void TrackAppUse(LaunchActivatedEventArgs args)
         {
             SystemInformation.TrackAppUse(args);
+        }
+
+        #endregion
+
+        #region Settings
+        // => operator means read-only
+
+        public static object AccountName = ApplicationData.Current.LocalSettings.Values["AccountName"];
+
+        public static object Configured = ApplicationData.Current.LocalSettings.Values["Configured"];
+
+        public static object LocalDateModified = ApplicationData.Current.LocalSettings.Values["LocalDateModified"];
+
+        public static void RemoveKey(string key)
+            => ApplicationData.Current.LocalSettings.Values.Remove(key);
+
+        public static bool ContainsKey(string key)
+        {
+            return ApplicationData.Current.LocalSettings.Values.ContainsKey(key) ? true : false;
         }
 
         #endregion

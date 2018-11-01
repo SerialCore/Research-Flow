@@ -1,5 +1,6 @@
 ﻿using LogicService.Helper;
 using LogicService.Security;
+using LogicService.Services;
 using Microsoft.Toolkit.Uwp.Helpers;
 using System;
 using System.Threading.Tasks;
@@ -54,23 +55,12 @@ namespace LogicService.Storage
 
         #region Operator
 
-        private static readonly LocalObjectStorageHelper localObject = new LocalObjectStorageHelper();
-
-        public static async Task<StorageFile> WriteTypeAsync(string path, Type o)
-        {
-            return await localObject.SaveFileAsync<Type>(path, o);
-        }
-
-        public static async Task<Type> ReadTypeAsync(string path, Type t)
-        {
-            return await localObject.ReadFileAsync<Type>(path, t);
-        }
-
         public static async Task<StorageFile> WriteObjectAsync(StorageFolder folder, string name, object o, string key = null)
         {
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.ReplaceExisting);
             string content = JsonHelper.SerializeObject(o);
             await FileIO.WriteTextAsync(file, TripleDES.Encrypt(content, key));
+            ApplicationService.LocalDateModified = DateTime.Now.ToBinary();
             return file;
         }
 
@@ -85,7 +75,10 @@ namespace LogicService.Storage
         {
             StorageFile file = await folder.GetFileAsync(name);
             if (file != null)
+            {
                 await file.DeleteAsync();
+                ApplicationService.LocalDateModified = DateTime.Now.ToBinary();
+            }
         }
 
     }

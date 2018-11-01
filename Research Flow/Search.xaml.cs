@@ -30,11 +30,6 @@ namespace Research_Flow
             InitializeData();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-
-        }
-
         private async void InitializeData()
         {
             // there must be feed source file
@@ -64,7 +59,7 @@ namespace Research_Flow
             var button = (Button)sender;
             foreach (var item in FeedSources)
             {
-                if (item.ID.Equals((string)(button.Tag)))
+                if (item.ID.Equals((string)button.Tag))
                 {
                     source_panel.Visibility = Visibility.Visible;
                     currentFeed = item;

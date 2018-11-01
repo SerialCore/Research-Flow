@@ -11,9 +11,6 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <Pivot Margin="20,0">
-            <PivotItem Header="Flow">
-
-            </PivotItem>
             <PivotItem Header="RSS">
                 <Grid >
                     <Grid.RowDefinitions>
@@ -98,6 +95,9 @@
             </PivotItem>
             <PivotItem Header="Crawler">
                 
+            </PivotItem>
+            <PivotItem Header="Flow">
+
             </PivotItem>
         </Pivot>
 
