@@ -1,11 +1,9 @@
-﻿using LogicService.Helper;
-using LogicService.Services;
-using Microsoft.HockeyApp;
+﻿using LogicService.Services;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Push;
 using System;
-using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.ApplicationModel.Background;
 using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Xaml;
@@ -25,7 +23,7 @@ namespace Research_Flow
         /// </summary>
         public App()
         {
-            Microsoft.HockeyApp.HockeyClient.Current.Configure("5314ea3e424f484183997e8252fef7af");
+            AppCenter.Start("5314ea3e-424f-4841-8399-7e8252fef7af", typeof(Push));
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
