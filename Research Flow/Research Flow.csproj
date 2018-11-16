@@ -282,13 +282,13 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CoreFlow\CoreFlow.csproj">
+      <Project>{7948c293-bf9c-4a99-8904-e18a8c66fca4}</Project>
+      <Name>CoreFlow</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LogicService\LogicService.csproj">
       <Project>{e77fadc0-a4ea-4081-b574-f459c3549078}</Project>
       <Name>LogicService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TaskFlow\CoreFlow.csproj">
-      <Project>{8a62f5fc-a097-47ee-93c8-0b60174f21b4}</Project>
-      <Name>CoreFlow</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

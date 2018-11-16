@@ -146,12 +146,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ResearchLearning\ResearchLearning.csproj">
-      <Project>{8e8efbab-b826-4ebb-8bfa-107f508d1164}</Project>
-      <Name>ResearchLearning</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +155,15 @@
     <SDKReference Include="Microsoft.VCLibs, Version=14.0">
       <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
     </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Learning\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Azop\Azop.csproj">
+      <Project>{0c1d7c38-e038-4c9d-8a4f-7e968b1223f0}</Project>
+      <Name>Azop</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

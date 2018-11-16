@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8A62F5FC-A097-47EE-93C8-0B60174F21B4}</ProjectGuid>
+    <ProjectGuid>{7948C293-BF9C-4A99-8904-E18A8C66FCA4}</ProjectGuid>
     <OutputType>winmdobj</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CoreFlow</RootNamespace>
@@ -107,9 +107,10 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="StorageTask.cs" />
     <Compile Include="FeedTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StorageTask.cs" />
+    <Compile Include="VoiceCommandService.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
@@ -121,9 +122,6 @@
       <Project>{e77fadc0-a4ea-4081-b574-f459c3549078}</Project>
       <Name>LogicService</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Crawling\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

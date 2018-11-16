@@ -37,7 +37,6 @@ namespace Research_Flow
             {
                 new StoreApp{ Name = "物理实验助手", AppUri = new Uri("blamderphylab:"), LogoUri = new Uri("ms-appx:///Assets/Logos/phyMylab_logo.png") },
                 new StoreApp{ Name = "力学量采集器", AppUri = new Uri("blamderblackbox:"), LogoUri = new Uri("ms-appx:///Assets/Logos/blackbox_logo.png") },
-                new StoreApp{ Name = "enGJFer", AppUri = new Uri("blamderengjfer:"), LogoUri = new Uri("ms-appx:///Assets/Logos/enGJFer_logo.png") },
                 new StoreApp{ Name = "Paint Panel", AppUri = new Uri("blamderpaint:"), LogoUri = new Uri("ms-appx:///Assets/Logos/paintpanel_logo.png") }
             };
             this.DataContext = this;

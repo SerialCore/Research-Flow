@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ResearchLearning
+namespace Azop
 {
     public class Class1
     {

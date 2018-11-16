@@ -72,9 +72,9 @@ namespace LogicService.Storage
                         UnCompression(await LocalStorage.GetFolderAsync(item.Name));
                         sign = true;
                     }
+                    if (sign == true)
+                        ApplicationService.LocalDateModified = DateTime.Now.ToBinary();
                 });
-                if (sign == true)
-                    ApplicationService.LocalDateModified = DateTime.Now.ToBinary();
                 return sign;
             }
             catch

@@ -74,7 +74,7 @@ namespace LogicService.Storage
 
         public static async Task<OneDriveStorageFolder> CreateFolderAsync(OneDriveStorageFolder folder, string foldername)
         {
-            return await folder.StorageFolderPlatformService.CreateFolderAsync(foldername, CreationCollisionOption.GenerateUniqueName);
+            return await folder.StorageFolderPlatformService.CreateFolderAsync(foldername, CreationCollisionOption.OpenIfExists);
         }
 
         public static async Task<OneDriveStorageFolder> RetrieveSubFolderAsync(OneDriveStorageFolder folder, string path)
