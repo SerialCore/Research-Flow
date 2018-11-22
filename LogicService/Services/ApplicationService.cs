@@ -67,11 +67,41 @@ namespace LogicService.Services
         #region Settings
         // => operator means read-only
 
-        public static object AccountName = ApplicationData.Current.LocalSettings.Values["AccountName"];
+        public static object AccountName
+        {
+            get
+            {
+                return ApplicationData.Current.LocalSettings.Values["AccountName"];
+            }
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values["AccountName"] = value;
+            }
+        }
 
-        public static object Configured = ApplicationData.Current.LocalSettings.Values["Configured"];
+        public static object Configured
+        {
+            get
+            {
+                return ApplicationData.Current.LocalSettings.Values["Configured"];
+            }
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values["Configured"] = value;
+            }
+        }
 
-        public static object LocalDateModified = ApplicationData.Current.LocalSettings.Values["LocalDateModified"];
+        public static object LocalDateModified
+        {
+            get
+            {
+                return ApplicationData.Current.LocalSettings.Values["LocalDateModified"];
+            }
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values["LocalDateModified"] = value;
+            }
+        }
 
         public static void RemoveKey(string key)
             => ApplicationData.Current.LocalSettings.Values.Remove(key);

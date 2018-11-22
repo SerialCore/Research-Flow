@@ -11,6 +11,7 @@
     <Grid x:Name="FullPage" Background="LightSkyBlue">
         
         <NavigationView x:Name="NavView"
+                        AlwaysShowHeader="True"
                         ItemInvoked="NavView_ItemInvoked"
                         SelectionChanged="NavView_SelectionChanged"
                         Loaded="NavView_Loaded"
@@ -122,7 +123,7 @@
                 </ListViewItem>
             </NavigationView.PaneFooter>
 
-            <Frame x:Name="ContentFrame" >
+            <Frame x:Name="ContentFrame">
                 <Frame.ContentTransitions>
                     <TransitionCollection>
                         <NavigationThemeTransition/>
