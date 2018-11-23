@@ -9,7 +9,7 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <Pivot Margin="20,0">
+        <Pivot Margin="20,0,20,10">
             <PivotItem Header="Panel">
                 <ScrollViewer>
                     <Grid >

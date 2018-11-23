@@ -8,17 +8,17 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid x:Name="FullPage" Background="LightSkyBlue">
-        
+    <Grid x:Name="FullPage" Background="Azure">
+
         <NavigationView x:Name="NavView"
-                        AlwaysShowHeader="True"
+                        PaneDisplayMode="Top"
+                        IsBackButtonVisible="Auto"
                         ItemInvoked="NavView_ItemInvoked"
                         SelectionChanged="NavView_SelectionChanged"
                         Loaded="NavView_Loaded"
                         Canvas.ZIndex="0">
 
             <NavigationView.MenuItems>
-                <NavigationViewItemHeader Content="Knowledge"/>
                 <NavigationViewItem Content="Overview" Tag="Overview">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEB68;"/>
@@ -31,7 +31,6 @@
                 </NavigationViewItem>
 
                 <NavigationViewItemSeparator/>
-                <NavigationViewItemHeader Content="Skills Training"/>
                 <NavigationViewItem Content="Topic" Tag="Topic">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEB50;"/>
@@ -49,7 +48,6 @@
                 </NavigationViewItem>
 
                 <NavigationViewItemSeparator/>
-                <NavigationViewItemHeader Content="Accessary"/>
                 <NavigationViewItem Content="Compose" Tag="Compose">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEA86;"/>
@@ -63,25 +61,13 @@
             </NavigationView.MenuItems>
 
             <NavigationView.AutoSuggestBox>
-                <AutoSuggestBox x:Name="ASB" QueryIcon="Find"/>
+                <AutoSuggestBox x:Name="ASB" QueryIcon="Find" Width="200"/>
             </NavigationView.AutoSuggestBox>
 
             <NavigationView.HeaderTemplate>
                 <DataTemplate>
-                    <Grid Margin="20,32,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Style="{StaticResource TitleTextBlockStyle}" 
-                                   FontSize="28"
-                                   VerticalAlignment="Top"
-                                   Text="Research Flow"/>
-                        <CommandBar Grid.Column="1"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Top"
-                                    DefaultLabelPosition="Right"
-                                    Background="Transparent">
+                    <Grid Margin="8,20,0,0">
+                        <CommandBar HorizontalAlignment="Left" VerticalAlignment="Top" DefaultLabelPosition="Right" Background="Transparent">
                             <AppBarButton Label="ScreenShot" Icon="AttachCamera" Tapped="Flyout_Tapped" Background="Transparent">
                                 <FlyoutBase.AttachedFlyout>
                                     <MenuFlyout>
@@ -101,25 +87,37 @@
                                 </FlyoutBase.AttachedFlyout>
                             </AppBarButton>
                         </CommandBar>
-                        </Grid>
+                    </Grid>
                 </DataTemplate>
             </NavigationView.HeaderTemplate>
 
             <NavigationView.PaneFooter>
                 <ListViewItem Tapped="Service_Tapped">
                     <Grid >
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="24"/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <PersonPicture Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" x:Name="accountPhoto" Height="24" Width="24"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" x:Name="accountName" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="1" Grid.Column="1" x:Name="accountEmail" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                        <PersonPicture Grid.Column="0" x:Name="accountPhoto" Height="24" Width="24"/>
+                        <TextBlock Grid.Column="1" x:Name="accountName" Margin="8,0,0,0" VerticalAlignment="Center"/>
                     </Grid>
+                    <FlyoutBase.AttachedFlyout>
+                        <Flyout>
+                            <Grid Width="270">
+                                <Image Source="/Assets/Logos/OneDrive_logo.png" Margin="10" VerticalAlignment="Top"/>
+                                <Grid Margin="0,70,0,70">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Button Grid.Row="0" x:Name="accountLogout" Content="Log out" Click="AccountLogout_Click"
+                        Height="32" Width="250" Margin="10" HorizontalAlignment="Right" Background="Red"/>
+                                    <Button Grid.Row="1" x:Name="accountSync" Content="Synchronize" Click="AccountSync_Click"
+                        Height="32" Width="250" Margin="10" HorizontalAlignment="Right" Background="LightBlue"/>
+                                </Grid>
+                            </Grid>
+                        </Flyout>
+                    </FlyoutBase.AttachedFlyout>
                 </ListViewItem>
             </NavigationView.PaneFooter>
 
@@ -132,28 +130,6 @@
             </Frame>
 
         </NavigationView>
-
-        <Grid x:Name="account_panel_background" Background="Black" Opacity="0.5" Visibility="Collapsed"/>
-        <Grid x:Name="account_panel" Height="580" Width="560" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="1" BorderBrush="Blue" Visibility="Collapsed">
-            <Image Source="/Assets/Logos/OneDrive_logo.png" Margin="40" VerticalAlignment="Top"/>
-            <Grid Margin="0,150,0,70">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Button Grid.Row="0" Grid.Column="0" x:Name="accountLogout" Content="Log out" Click="AccountLogout_Click"
-                        Height="32" Width="250" Margin="10" HorizontalAlignment="Right" Background="Red"/>
-                <Button Grid.Row="0" Grid.Column="1" x:Name="accountSync" Content="Synchronize" Click="AccountSync_Click"
-                        Height="32" Width="250" Margin="10" HorizontalAlignment="Right" Background="LightBlue"/>
-            </Grid>
-            <Button x:Name="account_exit" Click="Account_exit_Click" Content="OK" 
-                    Height="32" Width="250" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="LightSkyBlue"/>
-        </Grid>
 
         <toolkit:InAppNotification x:Name="InAppNotification" 
                                     ShowDismissButton="True"

@@ -139,18 +139,14 @@ namespace Research_Flow
             if (await GraphService.ServiceLogin())
             {
                 string name = await GraphService.GetDisplayName();
-                string email = await GraphService.GetPrincipalName();
                 BitmapImage image = new BitmapImage();
-                image.UriSource = new Uri("ms-appx:///Assets/Logos/Microsoft_logo.jpg");
+                image.UriSource = new Uri("ms-appx:///Assets/Logos/ResearchFlow_logo.jpg");
                 accountName.Text = name;
-                accountEmail.Text = email;
                 accountPhoto.ProfilePicture = image;
-                ApplicationService.AccountName = await GraphService.GetPrincipalName();
             }
             else
             {
                 accountName.Text = "Offline";
-                accountEmail.Text = ApplicationService.AccountName as string;
             }
         }
 
@@ -159,17 +155,15 @@ namespace Research_Flow
             GraphService.ServiceLogout();
 
             ApplicationService.RemoveKey("AccountName");
-            account_exit.IsEnabled = false;
+            ContentFrame.IsEnabled = false;
             accountLogout.Content = "restart this app";
+            accountSync.IsEnabled = false;
             accountName.Text = "";
-            accountEmail.Text = "";
         }
 
         private void Service_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-            account_panel.Visibility = Visibility.Visible;
-            account_panel_background.Visibility = Visibility.Visible;
-            NavView.IsEnabled = false;
+            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
         }
 
         private async void AccountLogout_Click(object sender, RoutedEventArgs e)
@@ -186,13 +180,6 @@ namespace Research_Flow
             {
                 Synchronization.ScanChanges();
             });
-        }
-
-        private void Account_exit_Click(object sender, RoutedEventArgs e)
-        {
-            account_panel.Visibility = Visibility.Collapsed;
-            account_panel_background.Visibility = Visibility.Collapsed;
-            NavView.IsEnabled = true;
         }
 
         #endregion

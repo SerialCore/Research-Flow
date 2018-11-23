@@ -40,7 +40,7 @@ namespace Research_Flow
                     await LocalStorage.GetFeedAsync(), "RSS") as ObservableCollection<FeedSource>;
             }
             catch { }
-            feedsource_list.ItemsSource = FeedSources;
+            feedSource_list.ItemsSource = FeedSources;
         }
 
         #region RSS
@@ -49,8 +49,6 @@ namespace Research_Flow
 
         // Used for item modification, not clicked item.
         private FeedSource currentFeed = null;
-
-        private void Open_Source(object sender, RoutedEventArgs e) => feedsource_view.IsPaneOpen = !feedsource_view.IsPaneOpen;
 
         private void Add_Source(object sender, RoutedEventArgs e) => source_panel.Visibility = Visibility.Visible;
 
@@ -161,10 +159,12 @@ namespace Research_Flow
         }
 
         private void RSS_SourceClick(object sender, ItemClickEventArgs e)
-            => SearchRss((e.ClickedItem as FeedSource));
+            => SearchRss(e.ClickedItem as FeedSource);
 
         private void RSS_ItemClick(object sender, ItemClickEventArgs e)
-            => this.Frame.Navigate(typeof(WebPage), (e.ClickedItem as FeedItem).Link);
+        {
+            this.feedItem_detail.IsPaneOpen = true;
+        }
 
         private async void SearchRss(FeedSource source)
         {
@@ -183,7 +183,7 @@ namespace Research_Flow
                         List<FeedItem> feeds = items as List<FeedItem>;
                         await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                         {
-                            feeditem_list.ItemsSource = feeds;
+                            feedItem_list.ItemsSource = feeds;
                             waiting_feed.IsActive = false;
                         });
                         if (feeds.Count > source.MaxCount)
@@ -208,7 +208,7 @@ namespace Research_Flow
                 {
                     List<FeedItem> feedItems = await LocalStorage.ReadObjectAsync<List<FeedItem>>(
                         await LocalStorage.GetFeedAsync(), source.ID, "hashashin" + source.ID) as List<FeedItem>;
-                    feeditem_list.ItemsSource = feedItems;
+                    feedItem_list.ItemsSource = feedItems;
                 }
                 catch { }
             }

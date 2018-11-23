@@ -12,7 +12,7 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17763.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.17134.0</TargetPlatformMinVersion>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -153,7 +153,6 @@
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-200.png" />
     <Content Include="Assets\Logos\blackbox_logo.png" />
-    <Content Include="Assets\Logos\enGJFer_logo.png" />
     <Content Include="Assets\Logos\Microsoft_logo.jpg" />
     <Content Include="Assets\Logos\paintpanel_logo.png" />
     <Content Include="Assets\Logos\phyMylab_logo.png" />
@@ -161,6 +160,7 @@
     <Content Include="Assets\Logos\OneDrive_icon.png" />
     <Content Include="Assets\Logos\OneDrive_icon_trans.png" />
     <Content Include="Assets\Logos\OneDrive_logo.png" />
+    <Content Include="Assets\Logos\ResearchFlow_logo.jpg" />
     <Content Include="Assets\SmallTile.scale-100.png" />
     <Content Include="Assets\SmallTile.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />

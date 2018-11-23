@@ -10,7 +10,7 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <Grid Margin="20,0">
+        <Grid Margin="20,0,20,10">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition Height="auto"/>

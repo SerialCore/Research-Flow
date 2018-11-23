@@ -10,10 +10,10 @@
 
     <Grid>
 
-        <NavigationView Canvas.ZIndex="0">
+        <NavigationView PaneDisplayMode="Top"
+                        IsBackButtonVisible="Auto">
 
             <NavigationView.MenuItems>
-                <NavigationViewItemHeader Content="Knowledge"/>
                 <NavigationViewItem Content="Overview" Tag="Overview">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEB68;"/>
@@ -26,7 +26,6 @@
                 </NavigationViewItem>
 
                 <NavigationViewItemSeparator/>
-                <NavigationViewItemHeader Content="Skills Training"/>
                 <NavigationViewItem Content="Topic" Tag="Topic">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEB50;"/>
@@ -44,7 +43,6 @@
                 </NavigationViewItem>
 
                 <NavigationViewItemSeparator/>
-                <NavigationViewItemHeader Content="Accessary"/>
                 <NavigationViewItem Content="Compose" Tag="Compose">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEA86;"/>
@@ -58,32 +56,12 @@
             </NavigationView.MenuItems>
 
             <NavigationView.AutoSuggestBox>
-                <AutoSuggestBox QueryIcon="Find"/>
+                <AutoSuggestBox x:Name="ASB" QueryIcon="Find" Width="200"/>
             </NavigationView.AutoSuggestBox>
 
-            <NavigationView.HeaderTemplate>
-                <DataTemplate>
-                    <Grid Margin="20,32,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Style="{StaticResource TitleTextBlockStyle}" 
-                                   FontSize="28"
-                                   VerticalAlignment="Top"
-                                   Text="Research Flow"/>
-                        <CommandBar Grid.Column="1"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Top"
-                                    DefaultLabelPosition="Right"
-                                    Background="Transparent">
-                            <AppBarButton Label="ScreenShot" Icon="AttachCamera" Background="Transparent"/>
-                            <AppBarButton Label="WebPage" Icon="Link" Background="Transparent"/>
-                            <AppBarButton Label="Application" Icon="Shop" Background="Transparent"/>
-                        </CommandBar>
-                    </Grid>
-                </DataTemplate>
-            </NavigationView.HeaderTemplate>
+            <NavigationView.PaneFooter>
+                <PersonPicture Grid.Column="0" Height="18" Width="18"/>
+            </NavigationView.PaneFooter>
 
         </NavigationView>
 
@@ -92,17 +70,17 @@
             <TextBlock Text="Research Flow" Foreground="White" FontSize="40" Margin="10" VerticalAlignment="Top" HorizontalAlignment="Center"/>
             <Grid Margin="0,80,0,50" Background="Beige">
                 <StackPanel>
-                    <ListViewItem Tapped="Login_Tapped" Height="24">
+                    <ListViewItem Tapped="Login_Tapped" Height="48">
                         <Grid >
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="24"/>
+                                <ColumnDefinition Width="48"/>
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <PersonPicture Grid.Column="0" ProfilePicture="/Assets/Logos/Microsoft_logo.jpg" Height="24" Width="24"/>
-                            <TextBlock Grid.Column="1" x:Name="accountStatu" Text="Log in with Microsoft account" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                            <Image Grid.Column="0" Source="/Assets/Logos/OneDrive_icon_trans.png" Height="48" Width="48"/>
+                            <TextBlock Grid.Column="1" x:Name="accountStatu" Text="Login with Microsoft account" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
                         </Grid>
                     </ListViewItem>
-                    <TextBlock x:Name="configState" Margin="10" TextLineBounds="Full"/>
+                    <TextBlock x:Name="configState" Margin="10" LineHeight="20"/>
                 </StackPanel>
                 <Button x:Name="finish_config" Content="Let's begin" IsEnabled="False" Click="Finish_config_Click" 
                             Height="32" Width="200" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20"/>

@@ -10,25 +10,17 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <Pivot Margin="20,0">
+        <Pivot Margin="20,0,20,10">
             <PivotItem Header="RSS">
-                <Grid >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" Orientation="Horizontal">
-                        <AppBarButton Label="Source" Click="Open_Source" LabelPosition="Default">
-                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE88E;" />
-                        </AppBarButton>
-                        <AppBarButton Label="Newest" LabelPosition="Default">
-                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE82F;" />
-                        </AppBarButton>
-                    </StackPanel>
-                    <SplitView x:Name="feedsource_view" Grid.Row="1" OpenPaneLength="300" IsPaneOpen="True" DisplayMode="Inline">
-                        <SplitView.Pane>
-                            <Grid>
-                                <ListView x:Name="feedsource_list" IsItemClickEnabled="True" ItemClick="RSS_SourceClick" Margin="0,0,0,72">
+                <SplitView x:Name="feedItem_detail" DisplayMode="Inline" PanePlacement="Right">
+                    <SplitView.Content>
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="300"/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <ListView x:Name="feedSource_list" IsItemClickEnabled="True" ItemClick="RSS_SourceClick" Margin="0,0,0,72">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <Grid>
@@ -72,10 +64,8 @@
                                     <Button Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedDelete" Click="Delete_FeedSetting" Content="Delete" Margin="10" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
                                 </Grid>
                             </Grid>
-                        </SplitView.Pane>
-                        <SplitView.Content>
-                            <Grid>
-                                <ListView x:Name="feeditem_list" IsItemClickEnabled="True" ItemClick="RSS_ItemClick">
+                            <Grid Grid.Column="1">
+                                <ListView x:Name="feedItem_list" IsItemClickEnabled="True" ItemClick="RSS_ItemClick">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel >
@@ -89,9 +79,9 @@
                                 </ListView>
                                 <ProgressRing x:Name="waiting_feed" Height="100" Width="100"/>
                             </Grid>
-                        </SplitView.Content>
-                    </SplitView>
-                </Grid>
+                        </Grid>
+                    </SplitView.Content>
+                </SplitView>
             </PivotItem>
             <PivotItem Header="Crawler">
                 
