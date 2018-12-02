@@ -12,9 +12,7 @@
         <Pivot Margin="20,0,20,10">
             <PivotItem Header="Panel">
                 <ScrollViewer>
-                    <Grid >
 
-                    </Grid>
                 </ScrollViewer>
             </PivotItem>
             <PivotItem Header="Inform">

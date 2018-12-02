@@ -13,13 +13,18 @@
         <Pivot Margin="20,0,20,10">
             <PivotItem Header="RSS">
                 <SplitView x:Name="feedItem_detail" DisplayMode="Inline" PanePlacement="Right">
+                    <SplitView.Pane>
+                        <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                            
+                        </Grid>
+                    </SplitView.Pane>
                     <SplitView.Content>
                         <Grid >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="300"/>
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="0">
+                            <Grid Grid.Column="0" Background="{ThemeResource AppBarBackgroundThemeBrush}">
                                 <ListView x:Name="feedSource_list" IsItemClickEnabled="True" ItemClick="RSS_SourceClick" Margin="0,0,0,72">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>

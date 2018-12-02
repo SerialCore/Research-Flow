@@ -8,15 +8,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid x:Name="FullPage" Background="Azure">
+    <Grid x:Name="FullPage" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <NavigationView x:Name="NavView"
                         PaneDisplayMode="Top"
                         IsBackButtonVisible="Auto"
                         ItemInvoked="NavView_ItemInvoked"
                         SelectionChanged="NavView_SelectionChanged"
-                        Loaded="NavView_Loaded"
-                        Canvas.ZIndex="0">
+                        Loaded="NavView_Loaded">
 
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Overview" Tag="Overview">
@@ -64,43 +63,40 @@
                 <AutoSuggestBox x:Name="ASB" QueryIcon="Find" Width="200"/>
             </NavigationView.AutoSuggestBox>
 
-            <NavigationView.HeaderTemplate>
-                <DataTemplate>
-                    <Grid Margin="8,20,0,0">
-                        <CommandBar HorizontalAlignment="Left" VerticalAlignment="Top" DefaultLabelPosition="Right" Background="Transparent">
-                            <AppBarButton Label="ScreenShot" Icon="AttachCamera" Tapped="Flyout_Tapped" Background="Transparent">
-                                <FlyoutBase.AttachedFlyout>
-                                    <MenuFlyout>
-                                        <MenuFlyoutItem Text="Share your idea" Click="ScreenShot_Share"/>
-                                        <MenuFlyoutItem Text="Upload to OneDrive" Click="ScreenShot_Save"/>
-                                    </MenuFlyout>
-                                </FlyoutBase.AttachedFlyout>
-                            </AppBarButton>
-                            <AppBarButton Label="WebPage" Icon="Link" Click="WebPage_Click" Background="Transparent"/>
-                            <AppBarButton Label="Application" Icon="Shop" Tapped="Flyout_Tapped" Background="Transparent">
-                                <FlyoutBase.AttachedFlyout>
-                                    <MenuFlyout>
-                                        <MenuFlyoutItem Text="Review" Click="Give_Rate"/>
-                                        <MenuFlyoutItem Text="FeedBack" Click="Give_Feedback"/>
-                                        <MenuFlyoutItem Text="How-Tos" Click="Open_Tutorials"/>
-                                    </MenuFlyout>
-                                </FlyoutBase.AttachedFlyout>
-                            </AppBarButton>
-                        </CommandBar>
-                    </Grid>
-                </DataTemplate>
-            </NavigationView.HeaderTemplate>
+            <NavigationView.Header>
+                <Grid>
+                    <CommandBar HorizontalAlignment="Right" VerticalAlignment="Top" DefaultLabelPosition="Right" 
+                                Background="Transparent" OverflowButtonVisibility="Collapsed">
+                        <AppBarButton Label="WebPage" Icon="Link" Click="WebPage_Click" Background="Transparent"/>
+                        <AppBarSeparator/>
+                        <AppBarButton Label="ScreenShot" Icon="AttachCamera" Tapped="Flyout_Tapped" Background="Transparent">
+                            <FlyoutBase.AttachedFlyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Text="Save"/>
+                                    <MenuFlyoutItem Text="Share" Click="ScreenShot_Share"/>
+                                    <MenuFlyoutItem Text="Upload" Click="ScreenShot_Upload"/>
+                                </MenuFlyout>
+                            </FlyoutBase.AttachedFlyout>
+                        </AppBarButton>
+                        <AppBarButton Label="Application" Icon="Shop" Tapped="Flyout_Tapped" Background="Transparent">
+                            <FlyoutBase.AttachedFlyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Text="Review" Click="Give_Rate"/>
+                                    <MenuFlyoutItem Text="FeedBack" Click="Give_Feedback"/>
+                                    <MenuFlyoutItem Text="How-Tos" Click="Open_Tutorials"/>
+                                </MenuFlyout>
+                            </FlyoutBase.AttachedFlyout>
+                        </AppBarButton>
+                    </CommandBar>
+                </Grid>
+            </NavigationView.Header>
 
             <NavigationView.PaneFooter>
-                <ListViewItem Tapped="Service_Tapped">
-                    <Grid >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="24"/>
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <PersonPicture Grid.Column="0" x:Name="accountPhoto" Height="24" Width="24"/>
-                        <TextBlock Grid.Column="1" x:Name="accountName" Margin="8,0,0,0" VerticalAlignment="Center"/>
-                    </Grid>
+                <ListViewItem Tapped="Flyout_Tapped">
+                    <StackPanel Orientation="Horizontal">
+                        <PersonPicture x:Name="accountPhoto" Height="24" Width="24"/>
+                        <TextBlock x:Name="accountName" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
                     <FlyoutBase.AttachedFlyout>
                         <Flyout>
                             <Grid Width="270">
@@ -109,10 +105,14 @@
                                     <Grid.RowDefinitions>
                                         <RowDefinition />
                                         <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <Button Grid.Row="0" x:Name="accountLogout" Content="Log out" Click="AccountLogout_Click"
+                                    <!--<TextBlock Grid.Row="0" x:Name="accountName" Margin="8,0,0,0" VerticalAlignment="Center"/>-->
+                                    <TextBlock Grid.Row="1" x:Name="accountEmail" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                                    <Button Grid.Row="2" x:Name="accountLogout" Content="Log out" Click="AccountLogout_Click"
                         Height="32" Width="250" Margin="10" HorizontalAlignment="Right" Background="Red"/>
-                                    <Button Grid.Row="1" x:Name="accountSync" Content="Synchronize" Click="AccountSync_Click"
+                                    <Button Grid.Row="3" x:Name="accountSync" Content="Synchronize" Click="AccountSync_Click"
                         Height="32" Width="250" Margin="10" HorizontalAlignment="Right" Background="LightBlue"/>
                                 </Grid>
                             </Grid>

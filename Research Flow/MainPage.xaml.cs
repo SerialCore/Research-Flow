@@ -139,9 +139,11 @@ namespace Research_Flow
             if (await GraphService.ServiceLogin())
             {
                 string name = await GraphService.GetDisplayName();
+                string email = await GraphService.GetPrincipalName();
                 BitmapImage image = new BitmapImage();
                 image.UriSource = new Uri("ms-appx:///Assets/Logos/ResearchFlow_logo.jpg");
                 accountName.Text = name;
+                accountEmail.Text = email;
                 accountPhoto.ProfilePicture = image;
             }
             else
@@ -159,11 +161,7 @@ namespace Research_Flow
             accountLogout.Content = "restart this app";
             accountSync.IsEnabled = false;
             accountName.Text = "";
-        }
-
-        private void Service_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {
-            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+            accountEmail.Text = "";
         }
 
         private async void AccountLogout_Click(object sender, RoutedEventArgs e)
@@ -231,7 +229,7 @@ namespace Research_Flow
             deferral.Complete();
         }
 
-        private async void ScreenShot_Save(object sender, RoutedEventArgs e)
+        private async void ScreenShot_Upload(object sender, RoutedEventArgs e)
         {
             var bitmap = new RenderTargetBitmap();
             StorageFile file = await (await LocalStorage.GetPhotoAsync()).CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", 
