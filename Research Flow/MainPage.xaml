@@ -82,7 +82,7 @@
                             <FlyoutBase.AttachedFlyout>
                                 <MenuFlyout>
                                     <MenuFlyoutItem Text="Review" Click="Give_Rate"/>
-                                    <MenuFlyoutItem Text="FeedBack" Click="Give_Feedback"/>
+                                    <MenuFlyoutItem Text="Feedback" Click="Give_Rate"/>
                                     <MenuFlyoutItem Text="How-Tos" Click="Open_Tutorials"/>
                                 </MenuFlyout>
                             </FlyoutBase.AttachedFlyout>

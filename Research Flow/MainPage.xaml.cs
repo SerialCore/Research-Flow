@@ -13,6 +13,7 @@ using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Notifications;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -164,14 +165,6 @@ namespace Research_Flow
             accountEmail.Text = "";
         }
 
-        private async void AccountLogout_Click(object sender, RoutedEventArgs e)
-        {
-            if (ApplicationService.ContainsKey("AccountName"))
-                Logout();
-            else
-                await CoreApplication.RequestRestartAsync(string.Empty);
-        }
-
         private async void AccountSync_Click(object sender, RoutedEventArgs e)
         {
             await Task.Run(() =>
@@ -179,6 +172,31 @@ namespace Research_Flow
                 Synchronization.ScanChanges();
             });
         }
+
+        private async void AccountLogout_Click(object sender, RoutedEventArgs e)
+        {
+            var messageDialog = new MessageDialog("Are you sure to log out?", "Operation confirming");
+            messageDialog.Commands.Add(new UICommand(
+                "True",
+                new UICommandInvokedHandler(this.DeleteInvokedHandler)));
+            messageDialog.Commands.Add(new UICommand(
+                "Joke",
+                new UICommandInvokedHandler(this.CancelInvokedHandler)));
+
+            messageDialog.DefaultCommandIndex = 0;
+            messageDialog.CancelCommandIndex = 1;
+            await messageDialog.ShowAsync();
+        }
+
+        private async void DeleteInvokedHandler(IUICommand command)
+        {
+            if (ApplicationService.ContainsKey("AccountName"))
+                Logout();
+            else
+                await CoreApplication.RequestRestartAsync(string.Empty);
+        }
+
+        private void CancelInvokedHandler(IUICommand command) { }
 
         #endregion
 
@@ -271,9 +289,6 @@ namespace Research_Flow
 
         private async void Give_Rate(object sender, RoutedEventArgs e)
             => await ApplicationService.ShowRatingReviewDialog();
-
-        private async void Give_Feedback(object sender, RoutedEventArgs e)
-            => await ApplicationService.LaunchFeedbackAsync();
 
         #endregion
 

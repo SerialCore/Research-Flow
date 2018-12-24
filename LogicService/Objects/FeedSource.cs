@@ -7,7 +7,7 @@ using Windows.Web.Syndication;
 
 namespace LogicService.Objects
 {
-    public class FeedSource
+    public class RSSSource
     {
 
         public string ID { get; set; }

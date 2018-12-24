@@ -1,5 +1,4 @@
-﻿using Microsoft.Services.Store.Engagement;
-using Microsoft.Toolkit.Uwp.Helpers;
+﻿using Microsoft.Toolkit.Uwp.Helpers;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Globalization;
@@ -112,9 +111,6 @@ namespace LogicService.Services
         }
 
         #endregion
-
-        public static async Task LaunchFeedbackAsync()
-            => await StoreServicesFeedbackLauncher.GetDefault().LaunchAsync();
 
         public static async Task<bool> ShowRatingReviewDialog()
         {
