@@ -40,8 +40,6 @@ namespace Research_Flow.Pages
             string link = e.Parameter as string;
             if (!string.IsNullOrEmpty(link))
                 webView.Navigate(new Uri(link));
-            else
-                webView.Navigate(new Uri("https://blamder.github.io/Research-Flow/"));
         }
 
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)

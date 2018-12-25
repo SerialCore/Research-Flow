@@ -78,7 +78,7 @@
                         </ListView>
                         <ProgressRing x:Name="waiting_feed" Height="100" Width="100"/>
                     </Grid>
-                    <SplitView Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedItem_detail" OpenPaneLength="400" DisplayMode="Inline" PanePlacement="Right">
+                    <SplitView Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedItem_detail" OpenPaneLength="400" DisplayMode="Overlay" PanePlacement="Right">
                         <SplitView.Pane>
                             <ScrollViewer Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="10,0">
                                 <StackPanel>
@@ -87,6 +87,7 @@
                                     <TextBlock x:Name="feedPublished" FontSize="16" Style="{ThemeResource SubtitleTextBlockStyle}"/>
                                     <TextBlock x:Name="feedSummary" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>
                                     <TextBlock x:Name="feedXml" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>
+                                    <WebView x:Name="_feedXml" Height="500"/>
                                 </StackPanel>
                             </ScrollViewer>
                         </SplitView.Pane>

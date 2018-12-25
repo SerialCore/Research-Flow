@@ -190,6 +190,7 @@ namespace Research_Flow
             feedSummary.Text = item.Summary + "\n";
             feedXml.Text = item.Xml;
             feedBrowse.Tag = item.Link;
+            _feedXml.NavigateToString(item.Xml);
         }
 
         private void Browse_Feed(object sender, RoutedEventArgs e)

@@ -11,7 +11,9 @@ using Windows.ApplicationModel.DataTransfer;
 using Windows.Graphics.Display;
 using Windows.Graphics.Imaging;
 using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
+using Windows.System;
 using Windows.UI.Notifications;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -159,8 +161,8 @@ namespace Research_Flow
 
             ApplicationService.RemoveKey("AccountName");
             ContentFrame.IsEnabled = false;
+            ContentHeader.IsEnabled = false;
             accountLogout.Content = "restart this app";
-            accountSync.IsEnabled = false;
             accountName.Text = "";
             accountEmail.Text = "";
         }
@@ -204,6 +206,35 @@ namespace Research_Flow
 
         private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
             => FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+
+        private async void ScreenShot_Save(object sender, RoutedEventArgs e)
+        {
+            FileSavePicker picker = new FileSavePicker();
+            picker.FileTypeChoices.Add("ScreenShot", new string[] { ".png" });
+            picker.SuggestedStartLocation = PickerLocationId.Desktop;
+            picker.SuggestedFileName = "ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png";
+            StorageFile file=await picker.PickSaveFileAsync();
+            if (file != null)
+            {
+                var bitmap = new RenderTargetBitmap();
+                await bitmap.RenderAsync(FullPage);
+                var buffer = await bitmap.GetPixelsAsync();
+                using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    var encode = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, stream);
+                    encode.SetPixelData(
+                        BitmapPixelFormat.Bgra8,
+                        BitmapAlphaMode.Ignore,
+                        (uint)bitmap.PixelWidth,
+                        (uint)bitmap.PixelHeight,
+                        DisplayInformation.GetForCurrentView().LogicalDpi,
+                        DisplayInformation.GetForCurrentView().LogicalDpi,
+                        buffer.ToArray()
+                       );
+                    await encode.FlushAsync();
+                }
+            }
+        }
 
         private void ScreenShot_Share(object sender, RoutedEventArgs e)
         {
@@ -289,6 +320,9 @@ namespace Research_Flow
 
         private async void Give_Rate(object sender, RoutedEventArgs e)
             => await ApplicationService.ShowRatingReviewDialog();
+
+        private async void Give_FeedBack(object sender, RoutedEventArgs e)
+            => await Launcher.LaunchUriAsync(new Uri("mailto://zwx.atomx@outlook.com"));
 
         #endregion
 

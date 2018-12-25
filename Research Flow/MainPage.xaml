@@ -64,15 +64,16 @@
             </NavigationView.AutoSuggestBox>
 
             <NavigationView.Header>
-                <Grid>
+                <Frame x:Name="ContentHeader">
                     <CommandBar HorizontalAlignment="Right" VerticalAlignment="Top" DefaultLabelPosition="Right" 
                                 Background="Transparent" OverflowButtonVisibility="Collapsed">
                         <AppBarButton Label="WebPage" Icon="Link" Click="WebPage_Click" Background="Transparent"/>
                         <AppBarSeparator/>
+                        <AppBarButton Label="Synchronize" Icon="Sync" Click="AccountSync_Click" Background="Transparent"/>
                         <AppBarButton Label="ScreenShot" Icon="AttachCamera" Tapped="Flyout_Tapped" Background="Transparent">
                             <FlyoutBase.AttachedFlyout>
                                 <MenuFlyout>
-                                    <MenuFlyoutItem Text="Save"/>
+                                    <MenuFlyoutItem Text="Save" Click="ScreenShot_Save"/>
                                     <MenuFlyoutItem Text="Share" Click="ScreenShot_Share"/>
                                     <MenuFlyoutItem Text="Upload" Click="ScreenShot_Upload"/>
                                 </MenuFlyout>
@@ -82,13 +83,13 @@
                             <FlyoutBase.AttachedFlyout>
                                 <MenuFlyout>
                                     <MenuFlyoutItem Text="Review" Click="Give_Rate"/>
-                                    <MenuFlyoutItem Text="Feedback" Click="Give_Rate"/>
+                                    <MenuFlyoutItem Text="Feedback" Click="Give_FeedBack"/>
                                     <MenuFlyoutItem Text="How-Tos" Click="Open_Tutorials"/>
                                 </MenuFlyout>
                             </FlyoutBase.AttachedFlyout>
                         </AppBarButton>
                     </CommandBar>
-                </Grid>
+                </Frame>
             </NavigationView.Header>
 
             <NavigationView.PaneFooter>
@@ -112,8 +113,6 @@
                                     <TextBlock Grid.Row="1" x:Name="accountEmail" Margin="8,0,0,0" VerticalAlignment="Center"/>
                                     <Button Grid.Row="2" x:Name="accountLogout" Content="Log out" Click="AccountLogout_Click"
                         Height="32" Width="250" Margin="10" HorizontalAlignment="Right" Background="Red"/>
-                                    <Button Grid.Row="3" x:Name="accountSync" Content="Synchronize" Click="AccountSync_Click"
-                        Height="32" Width="250" Margin="10" HorizontalAlignment="Right" Background="LightBlue"/>
                                 </Grid>
                             </Grid>
                         </Flyout>
