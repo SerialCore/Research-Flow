@@ -19,6 +19,7 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
@@ -124,6 +125,47 @@ namespace Research_Flow
                     ContentFrame.Navigate(typeof(Tool));
                     break;
 
+            }
+        }
+
+        private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+        {
+            On_BackRequested();
+        }
+
+        private bool On_BackRequested()
+        {
+            if (!ContentFrame.CanGoBack)
+                return false;
+
+            // Don't go back if the nav pane is overlayed.
+            if (NavView.IsPaneOpen &&
+                (NavView.DisplayMode == NavigationViewDisplayMode.Compact ||
+                 NavView.DisplayMode == NavigationViewDisplayMode.Minimal))
+                return false;
+
+            ContentFrame.GoBack();
+            return true;
+        }
+
+        private void On_Navigated(object sender, NavigationEventArgs e)
+        {
+            NavView.IsBackEnabled = ContentFrame.CanGoBack;
+
+            if (ContentFrame.SourcePageType == typeof(Settings))
+            {
+                //SettingsItem is not part of NavView.MenuItems, and doesn't have a Tag.
+                NavView.SelectedItem = (NavigationViewItem)NavView.SettingsItem;
+                NavView.Header = "Settings";
+            }
+            else if (ContentFrame.SourcePageType != null)
+            {
+                NavView.SelectedItem = NavView.MenuItems
+                    .OfType<NavigationViewItem>()
+                    .First(n => n.Tag.Equals("Overview"));
+
+                NavView.Header =
+                    ((NavigationViewItem)NavView.SelectedItem)?.Content?.ToString();
             }
         }
 

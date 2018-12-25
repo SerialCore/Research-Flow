@@ -12,10 +12,11 @@
 
         <NavigationView x:Name="NavView"
                         PaneDisplayMode="Top"
-                        IsBackButtonVisible="Auto"
+                        IsBackEnabled="{x:Bind ContentFrame.CanGoBack,Mode=OneWay}"
                         ItemInvoked="NavView_ItemInvoked"
                         SelectionChanged="NavView_SelectionChanged"
-                        Loaded="NavView_Loaded">
+                        Loaded="NavView_Loaded"
+                        BackRequested="NavView_BackRequested">
 
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Overview" Tag="Overview">
