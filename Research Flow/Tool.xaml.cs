@@ -32,7 +32,7 @@ namespace Research_Flow
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
 
-            // 此部分数据应放在静态数据集里
+            // 绑定的数据似乎不能使用匿名类
             AppList = new List<StoreApp>
             {
                 new StoreApp{ Name = "物理实验助手", AppUri = new Uri("blamderphylab:"), LogoUri = new Uri("ms-appx:///Assets/Logos/phyMylab_logo.png") },

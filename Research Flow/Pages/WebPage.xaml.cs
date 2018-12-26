@@ -63,9 +63,6 @@ namespace Research_Flow.Pages
         private void WebView_FrameNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
             => webWaiting.IsActive = false;
 
-        private void Return_Navigate(object sender, RoutedEventArgs e)
-            => this.Frame.GoBack();
-
         private void Back(object sender, RoutedEventArgs e)
         {
             if (webView.CanGoBack)

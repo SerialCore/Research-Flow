@@ -12,10 +12,9 @@
 
         <NavigationView x:Name="NavView"
                         PaneDisplayMode="Top"
-                        IsBackEnabled="{x:Bind ContentFrame.CanGoBack,Mode=OneWay}"
-                        ItemInvoked="NavView_ItemInvoked"
-                        SelectionChanged="NavView_SelectionChanged"
                         Loaded="NavView_Loaded"
+                        SelectionChanged="NavView_SelectionChanged"
+                        IsBackEnabled="{x:Bind ContentFrame.CanGoBack,Mode=OneWay}"
                         BackRequested="NavView_BackRequested">
 
             <NavigationView.MenuItems>
@@ -58,6 +57,11 @@
                         <FontIcon Glyph="&#xEC26;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
+                <NavigationViewItem Content="WebPage" Tag="WebPage">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xEC26;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
 
             <NavigationView.AutoSuggestBox>
@@ -68,8 +72,6 @@
                 <Frame x:Name="ContentHeader">
                     <CommandBar HorizontalAlignment="Right" VerticalAlignment="Top" DefaultLabelPosition="Right" 
                                 Background="Transparent" OverflowButtonVisibility="Collapsed">
-                        <AppBarButton Label="WebPage" Icon="Link" Click="WebPage_Click" Background="Transparent"/>
-                        <AppBarSeparator/>
                         <AppBarButton Label="Synchronize" Icon="Sync" Click="AccountSync_Click" Background="Transparent"/>
                         <AppBarButton Label="ScreenShot" Icon="AttachCamera" Tapped="Flyout_Tapped" Background="Transparent">
                             <FlyoutBase.AttachedFlyout>

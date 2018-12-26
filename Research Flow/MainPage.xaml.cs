@@ -21,6 +21,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
@@ -50,6 +51,7 @@ namespace Research_Flow
 
         #region NavView
 
+        // use of anonymous class
         private readonly List<(string Tag, Type Page)> _pages = new List<(string Tag, Type Page)>
         {
             ("Overview", typeof(Overview)),
@@ -59,6 +61,7 @@ namespace Research_Flow
             ("Learn", typeof(Learn)),
             ("Compose", typeof(Compose)),
             ("Tool", typeof(Tool)),
+            ("WebPage", typeof(WebPage)),
         };
 
         private void NavView_Loaded(object sender, RoutedEventArgs e)
@@ -77,21 +80,6 @@ namespace Research_Flow
             }
         }
 
-        private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
-        {
-            if (args.IsSettingsInvoked)
-            {
-                ContentFrame.Navigate(typeof(Settings));
-            }
-            else
-            {
-                // find NavigationViewItem with Content that equals InvokedItem
-                var item = sender.MenuItems.OfType<NavigationViewItem>().First(x => (string)x.Content == (string)args.InvokedItem);
-                NavView_Navigate(item as NavigationViewItem);
-
-            }
-        }
-
         private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
             if (args.IsSettingsSelected)
@@ -100,44 +88,15 @@ namespace Research_Flow
             }
             else
             {
-                NavigationViewItem item = args.SelectedItem as NavigationViewItem;
-                NavView_Navigate(item);
+                NavView_Navigate(args.SelectedItem as NavigationViewItem);
             }
         }
 
-        private void NavView_Navigate(NavigationViewItem item)
+        private void NavView_Navigate(NavigationViewItem pageItem)
         {
-            switch (item.Tag)
-            {
-                case "Overview":
-                    ContentFrame.Navigate(typeof(Overview));
-                    break;
-
-                case "Contact":
-                    ContentFrame.Navigate(typeof(Contact));
-                    break;
-
-                case "Topic":
-                    ContentFrame.Navigate(typeof(Topic));
-                    break;
-
-                case "Search":
-                    ContentFrame.Navigate(typeof(Search));
-                    break;
-
-                case "Learn":
-                    ContentFrame.Navigate(typeof(Learn));
-                    break;
-
-                case "Compose":
-                    ContentFrame.Navigate(typeof(Compose));
-                    break;
-
-                case "Tool":
-                    ContentFrame.Navigate(typeof(Tool));
-                    break;
-
-            }
+            var item = _pages.FirstOrDefault(p => p.Tag.Equals(pageItem.Tag));
+            
+            ContentFrame.Navigate(item.Page);
         }
 
         private void NavView_Navigated(object sender, NavigationEventArgs e)

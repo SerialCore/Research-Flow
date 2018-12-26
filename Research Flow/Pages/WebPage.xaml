@@ -29,8 +29,6 @@
                             DefaultLabelPosition="Right"
                             Background="Transparent"
                             OverflowButtonVisibility="Collapsed">
-                    <AppBarButton Label="Return" Icon="BackToWindow" Click="Return_Navigate"/>
-                    <AppBarSeparator/>
                     <AppBarButton Label="Back" Icon="Previous" Click="Back" IsEnabled="{x:Bind webView.CanGoBack,Mode=OneWay}"/>
                     <AppBarButton Label="Forward" Icon="Next" Click="Forward" IsEnabled="{x:Bind webView.CanGoForward,Mode=OneWay}"/>
                     <AppBarButton Label="Refresh" Icon="Refresh" Click="Refresh"/>
