@@ -121,7 +121,7 @@
                 </ListViewItem>
             </NavigationView.PaneFooter>
 
-            <Frame x:Name="ContentFrame">
+            <Frame x:Name="ContentFrame" Navigated="NavView_Navigated">
                 <Frame.ContentTransitions>
                     <TransitionCollection>
                         <NavigationThemeTransition/>

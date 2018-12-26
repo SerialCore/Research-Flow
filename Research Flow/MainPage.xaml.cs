@@ -3,6 +3,7 @@ using LogicService.Services;
 using LogicService.Storage;
 using Research_Flow.Pages;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
@@ -48,6 +49,17 @@ namespace Research_Flow
         }
 
         #region NavView
+
+        private readonly List<(string Tag, Type Page)> _pages = new List<(string Tag, Type Page)>
+        {
+            ("Overview", typeof(Overview)),
+            ("Contact", typeof(Contact)),
+            ("Topic", typeof(Topic)),
+            ("Search", typeof(Search)),
+            ("Learn", typeof(Learn)),
+            ("Compose", typeof(Compose)),
+            ("Tool", typeof(Tool)),
+        };
 
         private void NavView_Loaded(object sender, RoutedEventArgs e)
         {
@@ -128,46 +140,24 @@ namespace Research_Flow
             }
         }
 
-        private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+        private void NavView_Navigated(object sender, NavigationEventArgs e)
         {
-            On_BackRequested();
-        }
-
-        private bool On_BackRequested()
-        {
-            if (!ContentFrame.CanGoBack)
-                return false;
-
-            // Don't go back if the nav pane is overlayed.
-            if (NavView.IsPaneOpen &&
-                (NavView.DisplayMode == NavigationViewDisplayMode.Compact ||
-                 NavView.DisplayMode == NavigationViewDisplayMode.Minimal))
-                return false;
-
-            ContentFrame.GoBack();
-            return true;
-        }
-
-        private void On_Navigated(object sender, NavigationEventArgs e)
-        {
-            NavView.IsBackEnabled = ContentFrame.CanGoBack;
-
             if (ContentFrame.SourcePageType == typeof(Settings))
             {
-                //SettingsItem is not part of NavView.MenuItems, and doesn't have a Tag.
                 NavView.SelectedItem = (NavigationViewItem)NavView.SettingsItem;
-                NavView.Header = "Settings";
             }
             else if (ContentFrame.SourcePageType != null)
             {
+                var item = _pages.FirstOrDefault(p => p.Page == e.SourcePageType);
+
                 NavView.SelectedItem = NavView.MenuItems
                     .OfType<NavigationViewItem>()
-                    .First(n => n.Tag.Equals("Overview"));
-
-                NavView.Header =
-                    ((NavigationViewItem)NavView.SelectedItem)?.Content?.ToString();
+                    .First(n => n.Tag.Equals(item.Tag));
             }
         }
+
+        private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+            => ContentFrame.GoBack();
 
         private void WebPage_Click(object sender, RoutedEventArgs e)
             => ContentFrame.Navigate(typeof(WebPage));
