@@ -60,7 +60,6 @@ namespace Research_Flow
             ("Search", typeof(Search)),
             ("Learn", typeof(Learn)),
             ("Compose", typeof(Compose)),
-            ("Tool", typeof(Tool)),
             ("WebPage", typeof(WebPage)),
         };
 
@@ -117,9 +116,6 @@ namespace Research_Flow
 
         private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
             => ContentFrame.GoBack();
-
-        private void WebPage_Click(object sender, RoutedEventArgs e)
-            => ContentFrame.Navigate(typeof(WebPage));
 
         private void Open_Tutorials(object sender, RoutedEventArgs e)
             => ContentFrame.Navigate(typeof(Tutorials));

@@ -130,9 +130,6 @@
     <Compile Include="Pages\WebPage.xaml.cs">
       <DependentUpon>WebPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tool.xaml.cs">
-      <DependentUpon>Tool.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Topic.xaml.cs">
       <DependentUpon>Topic.xaml</DependentUpon>
     </Compile>
@@ -220,10 +217,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\WebPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Tool.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
