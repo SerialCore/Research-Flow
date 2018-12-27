@@ -12,7 +12,7 @@
         <Pivot Margin="20,0,20,10">
             <PivotItem Header="Panel">
                 <ScrollViewer>
-
+                    
                 </ScrollViewer>
             </PivotItem>
             <PivotItem Header="Inform">
@@ -23,6 +23,7 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
                             <ColumnDefinition />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
@@ -67,22 +68,34 @@
                         </TextBlock>
                         <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
                             <TextBlock Text="Supporting Links" FontWeight="Bold"/>
-                            <HyperlinkButton Content="zwx.atomx@outlook.com" NavigateUri="mailto:zwx.atomx@outlook.com"/>
                             <HyperlinkButton Content="Research Flow" NavigateUri="https://blamder.github.io/Research-Flow/"/>
                             <HyperlinkButton Content="Blamder's BiliBili content" NavigateUri="https://space.bilibili.com/62426742/#/"/>
                             <HyperlinkButton Content="Know about SystemInformation" NavigateUri="https://docs.microsoft.com/en-us/windows/uwpcommunitytoolkit/helpers/systeminformation"/>
+                            <HyperlinkButton Content="Feedback->zwx.atomx@outlook.com" NavigateUri="mailto:zwx.atomx@outlook.com"/>
+                            <Button Content="Review" Click="Give_Rate" Width="80" Background="LightSkyBlue"/>
                         </StackPanel>
+                        <ScrollViewer Grid.Row="0" Grid.Column="2" Grid.RowSpan="2">
+                            <StackPanel>
+                                <TextBlock Grid.Row="1" Text="Term of Use" FontSize="20" VerticalAlignment="Center" Margin="0,10"/>
+                                <TextBlock Grid.Row="1" Text="Privacy Policy" FontSize="20" VerticalAlignment="Center" Margin="0,10"/>
+                                <TextBlock Grid.Row="1" Text="Advertising" FontSize="20" VerticalAlignment="Center" Margin="0,10"/>
+                            </StackPanel>
+                        </ScrollViewer>
                     </Grid>
                 </ScrollViewer>
             </PivotItem>
-            <PivotItem Header="Usage">
-                <ScrollViewer>
-                    <StackPanel>
-                        <TextBlock Grid.Row="1" Text="Term of Use" FontSize="20" VerticalAlignment="Center" Margin="0,10"/>
-                        <TextBlock Grid.Row="1" Text="Privacy Policy" FontSize="20" VerticalAlignment="Center" Margin="0,10"/>
-                        <TextBlock Grid.Row="1" Text="Advertising" FontSize="20" VerticalAlignment="Center" Margin="0,10"/>
-                    </StackPanel>
-                </ScrollViewer>
+            <PivotItem Header="How-tos">
+                <Pivot Margin="20,0">
+                    <PivotItem Header="How to run RSS">
+                        <ScrollViewer>
+                            <StackPanel>
+                                <Image Source="/Images/ACS-Search.png"/>
+                                <Image Source="/Images/ACS-Feed.png"/>
+                                <Image Source="/Images/Add-Feed.png"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </PivotItem>
+                </Pivot>
             </PivotItem>
         </Pivot>
     </Grid>

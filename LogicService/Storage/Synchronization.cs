@@ -12,18 +12,19 @@ namespace LogicService.Storage
     public class Synchronization
     {
 
-        public async static void ScanChanges()
+        public static async Task<bool> ScanChanges()
         {
             try
             {
                 if ((await OneDriveStorage.GetDataAsync()).DateModified > DateTime.FromBinary((long)ApplicationService.LocalDateModified))
-                    await DownloadAll();
+                    return await DownloadAll();
                 else
-                    await UploadAll();
+                    return await UploadAll();
             }
             catch
             {
                 // network
+                return false;
             }
         }
 

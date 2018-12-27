@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
-using LogicService.Services;
-using Research_Flow.Pages;
-using Windows.Data.Json;
-using Windows.Security.Authentication.Web.Core;
-using Windows.Security.Credentials;
-using Windows.Storage;
+﻿using LogicService.Services;
+using System;
 using Windows.System;
-using Windows.UI.ApplicationSettings;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -63,7 +54,10 @@ namespace Research_Flow
 
             appUptime.Text = ApplicationService.AppUptime.ToString("G");
         }
-        
+
+        private async void Give_Rate(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+            => await ApplicationService.ShowRatingReviewDialog();
+
     }
 
 }

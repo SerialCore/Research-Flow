@@ -77,15 +77,6 @@
                                 </MenuFlyout>
                             </FlyoutBase.AttachedFlyout>
                         </AppBarButton>
-                        <AppBarButton Label="Application" Icon="Shop" Tapped="Flyout_Tapped" Background="Transparent">
-                            <FlyoutBase.AttachedFlyout>
-                                <MenuFlyout>
-                                    <MenuFlyoutItem Text="Review" Click="Give_Rate"/>
-                                    <MenuFlyoutItem Text="Feedback" Click="Give_FeedBack"/>
-                                    <MenuFlyoutItem Text="How-Tos" Click="Open_Tutorials"/>
-                                </MenuFlyout>
-                            </FlyoutBase.AttachedFlyout>
-                        </AppBarButton>
                     </CommandBar>
                 </Frame>
             </NavigationView.Header>
@@ -100,17 +91,16 @@
                         <Flyout>
                             <Grid Width="270">
                                 <Image Source="/Assets/Logos/OneDrive_logo.png" Margin="10" VerticalAlignment="Top"/>
-                                <Grid Margin="0,70,0,70">
+                                <Grid Margin="0,70,0,0">
                                     <Grid.RowDefinitions>
                                         <RowDefinition />
                                         <RowDefinition />
                                         <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <!--<TextBlock Grid.Row="0" x:Name="accountName" Margin="8,0,0,0" VerticalAlignment="Center"/>-->
-                                    <TextBlock Grid.Row="1" x:Name="accountEmail" Margin="8,0,0,0" VerticalAlignment="Center"/>
-                                    <Button Grid.Row="2" x:Name="accountLogout" Content="Log out" Click="AccountLogout_Click"
-                        Height="32" Width="250" Margin="10" HorizontalAlignment="Right" Background="Red"/>
+                                    <TextBlock Grid.Row="1" x:Name="accountEmail" FontSize="16" HorizontalAlignment="Center"/>
+                                    <Button Grid.Row="2" x:Name="accountLogout" Content="Log out" Click="AccountLogout_Click" 
+                                            Width="250" Margin="10" HorizontalAlignment="Right" Background="Red"/>
                                 </Grid>
                             </Grid>
                         </Flyout>

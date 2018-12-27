@@ -1,7 +1,6 @@
 ﻿using LogicService.Helper;
 using LogicService.Services;
 using LogicService.Storage;
-using Research_Flow.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +19,6 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
@@ -40,12 +37,21 @@ namespace Research_Flow
             this.InitializeComponent();
         }
 
+        // 四种消息通知方式
+        // 1. Toast，适用于后台通知
+        // 2. Header，适用于前台通知，实时滚动消息
+        // 3. InAppNotification，适用于捕获异常
+        // 3. Dialog，适用于操作限制
+
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             Login();
-            await Task.Run(() =>
+            await Task.Run(async() =>
             {
-                Synchronization.ScanChanges();
+                if (await Synchronization.ScanChanges())
+                    ToastNotificationManager.CreateToastNotifier().Show(
+                        new ToastNotification(ToastGenerator.TextToast("OneDrive", "Synchronize successfully").GetXml()));
+
             });
         }
 
@@ -117,9 +123,6 @@ namespace Research_Flow
         private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
             => ContentFrame.GoBack();
 
-        private void Open_Tutorials(object sender, RoutedEventArgs e)
-            => ContentFrame.Navigate(typeof(Tutorials));
-
         #endregion
 
         #region Account
@@ -156,9 +159,12 @@ namespace Research_Flow
 
         private async void AccountSync_Click(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() =>
+            await Task.Run(async() =>
             {
-                Synchronization.ScanChanges();
+                if (await Synchronization.ScanChanges())
+                    ToastNotificationManager.CreateToastNotifier().Show(
+                        new ToastNotification(ToastGenerator.TextToast("OneDrive", "Synchronize successfully").GetXml()));
+
             });
         }
 
@@ -304,12 +310,6 @@ namespace Research_Flow
                 }
             }
         }
-
-        private async void Give_Rate(object sender, RoutedEventArgs e)
-            => await ApplicationService.ShowRatingReviewDialog();
-
-        private async void Give_FeedBack(object sender, RoutedEventArgs e)
-            => await Launcher.LaunchUriAsync(new Uri("mailto://zwx.atomx@outlook.com"));
 
         #endregion
 
