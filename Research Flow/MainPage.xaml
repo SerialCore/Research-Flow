@@ -67,6 +67,9 @@
                 <Frame x:Name="ContentHeader">
                     <CommandBar HorizontalAlignment="Right" VerticalAlignment="Top" DefaultLabelPosition="Right" 
                                 Background="Transparent" OverflowButtonVisibility="Collapsed">
+                        <CommandBar.Content>
+                            <TextBlock x:Name="appMassage" Text="InAppMessage"/>
+                        </CommandBar.Content>
                         <AppBarButton Label="Synchronize" Icon="Sync" Click="AccountSync_Click" Background="Transparent"/>
                         <AppBarButton Label="ScreenShot" Icon="AttachCamera" Tapped="Flyout_Tapped" Background="Transparent">
                             <FlyoutBase.AttachedFlyout>

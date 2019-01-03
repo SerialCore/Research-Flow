@@ -35,13 +35,30 @@ namespace Research_Flow
         public MainPage()
         {
             this.InitializeComponent();
+
+            ApplicationData.Current.DataChanged += Current_DataChanged;
         }
 
-        // 四种消息通知方式
-        // 1. Toast，适用于后台通知
-        // 2. Header，适用于前台通知，实时滚动消息
-        // 3. InAppNotification，适用于捕获异常
-        // 3. Dialog，适用于操作限制
+        private void Current_DataChanged(ApplicationData sender, object args)
+        {
+            appMassage.Text = ApplicationService.InAppMessage;
+        }
+
+        // 消息通知方式：
+        // Toast，适用于后台通知
+        // Header，适用于前台通知，实时滚动消息
+        // InAppNotification，适用于捕获异常
+        // Dialog，适用于操作限制
+
+        // 用户数据存储：
+        // RSS数据，加密文本，同步
+        // 爬虫数据，
+        // 项目数据，
+        // 机器学习数据，
+        // 论文，
+        // 截图，图片，本地 
+        // 应用信息，应用设置，本地
+        // 用户信息，加密文本，同步
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -49,9 +66,9 @@ namespace Research_Flow
             await Task.Run(async() =>
             {
                 if (await Synchronization.ScanChanges())
-                    ToastNotificationManager.CreateToastNotifier().Show(
-                        new ToastNotification(ToastGenerator.TextToast("OneDrive", "Synchronize successfully").GetXml()));
-
+                {
+                    ApplicationService.InAppMessage = "Synchronize successfully";
+                }
             });
         }
 

@@ -66,11 +66,11 @@ namespace LogicService.Services
         #region Settings
         // => operator means read-only
 
-        public static object AccountName
+        public static string AccountName
         {
             get
             {
-                return ApplicationData.Current.LocalSettings.Values["AccountName"];
+                return ApplicationData.Current.LocalSettings.Values["AccountName"] as string;
             }
             set
             {
@@ -99,6 +99,18 @@ namespace LogicService.Services
             set
             {
                 ApplicationData.Current.LocalSettings.Values["LocalDateModified"] = value;
+            }
+        }
+
+        public static string InAppMessage
+        {
+            get
+            {
+                return ApplicationData.Current.LocalSettings.Values["InAppMessage"] as string;
+            }
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values["InAppMessage"] = value;
             }
         }
 

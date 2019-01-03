@@ -25,7 +25,7 @@ namespace LogicService.Storage
 
         public async static Task<StorageFolder> GetUserFolderAsync()
         {
-            return await GetAppFolderAsync().CreateFolderAsync((ApplicationData.Current.LocalSettings.Values["AccountName"] as string),
+            return await GetAppFolderAsync().CreateFolderAsync(ApplicationService.AccountName,
                 CreationCollisionOption.OpenIfExists);
         }
 

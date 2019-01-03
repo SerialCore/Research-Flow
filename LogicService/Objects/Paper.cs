@@ -13,7 +13,7 @@ namespace LogicService.Objects
 
         public string DOI { get; set; }
 
-        public List<People> Authors { get; set; }
+        public List<Author> Authors { get; set; }
 
         public string Abstract { get; set; }
 
@@ -23,7 +23,7 @@ namespace LogicService.Objects
 
     }
 
-    public class People
+    public class Author
     {
 
         public string FirstName { get; set; }
@@ -33,8 +33,6 @@ namespace LogicService.Objects
         public string LastName { get; set; }
 
         public string Email { get; set; }
-
-        public string Tele { get; set; }
 
         public string Organization { get; set; }
 
