@@ -38,14 +38,13 @@ namespace Research_Flow
             }
             catch
             {
+                // for new user
                 FeedSources = new ObservableCollection<RSSSource>()
                 {
                     new RSSSource{ID=TripleDES.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd"),
                         Name ="Hydrogen Bond in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
                     new RSSSource{ID=TripleDES.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd"),
                         Name ="Pedal Motion in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
-                    new RSSSource{ID=TripleDES.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526field1%253DContrib%2526target%253Ddefault%2526targetTab%253Dstd%2526text1%253DPaul%252BL.%252BA.%252BPopelier"),
-                        Name ="Paul L. A. Popelier in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526field1%253DContrib%2526target%253Ddefault%2526targetTab%253Dstd%2526text1%253DPaul%252BL.%252BA.%252BPopelier",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
                     new RSSSource{ID=TripleDES.MakeMD5("http://feeds.aps.org/rss/recent/prl.xml"),
                         Name ="Physical Review Letters",Uri="http://feeds.aps.org/rss/recent/prl.xml",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
                     new RSSSource{ID=TripleDES.MakeMD5("http://www.sciencenet.cn/xml/paper.aspx?di=7"),
@@ -185,14 +184,16 @@ namespace Research_Flow
             this.feedItem_detail.IsPaneOpen = true;
             feedTitle.Text = item.Title + "\n";
             feedPublished.Text = item.Published;
+            feedBrowse.Tag = item.Link;
             feedSummary.Text = item.Summary + "\n";
             feedXml.Text = item.Xml;
-            feedBrowse.Tag = item.Link;
-            _feedXml.NavigateToString(item.Xml);
         }
 
         private void Browse_Feed(object sender, RoutedEventArgs e)
             => this.Frame.Navigate(typeof(WebPage), feedBrowse.Tag);
+
+        private void Close_FeedDetail(object sender, RoutedEventArgs e)
+            => feedItem_detail.IsPaneOpen = false;
 
         private async void SearchRss(RSSSource source)
         {

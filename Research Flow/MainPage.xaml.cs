@@ -13,7 +13,6 @@ using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
-using Windows.System;
 using Windows.UI.Notifications;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -51,14 +50,43 @@ namespace Research_Flow
         // Dialog，适用于操作限制
 
         // 用户数据存储：
-        // RSS数据，加密文本，同步
-        // 爬虫数据，
-        // 项目数据，
-        // 机器学习数据，
-        // 论文，
-        // 截图，图片，本地 
-        // 应用信息，应用设置，本地
-        // 用户信息，加密文本，同步
+        // RSS数据        加密文本   同步
+        // 爬虫数据
+        // 项目数据
+        // 机器学习数据
+        // 论文
+        // 截图           图片      本地 
+        // 应用信息       应用设置   本地
+        // 用户信息       加密文本   同步
+
+//Feed的弹出界面要有返回按钮
+//WebView存储浏览记录，保存在Log文件夹里
+//显示Xml信息
+//解决获取Feed失败后再也无法获取信息
+//构建应用内消息机制，由各页面通过非导航的方式向主页发送消息
+//RSS列表可自定义顺序，包括手动拖拽，或者一键排序
+//Feed内容要包含时间，这样可以通知新Feed，并可以给用户呈现出一个热点、时间图
+//二进制加密？
+//数据库要存哪些数据？适合存储小数据，不适合大段文字和复杂格式以及复杂的继承关系。
+//数据库文件是否能加密，是否能转换成别的格式，压缩包是否能加密
+//同步进程显示在应用内通知栏
+//注册后台任务
+//爬虫的界面、流、存储
+//自定义关键词，项目管理
+//关键词的图表示
+//朋友圈界面，聊天界面，联系人界面
+//主页的平板化界面
+//论文管理
+//应用内搜索，文件遍历
+//收集用户信息
+//其他用户信息管理
+//登录IP，保存在Log里
+//Url搜索引擎，保存在Setting里
+//哪些文件需要同步，扩展名
+//需不需要log文件，记录什么？
+//优化数据存储结构、加密方式，选择导出到设备
+//How-tos
+//Azop对接，3.0
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {

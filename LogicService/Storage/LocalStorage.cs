@@ -34,13 +34,13 @@ namespace LogicService.Storage
             return await (await GetUserFolderAsync()).CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
         }
 
-        // synchronization
+        // OneDrive
         public static async Task<StorageFolder> GetPhotoAsync()
         {
             return await (await GetUserFolderAsync()).CreateFolderAsync("Photo", CreationCollisionOption.OpenIfExists);
         }
 
-        // synchronization
+        // OneDrive (Feed)
         public static async Task<StorageFolder> GetDataAsync()
         {
             return await (await GetUserFolderAsync()).CreateFolderAsync("Data", CreationCollisionOption.OpenIfExists);

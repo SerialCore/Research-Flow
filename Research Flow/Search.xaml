@@ -11,6 +11,14 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <Pivot Margin="20,0,20,10">
+            <PivotItem Header="Flow">
+                <StackPanel Height="500" Width="500">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Grid.Row="1" Grid.Column="0" Text="Bing"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="https://cn.bing.com/search?q=QUEST"/>
+                    </StackPanel>
+                </StackPanel>
+            </PivotItem>
             <PivotItem Header="RSS">
                 <Grid >
                     <Grid.ColumnDefinitions>
@@ -80,24 +88,25 @@
                     </Grid>
                     <SplitView Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedItem_detail" OpenPaneLength="400" DisplayMode="Overlay" PanePlacement="Right">
                         <SplitView.Pane>
-                            <ScrollViewer Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="10,0">
-                                <StackPanel>
-                                    <TextBlock x:Name="feedTitle" FontSize="20" Style="{ThemeResource TitleTextBlockStyle}"/>
-                                    <Button x:Name="feedBrowse" Click="Browse_Feed" Content="Browse this feed" Background="LightSkyBlue"/>
-                                    <TextBlock x:Name="feedPublished" FontSize="16" Style="{ThemeResource SubtitleTextBlockStyle}"/>
-                                    <TextBlock x:Name="feedSummary" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>
-                                    <TextBlock x:Name="feedXml" IsTextSelectionEnabled="True" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>
-                                    <WebView x:Name="_feedXml" Height="500"/>
-                                </StackPanel>
-                            </ScrollViewer>
+                            <Grid>
+                                <Button Height="32" Click="Close_FeedDetail" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="LightBlue">
+                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE0AB;" />
+                                </Button>
+                                <ScrollViewer Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="10,0" Margin="0,32,0,0">
+                                    <StackPanel>
+                                        <TextBlock x:Name="feedTitle" FontSize="20" Style="{ThemeResource TitleTextBlockStyle}"/>
+                                        <Button x:Name="feedBrowse" Click="Browse_Feed" Content="Browse this feed" Background="LightSkyBlue"/>
+                                        <TextBlock x:Name="feedPublished" FontSize="16" Style="{ThemeResource SubtitleTextBlockStyle}"/>
+                                        <TextBlock x:Name="feedSummary" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>
+                                        <TextBlock x:Name="feedXml" IsTextSelectionEnabled="True" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </Grid>
                         </SplitView.Pane>
                     </SplitView>
                 </Grid>
             </PivotItem>
             <PivotItem Header="Crawler">
-                
-            </PivotItem>
-            <PivotItem Header="Flow">
 
             </PivotItem>
         </Pivot>
