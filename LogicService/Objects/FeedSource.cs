@@ -35,17 +35,24 @@ namespace LogicService.Objects
 
         public string Published { get; set; }
 
-        public string DOI { get; set; }
-
         public string Link { get; set; }
-
-        public string Xml { get; set; }
 
         public string Summary { get; set; }
 
         public string FullText { get; set; }
 
+        public List<ElementNode> Nodes { get; set; }
+
         public List<ElementLink> PageLinks { get; set; }
+
+    }
+
+    public class ElementNode
+    {
+
+        public string Name { get; set; }
+
+        public string Value { get; set; }
 
     }
 

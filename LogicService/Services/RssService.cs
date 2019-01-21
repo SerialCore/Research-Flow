@@ -37,10 +37,9 @@ namespace LogicService.Services
                                 {
                                     Title = f.Title.Text,
                                     Published = f.PublishedDate.ToString(),
-                                    DOI = GetDoi(f),
                                     Link = f.Links[0].Uri.AbsoluteUri,
-                                    Xml = f.GetXmlDocument(SyndicationFormat.Rss20).GetXml(),
-                                    Summary = WebUtility.HtmlDecode(Regex.Replace(f.Summary.Text, "<[^>]+?>", ""))
+                                    Summary = WebUtility.HtmlDecode(Regex.Replace(f.Summary.Text, "<[^>]+?>", "")),
+                                    Nodes = GetNodes(f),
                                 });
                             }
                             if (onGetRssItemsCompleted != null)
@@ -76,16 +75,14 @@ namespace LogicService.Services
 
         }
 
-        private static string GetDoi(SyndicationItem item)
+        private static List<ElementNode> GetNodes(SyndicationItem item)
         {
+            var pairs = new List<ElementNode>();
             foreach (SyndicationNode node in item.ElementExtensions)
             {
-                if (node.NodeName == "doi")
-                {
-                    return node.NodeValue;
-                }
+                pairs.Add(new ElementNode { Name = node.NodeName, Value = node.NodeValue });
             }
-            return "Doi Unavailable";
+            return pairs;
         }
     }
 }

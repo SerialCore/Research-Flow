@@ -98,7 +98,7 @@
                                         <Button x:Name="feedBrowse" Click="Browse_Feed" Content="Browse this feed" Background="LightSkyBlue"/>
                                         <TextBlock x:Name="feedPublished" FontSize="16" Style="{ThemeResource SubtitleTextBlockStyle}"/>
                                         <TextBlock x:Name="feedSummary" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>
-                                        <TextBlock x:Name="feedXml" IsTextSelectionEnabled="True" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>
+                                        <TextBlock x:Name="feedNodes" IsTextSelectionEnabled="True" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>
                                     </StackPanel>
                                 </ScrollViewer>
                             </Grid>

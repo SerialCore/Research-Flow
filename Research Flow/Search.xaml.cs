@@ -186,7 +186,10 @@ namespace Research_Flow
             feedPublished.Text = item.Published;
             feedBrowse.Tag = item.Link;
             feedSummary.Text = item.Summary + "\n";
-            feedXml.Text = item.Xml;
+            foreach (var pair in item.Nodes)
+            {
+                feedNodes.Text += pair.Name + " : " + pair.Value + "\n";
+            }
         }
 
         private void Browse_Feed(object sender, RoutedEventArgs e)

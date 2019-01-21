@@ -23,36 +23,11 @@ namespace Research_Flow
     /// </summary>
     public sealed partial class Overview : Page
     {
-        public List<StoreApp> AppList { get; set; }
-
         public Overview()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
-
-            AppList = new List<StoreApp>
-            {
-                new StoreApp{ Name = "物理实验助手", AppUri = new Uri("blamderphylab:"), LogoUri = new Uri("ms-appx:///Assets/Logos/phyMylab_logo.png") },
-                new StoreApp{ Name = "力学量采集器", AppUri = new Uri("blamderblackbox:"), LogoUri = new Uri("ms-appx:///Assets/Logos/blackbox_logo.png") },
-                new StoreApp{ Name = "Paint Panel", AppUri = new Uri("blamderpaint:"), LogoUri = new Uri("ms-appx:///Assets/Logos/paintpanel_logo.png") }
-            };
-            this.DataContext = this;
         }
-
-        private async void AppList_ItemClick(object sender, ItemClickEventArgs e)
-            => await Launcher.LaunchUriAsync((e.ClickedItem as StoreApp).AppUri);
-    }
-
-    public class StoreApp
-    {
-
-        public string Name { get; set; }
-
-        public Uri AppUri { get; set; }
-
-        public Uri LogoUri { get; set; }
-
-        public string Abstract { get; set; }
 
     }
 }
