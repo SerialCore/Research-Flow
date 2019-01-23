@@ -65,22 +65,22 @@
 
             <NavigationView.Header>
                 <Frame x:Name="ContentHeader">
-                    <CommandBar HorizontalAlignment="Right" VerticalAlignment="Top" DefaultLabelPosition="Right" 
+                    <Grid>
+                        <TextBlock x:Name="appMessage" Text="InAppMessage" FontSize="18" VerticalAlignment="Center"/>
+                        <CommandBar HorizontalAlignment="Right" VerticalAlignment="Top" DefaultLabelPosition="Right" 
                                 Background="Transparent" OverflowButtonVisibility="Collapsed">
-                        <CommandBar.Content>
-                            <TextBlock x:Name="appMassage" Text="InAppMessage"/>
-                        </CommandBar.Content>
-                        <AppBarButton Label="Synchronize" Icon="Sync" Click="AccountSync_Click" Background="Transparent"/>
-                        <AppBarButton Label="ScreenShot" Icon="AttachCamera" Tapped="Flyout_Tapped" Background="Transparent">
-                            <FlyoutBase.AttachedFlyout>
-                                <MenuFlyout>
-                                    <MenuFlyoutItem Text="Save" Click="ScreenShot_Save"/>
-                                    <MenuFlyoutItem Text="Share" Click="ScreenShot_Share"/>
-                                    <MenuFlyoutItem Text="Upload" Click="ScreenShot_Upload"/>
-                                </MenuFlyout>
-                            </FlyoutBase.AttachedFlyout>
-                        </AppBarButton>
-                    </CommandBar>
+                            <AppBarButton Label="Synchronize" Icon="Sync" Click="AccountSync_Click" Background="Transparent"/>
+                            <AppBarButton Label="ScreenShot" Icon="AttachCamera" Tapped="Flyout_Tapped" Background="Transparent">
+                                <FlyoutBase.AttachedFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="Save" Click="ScreenShot_Save"/>
+                                        <MenuFlyoutItem Text="Share" Click="ScreenShot_Share"/>
+                                        <MenuFlyoutItem Text="Upload" Click="ScreenShot_Upload"/>
+                                    </MenuFlyout>
+                                </FlyoutBase.AttachedFlyout>
+                            </AppBarButton>
+                        </CommandBar>
+                    </Grid>
                 </Frame>
             </NavigationView.Header>
 

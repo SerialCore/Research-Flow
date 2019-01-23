@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LogicService.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -28,6 +29,5 @@ namespace Research_Flow
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
-
     }
 }

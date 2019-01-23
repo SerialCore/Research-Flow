@@ -102,18 +102,6 @@ namespace LogicService.Services
             }
         }
 
-        public static string InAppMessage
-        {
-            get
-            {
-                return ApplicationData.Current.LocalSettings.Values["InAppMessage"] as string;
-            }
-            set
-            {
-                ApplicationData.Current.LocalSettings.Values["InAppMessage"] = value;
-            }
-        }
-
         public static void RemoveKey(string key)
             => ApplicationData.Current.LocalSettings.Values.Remove(key);
 

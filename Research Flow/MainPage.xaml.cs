@@ -25,6 +25,8 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Research_Flow
 {
+    public delegate void MessageHandle(object sender);
+
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
@@ -35,17 +37,17 @@ namespace Research_Flow
         {
             this.InitializeComponent();
 
-            ApplicationData.Current.DataChanged += Current_DataChanged;
+            AppMessage.MessageReached += AppMessage_MessageReached;
         }
 
-        private void Current_DataChanged(ApplicationData sender, object args)
+        private void AppMessage_MessageReached(object sender)
         {
-            appMassage.Text = ApplicationService.InAppMessage;
+            appMessage.Text = sender as string;
         }
 
         // 消息通知方式：
         // Toast，适用于后台通知
-        // Header，适用于前台通知，实时滚动消息
+        // Header(Event)，适用于前台通知，页面间的短消息通信
         // InAppNotification，适用于捕获异常
         // Dialog，适用于操作限制
 
@@ -59,44 +61,47 @@ namespace Research_Flow
         // 应用信息       应用设置   本地
         // 用户信息       加密文本   同步
 
-//Feed的弹出界面要有返回按钮
-//WebView存储浏览记录，保存在Log文件夹里
-//解决获取Feed失败后再也无法获取信息
-//构建应用内消息机制，由各页面通过非导航的方式向主页发送消息
-//RSS列表可自定义顺序，包括手动拖拽，或者一键排序
-//Feed内容要包含时间，这样可以通知新Feed，并可以给用户呈现出一个热点、时间图
-//二进制加密？
-//数据库要存哪些数据？适合存储小数据，不适合大段文字和复杂格式以及复杂的继承关系。
-//数据库文件是否能加密，是否能转换成别的格式，压缩包是否能加密
-//同步进程显示在应用内通知栏
-//注册后台任务
-//爬虫的界面、流、存储
-//自定义关键词，项目管理
-//关键词的图表示
-//朋友圈界面，聊天界面，联系人界面
-//主页的平板化界面
-//论文管理
-//应用内搜索，文件遍历
-//收集用户信息
-//其他用户信息管理
-//登录IP，保存在Log里
-//Url搜索引擎，保存在Setting里
-//哪些文件需要同步，扩展名
-//需不需要log文件，记录什么？
-//优化数据存储结构、加密方式，选择导出到设备
-//How-tos
-//Azop对接，3.0
+        //WebView存储浏览记录，保存在Log文件夹里
+        //解决获取Feed失败后再也无法获取信息
+        //RSS列表可自定义顺序，包括手动拖拽，或者一键排序
+        //Feed内容要包含时间，这样可以通知新Feed，并可以给用户呈现出一个热点、时间图
+        //二进制加密？
+        //数据库要存哪些数据？适合存储小数据，不适合大段文字和复杂格式以及复杂的继承关系。
+        //数据库文件是否能加密，是否能转换成别的格式，压缩包是否能加密
+        //同步进程显示在应用内通知栏
+        //注册后台任务
+        //爬虫的界面、流、存储
+        //自定义关键词，项目管理
+        //关键词的图表示
+        //朋友圈界面，聊天界面，联系人界面
+        //主页的平板化界面
+        //论文管理
+        //应用内搜索，文件遍历
+        //收集用户信息
+        //其他用户信息管理
+        //登录IP，保存在Log里
+        //Url搜索引擎，保存在Setting里
+        //哪些文件需要同步，扩展名
+        //需不需要log文件，记录什么？
+        //优化数据存储结构、加密方式，选择导出到设备
+        //不同数据源的学习方法是不同的，网页爬虫，Feed统计
+        //How-tos
+        //Azop对接，3.0
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             Login();
-            await Task.Run(async() =>
+            //await Task.Run(async() =>
+            //{
+            //    if (await Synchronization.ScanChanges())
+            //    {
+            //        AppMessage.SendMessage("Synchronize successfully");
+            //    }
+            //});
+            if (await Synchronization.ScanChanges())
             {
-                if (await Synchronization.ScanChanges())
-                {
-                    ApplicationService.InAppMessage = "Synchronize successfully";
-                }
-            });
+                AppMessage.SendMessage("Synchronize successfully");
+            }
         }
 
         #region NavView
@@ -203,13 +208,8 @@ namespace Research_Flow
 
         private async void AccountSync_Click(object sender, RoutedEventArgs e)
         {
-            await Task.Run(async() =>
-            {
-                if (await Synchronization.ScanChanges())
-                    ToastNotificationManager.CreateToastNotifier().Show(
-                        new ToastNotification(ToastGenerator.TextToast("OneDrive", "Synchronize successfully").GetXml()));
-
-            });
+            if (await Synchronization.ScanChanges())
+                AppMessage.SendMessage("Synchronize successfully");
         }
 
         private async void AccountLogout_Click(object sender, RoutedEventArgs e)

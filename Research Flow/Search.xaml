@@ -92,15 +92,16 @@
                                 <Button Height="32" Click="Close_FeedDetail" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="LightBlue">
                                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE0AB;" />
                                 </Button>
-                                <ScrollViewer Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="10,0" Margin="0,32,0,0">
+                                <ScrollViewer Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="10,0" Margin="0,32">
                                     <StackPanel>
                                         <TextBlock x:Name="feedTitle" FontSize="20" Style="{ThemeResource TitleTextBlockStyle}"/>
-                                        <Button x:Name="feedBrowse" Click="Browse_Feed" Content="Browse this feed" Background="LightSkyBlue"/>
+                                        <Button x:Name="feedBrowse" Click="Browse_Feed" Content="Browse this feed" Background="GreenYellow"/>
                                         <TextBlock x:Name="feedPublished" FontSize="16" Style="{ThemeResource SubtitleTextBlockStyle}"/>
                                         <TextBlock x:Name="feedSummary" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>
                                         <TextBlock x:Name="feedNodes" IsTextSelectionEnabled="True" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>
                                     </StackPanel>
                                 </ScrollViewer>
+                                <Button Height="32" Content="Learn this Feed" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Background="LightSkyBlue"/>
                             </Grid>
                         </SplitView.Pane>
                     </SplitView>
