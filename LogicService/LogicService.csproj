@@ -106,13 +106,16 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Helper\NetHelper.cs" />
     <Compile Include="Helper\RegexHelper.cs" />
     <Compile Include="Helper\UrlOperator.cs" />
+    <Compile Include="Helper\WebClientHelper.cs" />
     <Compile Include="Objects\FeedSource.cs" />
     <Compile Include="Objects\Paper.cs" />
-    <Compile Include="Helper\JsonHelper.cs" />
+    <Compile Include="Helper\SerializeHelper.cs" />
     <Compile Include="Helper\ToastGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\HashCode.cs" />
     <Compile Include="Security\TripleDES.cs" />
     <Compile Include="Services\AppMessage.cs" />
     <Compile Include="Services\Crawler.cs" />

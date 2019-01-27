@@ -13,6 +13,12 @@ namespace LogicService.Services
     /// </summary>
     public class AppMessage
     {
+        public enum MessageType
+        {
+            Inform,
+            Warn,
+        }
+
         /// <summary>
         /// Each page should have defined a eventhandle, but they just need one if there is a Public defination.
         /// </summary>

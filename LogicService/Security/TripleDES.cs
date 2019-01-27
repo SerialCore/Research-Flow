@@ -9,13 +9,6 @@ namespace LogicService.Security
     /// </summary>
     public class TripleDES
     {
-        /// <summary>
-        /// 构造方法
-        /// </summary>
-        public TripleDES()
-        {
-
-        }
 
         #region 加密/解密string
         /// <summary>
@@ -73,7 +66,7 @@ namespace LogicService.Security
             if (key == null)
                 key = System.Text.Encoding.Default.GetBytes("hashashin");
             TripleDESCryptoServiceProvider des = new TripleDESCryptoServiceProvider();
-            des.Key = MakeMD5(key);
+            des.Key = HashEncode.MakeMD5(key);
             des.Mode = CipherMode.ECB;
 
             return des.CreateEncryptor().TransformFinalBlock(original, 0, original.Length);
@@ -90,7 +83,7 @@ namespace LogicService.Security
             if (key == null)
                 key = System.Text.Encoding.Default.GetBytes("hashashin");
             TripleDESCryptoServiceProvider des = new TripleDESCryptoServiceProvider();
-            des.Key = MakeMD5(key);
+            des.Key = HashEncode.MakeMD5(key);
             des.Mode = CipherMode.ECB;
 
             return des.CreateDecryptor().TransformFinalBlock(encrypted, 0, encrypted.Length);
@@ -98,50 +91,5 @@ namespace LogicService.Security
 
         #endregion
 
-        #region HashCode
-
-        public static string GetRandomValue()
-        {
-            Random Seed = new Random();
-            string RandomVaule = Seed.Next(1, int.MaxValue).ToString();
-            return RandomVaule;
-        }
-
-        public static byte[] MakeMD5(byte[] original)
-        {
-            MD5CryptoServiceProvider hashmd5 = new MD5CryptoServiceProvider();
-            byte[] Value = hashmd5.ComputeHash(original);
-            hashmd5 = null;
-            return Value;
-        }
-
-        public static string MakeMD5(string Security)
-        {
-            byte[] Message = Encoding.Default.GetBytes(Security);
-            MD5CryptoServiceProvider hashmd5 = new MD5CryptoServiceProvider();
-            byte[] Value = hashmd5.ComputeHash(Message);
-            hashmd5 = null;
-            Security = "";
-            foreach (byte o in Value)
-            {
-                Security += o.ToString("x2");
-            }
-            return Security;
-        }
-
-        public static string MakeSHA512(string Security)
-        {
-            byte[] Message = Encoding.Default.GetBytes(Security);
-            SHA512Managed Arithmetic = new SHA512Managed();
-            byte[] Value = Arithmetic.ComputeHash(Message);
-            Security = "";
-            foreach (byte o in Value)
-            {
-                Security += o.ToString("x2");
-            }
-            return Security;
-        }
-
-        #endregion
     }
 }

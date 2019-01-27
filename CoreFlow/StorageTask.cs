@@ -11,11 +11,11 @@ namespace CoreFlow
     public sealed class StorageTask : IBackgroundTask
     {
 
-        public void Run(IBackgroundTaskInstance taskInstance)
+        public async void Run(IBackgroundTaskInstance taskInstance)
         {
             var deferral = taskInstance.GetDeferral();
 
-            Synchronization.ScanChanges();
+            await Synchronization.ScanChanges();
 
             deferral.Complete();
         }

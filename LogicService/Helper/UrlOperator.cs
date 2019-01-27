@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using System.Net;
 using System.Collections.Specialized;
 
-namespace Utilities
+namespace LogicService.Helper
 {
     public class UrlOperator
     {

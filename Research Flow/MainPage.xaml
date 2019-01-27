@@ -66,7 +66,7 @@
             <NavigationView.Header>
                 <Frame x:Name="ContentHeader">
                     <Grid>
-                        <TextBlock x:Name="appMessage" Text="InAppMessage" FontSize="18" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="appMessage" Text="Research Flow" FontSize="18" VerticalAlignment="Center"/>
                         <CommandBar HorizontalAlignment="Right" VerticalAlignment="Top" DefaultLabelPosition="Right" 
                                 Background="Transparent" OverflowButtonVisibility="Collapsed">
                             <AppBarButton Label="Synchronize" Icon="Sync" Click="AccountSync_Click" Background="Transparent"/>

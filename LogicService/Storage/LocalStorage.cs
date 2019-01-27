@@ -58,7 +58,7 @@ namespace LogicService.Storage
         public static async Task<StorageFile> WriteObjectAsync(StorageFolder folder, string name, object o, string key = null)
         {
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.ReplaceExisting);
-            string content = JsonHelper.SerializeObject(o);
+            string content = SerializeHelper.SerializeObject(o);
             await FileIO.WriteTextAsync(file, TripleDES.Encrypt(content, key));
             ApplicationService.LocalDateModified = DateTime.Now.ToBinary();
             return file;
@@ -68,7 +68,7 @@ namespace LogicService.Storage
         {
             StorageFile file = await folder.GetFileAsync(name);
             string content = await FileIO.ReadTextAsync(file);
-            return JsonHelper.DeserializeJsonToObject<T>(TripleDES.Decrypt(content, key));
+            return SerializeHelper.DeserializeJsonToObject<T>(TripleDES.Decrypt(content, key));
         }
 
         public static async void DeleteFile(StorageFolder folder, string name)
