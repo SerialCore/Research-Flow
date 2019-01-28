@@ -96,11 +96,12 @@
                                     <StackPanel>
                                         <TextBlock x:Name="feedTitle" FontSize="20" Style="{ThemeResource TitleTextBlockStyle}"/>
                                         <StackPanel Orientation="Horizontal">
-                                            <Button x:Name="feedBrowse" Click="Browse_Feed" Content="Browse this feed" Background="LightBlue"/>
-                                            <Button Content="Learn this Feed" Background="LightSkyBlue"/>
+                                            <Button x:Name="feedBrowse" Click="Browse_Feed" Content="Browse this feed" Background="LightBlue" Margin="0,0,5,0"/>
+                                            <Button Content="Learn this Feed" Background="LightSkyBlue" Margin="5,0,0,0"/>
                                         </StackPanel>
                                         <TextBlock x:Name="feedPublished" FontSize="16" Style="{ThemeResource SubtitleTextBlockStyle}"/>
                                         <TextBlock x:Name="feedSummary" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>
+                                        <TextBlock Text="XML Nodes" Style="{StaticResource SubtitleTextBlockStyle}"/>
                                         <TextBlock x:Name="feedNodes" IsTextSelectionEnabled="True" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>
                                     </StackPanel>
                                 </ScrollViewer>

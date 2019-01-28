@@ -55,20 +55,20 @@ namespace LogicService.Storage
 
         #region Operator
 
-        public static async Task<StorageFile> WriteObjectAsync(StorageFolder folder, string name, object o, string key = null)
+        public static async Task<StorageFile> WriteJsonAsync(StorageFolder folder, string name, object o)
         {
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.ReplaceExisting);
             string content = SerializeHelper.SerializeObject(o);
-            await FileIO.WriteTextAsync(file, TripleDES.Encrypt(content, key));
+            await FileIO.WriteTextAsync(file, content);
             ApplicationService.LocalDateModified = DateTime.Now.ToBinary();
             return file;
         }
 
-        public static async Task<object> ReadObjectAsync<T>(StorageFolder folder, string name, string key = null) where T : class
+        public static async Task<object> ReadJsonAsync<T>(StorageFolder folder, string name) where T : class
         {
             StorageFile file = await folder.GetFileAsync(name);
             string content = await FileIO.ReadTextAsync(file);
-            return SerializeHelper.DeserializeJsonToObject<T>(TripleDES.Decrypt(content, key));
+            return SerializeHelper.DeserializeJsonToObject<T>(content);
         }
 
         public static async void DeleteFile(StorageFolder folder, string name)

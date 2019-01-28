@@ -62,7 +62,6 @@ namespace Research_Flow
         // 用户信息       加密文本   同步
 
         //Quartz.NET作业调度
-        //哪些文件需要加密？二进制序列化（Common库）？
         //WebView存储浏览记录，保存在Log文件夹里
         //解决获取Feed失败后再也无法获取信息
         //RSS列表可自定义顺序，包括手动拖拽，或者一键排序
