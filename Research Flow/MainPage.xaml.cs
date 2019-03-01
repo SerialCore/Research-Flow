@@ -52,15 +52,20 @@ namespace Research_Flow
         // Dialog，适用于操作限制
 
         // 用户数据存储：
-        // RSS数据        加密文本   同步
+        // RSS数据        文本      同步
         // 爬虫数据
         // 项目数据
         // 机器学习数据
         // 论文
         // 截图           图片      本地 
         // 应用信息       应用设置   本地
-        // 用户信息       加密文本   同步
+        // 用户信息
 
+        //关于加密，如果中途选择加密或者更改密钥，可以尝试使用新的写方法，而用捕获异常的方式尝试之前用过的读方法
+        //目前的同步机制不能满足远程删除，要么使用数据库管理文件，要么在解压时对照被删除文件。
+        //WebView地址栏实时更新
+        //如何直接使用系统账户登录
+        //尽可能用数据绑定节省代码
         //Quartz.NET作业调度
         //WebView存储浏览记录，保存在Log文件夹里
         //解决获取Feed失败后再也无法获取信息
@@ -68,7 +73,6 @@ namespace Research_Flow
         //Feed内容要包含时间，这样可以通知新Feed，并可以给用户呈现出一个热点、时间图
         //数据库要存哪些数据？适合存储小数据，不适合大段文字和复杂格式以及复杂的继承关系。
         //数据库文件是否能加密，是否能转换成别的格式，压缩包是否能加密
-        //同步进程显示在应用内通知栏
         //注册后台任务
         //爬虫的界面、流、存储
         //自定义关键词，项目管理
@@ -100,7 +104,7 @@ namespace Research_Flow
             //});
             if (await Synchronization.ScanChanges())
             {
-                AppMessage.SendMessage("Synchronize successfully");
+                AppMessage.SendMessage("Synchronize successfully", AppMessage.MessageType.Bravo);
             }
         }
 
@@ -191,6 +195,7 @@ namespace Research_Flow
             else
             {
                 accountName.Text = "Offline";
+                accountEmail.Text = ApplicationService.AccountName;
             }
         }
 
@@ -209,7 +214,7 @@ namespace Research_Flow
         private async void AccountSync_Click(object sender, RoutedEventArgs e)
         {
             if (await Synchronization.ScanChanges())
-                AppMessage.SendMessage("Synchronize successfully");
+                AppMessage.SendMessage("Synchronize successfully", AppMessage.MessageType.Bravo);
         }
 
         private async void AccountLogout_Click(object sender, RoutedEventArgs e)

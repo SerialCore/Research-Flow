@@ -3,6 +3,7 @@ using LogicService.Security;
 using LogicService.Services;
 using Microsoft.Toolkit.Uwp.Helpers;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
 
@@ -51,6 +52,11 @@ namespace LogicService.Storage
             return await (await GetUserFolderAsync()).CreateFolderAsync("Feed", CreationCollisionOption.OpenIfExists);
         }
 
+        public static async Task<StorageFolder> GetLogAsync()
+        {
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Log", CreationCollisionOption.OpenIfExists);
+        }
+
         #endregion
 
         #region Operator
@@ -58,8 +64,7 @@ namespace LogicService.Storage
         public static async Task<StorageFile> WriteJsonAsync(StorageFolder folder, string name, object o)
         {
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.ReplaceExisting);
-            string content = SerializeHelper.SerializeObject(o);
-            await FileIO.WriteTextAsync(file, content);
+            await FileIO.WriteTextAsync(file, SerializeHelper.SerializeToJson(o));
             ApplicationService.LocalDateModified = DateTime.Now.ToBinary();
             return file;
         }
@@ -67,8 +72,7 @@ namespace LogicService.Storage
         public static async Task<object> ReadJsonAsync<T>(StorageFolder folder, string name) where T : class
         {
             StorageFile file = await folder.GetFileAsync(name);
-            string content = await FileIO.ReadTextAsync(file);
-            return SerializeHelper.DeserializeJsonToObject<T>(content);
+            return SerializeHelper.DeserializeJsonToObject<T>(await FileIO.ReadTextAsync(file));
         }
 
         public static async void DeleteFile(StorageFolder folder, string name)

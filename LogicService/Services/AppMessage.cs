@@ -15,8 +15,11 @@ namespace LogicService.Services
     {
         public enum MessageType
         {
-            Inform,
-            Warn,
+            Tell,    // flash a text massage
+            Hey,     // scroll a text
+            Bravo,   // flash and color
+            Ops,     // flash and color
+            Banner   // fix a new text
         }
 
         /// <summary>
@@ -29,11 +32,11 @@ namespace LogicService.Services
         /// Just like Action-Parameter's behavior.
         /// </summary>
         /// <param name="send"></param>
-        public static void SendMessage(string send)
+        public static void SendMessage(string text, MessageType type)
         {
             if (MessageReached != null)
             {
-                MessageReached(send);
+                MessageReached(text);
             }
         }
 

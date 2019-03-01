@@ -40,12 +40,13 @@ namespace Research_Flow
             if (await GraphService.ServiceLogin())
             {
                 accountStatu.Text = await GraphService.GetPrincipalName();
+                // 账户名只在此页面设置
                 ApplicationService.AccountName = await GraphService.GetPrincipalName();
                 ConfigureFile();
             }
             else
             {
-                configState.Text = "Fail to log in, please try again.";
+                configState.Text = "> Fail to log in, please try again.";
             }
         }
 
@@ -59,12 +60,12 @@ namespace Research_Flow
                     bool IsDownloaded = await Synchronization.DownloadAll();
                     if (IsDownloaded)
                     {
-                        configState.Text += "\nAcquire files successfully.";
-                        configState.Text += "\nNow enjoy this application.";
+                        configState.Text += "\n> Acquire files successfully.";
+                        configState.Text += "\n> Now enjoy this application.";
                     }
                     else
                     {
-                        configState.Text += "\nCan't make it, but still try using.";
+                        configState.Text += "\n> Can't make it, but still try using.";
                     }
 
                     finish_config.IsEnabled = true;
@@ -72,7 +73,7 @@ namespace Research_Flow
             }
             catch (Exception ex)
             {
-                configState.Text += "\nFail: " + ex.Message;
+                configState.Text += "\n> Fail: " + ex.Message;
             }
         }
 
