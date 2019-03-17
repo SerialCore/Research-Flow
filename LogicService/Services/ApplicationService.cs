@@ -82,18 +82,6 @@ namespace LogicService.Services
             }
         }
 
-        public static object Configured
-        {
-            get
-            {
-                return ApplicationData.Current.LocalSettings.Values["Configured"];
-            }
-            set
-            {
-                ApplicationData.Current.LocalSettings.Values["Configured"] = value;
-            }
-        }
-
         public static object LocalDateModified
         {
             get

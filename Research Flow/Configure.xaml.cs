@@ -26,13 +26,7 @@ namespace Research_Flow
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (ApplicationService.ContainsKey("AccountName"))
-                Login_Tapped(null, null);
-        }
-
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            ApplicationService.Configured = 1;
+            Login_Tapped(null, null);
         }
 
         private async void Login_Tapped(object sender, TappedRoutedEventArgs e)
@@ -40,32 +34,31 @@ namespace Research_Flow
             if (await GraphService.ServiceLogin())
             {
                 accountStatu.Text = await GraphService.GetPrincipalName();
-                // 账户名只在此页面设置
                 ApplicationService.AccountName = await GraphService.GetPrincipalName();
                 ConfigureFile();
             }
             else
             {
-                configState.Text = "> Fail to log in, please try again.";
+                configState.Text = "\nFail to log in, please try again.\n";
             }
         }
 
         private async void ConfigureFile()
         {
-            configState.Text = "Acquiring files from OneDrive...";
+            configState.Text = "Acquiring files from OneDrive...\n";
             try
             {
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 {
-                    bool IsDownloaded = await Synchronization.DownloadAll();
-                    if (IsDownloaded)
+                    bool IsSynced = await Synchronization.ScanChanges();
+                    if (IsSynced)
                     {
-                        configState.Text += "\n> Acquire files successfully.";
-                        configState.Text += "\n> Now enjoy this application.";
+                        configState.Text += "\nSync files successfully.\n";
+                        configState.Text += "\nNow enjoy this application.\n";
                     }
                     else
                     {
-                        configState.Text += "\n> Can't make it, but still try using.";
+                        configState.Text += "\nCan't make it, but still try using.\n";
                     }
 
                     finish_config.IsEnabled = true;
@@ -73,7 +66,7 @@ namespace Research_Flow
             }
             catch (Exception ex)
             {
-                configState.Text += "\n> Fail: " + ex.Message;
+                configState.Text += "\nFail: " + ex.Message + "\n";
             }
         }
 

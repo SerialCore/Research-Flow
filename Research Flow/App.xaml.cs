@@ -63,11 +63,7 @@ namespace Research_Flow
 
                     ApplicationService.TrackAppUse(e);
 
-                    if (!ApplicationData.Current.LocalSettings.Values.ContainsKey("AccountName")
-                        || !ApplicationData.Current.LocalSettings.Values.ContainsKey("Configured"))
-                        rootFrame.Navigate(typeof(Configure), e.Arguments);
-                    else
-                        rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    rootFrame.Navigate(typeof(Configure), e.Arguments);
                 }
 
                 // Ensure the current window is active

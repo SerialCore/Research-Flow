@@ -94,7 +94,6 @@ namespace Research_Flow
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            Login();
             //await Task.Run(async() =>
             //{
             //    if (await Synchronization.ScanChanges())
@@ -102,9 +101,25 @@ namespace Research_Flow
             //        AppMessage.SendMessage("Synchronize successfully");
             //    }
             //});
-            if (await Synchronization.ScanChanges())
+            if (GraphService.IsSignedIn)
             {
-                AppMessage.SendMessage("Synchronize successfully", AppMessage.MessageType.Bravo);
+                string name = await GraphService.GetDisplayName();
+                string email = await GraphService.GetPrincipalName();
+                BitmapImage image = new BitmapImage();
+                image.UriSource = new Uri("ms-appx:///Assets/Logos/ResearchFlow_logo.jpg");
+                accountName.Text = name;
+                accountEmail.Text = email;
+                accountPhoto.ProfilePicture = image;
+
+                //if (await Synchronization.ScanChanges())
+                //{
+                //    AppMessage.SendMessage("Synchronize successfully", AppMessage.MessageType.Bravo);
+                //}
+            }
+            else
+            {
+                accountName.Text = "Offline";
+                accountEmail.Text = ApplicationService.AccountName;
             }
         }
 
@@ -176,28 +191,14 @@ namespace Research_Flow
         private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
             => ContentFrame.GoBack();
 
+        private void RefreshPage_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         #endregion
 
         #region Account
-
-        private async void Login()
-        {
-            if (await GraphService.ServiceLogin())
-            {
-                string name = await GraphService.GetDisplayName();
-                string email = await GraphService.GetPrincipalName();
-                BitmapImage image = new BitmapImage();
-                image.UriSource = new Uri("ms-appx:///Assets/Logos/ResearchFlow_logo.jpg");
-                accountName.Text = name;
-                accountEmail.Text = email;
-                accountPhoto.ProfilePicture = image;
-            }
-            else
-            {
-                accountName.Text = "Offline";
-                accountEmail.Text = ApplicationService.AccountName;
-            }
-        }
 
         private void Logout()
         {
@@ -213,8 +214,11 @@ namespace Research_Flow
 
         private async void AccountSync_Click(object sender, RoutedEventArgs e)
         {
-            if (await Synchronization.ScanChanges())
-                AppMessage.SendMessage("Synchronize successfully", AppMessage.MessageType.Bravo);
+            if (GraphService.IsSignedIn)
+            {
+                if (await Synchronization.ScanChanges())
+                    AppMessage.SendMessage("Synchronize successfully", AppMessage.MessageType.Bravo);
+            }
         }
 
         private async void AccountLogout_Click(object sender, RoutedEventArgs e)

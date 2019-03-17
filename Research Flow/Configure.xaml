@@ -10,67 +10,11 @@
 
     <Grid>
 
-        <NavigationView PaneDisplayMode="Top"
-                        IsBackButtonVisible="Auto">
-
-            <NavigationView.MenuItems>
-                <NavigationViewItem Content="Overview" Tag="Overview">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xEB68;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                <NavigationViewItem Content="Contact" Tag="Contact">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xEA8F;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-
-                <NavigationViewItemSeparator/>
-                <NavigationViewItem Content="Topic" Tag="Topic">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xEB50;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                <NavigationViewItem Content="Search" Tag="Search">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xEDE4;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                <NavigationViewItem Content="Learn" Tag="Learn">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE7BE;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-
-                <NavigationViewItemSeparator/>
-                <NavigationViewItem Content="Compose" Tag="Compose">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xEA86;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                <NavigationViewItem Content="Tool" Tag="Tool">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xEC26;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-            </NavigationView.MenuItems>
-
-            <NavigationView.AutoSuggestBox>
-                <AutoSuggestBox x:Name="ASB" QueryIcon="Find" Width="200"/>
-            </NavigationView.AutoSuggestBox>
-
-            <NavigationView.PaneFooter>
-                <PersonPicture Grid.Column="0" Height="18" Width="18"/>
-            </NavigationView.PaneFooter>
-
-        </NavigationView>
-
-        <Grid x:Name="config_panel_background" Background="Black" Opacity="0.5"/>
         <Grid x:Name="config_panel" Height="500" Width="600" Background="Transparent">
-            <TextBlock Text="Research Flow" Foreground="White" FontSize="40" Margin="10" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-            <Grid Margin="0,80,0,50" Background="Beige">
+            <TextBlock Text="Research Flow" FontSize="40" Margin="10" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+            <Grid Margin="0,80,0,50">
                 <StackPanel>
-                    <ListViewItem Tapped="Login_Tapped" Height="48">
+                    <ListViewItem Tapped="Login_Tapped"  Height="48">
                         <Grid >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="48"/>
@@ -83,7 +27,7 @@
                     <TextBlock x:Name="configState" Margin="10" LineHeight="20"/>
                 </StackPanel>
                 <Button x:Name="finish_config" Content="Let's begin" IsEnabled="False" Click="Finish_config_Click" 
-                            Height="32" Width="200" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20"/>
+                            Height="32" Width="200" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
             </Grid>
         </Grid>
 

@@ -25,7 +25,7 @@ namespace LogicService.Services
                 new string[] { MicrosoftGraphScope.FilesReadWriteAll });
             MicrosoftGraphService.Instance.Initialize("3bd1af71-d8ad-41f8-b1c9-22bef7a7028a", MicrosoftGraphEnums.ServicesToInitialize.OneDrive | MicrosoftGraphEnums.ServicesToInitialize.UserProfile,
                 new string[] { MicrosoftGraphScope.UserRead });
-
+            
             try
             {
                 IsSignedIn = await MicrosoftGraphService.Instance.LoginAsync() && await OneDriveService.Instance.LoginAsync();
