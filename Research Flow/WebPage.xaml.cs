@@ -46,7 +46,9 @@ namespace Research_Flow
         {
             try
             {
-                webView.Navigate(new Uri(siteUrl.Text));
+                string uri = siteUrl.Text;
+                uri = uri.StartsWith("http") ? uri : "http://" + uri;
+                webView.Navigate(new Uri(uri));
             }
             catch
             {
@@ -55,7 +57,10 @@ namespace Research_Flow
         }
 
         private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
-            => webWaiting.IsActive = true;
+        {
+            webWaiting.IsActive = true;
+            siteUrl.Text = webView.Source.AbsoluteUri;
+        }
 
         private void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
             => webWaiting.IsActive = false;

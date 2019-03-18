@@ -19,8 +19,8 @@
                      NavigationCompleted="WebView_NavigationCompleted"/>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
                 <AutoSuggestBox Grid.Column="0" x:Name="siteUrl" QueryIcon="Find" Text="http://" 
                                 QuerySubmitted="AutoSuggestBox_QuerySubmitted" Margin="5,5,0,0"/>

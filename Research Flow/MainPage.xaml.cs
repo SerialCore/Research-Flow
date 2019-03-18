@@ -61,10 +61,7 @@ namespace Research_Flow
         // 应用信息       应用设置   本地
         // 用户信息
 
-        //关于加密，如果中途选择加密或者更改密钥，可以尝试使用新的写方法，而用捕获异常的方式尝试之前用过的读方法
         //目前的同步机制不能满足远程删除，要么使用数据库管理文件，要么在解压时对照被删除文件。
-        //WebView地址栏实时更新
-        //如何直接使用系统账户登录
         //尽可能用数据绑定节省代码
         //Quartz.NET作业调度
         //WebView存储浏览记录，保存在Log文件夹里
@@ -183,11 +180,6 @@ namespace Research_Flow
 
         private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
             => ContentFrame.GoBack();
-
-        private void RefreshPage_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
 
         #endregion
 

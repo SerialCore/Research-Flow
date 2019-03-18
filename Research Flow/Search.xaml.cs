@@ -28,6 +28,11 @@ namespace Research_Flow
             InitializeData();
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            
+        }
+
         private async void InitializeData()
         {
             // RSS
