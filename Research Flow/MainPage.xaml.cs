@@ -90,17 +90,10 @@ namespace Research_Flow
         //优化数据存储结构、加密方式，选择导出到设备
         //不同数据源的学习方法是不同的，网页爬虫，Feed统计
         //How-tos
-        //Azop对接，3.0
+        //x3C对接，3.0
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            //await Task.Run(async() =>
-            //{
-            //    if (await Synchronization.ScanChanges())
-            //    {
-            //        AppMessage.SendMessage("Synchronize successfully");
-            //    }
-            //});
             if (GraphService.IsSignedIn)
             {
                 string name = await GraphService.GetDisplayName();
@@ -203,8 +196,7 @@ namespace Research_Flow
         private void Logout()
         {
             GraphService.ServiceLogout();
-
-            ApplicationService.RemoveKey("AccountName");
+            
             ContentFrame.IsEnabled = false;
             ContentHeader.IsEnabled = false;
             accountLogout.Content = "restart this app";

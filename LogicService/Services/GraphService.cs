@@ -41,6 +41,7 @@ namespace LogicService.Services
         public async static void ServiceLogout()
         {
             await OneDriveService.Instance.LogoutAsync();
+            ApplicationService.RemoveKey("AccountName");
             User = null;
             IsSignedIn = false;
         }

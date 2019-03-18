@@ -146,10 +146,8 @@
     <None Include="Package.xml" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-200.png" />
-    <Content Include="Assets\Logos\blackbox_logo.png" />
+    <Content Include="Assets\Logos\ResearchFlow_splash.png" />
     <Content Include="Assets\Logos\Microsoft_logo.jpg" />
-    <Content Include="Assets\Logos\paintpanel_logo.png" />
-    <Content Include="Assets\Logos\phyMylab_logo.png" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Assets\Logos\OneDrive_icon.png" />
     <Content Include="Assets\Logos\OneDrive_icon_trans.png" />

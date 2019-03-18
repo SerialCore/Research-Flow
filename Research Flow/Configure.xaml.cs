@@ -34,6 +34,7 @@ namespace Research_Flow
             if (await GraphService.ServiceLogin())
             {
                 accountStatu.Text = await GraphService.GetPrincipalName();
+                configState.Text = "\nHi\t" + await GraphService.GetDisplayName() + "\n";
                 ApplicationService.AccountName = await GraphService.GetPrincipalName();
                 ConfigureFile();
             }
@@ -41,11 +42,15 @@ namespace Research_Flow
             {
                 configState.Text = "\nFail to log in, please try again.\n";
             }
+
+            // make sure there will be an user folder
+            if (ApplicationService.ContainsKey("AccountName"))
+                finish_config.IsEnabled = true;
         }
 
         private async void ConfigureFile()
         {
-            configState.Text = "Acquiring files from OneDrive...\n";
+            configState.Text += "\nAcquiring files from OneDrive...\n";
             try
             {
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
@@ -54,20 +59,22 @@ namespace Research_Flow
                     if (IsSynced)
                     {
                         configState.Text += "\nSync files successfully.\n";
-                        configState.Text += "\nNow enjoy this application.\n";
                     }
                     else
                     {
                         configState.Text += "\nCan't make it, but still try using.\n";
                     }
-
-                    finish_config.IsEnabled = true;
                 });
             }
             catch (Exception ex)
             {
                 configState.Text += "\nFail: " + ex.Message + "\n";
             }
+        }
+
+        private void ConfigureSetting()
+        {
+
         }
 
         private void Finish_config_Click(object sender, RoutedEventArgs e)

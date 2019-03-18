@@ -10,6 +10,8 @@
 
     <Grid>
 
+        <Image Height="750" Width="900" Source="/Assets/Logos/ResearchFlow_splash.png"/>
+
         <Grid x:Name="config_panel" Height="500" Width="600" Background="Transparent">
             <TextBlock Text="Research Flow" FontSize="40" Margin="10" VerticalAlignment="Top" HorizontalAlignment="Left"/>
             <Grid Margin="0,80,0,50">
@@ -27,7 +29,7 @@
                     <TextBlock x:Name="configState" Margin="10" LineHeight="20"/>
                 </StackPanel>
                 <Button x:Name="finish_config" Content="Let's begin" IsEnabled="False" Click="Finish_config_Click" 
-                            Height="32" Width="200" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+                            Height="32" Width="200" VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="LightSkyBlue"/>
             </Grid>
         </Grid>
 
