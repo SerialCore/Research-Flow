@@ -1,9 +1,7 @@
-﻿using LogicService.Objects;
-using LogicService.Security;
+﻿using LogicService.Application;
 using LogicService.Services;
 using LogicService.Storage;
 using System;
-using System.Collections.ObjectModel;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -35,7 +33,7 @@ namespace Research_Flow
             {
                 accountStatu.Text = await GraphService.GetPrincipalName();
                 configState.Text = "\nHi\t" + await GraphService.GetDisplayName() + "\n";
-                ApplicationService.AccountName = await GraphService.GetPrincipalName();
+                ApplicationSetting.AccountName = await GraphService.GetPrincipalName();
                 ConfigureFile();
             }
             else
@@ -44,13 +42,13 @@ namespace Research_Flow
             }
 
             // make sure there will be an user folder
-            if (ApplicationService.ContainsKey("AccountName"))
+            if (ApplicationSetting.KeyContain("AccountName"))
                 finish_config.IsEnabled = true;
         }
 
         private async void ConfigureFile()
         {
-            configState.Text += "\nAcquiring files from OneDrive...\n";
+            configState.Text += "\nScanning files with OneDrive...\n";
             try
             {
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
@@ -70,6 +68,11 @@ namespace Research_Flow
             {
                 configState.Text += "\nFail: " + ex.Message + "\n";
             }
+        }
+
+        private void ConfigureBD()
+        {
+
         }
 
         private void ConfigureSetting()

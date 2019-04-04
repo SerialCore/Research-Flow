@@ -1,4 +1,4 @@
-﻿using LogicService.Services;
+﻿using LogicService.Application;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Push;
 using System;
@@ -24,6 +24,8 @@ namespace Research_Flow
         public App()
         {
             AppCenter.Start("5314ea3e-424f-4841-8399-7e8252fef7af", typeof(Push));
+            UWPnode.Handler.Start();
+
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
@@ -61,7 +63,7 @@ namespace Research_Flow
                     // configuring the new page by passing required information as a navigation
                     // parameter
 
-                    ApplicationService.TrackAppUse(e);
+                    ApplicationInfo.TrackAppUse(e);
 
                     rootFrame.Navigate(typeof(Configure), e.Arguments);
                 }

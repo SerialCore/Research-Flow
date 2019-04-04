@@ -1,9 +1,6 @@
 ﻿using ICSharpCode.SharpZipLib.Zip;
-using LogicService.Services;
+using LogicService.Application;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 
@@ -16,7 +13,7 @@ namespace LogicService.Storage
         {
             try
             {
-                if ((await OneDriveStorage.GetDataAsync()).DateModified > DateTime.FromBinary((long)ApplicationService.LocalDateModified))
+                if ((await OneDriveStorage.GetDataAsync()).DateModified > DateTime.FromBinary((long)ApplicationSetting.LocalDateModified))
                     return await DownloadAll();
                 else
                     return await UploadAll();
@@ -74,7 +71,7 @@ namespace LogicService.Storage
                         sign = true;
                     }
                     if (sign == true)
-                        ApplicationService.LocalDateModified = DateTime.Now.ToBinary();
+                        ApplicationSetting.LocalDateModified = DateTime.Now.ToBinary();
                 });
                 return sign;
             }

@@ -1,10 +1,9 @@
-﻿using Microsoft.Graph;
+﻿using LogicService.Application;
 using Microsoft.Toolkit.Services.MicrosoftGraph;
 using Microsoft.Toolkit.Services.OneDrive;
 using Microsoft.Toolkit.Services.Services.MicrosoftGraph;
 using System;
 using System.Threading.Tasks;
-using Windows.Storage;
 using Windows.Storage.Streams;
 
 namespace LogicService.Services
@@ -41,7 +40,7 @@ namespace LogicService.Services
         public async static void ServiceLogout()
         {
             await OneDriveService.Instance.LogoutAsync();
-            ApplicationService.RemoveKey("AccountName");
+            ApplicationSetting.KeyRemove("AccountName");
             User = null;
             IsSignedIn = false;
         }

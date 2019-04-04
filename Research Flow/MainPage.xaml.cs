@@ -1,4 +1,5 @@
-﻿using LogicService.Helper;
+﻿using LogicService.Application;
+using LogicService.Helper;
 using LogicService.Services;
 using LogicService.Storage;
 using System;
@@ -36,19 +37,22 @@ namespace Research_Flow
         public MainPage()
         {
             this.InitializeComponent();
-
-            AppMessage.MessageReached += AppMessage_MessageReached;
+            
+            ApplicationMessage.MessageReached += AppMessage_MessageReached;
         }
 
-        private void AppMessage_MessageReached(object sender)
+        private async void AppMessage_MessageReached(string message, int span)
         {
-            appMessage.Text = sender as string;
+            appMessage.Text = message;
+
+            await Task.Delay(span * 1000);
+            appMessage.Text = "";
         }
 
         // 消息通知方式：
-        // Toast，适用于后台通知
-        // Header(Event)，适用于前台通知，页面间的短消息通信
-        // InAppNotification，适用于捕获异常
+        // Toast，只用于后台通知
+        // Header(Event)，适用于前台通知，且用户能注意到
+        // InAppNotification，只用于捕获异常
         // Dialog，适用于操作限制
 
         // 用户数据存储：
@@ -62,14 +66,11 @@ namespace Research_Flow
         // 用户信息
 
         //目前的同步机制不能满足远程删除，要么使用数据库管理文件，要么在解压时对照被删除文件。
-        //尽可能用数据绑定节省代码
         //Quartz.NET作业调度
         //WebView存储浏览记录，保存在Log文件夹里
-        //解决获取Feed失败后再也无法获取信息
         //RSS列表可自定义顺序，包括手动拖拽，或者一键排序
         //Feed内容要包含时间，这样可以通知新Feed，并可以给用户呈现出一个热点、时间图
         //数据库要存哪些数据？适合存储小数据，不适合大段文字和复杂格式以及复杂的继承关系。
-        //数据库文件是否能加密，是否能转换成别的格式，压缩包是否能加密
         //注册后台任务
         //爬虫的界面、流、存储
         //自定义关键词，项目管理
@@ -79,9 +80,8 @@ namespace Research_Flow
         //论文管理
         //应用内搜索，文件遍历
         //收集用户信息
-        //其他用户信息管理
         //登录IP，保存在Log里
-        //Url搜索引擎，保存在Setting里
+        //Url搜索引擎
         //哪些文件需要同步，扩展名
         //需不需要log文件，记录什么？
         //优化数据存储结构、加密方式，选择导出到设备
@@ -109,7 +109,7 @@ namespace Research_Flow
             else
             {
                 accountName.Text = "Offline";
-                accountEmail.Text = ApplicationService.AccountName;
+                accountEmail.Text = ApplicationSetting.AccountName;
             }
         }
 
@@ -190,7 +190,6 @@ namespace Research_Flow
             GraphService.ServiceLogout();
             
             ContentFrame.IsEnabled = false;
-            ContentHeader.IsEnabled = false;
             accountLogout.Content = "restart this app";
             accountName.Text = "";
             accountEmail.Text = "";
@@ -200,8 +199,9 @@ namespace Research_Flow
         {
             if (GraphService.IsSignedIn)
             {
+                ApplicationMessage.SendMessage("Synchronizing", 3);
                 if (await Synchronization.ScanChanges())
-                    AppMessage.SendMessage("Synchronize successfully", AppMessage.MessageType.Bravo);
+                    ApplicationMessage.SendMessage("Synchronize successfully", 5);
             }
         }
 
@@ -222,7 +222,7 @@ namespace Research_Flow
 
         private async void DeleteInvokedHandler(IUICommand command)
         {
-            if (ApplicationService.ContainsKey("AccountName"))
+            if (ApplicationSetting.KeyContain("AccountName"))
                 Logout();
             else
                 await CoreApplication.RequestRestartAsync(string.Empty);

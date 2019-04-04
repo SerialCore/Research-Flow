@@ -1,9 +1,6 @@
-﻿using LogicService.Helper;
-using LogicService.Security;
-using LogicService.Services;
-using Microsoft.Toolkit.Uwp.Helpers;
+﻿using LogicService.Application;
+using LogicService.Helper;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
 
@@ -26,7 +23,7 @@ namespace LogicService.Storage
 
         public async static Task<StorageFolder> GetUserFolderAsync()
         {
-            return await GetAppFolderAsync().CreateFolderAsync(ApplicationService.AccountName,
+            return await GetAppFolderAsync().CreateFolderAsync(ApplicationSetting.AccountName,
                 CreationCollisionOption.OpenIfExists);
         }
 
@@ -65,7 +62,7 @@ namespace LogicService.Storage
         {
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(file, SerializeHelper.SerializeToJson(o));
-            ApplicationService.LocalDateModified = DateTime.Now.ToBinary();
+            ApplicationSetting.LocalDateModified = DateTime.Now.ToBinary();
             return file;
         }
 
@@ -81,7 +78,7 @@ namespace LogicService.Storage
             if (file != null)
             {
                 await file.DeleteAsync();
-                ApplicationService.LocalDateModified = DateTime.Now.ToBinary();
+                ApplicationSetting.LocalDateModified = DateTime.Now.ToBinary();
             }
         }
 

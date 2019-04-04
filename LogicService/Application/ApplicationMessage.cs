@@ -4,39 +4,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LogicService.Services
+namespace LogicService.Application
 {
-    public delegate void EventHandle(object sender);
-
     /// <summary>
     /// Instance of customized event handle
     /// </summary>
-    public class AppMessage
+    public class ApplicationMessage
     {
-        public enum MessageType
-        {
-            Tell,    // flash a text massage
-            Hey,     // scroll a text
-            Bravo,   // flash and color
-            Ops,     // flash and color
-            Banner   // fix a new text
-        }
+
+        public delegate void MessageHandle(string message, int span);
 
         /// <summary>
         /// Each page should have defined a eventhandle, but they just need one if there is a Public defination.
         /// </summary>
-        public static event EventHandle MessageReached;
+        public static event MessageHandle MessageReached;
 
         /// <summary>
         /// Page uses this to hang on (send) a message, and someone subscribes to event.
         /// Just like Action-Parameter's behavior.
         /// </summary>
-        /// <param name="send"></param>
-        public static void SendMessage(string text, MessageType type)
+        /// <param name="text">message</param>
+        /// <param name="span">time span for message in second</param>
+        public static void SendMessage(string text, int span)
         {
             if (MessageReached != null)
             {
-                MessageReached(text);
+                MessageReached(text, span);
             }
         }
 

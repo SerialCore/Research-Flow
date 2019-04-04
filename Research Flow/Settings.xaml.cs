@@ -1,4 +1,5 @@
-﻿using LogicService.Services;
+﻿using LogicService.Application;
+using LogicService.Services;
 using System;
 using Windows.System;
 using Windows.UI.Xaml.Controls;
@@ -26,37 +27,37 @@ namespace Research_Flow
 
         private void DisplaySystemInfo()
         {
-            applicationName.Text = ApplicationService.ApplicationName;
+            applicationName.Text = ApplicationInfo.ApplicationName;
 
-            applicationVersion.Text = ApplicationService.ApplicationVersion;
+            applicationVersion.Text = ApplicationInfo.ApplicationVersion;
 
-            cultureInfo.Text = ApplicationService.Culture.DisplayName;
+            cultureInfo.Text = ApplicationInfo.Culture.DisplayName;
 
-            oSVersion.Text = ApplicationService.OperatingSystemVersion.ToString();
+            oSVersion.Text = ApplicationInfo.OperatingSystemVersion.ToString();
 
-            deviceModel.Text = ApplicationService.DeviceModel;
+            deviceModel.Text = ApplicationInfo.DeviceModel;
 
-            availableMemory.Text = ApplicationService.AvailableMemory.ToString();
+            availableMemory.Text = ApplicationInfo.AvailableMemory.ToString();
 
-            firstVersionInstalled.Text = ApplicationService.FirstVersionInstalled;
+            firstVersionInstalled.Text = ApplicationInfo.FirstVersionInstalled;
 
-            firstUseTime.Text = ApplicationService.FirstUseTime.ToString();
+            firstUseTime.Text = ApplicationInfo.FirstUseTime.ToString();
 
-            launchTime.Text = ApplicationService.LaunchTime.ToString();
+            launchTime.Text = ApplicationInfo.LaunchTime.ToString();
 
-            lastLaunchTime.Text = ApplicationService.LastLaunchTime.ToString();
+            lastLaunchTime.Text = ApplicationInfo.LastLaunchTime.ToString();
 
-            lastResetTime.Text = ApplicationService.LastResetTime.ToString();
+            lastResetTime.Text = ApplicationInfo.LastResetTime.ToString();
 
-            launchCount.Text = ApplicationService.LaunchCount.ToString();
+            launchCount.Text = ApplicationInfo.LaunchCount.ToString();
 
-            totalLaunchCount.Text = ApplicationService.TotalLaunchCount.ToString();
+            totalLaunchCount.Text = ApplicationInfo.TotalLaunchCount.ToString();
 
-            appUptime.Text = ApplicationService.AppUptime.ToString("G");
+            appUptime.Text = ApplicationInfo.AppUptime.ToString("G");
         }
 
         private async void Give_Rate(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-            => await ApplicationService.ShowRatingReviewDialog();
+            => await ApplicationInfo.ShowRatingReviewDialog();
 
     }
 
