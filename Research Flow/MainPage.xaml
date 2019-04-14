@@ -47,14 +47,14 @@
                 </NavigationViewItem>
 
                 <NavigationViewItemSeparator/>
-                <NavigationViewItem Content="Compose" Tag="Compose">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xEA86;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
                 <NavigationViewItem Content="WebPage" Tag="WebPage">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEC26;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Note" Tag="Note">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xEA86;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>

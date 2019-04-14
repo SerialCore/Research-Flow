@@ -97,18 +97,21 @@ namespace Research_Flow
 
         private void DataTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
         {
-            // deferral code for catching data
-            DataRequestDeferral deferral = args.Request.GetDeferral();
-            
-            // info of share request
-            DataRequest request = args.Request;
-            request.Data.Properties.Title = "Search Result";
-            request.Data.Properties.Description = "Share your search result";
+            if (webView.Source != null)
+            {
+                // deferral code for catching data
+                DataRequestDeferral deferral = args.Request.GetDeferral();
 
-            request.Data.SetWebLink(webView.Source);
+                // info of share request
+                DataRequest request = args.Request;
+                request.Data.Properties.Title = "Search Result";
+                request.Data.Properties.Description = "Share your search result";
 
-            // end if deferral
-            deferral.Complete();
+                request.Data.SetWebLink(webView.Source);
+
+                // end if deferral
+                deferral.Complete();
+            }
         }
 
     }

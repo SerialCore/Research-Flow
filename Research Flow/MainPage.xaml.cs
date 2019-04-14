@@ -123,8 +123,8 @@ namespace Research_Flow
             ("Topic", typeof(Topic)),
             ("Search", typeof(Search)),
             ("Learn", typeof(Learn)),
-            ("Compose", typeof(Compose)),
             ("WebPage", typeof(WebPage)),
+            ("Note", typeof(Note)),
         };
 
         private void NavView_Loaded(object sender, RoutedEventArgs e)

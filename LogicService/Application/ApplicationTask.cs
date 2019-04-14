@@ -10,7 +10,25 @@ namespace LogicService.Application
     public class ApplicationTask
     {
 
-        public static async Task<BackgroundTaskRegistration> RegisterBackgroundTask(Type taskEntryPoint,
+        public static async Task<BackgroundTaskRegistration> RegisterLearnTask(Type taskEntryPoint,
+            IBackgroundTrigger trigger, IBackgroundCondition condition)
+        {
+            return await RegisterBackgroundTask(taskEntryPoint, "LearnTask", null, null);
+        }
+
+        public static async Task<BackgroundTaskRegistration> RegisterSearchTask(Type taskEntryPoint,
+            IBackgroundTrigger trigger, IBackgroundCondition condition)
+        {
+            return await RegisterBackgroundTask(taskEntryPoint, "SearchTask", null, null);
+        }
+
+        public static async Task<BackgroundTaskRegistration> RegisterStorageTask(Type taskEntryPoint,
+            IBackgroundTrigger trigger, IBackgroundCondition condition)
+        {
+            return await RegisterBackgroundTask(taskEntryPoint, "StorageTask", null, null);
+        }
+
+        private static async Task<BackgroundTaskRegistration> RegisterBackgroundTask(Type taskEntryPoint,
             string taskName, IBackgroundTrigger trigger, IBackgroundCondition condition)
         {
             var status = await BackgroundExecutionManager.RequestAccessAsync();
