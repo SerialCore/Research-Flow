@@ -72,8 +72,8 @@
                         <AppBarButton Label="ScreenShot" Icon="AttachCamera" Tapped="Flyout_Tapped" Background="Transparent">
                             <FlyoutBase.AttachedFlyout>
                                 <MenuFlyout>
-                                    <MenuFlyoutItem Text="Save" Click="ScreenShot_Save"/>
                                     <MenuFlyoutItem Text="Share" Click="ScreenShot_Share"/>
+                                    <MenuFlyoutItem Text="Export" Click="ScreenShot_Export"/>
                                     <MenuFlyoutItem Text="Upload" Click="ScreenShot_Upload"/>
                                 </MenuFlyout>
                             </FlyoutBase.AttachedFlyout>

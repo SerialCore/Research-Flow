@@ -22,8 +22,11 @@ namespace Research_Flow
             this.InitializeComponent();
         }
 
+        private object tempParameter;
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            tempParameter = e.Parameter;
             Login_Tapped(null, null);
         }
 
@@ -82,7 +85,7 @@ namespace Research_Flow
 
         private void Finish_config_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(MainPage));
+            this.Frame.Navigate(typeof(MainPage), tempParameter);
         }
 
     }

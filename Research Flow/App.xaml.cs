@@ -87,14 +87,32 @@ namespace Research_Flow
                 }
                 if (rootFrame.Content == null)
                 {
-                    if (!ApplicationData.Current.LocalSettings.Values.ContainsKey("AccountName")
-                        || !ApplicationData.Current.LocalSettings.Values.ContainsKey("Configured"))
-                        rootFrame.Navigate(typeof(Configure));
-                    else
-                        rootFrame.Navigate(typeof(MainPage));
+                    rootFrame.Navigate(typeof(Configure));
                 }
                 Window.Current.Activate();
             }
+        }
+
+        protected override void OnFileActivated(FileActivatedEventArgs args)
+        {
+            StorageFile indexFile = args.Files[0] as StorageFile;
+            if (indexFile != null)
+            {
+                Frame rootFrame = Window.Current.Content as Frame;
+                ConfigureUI();
+                if (rootFrame == null)
+                {
+                    rootFrame = new Frame();
+                    rootFrame.NavigationFailed += OnNavigationFailed;
+                    Window.Current.Content = rootFrame;
+                }
+                if (rootFrame.Content == null)
+                {
+                    rootFrame.BackStack.Clear();
+                    rootFrame.Navigate(typeof(Configure), indexFile);
+                }
+            }
+            Window.Current.Activate();
         }
 
         private void ConfigureUI()

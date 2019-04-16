@@ -1,0 +1,31 @@
+{
+  "DrawableList": [
+    {
+      "$type": "Microsoft.Toolkit.Uwp.UI.Controls.TextDrawable, Microsoft.Toolkit.Uwp.UI.Controls",
+      "Text": "Research Note for ",
+      "Bounds": {
+        "X": 20.976377487182617,
+        "Y": 17.988983154296875,
+        "Width": 200.0,
+        "Height": 42.0,
+        "Left": 20.976377487182617,
+        "Top": 17.988983154296875,
+        "Right": 220.97637939453125,
+        "Bottom": 59.988983154296875,
+        "IsEmpty": false
+      },
+      "IsActive": true,
+      "FontSize": 22.0,
+      "TextColor": {
+        "A": 255,
+        "R": 11,
+        "G": 134,
+        "B": 255
+      },
+      "IsBold": false,
+      "IsItalic": false,
+      "HorizontalMarginBasedOnFont": 12.8
+    }
+  ],
+  "Version": 1
+}

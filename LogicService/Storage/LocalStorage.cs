@@ -21,21 +21,21 @@ namespace LogicService.Storage
             return ApplicationData.Current.RoamingFolder;
         }
 
-        public async static Task<StorageFolder> GetUserFolderAsync()
-        {
-            return await GetAppFolderAsync().CreateFolderAsync(ApplicationSetting.AccountName,
-                CreationCollisionOption.OpenIfExists);
-        }
-
         public static async Task<StorageFolder> GetFolderAsync(string folder)
         {
             return await (await GetUserFolderAsync()).CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
         }
 
-        // OneDrive
-        public static async Task<StorageFolder> GetPhotoAsync()
+        public async static Task<StorageFolder> GetUserFolderAsync()
         {
-            return await (await GetUserFolderAsync()).CreateFolderAsync("Photo", CreationCollisionOption.OpenIfExists);
+            return await GetAppFolderAsync().CreateFolderAsync(ApplicationSetting.AccountName,
+                    CreationCollisionOption.OpenIfExists);
+        }
+
+        // OneDrive
+        public static async Task<StorageFolder> GetPictureAsync()
+        {
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Picture", CreationCollisionOption.OpenIfExists);
         }
 
         // OneDrive (Feed)
@@ -49,6 +49,11 @@ namespace LogicService.Storage
             return await (await GetUserFolderAsync()).CreateFolderAsync("Feed", CreationCollisionOption.OpenIfExists);
         }
 
+        public static async Task<StorageFolder> GetNoteAsync()
+        {
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Note", CreationCollisionOption.OpenIfExists);
+        }
+
         public static async Task<StorageFolder> GetLogAsync()
         {
             return await (await GetUserFolderAsync()).CreateFolderAsync("Log", CreationCollisionOption.OpenIfExists);
@@ -56,20 +61,34 @@ namespace LogicService.Storage
 
         #endregion
 
-        #region Operator
+        #region Common file
 
         public static async Task<StorageFile> WriteJsonAsync(StorageFolder folder, string name, object o)
         {
-            StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.ReplaceExisting);
-            await FileIO.WriteTextAsync(file, SerializeHelper.SerializeToJson(o));
-            ApplicationSetting.LocalDateModified = DateTime.Now.ToBinary();
-            return file;
+            string json = SerializeHelper.SerializeToJson(o);
+            return await WriteText(folder, name, json);
         }
 
         public static async Task<object> ReadJsonAsync<T>(StorageFolder folder, string name) where T : class
         {
+            return SerializeHelper.DeserializeJsonToObject<T>(await ReadText(folder, name));
+        }
+
+        public static async Task<StorageFile> WriteText(StorageFolder folder, string name, string content)
+        {
+            StorageFile file = await folder.CreateFileAsync(name);
+            if (file != null)
+            {
+                await FileIO.WriteTextAsync(file, content);
+                ApplicationSetting.LocalDateModified = DateTime.Now.ToBinary();
+            }
+            return file;
+        }
+
+        public static async Task<string> ReadText(StorageFolder folder, string name)
+        {
             StorageFile file = await folder.GetFileAsync(name);
-            return SerializeHelper.DeserializeJsonToObject<T>(await FileIO.ReadTextAsync(file));
+            return await FileIO.ReadTextAsync(file);
         }
 
         public static async void DeleteFile(StorageFolder folder, string name)
@@ -82,9 +101,9 @@ namespace LogicService.Storage
             }
         }
 
-    }
+        #endregion
 
-    #endregion
+    }
 
 }
 

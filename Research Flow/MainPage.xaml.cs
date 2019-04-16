@@ -91,6 +91,8 @@ namespace Research_Flow
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            FileParameter = e.Parameter as StorageFile;
+
             if (GraphService.IsSignedIn)
             {
                 string name = await GraphService.GetDisplayName();
@@ -115,6 +117,8 @@ namespace Research_Flow
 
         #region NavView
 
+        private StorageFile FileParameter;
+
         // use of anonymous class
         private readonly List<(string Tag, Type Page)> _pages = new List<(string Tag, Type Page)>
         {
@@ -131,15 +135,18 @@ namespace Research_Flow
         {
             // you can also add items in code behind
             //NavView.MenuItems.Add(new NavigationViewItemSeparator());
-
-            // set the initial SelectedItem
-            foreach (NavigationViewItemBase item in NavView.MenuItems)
+            if (FileParameter != null)
             {
-                if (item is NavigationViewItem && item.Tag.ToString() == "Overview")
+                if (FileParameter.FileType.Equals(".note"))
                 {
-                    NavView.SelectedItem = item;
-                    break;
+                    ContentFrame.Navigate(typeof(Note), FileParameter);
                 }
+            }
+            else
+            {
+                NavView.SelectedItem = NavView.MenuItems
+                    .OfType<NavigationViewItem>()
+                    .First(n => n.Tag.Equals("Overview"));
             }
         }
 
@@ -237,13 +244,15 @@ namespace Research_Flow
         private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
             => FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
 
-        private async void ScreenShot_Save(object sender, RoutedEventArgs e)
+        private async void ScreenShot_Export(object sender, RoutedEventArgs e)
         {
-            FileSavePicker picker = new FileSavePicker();
+            FileSavePicker picker = new FileSavePicker
+            {
+                SuggestedStartLocation = PickerLocationId.Desktop,
+                SuggestedFileName = "ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png",
+            };
             picker.FileTypeChoices.Add("ScreenShot", new string[] { ".png" });
-            picker.SuggestedStartLocation = PickerLocationId.Desktop;
-            picker.SuggestedFileName = "ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png";
-            StorageFile file=await picker.PickSaveFileAsync();
+            StorageFile file = await picker.PickSaveFileAsync();
             if (file != null)
             {
                 var bitmap = new RenderTargetBitmap();
@@ -282,7 +291,7 @@ namespace Research_Flow
             request.Data.Properties.Description = "Share your current idea";
 
             var bitmap = new RenderTargetBitmap();
-            StorageFile file = await (await LocalStorage.GetPhotoAsync()).CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", 
+            StorageFile file = await (await LocalStorage.GetPictureAsync()).CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", 
                 CreationCollisionOption.ReplaceExisting);
             await bitmap.RenderAsync(FullPage);
             var buffer = await bitmap.GetPixelsAsync();
@@ -311,7 +320,7 @@ namespace Research_Flow
         private async void ScreenShot_Upload(object sender, RoutedEventArgs e)
         {
             var bitmap = new RenderTargetBitmap();
-            StorageFile file = await (await LocalStorage.GetPhotoAsync()).CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", 
+            StorageFile file = await (await LocalStorage.GetPictureAsync()).CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", 
                 CreationCollisionOption.ReplaceExisting);
             await bitmap.RenderAsync(FullPage);
             var buffer = await bitmap.GetPixelsAsync();
@@ -335,7 +344,7 @@ namespace Research_Flow
                 // confirm the app was associated with Microsoft account
                 try
                 {
-                    await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetPhotoAsync(), file);
+                    await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetPictureAsync(), file);
                     ToastNotificationManager.CreateToastNotifier().Show(
                         new ToastNotification(ToastGenerator.TextToast("OneDrive", "Screen Shot Saved").GetXml()));
                 }

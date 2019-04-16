@@ -143,6 +143,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="Assets\Documents\DefaultNote.note" />
     <None Include="Research Flow_StoreKey.pfx" />
     <None Include="Research Flow_TemporaryKey.pfx" />
   </ItemGroup>
@@ -155,7 +156,6 @@
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Assets\Logos\OneDrive_icon.png" />
     <Content Include="Assets\Logos\OneDrive_icon_trans.png" />
-    <Content Include="Assets\Logos\OneDrive_logo.png" />
     <Content Include="Assets\Logos\ResearchFlow_logo.jpg" />
     <Content Include="Assets\SmallTile.scale-100.png" />
     <Content Include="Assets\SmallTile.scale-200.png" />
@@ -263,6 +263,7 @@
       <HintPath>..\..\..\..\Downloads\9597827620290011319192\dotlib.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

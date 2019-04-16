@@ -11,7 +11,23 @@
 
     <Grid>
 
-        <toolkit:InfiniteCanvas x:Name="canvas" Margin="20,0"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <toolkit:InfiniteCanvas x:Name="canvas" Grid.Row="0"/>
+
+            <CommandBar Grid.Row="1" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                <AppBarButton Icon="Share" Label="Share" Click="Share_Note"/>
+                <AppBarButton Icon="Pin" Label="ToImage" Click="Share_Note"/>
+                <AppBarSeparator />
+                <AppBarButton Icon="Save" Label="Save" Click="Save_Note"/>
+                <AppBarButton Icon="ZoomOut" Label="Export" Click="Export_Note"/>
+                <AppBarButton Icon="Import" Label="Import" Click="Import_Note"/>
+                <AppBarButton Icon="Document" Label="Document" Click="Open_Document"/>
+            </CommandBar>
+        </Grid>
 
         <toolkit:InAppNotification x:Name="InAppNotification" 
                                     ShowDismissButton="True"
