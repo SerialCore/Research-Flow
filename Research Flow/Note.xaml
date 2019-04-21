@@ -16,17 +16,48 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <toolkit:InfiniteCanvas x:Name="canvas" Grid.Row="0"/>
 
-            <CommandBar Grid.Row="1" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                <AppBarButton Icon="Share" Label="Share" Click="Share_Note"/>
-                <AppBarButton Icon="Pin" Label="ToImage" Click="Share_Note"/>
-                <AppBarSeparator />
-                <AppBarButton Icon="Save" Label="Save" Click="Save_Note"/>
-                <AppBarButton Icon="ZoomOut" Label="Export" Click="Export_Note"/>
-                <AppBarButton Icon="Import" Label="Import" Click="Import_Note"/>
-                <AppBarButton Icon="Document" Label="Document" Click="Open_Document"/>
-            </CommandBar>
+            <SplitView Grid.Row="0" x:Name="notepanel" OpenPaneLength="400" PanePlacement="Right" DisplayMode="Overlay">
+                <SplitView.Pane>
+                    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                        <ListView x:Name="notelist">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding BoteName}"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </SplitView.Pane>
+                <SplitView.Content>
+                    <toolkit:InfiniteCanvas x:Name="canvas" />
+                </SplitView.Content>
+            </SplitView>
+
+            <Grid Grid.Row="1" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" Text="note" VerticalAlignment="Center"/>
+                    <AppBarButton Grid.Column="1" Icon="Save" Label="Save" Click="Save_Note" LabelPosition="Collapsed"/>
+                </Grid>
+                <CommandBar Grid.Column="1" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                    <AppBarButton Icon="Share" Label="Share" Click="Share_Note"/>
+                    <AppBarButton Icon="Pin" Label="ToImage" Click="Share_Note"/>
+                    <AppBarSeparator />
+                    <AppBarButton Icon="Save" Label="Save" Click="Save_Note"/>
+                    <AppBarButton Icon="ZoomOut" Label="Export" Click="Export_Note"/>
+                    <AppBarButton Icon="Import" Label="Import" Click="Import_Note"/>
+                    <AppBarButton Icon="Document" Label="Document" Click="Open_Document"/>
+                </CommandBar>
+                <Grid/>
+            </Grid>
         </Grid>
 
         <toolkit:InAppNotification x:Name="InAppNotification" 

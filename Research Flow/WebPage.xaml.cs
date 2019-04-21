@@ -33,6 +33,8 @@ namespace Research_Flow
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
+
+            webView.Source = new Uri("https://blamder.github.io/Research-Flow/");
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

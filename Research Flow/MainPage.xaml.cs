@@ -98,7 +98,7 @@ namespace Research_Flow
                 string name = await GraphService.GetDisplayName();
                 string email = await GraphService.GetPrincipalName();
                 BitmapImage image = new BitmapImage();
-                image.UriSource = new Uri("ms-appx:///Assets/Logos/ResearchFlow_logo.jpg");
+                image.UriSource = new Uri("ms-appx:///Images/ResearchFlow_logo.jpg");
                 accountName.Text = name;
                 accountEmail.Text = email;
                 accountPhoto.ProfilePicture = image;

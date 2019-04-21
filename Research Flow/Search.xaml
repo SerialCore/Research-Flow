@@ -88,11 +88,11 @@
                     </Grid>
                     <SplitView Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedItem_detail" OpenPaneLength="400" DisplayMode="Overlay" PanePlacement="Right">
                         <SplitView.Pane>
-                            <Grid>
+                            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                                 <Button Height="32" Click="Close_FeedDetail" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="LightBlue">
                                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE0AB;" />
                                 </Button>
-                                <ScrollViewer Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="10,0" Margin="0,32,0,0">
+                                <ScrollViewer Padding="10,0" Margin="0,32,0,0">
                                     <StackPanel>
                                         <TextBlock x:Name="feedTitle" FontSize="20" Style="{ThemeResource TitleTextBlockStyle}"/>
                                         <StackPanel Orientation="Horizontal">

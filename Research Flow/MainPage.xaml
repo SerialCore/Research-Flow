@@ -91,7 +91,7 @@
                     <FlyoutBase.AttachedFlyout>
                         <Flyout>
                             <Grid Width="270">
-                                <Image Source="/Assets/Logos/OneDrive_logo.png" Margin="10" VerticalAlignment="Top"/>
+                                <Image Source="/Images/OneDrive_logo.png" Margin="10" VerticalAlignment="Top"/>
                                 <Grid Margin="0,70,0,0">
                                     <Grid.RowDefinitions>
                                         <RowDefinition />

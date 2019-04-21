@@ -2,6 +2,7 @@
 using LogicService.Services;
 using LogicService.Storage;
 using System;
+using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -32,16 +33,18 @@ namespace Research_Flow
 
         private async void Login_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            accountStatu.Text = "Microsoft account in process";
             if (await GraphService.ServiceLogin())
             {
                 accountStatu.Text = await GraphService.GetPrincipalName();
                 configState.Text = "\nHi\t" + await GraphService.GetDisplayName() + "\n";
                 ApplicationSetting.AccountName = await GraphService.GetPrincipalName();
-                ConfigureFile();
+                await ConfigureFile();
             }
             else
             {
                 configState.Text = "\nFail to log in, please try again.\n";
+                accountStatu.Text = "Please login again";
             }
 
             // make sure there will be an user folder
@@ -49,23 +52,19 @@ namespace Research_Flow
                 finish_config.IsEnabled = true;
         }
 
-        private async void ConfigureFile()
+        private async Task ConfigureFile()
         {
             configState.Text += "\nScanning files with OneDrive...\n";
             try
             {
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                if (await Synchronization.ScanChanges())
                 {
-                    bool IsSynced = await Synchronization.ScanChanges();
-                    if (IsSynced)
-                    {
-                        configState.Text += "\nSync files successfully.\n";
-                    }
-                    else
-                    {
-                        configState.Text += "\nCan't make it, but still try using.\n";
-                    }
-                });
+                    configState.Text += "\nSync files successfully.\n";
+                }
+                else
+                {
+                    configState.Text += "\nCan't make it, but still try using.\n";
+                }
             }
             catch (Exception ex)
             {

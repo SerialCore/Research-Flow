@@ -76,7 +76,7 @@ namespace LogicService.Storage
 
         public static async Task<StorageFile> WriteText(StorageFolder folder, string name, string content)
         {
-            StorageFile file = await folder.CreateFileAsync(name);
+            StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
             if (file != null)
             {
                 await FileIO.WriteTextAsync(file, content);

@@ -10,7 +10,7 @@
 
     <Grid>
 
-        <Image Height="750" Width="900" Source="/Assets/Logos/ResearchFlow_splash.png"/>
+        <Image Height="750" Width="900" Source="/Images/ResearchFlow_splash.png"/>
 
         <Grid x:Name="config_panel" Height="500" Width="600" Background="Transparent">
             <TextBlock Text="Research Flow" FontSize="40" Margin="10" VerticalAlignment="Top" HorizontalAlignment="Left"/>
@@ -22,8 +22,8 @@
                                 <ColumnDefinition Width="48"/>
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <Image Grid.Column="0" Source="/Assets/Logos/OneDrive_icon_trans.png" Height="48" Width="48"/>
-                            <TextBlock Grid.Column="1" x:Name="accountStatu" Text="Login with Microsoft account" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                            <Image Grid.Column="0" Source="/Images/OneDrive_icon_trans.png" Height="48" Width="48"/>
+                            <TextBlock Grid.Column="1" x:Name="accountStatu" FontSize="16" Margin="12,0,0,0" VerticalAlignment="Center"/>
                         </Grid>
                     </ListViewItem>
                     <TextBlock x:Name="configState" Margin="10" LineHeight="20"/>
