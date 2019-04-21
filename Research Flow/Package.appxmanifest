@@ -56,7 +56,7 @@
               <uap:FileType>.note</uap:FileType>
             </uap:SupportedFileTypes>
             <uap:DisplayName>Research Note</uap:DisplayName>
-            <uap:Logo>Assets\Logos\ResearchFlow_logo.jpg</uap:Logo>
+            <uap:Logo>Images\ResearchFlow_logo.jpg</uap:Logo>
           </uap:FileTypeAssociation>
         </uap:Extension>
       </Extensions>

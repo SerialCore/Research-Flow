@@ -31,14 +31,6 @@ namespace Research_Flow
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
-
-            LoadDefaultNote();
-        }
-
-        private async void LoadDefaultNote()
-        {
-            var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Resources/DefaultNote.note"));
-            canvas.ImportFromJson(await FileIO.ReadTextAsync(file));
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
@@ -54,6 +46,11 @@ namespace Research_Flow
                 {
                     InAppNotification.Show(ex.Message);
                 }
+            }
+            else
+            {
+                var defaultnote = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Resources/DefaultNote.note"));
+                canvas.ImportFromJson(await FileIO.ReadTextAsync(defaultnote));
             }
         }
 

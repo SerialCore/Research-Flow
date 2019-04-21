@@ -167,6 +167,7 @@
     <Content Include="Images\Microsoft_logo.jpg" />
     <Content Include="Images\OneDrive_icon.png" />
     <Content Include="Images\OneDrive_icon_trans.png" />
+    <Content Include="Images\OneDrive_logo.png" />
     <Content Include="Images\ResearchFlow_logo.jpg" />
     <Content Include="Images\ResearchFlow_splash.png" />
     <Content Include="Properties\Default.rd.xml" />
