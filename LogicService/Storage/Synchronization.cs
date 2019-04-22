@@ -11,23 +11,18 @@ namespace LogicService.Storage
 
         public static async Task<bool> ScanChanges()
         {
-            //try
-            //{
-            //    if ((await OneDriveStorage.GetDataAsync()).DateModified > DateTime.FromBinary((long)ApplicationSetting.LocalDateModified))
-            //        return await DownloadAll();
-            //    else
-            //        return await UploadAll();
-            //}
-            //catch
-            //{
-            //    // network
-            //    return false;
-            //}
-
-            if ((await OneDriveStorage.GetDataAsync()).DateModified > DateTime.FromBinary((long)ApplicationSetting.LocalDateModified))
-                return await DownloadAll();
-            else
-                return await UploadAll();
+            try
+            {
+                if ((await OneDriveStorage.GetDataAsync()).DateModified > DateTime.FromBinary((long)ApplicationSetting.LocalDateModified))
+                    return await DownloadAll();
+                else
+                    return await UploadAll();
+            }
+            catch
+            {
+                // network
+                return false;
+            }
         }
 
         public static async Task<bool> UploadAll()

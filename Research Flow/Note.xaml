@@ -39,20 +39,26 @@
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0" Text="note" VerticalAlignment="Center"/>
-                    <AppBarButton Grid.Column="1" Icon="Save" Label="Save" Click="Save_Note" LabelPosition="Collapsed"/>
-                </Grid>
+                <TextBox Grid.Column="0" VerticalAlignment="Center" Margin="5,0"/>
                 <CommandBar Grid.Column="1" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                    <AppBarButton Icon="Share" Label="Share" Click="Share_Note"/>
-                    <AppBarButton Icon="Pin" Label="ToImage" Click="Share_Note"/>
+                    <AppBarButton Icon="Share" Label="Share" Tapped="Flyout_Tapped">
+                        <FlyoutBase.AttachedFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Text="Export File" Click="Export_Note"/>
+                                <MenuFlyoutItem Text="Share to People" Click="Share_Note"/>
+                            </MenuFlyout>
+                        </FlyoutBase.AttachedFlyout>
+                    </AppBarButton>
+                    <AppBarButton Icon="Print" Label="ToImage" Tapped="Flyout_Tapped">
+                        <FlyoutBase.AttachedFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Text="Export Image" Click="Export_Image"/>
+                                <MenuFlyoutItem Text="Share to People" Click="Share_Image"/>
+                            </MenuFlyout>
+                        </FlyoutBase.AttachedFlyout>
+                    </AppBarButton>
                     <AppBarSeparator />
                     <AppBarButton Icon="Save" Label="Save" Click="Save_Note"/>
-                    <AppBarButton Icon="ZoomOut" Label="Export" Click="Export_Note"/>
                     <AppBarButton Icon="Import" Label="Import" Click="Import_Note"/>
                     <AppBarButton Icon="Document" Label="Document" Click="Open_Document"/>
                 </CommandBar>

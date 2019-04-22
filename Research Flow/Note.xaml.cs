@@ -47,11 +47,6 @@ namespace Research_Flow
                     InAppNotification.Show(ex.Message);
                 }
             }
-            else
-            {
-                var defaultnote = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Resources/DefaultNote.note"));
-                canvas.ImportFromJson(await FileIO.ReadTextAsync(defaultnote));
-            }
         }
 
         #region File Operation
@@ -61,21 +56,6 @@ namespace Research_Flow
             await LocalStorage.WriteText(await LocalStorage.GetNoteAsync(),
                 "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".note",
                 canvas.ExportAsJson());
-        }
-
-        private async void Export_Note(object sender, RoutedEventArgs e)
-        {
-            FileSavePicker picker = new FileSavePicker
-            {
-                SuggestedStartLocation = PickerLocationId.Desktop,
-                SuggestedFileName = "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".note",
-            };
-            picker.FileTypeChoices.Add("Note", new string[] { ".note" });
-            StorageFile file = await picker.PickSaveFileAsync();
-            if (file != null)
-            {
-                await FileIO.WriteTextAsync(file, canvas.ExportAsJson());
-            }
         }
 
         private async void Import_Note(object sender, RoutedEventArgs e)
@@ -94,6 +74,31 @@ namespace Research_Flow
                     InAppNotification.Show(ex.Message);
                 }
             }
+        }
+
+        private void Export_Image(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private async void Export_Note(object sender, RoutedEventArgs e)
+        {
+            FileSavePicker picker = new FileSavePicker
+            {
+                SuggestedStartLocation = PickerLocationId.Desktop,
+                SuggestedFileName = "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".note",
+            };
+            picker.FileTypeChoices.Add("Note", new string[] { ".note" });
+            StorageFile file = await picker.PickSaveFileAsync();
+            if (file != null)
+            {
+                await FileIO.WriteTextAsync(file, canvas.ExportAsJson());
+            }
+        }
+
+        private void Share_Image(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void Share_Note(object sender, RoutedEventArgs e)
@@ -128,6 +133,15 @@ namespace Research_Flow
 
         private void Open_Document(object sender, RoutedEventArgs e)
             => notepanel.IsPaneOpen = !notepanel.IsPaneOpen;
+
+        private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+            => FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+
+        private async void LoadDefaultNote()
+        {
+            var defaultnote = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Resources/DefaultNote.txt"));
+            canvas.ImportFromJson(await FileIO.ReadTextAsync(defaultnote));
+        }
 
         #endregion
 
