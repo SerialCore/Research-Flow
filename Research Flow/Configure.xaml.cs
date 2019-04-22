@@ -39,6 +39,8 @@ namespace Research_Flow
                 accountStatu.Text = await GraphService.GetPrincipalName();
                 configState.Text = "\nHi\t" + await GraphService.GetDisplayName() + "\n";
                 ApplicationSetting.AccountName = await GraphService.GetPrincipalName();
+
+                ConfigureSetting();
                 await ConfigureFile();
             }
             else
@@ -57,13 +59,23 @@ namespace Research_Flow
             configState.Text += "\nScanning files with OneDrive...\n";
             try
             {
-                if (await Synchronization.ScanChanges())
+                if (ApplicationInfo.IsFirstUse)
                 {
-                    configState.Text += "\nSync files successfully.\n";
+                    if(await Synchronization.DownloadAll())
+                    {
+                        configState.Text += "\nSync files successfully.\n";
+                    }
                 }
                 else
                 {
-                    configState.Text += "\nCan't make it, but still try using.\n";
+                    if (await Synchronization.ScanChanges())
+                    {
+                        configState.Text += "\nSync files successfully.\n";
+                    }
+                    else
+                    {
+                        configState.Text += "\nCan't make it, but still try using.\n";
+                    }
                 }
             }
             catch (Exception ex)
