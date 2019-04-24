@@ -37,7 +37,8 @@ namespace Research_Flow
         public MainPage()
         {
             this.InitializeComponent();
-            
+
+            ConfigureTask();
             ApplicationMessage.MessageReached += AppMessage_MessageReached;
         }
 
@@ -47,6 +48,11 @@ namespace Research_Flow
 
             await Task.Delay(span * 1000);
             appMessage.Text = "";
+        }
+
+        private async void ConfigureTask()
+        {
+            await ApplicationTask.RegisterSearchTask(typeof(CoreFlow.SearchTask), );
         }
 
         // 消息通知方式：
@@ -102,11 +108,6 @@ namespace Research_Flow
                 accountName.Text = name;
                 accountEmail.Text = email;
                 accountPhoto.ProfilePicture = image;
-
-                //if (await Synchronization.ScanChanges())
-                //{
-                //    AppMessage.SendMessage("Synchronize successfully", AppMessage.MessageType.Bravo);
-                //}
             }
             else
             {

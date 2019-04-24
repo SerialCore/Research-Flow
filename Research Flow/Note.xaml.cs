@@ -1,6 +1,7 @@
 ﻿using LogicService.Storage;
 using Microsoft.Graphics.Canvas;
 using Microsoft.Toolkit.Uwp.Helpers;
+using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -76,9 +77,22 @@ namespace Research_Flow
             }
         }
 
-        private void Export_Image(object sender, RoutedEventArgs e)
+        private async void Export_Image(object sender, RoutedEventArgs e)
         {
-
+            FileSavePicker picker = new FileSavePicker
+            {
+                SuggestedStartLocation = PickerLocationId.Desktop,
+                SuggestedFileName = "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png",
+            };
+            picker.FileTypeChoices.Add("Note", new string[] { ".png" });
+            StorageFile file = await picker.PickSaveFileAsync();
+            if (file != null)
+            {
+                using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    await canvas.SaveBitmapAsync(stream, BitmapFileFormat.Png);
+                }
+            }
         }
 
         private async void Export_Note(object sender, RoutedEventArgs e)
@@ -98,17 +112,41 @@ namespace Research_Flow
 
         private void Share_Image(object sender, RoutedEventArgs e)
         {
-
+            DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
+            dataTransferManager.DataRequested += ImageTransferManager_DataRequested;
+            DataTransferManager.ShowShareUI();
         }
 
         private void Share_Note(object sender, RoutedEventArgs e)
         {
             DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
-            dataTransferManager.DataRequested += DataTransferManager_DataRequested;
+            dataTransferManager.DataRequested += JsonTransferManager_DataRequested;
             DataTransferManager.ShowShareUI();
         }
 
-        private async void DataTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
+        private async void ImageTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
+        {
+            DataRequestDeferral deferral = args.Request.GetDeferral();
+
+            DataRequest request = args.Request;
+            request.Data.Properties.Title = "Research Note";
+            request.Data.Properties.Description = "Share your research note";
+
+            StorageFile file = await (await LocalStorage.GetPictureAsync()).CreateFileAsync("Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
+
+            using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
+            {
+                await canvas.SaveBitmapAsync(stream, BitmapFileFormat.Png);
+            }
+
+            RandomAccessStreamReference imageStreamRef = RandomAccessStreamReference.CreateFromFile(file);
+            request.Data.Properties.Thumbnail = imageStreamRef;
+            request.Data.SetBitmap(imageStreamRef);
+
+            deferral.Complete();
+        }
+
+        private async void JsonTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
         {
             DataRequestDeferral deferral = args.Request.GetDeferral();
 
