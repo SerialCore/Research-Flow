@@ -17,20 +17,20 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
-            <SplitView Grid.Row="0" x:Name="notepanel" OpenPaneLength="400" PanePlacement="Right" DisplayMode="Overlay">
+            <SplitView Grid.Row="0" x:Name="notepanel" OpenPaneLength="300" PanePlacement="Right" DisplayMode="Overlay">
                 <SplitView.Pane>
-                    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                        <ListView x:Name="notelist">
+                    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="2,0,0,0">
+                        <ListView x:Name="notelist" IsItemClickEnabled="True" ItemClick="Notelist_ItemClick">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding BoteName}"/>
+                                    <TextBlock Text="{Binding NoteName}"/>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
                     </Grid>
                 </SplitView.Pane>
                 <SplitView.Content>
-                    <toolkit:InfiniteCanvas x:Name="canvas" />
+                    <toolkit:InfiniteCanvas x:Name="canvas"/>
                 </SplitView.Content>
             </SplitView>
 
@@ -59,8 +59,8 @@
                     </AppBarButton>
                     <AppBarSeparator />
                     <AppBarButton Icon="Save" Label="Save" Click="Save_Note"/>
-                    <AppBarButton Icon="Import" Label="Import" Click="Import_Note"/>
-                    <AppBarButton Icon="Document" Label="Document" Click="Open_Document"/>
+                    <AppBarButton Icon="OpenFile" Label="Import" Click="Import_Note"/>
+                    <AppBarButton Icon="Import" Label="Document" Click="Open_Document"/>
                 </CommandBar>
                 <Grid/>
             </Grid>

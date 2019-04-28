@@ -32,6 +32,8 @@ namespace Research_Flow
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
+
+            InitializeData();
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
@@ -50,19 +52,30 @@ namespace Research_Flow
             }
         }
 
+        private async void InitializeData()
+        {
+            var filelist = await (await LocalStorage.GetNoteAsync()).GetFilesAsync();
+            var namelist = new List<NoteItem>();
+            foreach(var file in filelist)
+            {
+                namelist.Add(new NoteItem { NoteName = file.DisplayName});
+            }
+            notelist.ItemsSource = namelist;
+        }
+
         #region File Operation
 
         private async void Save_Note(object sender, RoutedEventArgs e)
         {
             await LocalStorage.WriteText(await LocalStorage.GetNoteAsync(),
-                "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".note",
+                "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".rfn",
                 canvas.ExportAsJson());
         }
 
         private async void Import_Note(object sender, RoutedEventArgs e)
         {
             FileOpenPicker picker = new FileOpenPicker();
-            picker.FileTypeFilter.Add(".note");
+            picker.FileTypeFilter.Add(".rfn");
             StorageFile file = await picker.PickSingleFileAsync();
             if (file != null)
             {
@@ -100,9 +113,9 @@ namespace Research_Flow
             FileSavePicker picker = new FileSavePicker
             {
                 SuggestedStartLocation = PickerLocationId.Desktop,
-                SuggestedFileName = "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".note",
+                SuggestedFileName = "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".rfn",
             };
-            picker.FileTypeChoices.Add("Note", new string[] { ".note" });
+            picker.FileTypeChoices.Add("Research Flow Note", new string[] { ".rfn" });
             StorageFile file = await picker.PickSaveFileAsync();
             if (file != null)
             {
@@ -129,7 +142,7 @@ namespace Research_Flow
             DataRequestDeferral deferral = args.Request.GetDeferral();
 
             DataRequest request = args.Request;
-            request.Data.Properties.Title = "Research Note";
+            request.Data.Properties.Title = "Research Flow Note";
             request.Data.Properties.Description = "Share your research note";
 
             StorageFile file = await (await LocalStorage.GetPictureAsync()).CreateFileAsync("Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
@@ -151,11 +164,11 @@ namespace Research_Flow
             DataRequestDeferral deferral = args.Request.GetDeferral();
 
             DataRequest request = args.Request;
-            request.Data.Properties.Title = "Research Note";
+            request.Data.Properties.Title = "Research Flow Note";
             request.Data.Properties.Description = "Share your research note";
 
             StorageFile file = await LocalStorage.WriteText(await LocalStorage.GetNoteAsync(),
-                "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".note",
+                "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".rfn",
                 canvas.ExportAsJson());
 
             RandomAccessStreamReference imageStreamRef = RandomAccessStreamReference.CreateFromFile(file);
@@ -181,7 +194,20 @@ namespace Research_Flow
             canvas.ImportFromJson(await FileIO.ReadTextAsync(defaultnote));
         }
 
+        private async void Notelist_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var item = e.ClickedItem as NoteItem;
+            var fileitem = await (await LocalStorage.GetNoteAsync()).GetFileAsync(item.NoteName + ".rfn");
+            canvas.ImportFromJson(await FileIO.ReadTextAsync(fileitem));
+        }
+
         #endregion
+
+    }
+
+    public class NoteItem
+    {
+        public string NoteName { get; set; }
 
     }
 }

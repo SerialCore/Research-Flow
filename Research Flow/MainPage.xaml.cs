@@ -52,7 +52,7 @@ namespace Research_Flow
 
         private async void ConfigureTask()
         {
-            await ApplicationTask.RegisterSearchTask(typeof(CoreFlow.SearchTask), );
+            //await ApplicationTask.RegisterSearchTask(typeof(CoreFlow.SearchTask), );
         }
 
         // 消息通知方式：
@@ -138,7 +138,7 @@ namespace Research_Flow
             //NavView.MenuItems.Add(new NavigationViewItemSeparator());
             if (FileParameter != null)
             {
-                if (FileParameter.FileType.Equals(".note"))
+                if (FileParameter.FileType.Equals(".rfn"))
                 {
                     ContentFrame.Navigate(typeof(Note), FileParameter);
                 }

@@ -15,7 +15,7 @@
 
             </PivotItem>
             <PivotItem Header="Project">
-
+                <TextBox Text="Key words here" />
             </PivotItem>
         </Pivot>
 
