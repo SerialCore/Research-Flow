@@ -17,7 +17,7 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
-            <SplitView Grid.Row="0" x:Name="notepanel" OpenPaneLength="300" PanePlacement="Right" DisplayMode="Overlay">
+            <SplitView Grid.Row="0" x:Name="notepanel" OpenPaneLength="400" PanePlacement="Right" DisplayMode="Overlay">
                 <SplitView.Pane>
                     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="2,0,0,0">
                         <ListView x:Name="notelist" IsItemClickEnabled="True" ItemClick="Notelist_ItemClick">
@@ -27,6 +27,7 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
+                        <AppBarButton Icon="Delete" LabelPosition="Collapsed" Click="Delete_Note" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
                     </Grid>
                 </SplitView.Pane>
                 <SplitView.Content>
@@ -39,7 +40,14 @@
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" VerticalAlignment="Center" Margin="5,0"/>
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" x:Name="notefilename" VerticalAlignment="Center" Margin="5,0"/>
+                    <AppBarButton Grid.Column="1" Icon="Save" LabelPosition="Collapsed" Click="Save_Note"/>
+                </Grid>
                 <CommandBar Grid.Column="1" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
                     <AppBarButton Icon="Share" Label="Share" Tapped="Flyout_Tapped">
                         <FlyoutBase.AttachedFlyout>
@@ -58,8 +66,14 @@
                         </FlyoutBase.AttachedFlyout>
                     </AppBarButton>
                     <AppBarSeparator />
-                    <AppBarButton Icon="Save" Label="Save" Click="Save_Note"/>
-                    <AppBarButton Icon="OpenFile" Label="Import" Click="Import_Note"/>
+                    <AppBarButton Icon="OpenFile" Label="Import" Tapped="Flyout_Tapped">
+                        <FlyoutBase.AttachedFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Text="From File" Click="Import_Note"/>
+                                <MenuFlyoutItem Text="DefaultNote" Click="LoadDefaultNote"/>
+                            </MenuFlyout>
+                        </FlyoutBase.AttachedFlyout>
+                    </AppBarButton>
                     <AppBarButton Icon="Import" Label="Document" Click="Open_Document"/>
                 </CommandBar>
                 <Grid/>

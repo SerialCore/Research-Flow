@@ -1,4 +1,5 @@
-﻿using LogicService.Storage;
+﻿using LogicService.Application;
+using LogicService.Storage;
 using Microsoft.Graphics.Canvas;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Microsoft.Toolkit.Uwp.UI.Controls;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.Storage.Search;
 using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.Input.Inking;
@@ -52,9 +54,12 @@ namespace Research_Flow
             }
         }
 
+        /// <summary>
+        /// Add file, rename file or delete file, then re-Initialize
+        /// </summary>
         private async void InitializeData()
         {
-            var filelist = await (await LocalStorage.GetNoteAsync()).GetFilesAsync();
+            var filelist = await (await LocalStorage.GetNoteAsync()).GetFilesAsync(CommonFileQuery.OrderByName);
             var namelist = new List<NoteItem>();
             foreach(var file in filelist)
             {
@@ -65,11 +70,11 @@ namespace Research_Flow
 
         #region File Operation
 
-        private async void Save_Note(object sender, RoutedEventArgs e)
+        private async void LoadDefaultNote(object sender, RoutedEventArgs e)
         {
-            await LocalStorage.WriteText(await LocalStorage.GetNoteAsync(),
-                "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".rfn",
-                canvas.ExportAsJson());
+            var defaultnote = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Resources/DefaultNote.txt"));
+            canvas.ImportFromJson(await FileIO.ReadTextAsync(defaultnote));
+            notefilename.Text = "";
         }
 
         private async void Import_Note(object sender, RoutedEventArgs e)
@@ -188,18 +193,53 @@ namespace Research_Flow
         private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
             => FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
 
-        private async void LoadDefaultNote()
-        {
-            var defaultnote = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Resources/DefaultNote.txt"));
-            canvas.ImportFromJson(await FileIO.ReadTextAsync(defaultnote));
-        }
-
         private async void Notelist_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as NoteItem;
             var fileitem = await (await LocalStorage.GetNoteAsync()).GetFileAsync(item.NoteName + ".rfn");
             canvas.ImportFromJson(await FileIO.ReadTextAsync(fileitem));
+            notefilename.Text = item.NoteName;
         }
+
+        private async void Save_Note(object sender, RoutedEventArgs e)
+        {
+            if (notefilename.Text.Equals(""))
+                await LocalStorage.WriteText(await LocalStorage.GetNoteAsync(),
+                    "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".rfn",
+                    canvas.ExportAsJson());
+            else
+                await LocalStorage.WriteText(await LocalStorage.GetNoteAsync(),
+                    notefilename.Text + ".rfn",
+                    canvas.ExportAsJson());
+
+            ApplicationMessage.SendMessage("Note saved", 3);
+            InitializeData();
+        }
+
+        private async void Delete_Note(object sender, RoutedEventArgs e)
+        {
+            var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.", "Operation confirming");
+            messageDialog.Commands.Add(new UICommand(
+                "True",
+                new UICommandInvokedHandler(this.DeleteInvokedHandler)));
+            messageDialog.Commands.Add(new UICommand(
+                "Joke",
+                new UICommandInvokedHandler(this.CancelInvokedHandler)));
+
+            messageDialog.DefaultCommandIndex = 0;
+            messageDialog.CancelCommandIndex = 1;
+            await messageDialog.ShowAsync();
+        }
+
+        private async void DeleteInvokedHandler(IUICommand command)
+        {
+            var item = notelist.SelectedItem as NoteItem;
+            LocalStorage.DeleteFile(await LocalStorage.GetNoteAsync(), item.NoteName + ".rfn");
+            InitializeData();
+            notefilename.Text = "";
+        }
+
+        private void CancelInvokedHandler(IUICommand command) { }
 
         #endregion
 

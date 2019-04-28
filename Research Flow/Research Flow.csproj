@@ -141,6 +141,7 @@
     </AppxManifest>
     <None Include="Research Flow_StoreKey.pfx" />
     <None Include="Research Flow_TemporaryKey.pfx" />
+    <Content Include="Resources\readme.txt" />
     <Content Include="Resources\DefaultNote.txt" />
   </ItemGroup>
   <ItemGroup>
