@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LogicService.Helper;
 using Windows.ApplicationModel.Background;
 
 namespace CoreFlow
@@ -14,7 +15,7 @@ namespace CoreFlow
         {
             var deferral = taskInstance.GetDeferral();
 
-
+            ToastGenerator.ShowTextToast("SearchTask", "Triggered");
 
             deferral.Complete();
         }

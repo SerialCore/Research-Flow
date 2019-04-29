@@ -107,7 +107,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Application\ApplicationSetting.cs" />
-    <Compile Include="Application\ApplicationTask.cs" />
     <Compile Include="Helper\NetHelper.cs" />
     <Compile Include="Helper\RegexHelper.cs" />
     <Compile Include="Helper\UrlOperator.cs" />
