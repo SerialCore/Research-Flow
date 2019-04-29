@@ -54,8 +54,8 @@ namespace Research_Flow
         private async void ConfigureTask()
         {
             await ApplicationTask.RegisterSearchTask(typeof(CoreFlow.SearchTask));
-            await ApplicationTask.RegisterSearchTask(typeof(CoreFlow.LearnTask));
-            await ApplicationTask.RegisterSearchTask(typeof(CoreFlow.StorageTask));
+            //await ApplicationTask.RegisterSearchTask(typeof(CoreFlow.LearnTask));
+            //await ApplicationTask.RegisterSearchTask(typeof(CoreFlow.StorageTask));
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
@@ -329,7 +329,7 @@ namespace Research_Flow
         public static async Task<BackgroundTaskRegistration> RegisterLearnTask(Type taskEntryPoint,
             IBackgroundTrigger trigger = null, IBackgroundCondition condition = null)
         {
-            trigger = trigger == null ? new SystemTrigger(SystemTriggerType.BackgroundWorkCostChange, false) : trigger;
+            trigger = trigger == null ? new SystemTrigger(SystemTriggerType.UserAway, false) : trigger;
             condition = condition == null ? new SystemCondition(SystemConditionType.BackgroundWorkCostNotHigh) : condition;
             return await RegisterBackgroundTask(taskEntryPoint, "LearnTask", trigger, condition);
         }
@@ -345,7 +345,7 @@ namespace Research_Flow
         public static async Task<BackgroundTaskRegistration> RegisterStorageTask(Type taskEntryPoint,
             IBackgroundTrigger trigger = null, IBackgroundCondition condition = null)
         {
-            trigger = trigger == null ? new SystemTrigger(SystemTriggerType.UserAway, false) : trigger;
+            trigger = trigger == null ? new SystemTrigger(SystemTriggerType.UserPresent, false) : trigger;
             condition = condition == null ? new SystemCondition(SystemConditionType.InternetAvailable) : condition;
             return await RegisterBackgroundTask(taskEntryPoint, "StorageTask", trigger, condition);
         }

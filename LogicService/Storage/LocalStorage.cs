@@ -103,6 +103,12 @@ namespace LogicService.Storage
 
         #endregion
 
+        #region Logging  file
+
+
+
+        #endregion
+
     }
 
 }

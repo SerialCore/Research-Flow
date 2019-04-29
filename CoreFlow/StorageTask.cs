@@ -12,11 +12,18 @@ namespace CoreFlow
     public sealed class StorageTask : IBackgroundTask
     {
 
-        public void Run(IBackgroundTaskInstance taskInstance)
+        public async void Run(IBackgroundTaskInstance taskInstance)
         {
             var deferral = taskInstance.GetDeferral();
 
-            ToastGenerator.ShowTextToast("StorageTask", "Triggered");
+            if(await Synchronization.ScanChanges())
+            {
+                ToastGenerator.ShowTextToast("StorageTask", "Triggered");
+            }
+            else
+            {
+                ToastGenerator.ShowTextToast("StorageTask", "Fail to sync");
+            }
 
             deferral.Complete();
         }
