@@ -32,15 +32,39 @@ namespace LogicService.Storage
             }
         }
 
-        public static async Task<OneDriveStorageFolder> GetDataAsync()
+        public static async Task<OneDriveStorageFolder> GetFeedAsync()
         {
             try
             {
-                return await RetrieveSubFolderAsync(await GetAppFolderAsync(), "Data");
+                return await RetrieveSubFolderAsync(await GetAppFolderAsync(), "Feed");
             }
             catch
             {
-                return await CreateFolderAsync(await GetAppFolderAsync(), "Data");
+                return await CreateFolderAsync(await GetAppFolderAsync(), "Feed");
+            }
+        }
+
+        public static async Task<OneDriveStorageFolder> GetNoteAsync()
+        {
+            try
+            {
+                return await RetrieveSubFolderAsync(await GetAppFolderAsync(), "Note");
+            }
+            catch
+            {
+                return await CreateFolderAsync(await GetAppFolderAsync(), "Note");
+            }
+        }
+
+        public static async Task<OneDriveStorageFolder> GetLogAsync()
+        {
+            try
+            {
+                return await RetrieveSubFolderAsync(await GetAppFolderAsync(), "Log");
+            }
+            catch
+            {
+                return await CreateFolderAsync(await GetAppFolderAsync(), "Log");
             }
         }
 

@@ -39,8 +39,8 @@ namespace Research_Flow
                 configState.Text = "\nHi\t" + await GraphService.GetDisplayName() + "\n";
                 ApplicationSetting.AccountName = await GraphService.GetPrincipalName();
 
-                ConfigureSetting();
-                await ConfigureFile();
+                ConfigureBD();
+                //await ConfigureFile();
             }
             else
             {
@@ -53,42 +53,37 @@ namespace Research_Flow
                 finish_config.IsEnabled = true;
         }
 
-        private async Task ConfigureFile()
-        {
-            configState.Text += "\nScanning files with OneDrive...\n";
-            try
-            {
-                if (ApplicationInfo.IsFirstUse)
-                {
-                    if(await Synchronization.DownloadAll())
-                    {
-                        configState.Text += "\nSync files successfully.\n";
-                    }
-                }
-                else
-                {
-                    if (await Synchronization.ScanChanges())
-                    {
-                        configState.Text += "\nSync files successfully.\n";
-                    }
-                    else
-                    {
-                        configState.Text += "\nCan't make it, but still try using.\n";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                configState.Text += "\nFail: " + ex.Message + "\n";
-            }
-        }
+        //private async Task ConfigureFile()
+        //{
+        //    configState.Text += "\nScanning files with OneDrive...\n";
+        //    try
+        //    {
+        //        if (ApplicationInfo.IsFirstUse)
+        //        {
+        //            if(await Synchronization.DownloadAll())
+        //            {
+        //                configState.Text += "\nSync files successfully.\n";
+        //            }
+        //        }
+        //        else
+        //        {
+        //            if (await Synchronization.ScanChanges())
+        //            {
+        //                configState.Text += "\nSync files successfully.\n";
+        //            }
+        //            else
+        //            {
+        //                configState.Text += "\nCan't make it, but still try using.\n";
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        configState.Text += "\nFail: " + ex.Message + "\n";
+        //    }
+        //}
 
         private void ConfigureBD()
-        {
-
-        }
-
-        private void ConfigureSetting()
         {
 
         }

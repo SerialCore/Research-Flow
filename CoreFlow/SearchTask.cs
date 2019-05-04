@@ -18,16 +18,7 @@ namespace CoreFlow
         {
             var deferral = taskInstance.GetDeferral();
 
-            // file, net
-            try
-            {
-                SearchRss();
-                ToastGenerator.ShowTextToast("SearchTask", "Triggered");
-            }
-            catch
-            {
-                ToastGenerator.ShowTextToast("SearchTask", "Fail to search");
-            }
+            SearchRss();
 
             deferral.Complete();
         }

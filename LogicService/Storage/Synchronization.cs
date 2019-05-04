@@ -9,81 +9,86 @@ namespace LogicService.Storage
     public class Synchronization
     {
 
-        public static async Task<bool> ScanChanges()
+        public static void ScanChanges()
         {
-            try
-            {
-                if ((await OneDriveStorage.GetDataAsync()).DateModified > DateTime.FromBinary((long)ApplicationSetting.LocalDateModified))
-                    return await DownloadAll();
-                else
-                    return await UploadAll();
-            }
-            catch
-            {
-                // network
-                return false;
-            }
+            //try
+            //{
+            //    if ((await OneDriveStorage.GetDataAsync()).DateModified > DateTime.FromBinary((long)ApplicationSetting.LocalDateModified))
+            //        return await DownloadAll();
+            //    else
+            //        return await UploadAll();
+            //}
+            //catch
+            //{
+            //    // network
+            //    return false;
+            //}
         }
 
-        public static async Task<bool> UploadAll()
+        public static void ScanFileTracer()
         {
-            try
-            {
-                await Task.Run(async () =>
-                {
-                    Compression(await LocalStorage.GetFeedAsync());
-                    await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetDataAsync(), 
-                        await (await LocalStorage.GetDataAsync()).GetFileAsync("Feed"));
-                });
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+
         }
 
-        private static async void Compression(StorageFolder origin)
+        public static void UploadAll()
         {
-            using (ZipFile zip = ZipFile.Create((await LocalStorage.GetDataAsync()).Path + "\\" + origin.Name))
-            {
-                zip.BeginUpdate();
-                foreach (StorageFile file in await origin.GetFilesAsync())
-                {
-                    zip.Add(origin.Path + "\\" + file.Name, file.Name);
-                }
-                zip.CommitUpdate();
-            }
+            //try
+            //{
+            //    await Task.Run(async () =>
+            //    {
+            //        Compression(await LocalStorage.GetFeedAsync());
+            //        await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetDataAsync(), 
+            //            await (await LocalStorage.GetDataAsync()).GetFileAsync("Feed"));
+            //    });
+            //    return true;
+            //}
+            //catch
+            //{
+            //    return false;
+            //}
         }
 
-        public async static Task<bool> DownloadAll()
+        private static void Compression(StorageFolder origin)
         {
-            bool sign = false;
-            try
-            {
-                await Task.Run(async () =>
-                {
-                    foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetDataAsync()))
-                    {
-                        await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetDataAsync(),
-                            await LocalStorage.GetDataAsync(), item.Name);
-                        UnCompression(await LocalStorage.GetFolderAsync(item.Name));
-                        sign = true;
-                    }
-                    if (sign == true)
-                        ApplicationSetting.LocalDateModified = DateTime.Now.ToBinary();
-                });
-                return sign;
-            }
-            catch
-            {
-                return sign;
-            }
+            //using (ZipFile zip = ZipFile.Create((await LocalStorage.GetDataAsync()).Path + "\\" + origin.Name))
+            //{
+            //    zip.BeginUpdate();
+            //    foreach (StorageFile file in await origin.GetFilesAsync())
+            //    {
+            //        zip.Add(origin.Path + "\\" + file.Name, file.Name);
+            //    }
+            //    zip.CommitUpdate();
+            //}
         }
 
-        private static async void UnCompression(StorageFolder target)
+        public static void DownloadAll()
         {
-            new FastZip().ExtractZip((await LocalStorage.GetDataAsync()).Path + "\\" + target.Name, target.Path, "");
+            //bool sign = false;
+            //try
+            //{
+            //    await Task.Run(async () =>
+            //    {
+            //        foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetDataAsync()))
+            //        {
+            //            await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetDataAsync(),
+            //                await LocalStorage.GetDataAsync(), item.Name);
+            //            UnCompression(await LocalStorage.GetFolderAsync(item.Name));
+            //            sign = true;
+            //        }
+            //        if (sign == true)
+            //            ApplicationSetting.LocalDateModified = DateTime.Now.ToBinary();
+            //    });
+            //    return sign;
+            //}
+            //catch
+            //{
+            //    return sign;
+            //}
+        }
+
+        private static void UnCompression(StorageFolder target)
+        {
+            //new FastZip().ExtractZip((await LocalStorage.GetDataAsync()).Path + "\\" + target.Name, target.Path, "");
         }
 
     }

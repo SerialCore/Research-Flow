@@ -53,9 +53,9 @@ namespace Research_Flow
 
         private async void ConfigureTask()
         {
-            await ApplicationTask.RegisterSearchTask(typeof(CoreFlow.SearchTask));
-            //await ApplicationTask.RegisterSearchTask(typeof(CoreFlow.LearnTask));
-            //await ApplicationTask.RegisterSearchTask(typeof(CoreFlow.StorageTask));
+            await ApplicationTask.RegisterSearchTask();
+            //await ApplicationTask.RegisterStorageTask();
+            await ApplicationTask.RegisterLearnTask();
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
@@ -166,13 +166,13 @@ namespace Research_Flow
             accountEmail.Text = "";
         }
 
-        private async void AccountSync_Click(object sender, RoutedEventArgs e)
+        private void AccountSync_Click(object sender, RoutedEventArgs e)
         {
             if (GraphService.IsSignedIn)
             {
                 ApplicationMessage.SendMessage("Synchronizing", 3);
-                if (await Synchronization.ScanChanges())
-                    ApplicationMessage.SendMessage("Synchronize successfully", 5);
+                //if (await Synchronization.ScanChanges())
+                //    ApplicationMessage.SendMessage("Synchronize successfully", 5);
             }
         }
 
@@ -326,28 +326,25 @@ namespace Research_Flow
     public class ApplicationTask
     {
 
-        public static async Task<BackgroundTaskRegistration> RegisterLearnTask(Type taskEntryPoint,
-            IBackgroundTrigger trigger = null, IBackgroundCondition condition = null)
+        public static async Task<BackgroundTaskRegistration> RegisterLearnTask()
         {
-            trigger = trigger == null ? new SystemTrigger(SystemTriggerType.UserAway, false) : trigger;
-            condition = condition == null ? new SystemCondition(SystemConditionType.BackgroundWorkCostNotHigh) : condition;
-            return await RegisterBackgroundTask(taskEntryPoint, "LearnTask", trigger, condition);
+            return await RegisterBackgroundTask(typeof(CoreFlow.LearnTask),
+                "LearnTask", new SystemTrigger(SystemTriggerType.UserAway, false),
+                new SystemCondition(SystemConditionType.InternetAvailable));
         }
 
-        public static async Task<BackgroundTaskRegistration> RegisterSearchTask(Type taskEntryPoint,
-            IBackgroundTrigger trigger = null, IBackgroundCondition condition = null)
+        public static async Task<BackgroundTaskRegistration> RegisterSearchTask()
         {
-            trigger = trigger == null ? new SystemTrigger(SystemTriggerType.InternetAvailable, false) : trigger;
-            condition = condition == null ? new SystemCondition(SystemConditionType.InternetAvailable) : condition;
-            return await RegisterBackgroundTask(taskEntryPoint, "SearchTask", trigger, condition);
+            return await RegisterBackgroundTask(typeof(CoreFlow.SearchTask),
+                "SearchTask", new SystemTrigger(SystemTriggerType.UserAway, false),
+                new SystemCondition(SystemConditionType.InternetAvailable));
         }
 
-        public static async Task<BackgroundTaskRegistration> RegisterStorageTask(Type taskEntryPoint,
-            IBackgroundTrigger trigger = null, IBackgroundCondition condition = null)
+        public static async Task<BackgroundTaskRegistration> RegisterStorageTask()
         {
-            trigger = trigger == null ? new SystemTrigger(SystemTriggerType.UserPresent, false) : trigger;
-            condition = condition == null ? new SystemCondition(SystemConditionType.InternetAvailable) : condition;
-            return await RegisterBackgroundTask(taskEntryPoint, "StorageTask", trigger, condition);
+            return await RegisterBackgroundTask(typeof(CoreFlow.StorageTask),
+                "StorageTask", new SystemTrigger(SystemTriggerType.UserPresent, false),
+                new SystemCondition(SystemConditionType.InternetAvailable));
         }
 
         private static async Task<BackgroundTaskRegistration> RegisterBackgroundTask(Type taskEntryPoint,

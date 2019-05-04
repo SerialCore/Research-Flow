@@ -79,25 +79,13 @@
                         </StackPanel>
                         <ScrollViewer Grid.Row="0" Grid.Column="2" Grid.RowSpan="2">
                             <StackPanel>
-                                <TextBlock Grid.Row="1" Text="Application Capabilities" FontSize="20" VerticalAlignment="Center" Margin="0,10"/>
-                                <TextBlock Grid.Row="1" Text="Privacy Policy" FontSize="20" VerticalAlignment="Center" Margin="0,10"/>
+                                <TextBlock Text="Background Task" FontSize="20" VerticalAlignment="Center" Margin="0,10"/>
+                                <TextBlock Text="Application Capabilities" FontSize="20" VerticalAlignment="Center" Margin="0,10"/>
+                                <TextBlock Text="Privacy Policy" FontSize="20" VerticalAlignment="Center" Margin="0,10"/>
                             </StackPanel>
                         </ScrollViewer>
                     </Grid>
                 </ScrollViewer>
-            </PivotItem>
-            <PivotItem Header="How-tos">
-                <Pivot Margin="20,0">
-                    <PivotItem Header="How to run RSS">
-                        <ScrollViewer>
-                            <StackPanel>
-                                <Image Source="/Images/ACS-Search.png"/>
-                                <Image Source="/Images/ACS-Feed.png"/>
-                                <Image Source="/Images/Add-Feed.png"/>
-                            </StackPanel>
-                        </ScrollViewer>
-                    </PivotItem>
-                </Pivot>
             </PivotItem>
         </Pivot>
     </Grid>

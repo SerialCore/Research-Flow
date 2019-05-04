@@ -15,7 +15,7 @@ namespace CoreFlow
         {
             var deferral = taskInstance.GetDeferral();
 
-            ToastGenerator.ShowTextToast("LearnTask", "Triggered");
+
 
             deferral.Complete();
         }

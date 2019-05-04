@@ -1,4 +1,5 @@
 ﻿using LogicService.Helper;
+using LogicService.Services;
 using LogicService.Storage;
 using System;
 using System.Collections.Generic;
@@ -12,18 +13,19 @@ namespace CoreFlow
     public sealed class StorageTask : IBackgroundTask
     {
 
-        public async void Run(IBackgroundTaskInstance taskInstance)
+        public void Run(IBackgroundTaskInstance taskInstance)
         {
             var deferral = taskInstance.GetDeferral();
 
-            if(await Synchronization.ScanChanges())
-            {
-                ToastGenerator.ShowTextToast("StorageTask", "Triggered");
-            }
-            else
-            {
-                ToastGenerator.ShowTextToast("StorageTask", "Fail to sync");
-            }
+            //await GraphService.ServiceLogin();
+            //if(await Synchronization.ScanChanges())
+            //{
+            //    //
+            //}
+            //else
+            //{
+            //    //
+            //}
 
             deferral.Complete();
         }

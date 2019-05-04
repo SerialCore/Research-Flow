@@ -32,16 +32,9 @@ namespace LogicService.Storage
                     CreationCollisionOption.OpenIfExists);
         }
 
-        // OneDrive
         public static async Task<StorageFolder> GetPictureAsync()
         {
             return await (await GetUserFolderAsync()).CreateFolderAsync("Picture", CreationCollisionOption.OpenIfExists);
-        }
-
-        // OneDrive (Feed)
-        public static async Task<StorageFolder> GetDataAsync()
-        {
-            return await (await GetUserFolderAsync()).CreateFolderAsync("Data", CreationCollisionOption.OpenIfExists);
         }
 
         public static async Task<StorageFolder> GetFeedAsync()
@@ -80,6 +73,7 @@ namespace LogicService.Storage
             if (file != null)
             {
                 await FileIO.WriteTextAsync(file, content);
+                // record
                 ApplicationSetting.LocalDateModified = DateTime.Now.ToBinary();
             }
             return file;
@@ -97,6 +91,7 @@ namespace LogicService.Storage
             if (file != null)
             {
                 await file.DeleteAsync();
+                // record
                 ApplicationSetting.LocalDateModified = DateTime.Now.ToBinary();
             }
         }

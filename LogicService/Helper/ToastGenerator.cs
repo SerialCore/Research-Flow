@@ -11,7 +11,6 @@ namespace LogicService.Helper
         {
             var toast = new ToastContent()
             {
-                Launch = "action=viewEvent&eventId=1983", // how to launch target app
                 Scenario = ToastScenario.Default,
 
                 Visual = new ToastVisual()

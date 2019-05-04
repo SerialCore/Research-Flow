@@ -206,8 +206,7 @@ namespace Research_Flow
 
         private async void SearchRss(RSSSource source)
         {
-            // now you can modify source while fetching feed
-            int selectedFeedIndex = FeedSources.IndexOf(source);
+            int selectedFeedIndex = FeedSources.IndexOf(source); // now you can modify source while fetching feed
             TimeSpan ts1 = new TimeSpan(DateTime.Now.Ticks);
             TimeSpan ts2 = new TimeSpan(source.LastUpdateTime.Ticks);
             TimeSpan ts = ts1.Subtract(ts2).Duration();
