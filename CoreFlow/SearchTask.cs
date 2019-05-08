@@ -47,10 +47,14 @@ namespace CoreFlow
                             await LocalStorage.WriteJsonAsync(await LocalStorage.GetFeedAsync(), "RSS", FeedSources);
 
                             // inform user
+                            await LocalStorage.WriteLogAsync<SearchTask>("BackgroundTask.log",
+                                "just updated your rss feed-" + source.Name);
                         },
-                        (exception) =>
+                        async (exception) =>
                         {
                             // save to log
+                            await LocalStorage.WriteLogAsync<SearchTask>("BackgroundTask.log",
+                                exception + "-" + source.Name);
                         }, null);
                 }
             }

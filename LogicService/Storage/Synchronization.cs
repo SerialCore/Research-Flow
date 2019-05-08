@@ -11,85 +11,70 @@ namespace LogicService.Storage
 
         public static void ScanChanges()
         {
-            //try
-            //{
-            //    if ((await OneDriveStorage.GetDataAsync()).DateModified > DateTime.FromBinary((long)ApplicationSetting.LocalDateModified))
-            //        return await DownloadAll();
-            //    else
-            //        return await UploadAll();
-            //}
-            //catch
-            //{
-            //    // network
-            //    return false;
-            //}
+
         }
 
-        public static void ScanFileTracer()
+        public async static void UploadAll()
         {
-
+            foreach(var item in await (await LocalStorage.GetFeedAsync()).GetFilesAsync())
+            {
+                await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetFeedAsync(), item);
+            }
+            //foreach (var item in await (await LocalStorage.GetLogAsync()).GetFilesAsync())
+            //{
+            //    await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetLogAsync(), item);
+            //}
+            foreach (var item in await (await LocalStorage.GetNoteAsync()).GetFilesAsync())
+            {
+                await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetNoteAsync(), item);
+            }
+            foreach (var item in await (await LocalStorage.GetPictureAsync()).GetFilesAsync())
+            {
+                await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetPictureAsync(), item);
+            }
         }
 
-        public static void UploadAll()
+        public async static void DownloadAll()
         {
-            //try
+            foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetFeedAsync()))
+            {
+                await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetFeedAsync(),
+                    await LocalStorage.GetFeedAsync(), item.Name);
+            }
+            //foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetLogAsync()))
             //{
-            //    await Task.Run(async () =>
-            //    {
-            //        Compression(await LocalStorage.GetFeedAsync());
-            //        await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetDataAsync(), 
-            //            await (await LocalStorage.GetDataAsync()).GetFileAsync("Feed"));
-            //    });
-            //    return true;
+            //    await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetLogAsync(),
+            //        await LocalStorage.GetLogAsync(), item.Name);
             //}
-            //catch
-            //{
-            //    return false;
-            //}
+            foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetNoteAsync()))
+            {
+                await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetNoteAsync(),
+                    await LocalStorage.GetNoteAsync(), item.Name);
+            }
+            foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetPictureAsync()))
+            {
+                await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetPictureAsync(),
+                    await LocalStorage.GetPictureAsync(), item.Name);
+            }
         }
 
-        private static void Compression(StorageFolder origin)
-        {
-            //using (ZipFile zip = ZipFile.Create((await LocalStorage.GetDataAsync()).Path + "\\" + origin.Name))
-            //{
-            //    zip.BeginUpdate();
-            //    foreach (StorageFile file in await origin.GetFilesAsync())
-            //    {
-            //        zip.Add(origin.Path + "\\" + file.Name, file.Name);
-            //    }
-            //    zip.CommitUpdate();
-            //}
-        }
+        //private static void Compression(StorageFolder origin)
+        //{
+        //    using (ZipFile zip = ZipFile.Create((await LocalStorage.GetDataAsync()).Path + "\\" + origin.Name))
+        //    {
+        //        zip.BeginUpdate();
+        //        foreach (StorageFile file in await origin.GetFilesAsync())
+        //        {
+        //            zip.Add(origin.Path + "\\" + file.Name, file.Name);
+        //        }
+        //        zip.CommitUpdate();
+        //    }
+        //}
 
-        public static void DownloadAll()
-        {
-            //bool sign = false;
-            //try
-            //{
-            //    await Task.Run(async () =>
-            //    {
-            //        foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetDataAsync()))
-            //        {
-            //            await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetDataAsync(),
-            //                await LocalStorage.GetDataAsync(), item.Name);
-            //            UnCompression(await LocalStorage.GetFolderAsync(item.Name));
-            //            sign = true;
-            //        }
-            //        if (sign == true)
-            //            ApplicationSetting.LocalDateModified = DateTime.Now.ToBinary();
-            //    });
-            //    return sign;
-            //}
-            //catch
-            //{
-            //    return sign;
-            //}
-        }
-
-        private static void UnCompression(StorageFolder target)
-        {
-            //new FastZip().ExtractZip((await LocalStorage.GetDataAsync()).Path + "\\" + target.Name, target.Path, "");
-        }
+        //private static void UnCompression(StorageFolder target)
+        //{
+        //    new FastZip().ExtractZip((await LocalStorage.GetDataAsync()).Path + "\\" + target.Name, target.Path, "");
+        //}
 
     }
 }

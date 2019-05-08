@@ -156,7 +156,7 @@ namespace Research_Flow
             await LocalStorage.WriteJsonAsync(await LocalStorage.GetFeedAsync(), "RSS", FeedSources);
             try
             {
-                LocalStorage.DeleteFile(await LocalStorage.GetFeedAsync(), currentRSS.ID);
+                LocalStorage.DeleteFileAsync(await LocalStorage.GetFeedAsync(), currentRSS.ID);
             }
             catch { }
             ClearSettings();

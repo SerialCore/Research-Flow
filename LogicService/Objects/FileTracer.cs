@@ -7,16 +7,10 @@ using System.Threading.Tasks;
 namespace LogicService.Objects
 {
     /// <summary>
-    /// Tracer for all the files in UserFolder
+    /// Trace for all the files in UserFolder
     /// </summary>
     public class FileTracer
     {
-        public enum SyncAction
-        {
-            Add,
-            Modify,
-            Delete
-        }
 
         public string FileName { get; set; }
 
@@ -26,9 +20,7 @@ namespace LogicService.Objects
 
         public bool WillbeSync { get; set; }
 
-        public SyncAction SyncbyWhat { get; set; }
-
-        public bool IsSynced { get; set; }
+        public bool IsSync { get; set; }
 
     }
 }

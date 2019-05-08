@@ -27,18 +27,6 @@ namespace LogicService.Application
             }
         }
 
-        public static object LocalDateModified
-        {
-            get
-            {
-                return ApplicationData.Current.LocalSettings.Values["LocalDateModified"];
-            }
-            set
-            {
-                ApplicationData.Current.LocalSettings.Values["LocalDateModified"] = value;
-            }
-        }
-
         public static void KeyRemove(string key)
             => ApplicationData.Current.LocalSettings.Values.Remove(key);
 

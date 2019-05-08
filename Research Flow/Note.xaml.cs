@@ -172,7 +172,7 @@ namespace Research_Flow
             request.Data.Properties.Title = "Research Flow Note";
             request.Data.Properties.Description = "Share your research note";
 
-            StorageFile file = await LocalStorage.WriteText(await LocalStorage.GetNoteAsync(),
+            StorageFile file = await LocalStorage.WriteTextAsync(await LocalStorage.GetNoteAsync(),
                 "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".rfn",
                 canvas.ExportAsJson());
 
@@ -204,11 +204,11 @@ namespace Research_Flow
         private async void Save_Note(object sender, RoutedEventArgs e)
         {
             if (notefilename.Text.Equals(""))
-                await LocalStorage.WriteText(await LocalStorage.GetNoteAsync(),
+                await LocalStorage.WriteTextAsync(await LocalStorage.GetNoteAsync(),
                     "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".rfn",
                     canvas.ExportAsJson());
             else
-                await LocalStorage.WriteText(await LocalStorage.GetNoteAsync(),
+                await LocalStorage.WriteTextAsync(await LocalStorage.GetNoteAsync(),
                     notefilename.Text + ".rfn",
                     canvas.ExportAsJson());
 
@@ -234,7 +234,7 @@ namespace Research_Flow
         private async void DeleteInvokedHandler(IUICommand command)
         {
             var item = notelist.SelectedItem as NoteItem;
-            LocalStorage.DeleteFile(await LocalStorage.GetNoteAsync(), item.NoteName + ".rfn");
+            LocalStorage.DeleteFileAsync(await LocalStorage.GetNoteAsync(), item.NoteName + ".rfn");
             InitializeData();
             notefilename.Text = "";
         }

@@ -59,40 +59,50 @@ namespace LogicService.Storage
         public static async Task<StorageFile> WriteJsonAsync(StorageFolder folder, string name, object o)
         {
             string json = SerializeHelper.SerializeToJson(o);
-            return await WriteText(folder, name, json);
+            return await WriteTextAsync(folder, name, json);
         }
 
         public static async Task<object> ReadJsonAsync<T>(StorageFolder folder, string name) where T : class
         {
-            return SerializeHelper.DeserializeJsonToObject<T>(await ReadText(folder, name));
+            return SerializeHelper.DeserializeJsonToObject<T>(await ReadTextAsync(folder, name));
         }
 
-        public static async Task<StorageFile> WriteText(StorageFolder folder, string name, string content)
+        public static async Task<string> ReadTextAsync(StorageFolder folder, string name)
+        {
+            StorageFile file = await folder.GetFileAsync(name);
+            return await FileIO.ReadTextAsync(file);
+        }
+
+        /// <summary>
+        /// General write process should be record
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <param name="name"></param>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        public static async Task<StorageFile> WriteTextAsync(StorageFolder folder, string name, string content)
         {
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
             if (file != null)
             {
                 await FileIO.WriteTextAsync(file, content);
                 // record
-                ApplicationSetting.LocalDateModified = DateTime.Now.ToBinary();
             }
             return file;
         }
 
-        public static async Task<string> ReadText(StorageFolder folder, string name)
-        {
-            StorageFile file = await folder.GetFileAsync(name);
-            return await FileIO.ReadTextAsync(file);
-        }
-
-        public static async void DeleteFile(StorageFolder folder, string name)
+        /// <summary>
+        /// General delete process should be record
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <param name="name"></param>
+        public static async void DeleteFileAsync(StorageFolder folder, string name)
         {
             StorageFile file = await folder.GetFileAsync(name);
             if (file != null)
             {
                 await file.DeleteAsync();
                 // record
-                ApplicationSetting.LocalDateModified = DateTime.Now.ToBinary();
             }
         }
 
@@ -100,7 +110,24 @@ namespace LogicService.Storage
 
         #region Logging  file
 
-
+        /// <summary>
+        /// General append process should be record
+        /// </summary>
+        /// <typeparam name="T">this.GetType();</typeparam>
+        /// <param name="name"></param>
+        /// <param name="line">just what you did without param</param>
+        /// <returns></returns>
+        public static async Task<StorageFile> WriteLogAsync<T>(string name, string line) where T : class
+        {
+            StorageFile file = await (await LocalStorage.GetLogAsync()).CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
+            if (file != null)
+            {
+                await FileIO.AppendTextAsync(file,
+                    "[" + DateTime.Now.ToString() + "]" + typeof(T).FullName + " : " + line);
+                // record
+            }
+            return file;
+        }
 
         #endregion
 

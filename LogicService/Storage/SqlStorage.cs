@@ -10,42 +10,38 @@ namespace LogicService.Storage
     public class SqlStorage
     {
 
-        SqlStorage()
+        public SqlStorage()
         {
-            
+
         }
 
-        private void Operate()
+        public void RunCommand(string dbname, string command)
         {
-            using (SqliteConnection db = new SqliteConnection("Filename=sqliteSample.db"))
+            using (SqliteConnection db = new SqliteConnection("Filename=" + dbname))
             {
                 db.Open();
 
-                SqliteCommand insertCommand = new SqliteCommand();
-                insertCommand.Connection = db;
-
-                //Use parameterized query to prevent SQL injection attacks
-                insertCommand.CommandText = "INSERT INTO MyTable VALUES (NULL, @Entry);";
-                //insertCommand.Parameters.AddWithValue("@Entry", Input_Box.Text);
-
+                SqliteCommand sqlcommand = new SqliteCommand(command,db);
                 try
                 {
-                    insertCommand.ExecuteReader();
+                    sqlcommand.ExecuteReader();
                 }
                 catch (SqliteException)
                 {
                     return;
                 }
+
                 db.Close();
             }
         }
 
-        private List<string> GetEntries()
+        public List<T> GetEntries<T>() where T : class
         {
-            List<string> entries = new List<string>();
+            List<T> entries = new List<T>();
             using (SqliteConnection db = new SqliteConnection("Filename=sqliteSample.db"))
             {
                 db.Open();
+
                 SqliteCommand selectCommand = new SqliteCommand("SELECT Text_Entry from MyTable", db);
                 SqliteDataReader query;
                 try
@@ -58,26 +54,13 @@ namespace LogicService.Storage
                 }
                 while (query.Read())
                 {
-                    entries.Add(query.GetString(0));
+                    //entries.Add(query.GetValue(0));
                 }
+
                 db.Close();
             }
             return entries;
         }
-
-    }
-
-    public class FileManager
-    {
-        public string FileName { get; set; }
-
-        public string Folder { get; set; }
-
-        public DateTimeOffset RecentDate { get; set; }
-
-        public bool Synced { get; set; }
-
-        public bool Deleting { get; set; }
 
     }
 
