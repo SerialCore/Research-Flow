@@ -32,9 +32,9 @@ namespace LogicService.Storage
                     CreationCollisionOption.OpenIfExists);
         }
 
-        public static async Task<StorageFolder> GetPictureAsync()
+        public static async Task<StorageFolder> GetCrawAsync()
         {
-            return await (await GetUserFolderAsync()).CreateFolderAsync("Picture", CreationCollisionOption.OpenIfExists);
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Craw", CreationCollisionOption.OpenIfExists);
         }
 
         public static async Task<StorageFolder> GetFeedAsync()
@@ -42,19 +42,24 @@ namespace LogicService.Storage
             return await (await GetUserFolderAsync()).CreateFolderAsync("Feed", CreationCollisionOption.OpenIfExists);
         }
 
-        public static async Task<StorageFolder> GetNoteAsync()
-        {
-            return await (await GetUserFolderAsync()).CreateFolderAsync("Note", CreationCollisionOption.OpenIfExists);
-        }
-
         public static async Task<StorageFolder> GetLogAsync()
         {
             return await (await GetUserFolderAsync()).CreateFolderAsync("Log", CreationCollisionOption.OpenIfExists);
         }
 
+        public static async Task<StorageFolder> GetNoteAsync()
+        {
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Note", CreationCollisionOption.OpenIfExists);
+        }
+
+        public static async Task<StorageFolder> GetPictureAsync()
+        {
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Picture", CreationCollisionOption.OpenIfExists);
+        }
+
         #endregion
 
-        #region Common file
+        #region read / write
 
         public static async Task<StorageFile> WriteJsonAsync(StorageFolder folder, string name, object o)
         {
@@ -106,10 +111,6 @@ namespace LogicService.Storage
             }
         }
 
-        #endregion
-
-        #region Logging  file
-
         /// <summary>
         /// General append process should be record
         /// </summary>
@@ -128,6 +129,33 @@ namespace LogicService.Storage
             }
             return file;
         }
+
+        #endregion
+
+        #region management
+
+        public static void FileTracer()
+        {
+
+        }
+
+        //private static void Compression(StorageFolder origin)
+        //{
+        //    using (ZipFile zip = ZipFile.Create((await LocalStorage.GetDataAsync()).Path + "\\" + origin.Name))
+        //    {
+        //        zip.BeginUpdate();
+        //        foreach (StorageFile file in await origin.GetFilesAsync())
+        //        {
+        //            zip.Add(origin.Path + "\\" + file.Name, file.Name);
+        //        }
+        //        zip.CommitUpdate();
+        //    }
+        //}
+
+        //private static void UnCompression(StorageFolder target)
+        //{
+        //    new FastZip().ExtractZip((await LocalStorage.GetDataAsync()).Path + "\\" + target.Name, target.Path, "");
+        //}
 
         #endregion
 

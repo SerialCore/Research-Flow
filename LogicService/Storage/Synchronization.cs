@@ -58,23 +58,5 @@ namespace LogicService.Storage
             }
         }
 
-        //private static void Compression(StorageFolder origin)
-        //{
-        //    using (ZipFile zip = ZipFile.Create((await LocalStorage.GetDataAsync()).Path + "\\" + origin.Name))
-        //    {
-        //        zip.BeginUpdate();
-        //        foreach (StorageFile file in await origin.GetFilesAsync())
-        //        {
-        //            zip.Add(origin.Path + "\\" + file.Name, file.Name);
-        //        }
-        //        zip.CommitUpdate();
-        //    }
-        //}
-
-        //private static void UnCompression(StorageFolder target)
-        //{
-        //    new FastZip().ExtractZip((await LocalStorage.GetDataAsync()).Path + "\\" + target.Name, target.Path, "");
-        //}
-
     }
 }

@@ -64,7 +64,6 @@
                             <Run Text="DotNetZip"/><LineBreak/>
                             <Run Text="LiveCharts.Uwp"/><LineBreak/>
                             <Run Text="Microsoft.AppCenter"/><LineBreak/>
-                            <Run Text="Microsoft.Data.SQLite"/><LineBreak/>
                             <Run Text="Microsoft.Services.Store.Engagement"/><LineBreak/>
                             <Run Text="Microsoft.Toolkit.Uwp"/><LineBreak/>
                             <Run Text="Microsoft.UI.Xaml"/><LineBreak/>

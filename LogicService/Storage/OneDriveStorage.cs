@@ -20,15 +20,15 @@ namespace LogicService.Storage
             return await OneDriveService.Instance.AppRootFolderAsync();
         }
 
-        public static async Task<OneDriveStorageFolder> GetPictureAsync()
+        public static async Task<OneDriveStorageFolder> GetCrawAsync()
         {
             try
             {
-                return await RetrieveSubFolderAsync(await GetAppFolderAsync(), "Picture");
+                return await RetrieveSubFolderAsync(await GetAppFolderAsync(), "Craw");
             }
             catch
             {
-                return await CreateFolderAsync(await GetAppFolderAsync(), "Picture");
+                return await CreateFolderAsync(await GetAppFolderAsync(), "Craw");
             }
         }
 
@@ -44,6 +44,18 @@ namespace LogicService.Storage
             }
         }
 
+        public static async Task<OneDriveStorageFolder> GetLogAsync()
+        {
+            try
+            {
+                return await RetrieveSubFolderAsync(await GetAppFolderAsync(), "Log");
+            }
+            catch
+            {
+                return await CreateFolderAsync(await GetAppFolderAsync(), "Log");
+            }
+        }
+
         public static async Task<OneDriveStorageFolder> GetNoteAsync()
         {
             try
@@ -56,15 +68,15 @@ namespace LogicService.Storage
             }
         }
 
-        public static async Task<OneDriveStorageFolder> GetLogAsync()
+        public static async Task<OneDriveStorageFolder> GetPictureAsync()
         {
             try
             {
-                return await RetrieveSubFolderAsync(await GetAppFolderAsync(), "Log");
+                return await RetrieveSubFolderAsync(await GetAppFolderAsync(), "Picture");
             }
             catch
             {
-                return await CreateFolderAsync(await GetAppFolderAsync(), "Log");
+                return await CreateFolderAsync(await GetAppFolderAsync(), "Picture");
             }
         }
 
