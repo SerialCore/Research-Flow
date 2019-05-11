@@ -64,7 +64,7 @@ namespace LogicService.Storage
         public static async Task<StorageFile> WriteJsonAsync(StorageFolder folder, string name, object o)
         {
             string json = SerializeHelper.SerializeToJson(o);
-            return await WriteTextAsync(folder, name, json);
+            return await GeneralWriteAsync(folder, name, json);
         }
 
         public static async Task<object> ReadJsonAsync<T>(StorageFolder folder, string name) where T : class
@@ -85,7 +85,7 @@ namespace LogicService.Storage
         /// <param name="name"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        public static async Task<StorageFile> WriteTextAsync(StorageFolder folder, string name, string content)
+        public static async Task<StorageFile> GeneralWriteAsync(StorageFolder folder, string name, string content)
         {
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
             if (file != null)
@@ -101,7 +101,7 @@ namespace LogicService.Storage
         /// </summary>
         /// <param name="folder"></param>
         /// <param name="name"></param>
-        public static async void DeleteFileAsync(StorageFolder folder, string name)
+        public static async void GeneralDeleteAsync(StorageFolder folder, string name)
         {
             StorageFile file = await folder.GetFileAsync(name);
             if (file != null)
@@ -112,7 +112,7 @@ namespace LogicService.Storage
         }
 
         /// <summary>
-        /// General append process should be record
+        /// Log append process should not be record
         /// </summary>
         /// <typeparam name="T">this.GetType();</typeparam>
         /// <param name="name"></param>
@@ -125,7 +125,6 @@ namespace LogicService.Storage
             {
                 await FileIO.AppendTextAsync(file,
                     "[" + DateTime.Now.ToString() + "]" + typeof(T).FullName + " : " + line);
-                // record
             }
             return file;
         }

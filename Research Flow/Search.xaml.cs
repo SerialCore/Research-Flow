@@ -43,7 +43,7 @@ namespace Research_Flow
             }
             catch
             {
-                // for new user
+                // for new user, remember to load default feed from file, not the follows
                 FeedSources = new ObservableCollection<RSSSource>()
                 {
                     new RSSSource{ID=HashEncode.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd"),

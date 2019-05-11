@@ -9,14 +9,14 @@ namespace LogicService.Storage
     public class Synchronization
     {
 
-        public static void ScanChanges()
+        public static async Task ScanChanges()
         {
 
         }
 
-        public async static void UploadAll()
+        public async static Task UploadAll()
         {
-            foreach(var item in await (await LocalStorage.GetFeedAsync()).GetFilesAsync())
+            foreach (var item in await (await LocalStorage.GetFeedAsync()).GetFilesAsync())
             {
                 await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetFeedAsync(), item);
             }
@@ -34,7 +34,7 @@ namespace LogicService.Storage
             }
         }
 
-        public async static void DownloadAll()
+        public async static Task DownloadAll()
         {
             foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetFeedAsync()))
             {

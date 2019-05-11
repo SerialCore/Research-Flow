@@ -9,6 +9,11 @@ list of rsssources stored as one file
 list of feeds stored as one file which cannot be modified
 list of notes stored as files, reorderd by name
 
+File does not need to sync:
+Log(user)
+Picture(temporary)
+FileTracer(roaming)
+
 Todo:
 目前的同步机制不能满足远程删除，要么使用数据库管理文件，要么在解压时对照被删除文件。
 Quartz.NET作业调度
