@@ -113,7 +113,7 @@
     <Compile Include="Helper\WebClientHelper.cs" />
     <Compile Include="Objects\Crawable.cs" />
     <Compile Include="Objects\FeedSource.cs" />
-    <Compile Include="Objects\FileTracer.cs" />
+    <Compile Include="Objects\FileTrace.cs" />
     <Compile Include="Objects\Paper.cs" />
     <Compile Include="Helper\SerializeHelper.cs" />
     <Compile Include="Helper\ToastGenerator.cs" />

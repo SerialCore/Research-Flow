@@ -73,8 +73,8 @@
                             <FlyoutBase.AttachedFlyout>
                                 <MenuFlyout>
                                     <MenuFlyoutItem Text="Export" Click="ScreenShot_Export"/>
-                                    <MenuFlyoutItem Text="Save and Share" Click="ScreenShot_Share"/>
-                                    <MenuFlyoutItem Text="Save and Upload" Click="ScreenShot_Upload"/>
+                                    <MenuFlyoutItem Text="Share" Click="ScreenShot_Share"/>
+                                    <MenuFlyoutItem Text="Upload" Click="ScreenShot_Upload"/>
                                 </MenuFlyout>
                             </FlyoutBase.AttachedFlyout>
                         </AppBarButton>

@@ -31,6 +31,7 @@
                             OverflowButtonVisibility="Collapsed">
                     <AppBarButton Label="Learn" Icon="Favorite" Click="SavetoLearn"/>
                     <AppBarButton Label="Share" Icon="Share" Click="ShareLink"/>
+                    <AppBarButton Label="Browser" Icon="Account" Click="OpenBrowser"/>
                     <AppBarSeparator/>
                     <AppBarButton Label="Back" Icon="Previous" Click="Back" IsEnabled="{x:Bind webView.CanGoBack,Mode=OneWay}"/>
                     <AppBarButton Label="Forward" Icon="Next" Click="Forward" IsEnabled="{x:Bind webView.CanGoForward,Mode=OneWay}"/>

@@ -10,17 +10,15 @@ list of feeds stored as one file which cannot be modified
 list of notes stored as files, reorderd by name
 
 File does not need to sync:
-Log(user)
+GeneralLog(user)
 Picture(temporary)
-FileTracer(roaming)
+FileTracer(user)
 
 Todo:
-目前的同步机制不能满足远程删除，要么使用数据库管理文件，要么在解压时对照被删除文件。
 Quartz.NET作业调度
 WebView存储浏览记录，保存在Log文件夹里
 RSS列表可自定义顺序，包括手动拖拽，或者一键排序
 Feed内容要包含时间，这样可以通知新Feed，并可以给用户呈现出一个热点、时间图
-数据库要存哪些数据？是否有必要使用数据库
 爬虫的界面、流、存储
 自定义关键词，项目管理
 关键词的图表示

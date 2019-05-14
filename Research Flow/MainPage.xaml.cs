@@ -15,7 +15,6 @@ using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
-using Windows.UI.Notifications;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -55,7 +54,7 @@ namespace Research_Flow
         {
             await ApplicationTask.RegisterSearchTask();
             //await ApplicationTask.RegisterStorageTask();
-            await ApplicationTask.RegisterLearnTask();
+            //await ApplicationTask.RegisterLearnTask();
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
@@ -255,7 +254,7 @@ namespace Research_Flow
             request.Data.Properties.Description = "Share your current idea";
 
             var bitmap = new RenderTargetBitmap();
-            StorageFile file = await (await LocalStorage.GetPictureAsync()).CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", 
+            StorageFile file = await LocalStorage.GetTemporaryFolder().CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", 
                 CreationCollisionOption.ReplaceExisting);
             await bitmap.RenderAsync(FullPage);
             var buffer = await bitmap.GetPixelsAsync();
@@ -284,7 +283,7 @@ namespace Research_Flow
         private async void ScreenShot_Upload(object sender, RoutedEventArgs e)
         {
             var bitmap = new RenderTargetBitmap();
-            StorageFile file = await (await LocalStorage.GetPictureAsync()).CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", 
+            StorageFile file = await LocalStorage.GetTemporaryFolder().CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", 
                 CreationCollisionOption.ReplaceExisting);
             await bitmap.RenderAsync(FullPage);
             var buffer = await bitmap.GetPixelsAsync();

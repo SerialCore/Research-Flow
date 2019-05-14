@@ -26,7 +26,7 @@ namespace CoreFlow
         private async void SearchRss()
         {
             List<RSSSource> FeedSources = await LocalStorage.ReadJsonAsync<List<RSSSource>>(
-                    await LocalStorage.GetFeedAsync(), "RSS") as List<RSSSource>;
+                    await LocalStorage.GetFeedAsync(), "rsslist");
 
             foreach (RSSSource source in FeedSources)
             {
@@ -44,16 +44,16 @@ namespace CoreFlow
                                 feeds.RemoveRange(source.MaxCount, feeds.Count - source.MaxCount);
                             await LocalStorage.WriteJsonAsync(await LocalStorage.GetFeedAsync(), source.ID, items);
                             source.LastUpdateTime = DateTime.Now;
-                            await LocalStorage.WriteJsonAsync(await LocalStorage.GetFeedAsync(), "RSS", FeedSources);
+                            await LocalStorage.WriteJsonAsync(await LocalStorage.GetFeedAsync(), "rsslist", FeedSources);
 
                             // inform user
-                            await LocalStorage.WriteLogAsync<SearchTask>("BackgroundTask.log",
+                            await LocalStorage.GeneralLogAsync<SearchTask>("SearchTask.log",
                                 "just updated your rss feed-" + source.Name);
                         },
                         async (exception) =>
                         {
                             // save to log
-                            await LocalStorage.WriteLogAsync<SearchTask>("BackgroundTask.log",
+                            await LocalStorage.GeneralLogAsync<SearchTask>("SearchTask.log",
                                 exception + "-" + source.Name);
                         }, null);
                 }

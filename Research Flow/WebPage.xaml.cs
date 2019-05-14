@@ -1,23 +1,10 @@
-﻿using LogicService.Objects;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Graphics.Display;
-using Windows.Graphics.Imaging;
-using Windows.Storage.Streams;
 using Windows.System;
-using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -59,35 +46,39 @@ namespace Research_Flow
         }
 
         private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
+            => webWaiting.IsActive = true;
+
+        private void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
-            webWaiting.IsActive = true;
+            webWaiting.IsActive = false;
             siteUrl.Text = webView.Source.AbsoluteUri;
         }
 
-        private void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
-            => webWaiting.IsActive = false;
-
         private void WebView_FrameNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
-            => webWaiting.IsActive = false;
+        {
+            webWaiting.IsActive = false;
+            siteUrl.Text = webView.Source.AbsoluteUri;
+        }
 
         private void Back(object sender, RoutedEventArgs e)
         {
-            if (webView.CanGoBack)
-                webView.GoBack();
+            if (webView.CanGoBack) webView.GoBack();
         }
 
         private void Forward(object sender, RoutedEventArgs e)
         {
-            if (webView.CanGoForward)
-                webView.GoForward();
+            if (webView.CanGoForward) webView.GoForward();
         }
 
         private void Refresh(object sender, RoutedEventArgs e)
             => webView.Refresh();
 
+        private async void OpenBrowser(object sender, RoutedEventArgs e)
+            => await Launcher.LaunchUriAsync(webView.Source);
+
         private void SavetoLearn(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private void ShareLink(object sender, RoutedEventArgs e)

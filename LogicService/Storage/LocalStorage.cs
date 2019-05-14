@@ -1,4 +1,5 @@
-﻿using LogicService.Application;
+﻿using ICSharpCode.SharpZipLib.Zip;
+using LogicService.Application;
 using LogicService.Helper;
 using System;
 using System.Threading.Tasks;
@@ -9,27 +10,32 @@ namespace LogicService.Storage
     public class LocalStorage
     {
 
-        #region Folders
+        #region folder
 
-        public static StorageFolder GetAppFolderAsync()
+        public static StorageFolder GetAppFolder()
         {
             return ApplicationData.Current.LocalFolder;
         }
 
-        public static StorageFolder GetRoamingFolderAsync()
+        public static StorageFolder GetRoamingFolder()
         {
             return ApplicationData.Current.RoamingFolder;
+        }
+
+        public static StorageFolder GetTemporaryFolder()
+        {
+            return ApplicationData.Current.TemporaryFolder;
+        }
+
+        public async static Task<StorageFolder> GetUserFolderAsync()
+        {
+            return await GetAppFolder().CreateFolderAsync(ApplicationSetting.AccountName,
+                    CreationCollisionOption.OpenIfExists);
         }
 
         public static async Task<StorageFolder> GetFolderAsync(string folder)
         {
             return await (await GetUserFolderAsync()).CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
-        }
-
-        public async static Task<StorageFolder> GetUserFolderAsync()
-        {
-            return await GetAppFolderAsync().CreateFolderAsync(ApplicationSetting.AccountName,
-                    CreationCollisionOption.OpenIfExists);
         }
 
         public static async Task<StorageFolder> GetCrawAsync()
@@ -52,27 +58,17 @@ namespace LogicService.Storage
             return await (await GetUserFolderAsync()).CreateFolderAsync("Note", CreationCollisionOption.OpenIfExists);
         }
 
-        public static async Task<StorageFolder> GetPictureAsync()
-        {
-            return await (await GetUserFolderAsync()).CreateFolderAsync("Picture", CreationCollisionOption.OpenIfExists);
-        }
-
         #endregion
 
-        #region read / write
+        #region general / core
 
-        public static async Task<StorageFile> WriteJsonAsync(StorageFolder folder, string name, object o)
-        {
-            string json = SerializeHelper.SerializeToJson(o);
-            return await GeneralWriteAsync(folder, name, json);
-        }
-
-        public static async Task<object> ReadJsonAsync<T>(StorageFolder folder, string name) where T : class
-        {
-            return SerializeHelper.DeserializeJsonToObject<T>(await ReadTextAsync(folder, name));
-        }
-
-        public static async Task<string> ReadTextAsync(StorageFolder folder, string name)
+        /// <summary>
+        /// General read process should not be record
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static async Task<string> GeneralReadAsync(StorageFolder folder, string name)
         {
             StorageFile file = await folder.GetFileAsync(name);
             return await FileIO.ReadTextAsync(file);
@@ -82,17 +78,16 @@ namespace LogicService.Storage
         /// General write process should be record
         /// </summary>
         /// <param name="folder"></param>
-        /// <param name="name"></param>
+        /// <param name="name">there must be a file or exception</param>
         /// <param name="content"></param>
         /// <returns></returns>
         public static async Task<StorageFile> GeneralWriteAsync(StorageFolder folder, string name, string content)
         {
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
-            if (file != null)
-            {
-                await FileIO.WriteTextAsync(file, content);
-                // record
-            }
+            await FileIO.WriteTextAsync(file, content);
+            // record
+            Synchronization.AddTrace(folder.Name, name);
+
             return file;
         }
 
@@ -103,12 +98,10 @@ namespace LogicService.Storage
         /// <param name="name"></param>
         public static async void GeneralDeleteAsync(StorageFolder folder, string name)
         {
-            StorageFile file = await folder.GetFileAsync(name);
-            if (file != null)
-            {
-                await file.DeleteAsync();
-                // record
-            }
+            StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
+            await file.DeleteAsync();
+            // record
+            Synchronization.AddTrace(folder.Name, name);
         }
 
         /// <summary>
@@ -118,43 +111,47 @@ namespace LogicService.Storage
         /// <param name="name"></param>
         /// <param name="line">just what you did without param</param>
         /// <returns></returns>
-        public static async Task<StorageFile> WriteLogAsync<T>(string name, string line) where T : class
+        public static async Task<StorageFile> GeneralLogAsync<T>(string name, string line) where T : class
         {
-            StorageFile file = await (await LocalStorage.GetLogAsync()).CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
-            if (file != null)
-            {
-                await FileIO.AppendTextAsync(file,
-                    "[" + DateTime.Now.ToString() + "]" + typeof(T).FullName + " : " + line);
-            }
+            StorageFile file = await (await GetLogAsync()).CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
+            await FileIO.AppendTextAsync(file,
+                                "[" + DateTime.Now.ToString() + "]" + typeof(T).FullName + " : " + line + "\n");
+
             return file;
+        }
+
+        public async static void Compression(StorageFolder origin)
+        {
+            using (ZipFile zip = ZipFile.Create(LocalStorage.GetTemporaryFolder().Path + "\\" + origin.Name + ".zip"))
+            {
+                zip.BeginUpdate();
+                foreach (StorageFile file in await origin.GetFilesAsync())
+                {
+                    zip.Add(origin.Path + "\\" + file.Name, file.Name);
+                }
+                zip.CommitUpdate();
+            }
+        }
+
+        public static void UnCompression(StorageFolder target)
+        {
+            new FastZip().ExtractZip(LocalStorage.GetTemporaryFolder().Path + "\\" + target.Name + ".zip", target.Path, "");
         }
 
         #endregion
 
-        #region management
+        #region custom
 
-        public static void FileTracer()
+        public static async Task<StorageFile> WriteJsonAsync(StorageFolder folder, string name, object o)
         {
-
+            string json = SerializeHelper.SerializeToJson(o);
+            return await GeneralWriteAsync(folder, name, json);
         }
 
-        //private static void Compression(StorageFolder origin)
-        //{
-        //    using (ZipFile zip = ZipFile.Create((await LocalStorage.GetDataAsync()).Path + "\\" + origin.Name))
-        //    {
-        //        zip.BeginUpdate();
-        //        foreach (StorageFile file in await origin.GetFilesAsync())
-        //        {
-        //            zip.Add(origin.Path + "\\" + file.Name, file.Name);
-        //        }
-        //        zip.CommitUpdate();
-        //    }
-        //}
-
-        //private static void UnCompression(StorageFolder target)
-        //{
-        //    new FastZip().ExtractZip((await LocalStorage.GetDataAsync()).Path + "\\" + target.Name, target.Path, "");
-        //}
+        public static async Task<T> ReadJsonAsync<T>(StorageFolder folder, string name) where T : class
+        {
+            return SerializeHelper.DeserializeJsonToObject<T>(await GeneralReadAsync(folder, name));
+        }
 
         #endregion
 

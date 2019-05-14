@@ -13,7 +13,7 @@
             <PivotItem Header="Panel">
                 <ScrollViewer>
                     <StackPanel>
-                        <ToggleSwitch Header="Sync in Start Page"/>
+                        
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem>
@@ -85,6 +85,9 @@
                         </ScrollViewer>
                     </Grid>
                 </ScrollViewer>
+            </PivotItem>
+            <PivotItem Header="OpenData">
+                
             </PivotItem>
         </Pivot>
     </Grid>
