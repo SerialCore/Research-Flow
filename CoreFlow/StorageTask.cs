@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LogicService.Services;
+using LogicService.Storage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,19 +12,20 @@ namespace CoreFlow
     public sealed class StorageTask : IBackgroundTask
     {
 
-        public void Run(IBackgroundTaskInstance taskInstance)
+        public async void Run(IBackgroundTaskInstance taskInstance)
         {
             var deferral = taskInstance.GetDeferral();
 
-            //await GraphService.ServiceLogin();
-            //if(await Synchronization.ScanChanges())
-            //{
-            //    //
-            //}
-            //else
-            //{
-            //    //
-            //}
+            await GraphService.ServiceLogin();
+            if (await Synchronization.FileTracer())
+            {
+                await LocalStorage.GeneralLogAsync<SearchTask>("BackgroundTask.log",
+                    "Synchronized successfully");
+            }
+            else
+            {
+                //
+            }
 
             deferral.Complete();
         }

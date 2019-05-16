@@ -53,7 +53,7 @@ namespace Research_Flow
         private async void ConfigureTask()
         {
             await ApplicationTask.RegisterSearchTask();
-            //await ApplicationTask.RegisterStorageTask();
+            await ApplicationTask.RegisterStorageTask();
             //await ApplicationTask.RegisterLearnTask();
         }
 
@@ -165,13 +165,13 @@ namespace Research_Flow
             accountEmail.Text = "";
         }
 
-        private void AccountSync_Click(object sender, RoutedEventArgs e)
+        private async void AccountSync_Click(object sender, RoutedEventArgs e)
         {
-            if (GraphService.IsSignedIn)
+            if (GraphService.IsSignedIn && GraphService.IsNetworkAvailable)
             {
                 ApplicationMessage.SendMessage("Synchronizing", 3);
-                //if (await Synchronization.ScanChanges())
-                //    ApplicationMessage.SendMessage("Synchronize successfully", 5);
+                if (await Synchronization.FileTracer())
+                    ApplicationMessage.SendMessage("Synchronized successfully", 5);
             }
         }
 

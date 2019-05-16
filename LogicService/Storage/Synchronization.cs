@@ -1,5 +1,6 @@
 ﻿using LogicService.Helper;
 using LogicService.Objects;
+using Microsoft.Graph;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,92 +12,127 @@ namespace LogicService.Storage
     public class Synchronization
     {
 
-        public static async Task FileTracer()
+        public static async Task<bool> FileTracer()
         {
-            // Delete Treatment: scanning
-            // If a file was not synced but only existed on cloud, that means it should be deleted from cloud.
-            // If files are deleted from cloud by app or user, another app should directly remove this locally.
-            // Add Treatment: recording
-            // A file was wrote and tagged unsynced, check if there is a same one on cloud.
-            // If true, compare modified date, else upload directly.
+            // some rules:
+            // updated files will all be tagged synced
+            // local deleting in sync process will not be recorded, but checked
 
+            // load file trace
             List<FileTrace> trace;
-            StorageFile file = await (await LocalStorage.GetLogAsync()).CreateFileAsync("filetrace",
+            StorageFile traceFile = await (await LocalStorage.GetLogAsync()).CreateFileAsync("filetrace",
                 CreationCollisionOption.OpenIfExists);
-            trace = SerializeHelper.DeserializeJsonToObject<List<FileTrace>>(await FileIO.ReadTextAsync(file));
+            trace = SerializeHelper.DeserializeJsonToObject<List<FileTrace>>(await FileIO.ReadTextAsync(traceFile));
             if (trace == null)
                 trace = new List<FileTrace>();
 
-            foreach (FileTrace item in trace)
+            // load remove list
+            List<RemoveList> remove;
+            StorageFile removeFile = await LocalStorage.GetRoamingFolder().CreateFileAsync("removelist",
+                CreationCollisionOption.OpenIfExists);
+            remove = SerializeHelper.DeserializeJsonToObject<List<RemoveList>>(await FileIO.ReadTextAsync(removeFile));
+            if (remove == null)
+                remove = new List<RemoveList>();
+
+            List<int> deleteIntrace = new List<int>();
+
+            // check process
+            foreach (FileTrace traceItem in trace)
             {
-                if(!item.IsSynced)
+                if (traceItem.IsSynced)
                 {
                     try
                     {
-                        var source = await (await LocalStorage.GetFolderAsync(item.FilePosition)).GetFileAsync(item.FileName);
-                        try
+                        var mirrorFolder = await OneDriveStorage.GetFolderAsync(traceItem.FilePosition); // for saving network resource
+                        var mirror = await OneDriveStorage.RetrieveFileAsync(mirrorFolder, traceItem.FileName);
+                        if (traceItem.DateModified < mirror.DateModified) // checking date for saving network resource
                         {
-                            var mirror = await OneDriveStorage.RetrieveFileAsync(await OneDriveStorage.GetFolderAsync(item.FilePosition), item.FileName);
-
-                        }
-                        catch
-                        {
-                            // if net issue?
-                            await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetFolderAsync(item.FilePosition), source);
-                            item.IsSynced = true;
+                            await OneDriveStorage.DownloadFileAsync(mirrorFolder,
+                                await LocalStorage.GetFolderAsync(traceItem.FilePosition), traceItem.FileName);
                         }
                     }
-                    catch(FileNotFoundException) // set for failure of finding source
+                    catch (ServiceException) // exist only in local, then delete // but network issue will cause the same exception
                     {
+                        var temp = await (await LocalStorage.GetFolderAsync(traceItem.FilePosition)).GetFileAsync(traceItem.FileName);
+                        await temp.DeleteAsync();
+                        // check remove list, not add
+                        foreach (RemoveList removeItem in remove)
+                        {
+                            if (removeItem.FileName == traceItem.FileName && removeItem.FilePosition == traceItem.FilePosition)
+                            {
+                                removeItem.Checked++; break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        var local = await (await LocalStorage.GetFolderAsync(traceItem.FilePosition)).GetFileAsync(traceItem.FileName);
                         try
                         {
-                            var mirror = await OneDriveStorage.RetrieveFileAsync(await OneDriveStorage.GetFolderAsync(item.FilePosition), item.FileName);
-                            await mirror.DeleteAsync();
-                            item.IsSynced = true;
+                            var mirrorFolder = await OneDriveStorage.GetFolderAsync(traceItem.FilePosition); // for saving network resource
+                            var mirror = await OneDriveStorage.RetrieveFileAsync(mirrorFolder, traceItem.FileName);
+                            if (traceItem.DateModified < mirror.DateModified)
+                            {
+                                await OneDriveStorage.DownloadFileAsync(mirrorFolder,
+                                    await LocalStorage.GetFolderAsync(traceItem.FilePosition), traceItem.FileName);
+                                traceItem.IsSynced = true;
+                            }
+                            else
+                            {
+                                await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetFolderAsync(traceItem.FilePosition), local);
+                                traceItem.IsSynced = true;
+                            }
                         }
-                        catch
+                        catch (ServiceException) // only exist in local
                         {
-                            await LocalStorage.GeneralLogAsync<Synchronization>("FileManagement.log", 
-                                "Fail to fetch cloud file (to be deleted)-" + item.FilePosition + ": " + item.FileName);
+                            int removeIndex = -1;
+                            foreach (RemoveList removeItem in remove)
+                            {
+                                if (removeItem.FileName == traceItem.FileName && removeItem.FilePosition == traceItem.FilePosition)
+                                {
+                                    removeIndex = remove.IndexOf(removeItem);
+                                    break;
+                                }
+                            }
+                            if (removeIndex >= 0) // another client had deleted this file from server
+                            {
+                                await local.DeleteAsync();
+                                // there will never be such file, so check ths list, and remove trace
+                                remove[removeIndex].Checked++;
+                                deleteIntrace.Add(trace.IndexOf(traceItem));
+                            }
+                            else // the server has never had this file
+                            {
+                                await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetFolderAsync(traceItem.FilePosition), local);
+                                traceItem.IsSynced = true; // tagged true
+                            }
                         }
+                    }
+                    catch (FileNotFoundException) // not exist in local, logically that means existing in cloud
+                    {
+                        // there might be no network issue, since sync process should be under the available connection
+                        var mirror = await OneDriveStorage.RetrieveFileAsync(await OneDriveStorage.GetFolderAsync(traceItem.FilePosition), traceItem.FileName);
+                        await mirror.DeleteAsync();
+                        // once deleted in cloud, remove the trace and leave the removelist recorded (untouched)
+                        deleteIntrace.Add(trace.IndexOf(traceItem));
                     }
                 }
             }
 
-            //await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetFeedAsync(), );
-
-            await FileIO.WriteTextAsync(file, SerializeHelper.SerializeToJson(trace));
-        }
-
-        public static async void AddTrace(string position, string name)
-        {
-            List<FileTrace> trace;
-            StorageFile file = await (await LocalStorage.GetLogAsync()).CreateFileAsync("filetrace",
-                CreationCollisionOption.OpenIfExists);
-            trace = SerializeHelper.DeserializeJsonToObject<List<FileTrace>>(await FileIO.ReadTextAsync(file));
-            if (trace == null)
-                trace = new List<FileTrace>();
-
-            // check the existing item
-            int traceIndex = -1;
-            FileTrace add = new FileTrace
+            // remove some trace
+            foreach (int index in deleteIntrace)
             {
-                FileName = name,
-                FilePosition = position,
-                DateModified = DateTime.Now,
-                IsSynced = false
-            };
-            foreach (FileTrace item in trace)
-            {
-                if (item.FileName == name && item.FilePosition == position)
-                    traceIndex = trace.IndexOf(item);
+                trace.RemoveAt(index);
             }
-            if (traceIndex >= 0)
-                trace[traceIndex] = add;
-            else
-                trace.Add(add);
 
-            await FileIO.WriteTextAsync(file, SerializeHelper.SerializeToJson(trace));
+            // save all
+            await FileIO.WriteTextAsync(traceFile, SerializeHelper.SerializeToJson(trace));
+            await FileIO.WriteTextAsync(removeFile, SerializeHelper.SerializeToJson(remove));
+
+            return true;
         }
 
         public async static Task DownloadAll()

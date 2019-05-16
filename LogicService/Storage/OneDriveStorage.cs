@@ -109,12 +109,12 @@ namespace LogicService.Storage
 
         #region read / write
 
-        public static async Task<IReadOnlyList<OneDriveStorageItem>> RetrieveItemsAsync(OneDriveStorageFolder folder, int top = 20, OrderBy order = OrderBy.None, string filter = null)
+        public static async Task<IReadOnlyList<OneDriveStorageItem>> RetrieveItemsAsync(OneDriveStorageFolder folder, int top = 50, OrderBy order = OrderBy.None, string filter = null)
         {
             return await folder.GetItemsAsync(top, order, filter);
         }
 
-        public static async Task<IReadOnlyList<OneDriveStorageItem>> RetrieveFilesAsync(OneDriveStorageFolder folder, int top = 20, OrderBy order = OrderBy.None, string filter = null)
+        public static async Task<IReadOnlyList<OneDriveStorageItem>> RetrieveFilesAsync(OneDriveStorageFolder folder, int top = 50, OrderBy order = OrderBy.None, string filter = null)
         {
             return await folder.GetFilesAsync(top, order, filter);
         }

@@ -3,6 +3,7 @@ using Microsoft.Toolkit.Services.MicrosoftGraph;
 using Microsoft.Toolkit.Services.OneDrive;
 using Microsoft.Toolkit.Services.Services.MicrosoftGraph;
 using System;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Windows.Storage.Streams;
 
@@ -11,11 +12,11 @@ namespace LogicService.Services
     public class GraphService
     {
 
-        #region profile
-
         private static MicrosoftGraphUserService User = null;
 
         public static bool IsSignedIn = false;
+
+        public static bool IsNetworkAvailable => NetworkInterface.GetIsNetworkAvailable();
 
         public async static Task<bool> ServiceLogin()
         {
@@ -24,7 +25,7 @@ namespace LogicService.Services
                 new string[] { MicrosoftGraphScope.FilesReadWriteAll });
             MicrosoftGraphService.Instance.Initialize("3bd1af71-d8ad-41f8-b1c9-22bef7a7028a", MicrosoftGraphEnums.ServicesToInitialize.OneDrive | MicrosoftGraphEnums.ServicesToInitialize.UserProfile,
                 new string[] { MicrosoftGraphScope.UserRead });
-            
+
             try
             {
                 IsSignedIn = await MicrosoftGraphService.Instance.LoginAsync() && await OneDriveService.Instance.LoginAsync();
@@ -59,8 +60,6 @@ namespace LogicService.Services
         {
             return (await User.GetProfileAsync()).UserPrincipalName;
         }
-
-        #endregion
 
     }
 }

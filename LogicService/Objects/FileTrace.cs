@@ -1,18 +1,19 @@
 ﻿using LogicService.Application;
+using LogicService.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace LogicService.Objects
 {
     /// <summary>
-    /// Trace for all the files in UserFolder
+    /// on cloud
     /// </summary>
     public class FileTrace
     {
-
         public string FilePosition { get; set; }
 
         public string FileName { get; set; }
@@ -23,11 +24,16 @@ namespace LogicService.Objects
 
     }
 
-    public class Filesrc
+    /// <summary>
+    /// on cloud or roaming
+    /// </summary>
+    public class RemoveList
     {
-        public static string Tracer => ApplicationSetting.AccountName + ".trace";
-        public static string RssList => "rsslist";
-        public static string SearchLog => "SearchTask.log";
-        public static string FileManage => "FileManagement.log";
+        public string FilePosition { get; set; }
+
+        public string FileName { get; set; }
+
+        public int Checked { get; set; }
+
     }
 }

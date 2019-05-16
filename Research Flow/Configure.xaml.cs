@@ -32,14 +32,15 @@ namespace Research_Flow
 
         private async void Login_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            accountStatu.Text = "Microsoft account on process";
+            accountStatu.Text = "Microsoft account in process";
             if (await GraphService.ServiceLogin())
             {
                 accountStatu.Text = await GraphService.GetPrincipalName();
                 configState.Text = "\nHi\t" + await GraphService.GetDisplayName() + "\n";
                 ApplicationSetting.AccountName = await GraphService.GetPrincipalName();
 
-                await ConfigureFile();
+                if(ApplicationInfo.IsFirstUse)
+                    await ConfigureFile();
             }
             else
             {
@@ -57,15 +58,12 @@ namespace Research_Flow
             configState.Text += "\nTracing files with OneDrive...\n";
             try
             {
-                if (ApplicationInfo.IsFirstUse)
-                    await Synchronization.DownloadAll();
-                else
-                    await Synchronization.FileTracer();
-
+                await Synchronization.DownloadAll();
                 configState.Text += "\nSync files successfully.\n";
             }
             catch (Exception ex)
             {
+                // load default files
                 configState.Text += "\nCan't make it, since " + ex.Message + "\n";
                 configState.Text += "\nPlease enter and sync again then restart Research Flow.\n";
             }
