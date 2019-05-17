@@ -36,4 +36,17 @@ namespace LogicService.Objects
         public int Checked { get; set; }
 
     }
+
+    /// <summary>
+    /// on cloud or roaming
+    /// </summary>
+    public class AddList
+    {
+        public string FilePosition { get; set; }
+
+        public string FileName { get; set; }
+
+        public int Checked { get; set; }
+
+    }
 }

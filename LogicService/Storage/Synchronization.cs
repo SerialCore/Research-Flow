@@ -1,4 +1,5 @@
-﻿using LogicService.Helper;
+﻿using LogicService.Application;
+using LogicService.Helper;
 using LogicService.Objects;
 using Microsoft.Graph;
 using System;
@@ -28,7 +29,7 @@ namespace LogicService.Storage
 
             // load remove list
             List<RemoveList> remove;
-            StorageFile removeFile = await LocalStorage.GetRoamingFolder().CreateFileAsync("removelist",
+            StorageFile removeFile = await LocalStorage.GetRoamingFolder().CreateFileAsync(ApplicationSetting.AccountName + ".removelist",
                 CreationCollisionOption.OpenIfExists);
             remove = SerializeHelper.DeserializeJsonToObject<List<RemoveList>>(await FileIO.ReadTextAsync(removeFile));
             if (remove == null)
@@ -45,7 +46,7 @@ namespace LogicService.Storage
                     {
                         var mirrorFolder = await OneDriveStorage.GetFolderAsync(traceItem.FilePosition); // for saving network resource
                         var mirror = await OneDriveStorage.RetrieveFileAsync(mirrorFolder, traceItem.FileName);
-                        if (traceItem.DateModified < mirror.DateModified) // checking date for saving network resource
+                        if (traceItem.DateModified < mirror.DateModified) // check date for saving network resource
                         {
                             await OneDriveStorage.DownloadFileAsync(mirrorFolder,
                                 await LocalStorage.GetFolderAsync(traceItem.FilePosition), traceItem.FileName);

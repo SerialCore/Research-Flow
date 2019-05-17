@@ -65,22 +65,23 @@ namespace LogicService.Storage
         #region general / core
 
         /// <summary>
-        /// General read process should not be record
+        /// will not be recorded
         /// </summary>
         /// <param name="folder"></param>
-        /// <param name="name"></param>
+        /// <param name="name">there must be a file or exception</param>
         /// <returns></returns>
         public static async Task<string> GeneralReadAsync(StorageFolder folder, string name)
         {
+            // FileNotFoundException will be catched externally for some reasons
             StorageFile file = await folder.GetFileAsync(name);
             return await FileIO.ReadTextAsync(file);
         }
 
         /// <summary>
-        /// General write process should be record
+        /// will be recorded
         /// </summary>
         /// <param name="folder"></param>
-        /// <param name="name">there must be a file or exception</param>
+        /// <param name="name"></param>
         /// <param name="content"></param>
         /// <returns></returns>
         public static async Task<StorageFile> GeneralWriteAsync(StorageFolder folder, string name, string content)
@@ -94,12 +95,13 @@ namespace LogicService.Storage
         }
 
         /// <summary>
-        /// General delete process should be record
+        /// will be recorded
         /// </summary>
         /// <param name="folder"></param>
         /// <param name="name"></param>
         public static async void GeneralDeleteAsync(StorageFolder folder, string name)
         {
+            // create then delete, equils to get and delete
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
             await file.DeleteAsync();
             // record
@@ -107,13 +109,6 @@ namespace LogicService.Storage
             AddRemoveList(folder.Name, name);
         }
 
-        /// <summary>
-        /// Log append process should not be record
-        /// </summary>
-        /// <typeparam name="T">this.GetType();</typeparam>
-        /// <param name="name"></param>
-        /// <param name="line">just what you did without param</param>
-        /// <returns></returns>
         public static async Task<StorageFile> GeneralLogAsync<T>(string name, string line) where T : class
         {
             StorageFile file = await (await GetLogAsync()).CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
@@ -145,6 +140,13 @@ namespace LogicService.Storage
 
         #region custom
 
+        /// <summary>
+        /// will be recorded
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <param name="name"></param>
+        /// <param name="o"></param>
+        /// <returns></returns>
         public static async Task<StorageFile> WriteJsonAsync(StorageFolder folder, string name, object o)
         {
             string json = SerializeHelper.SerializeToJson(o);
@@ -192,7 +194,8 @@ namespace LogicService.Storage
         public static async void AddRemoveList(string position, string name)
         {
             List<RemoveList> remove;
-            StorageFile file = await GetRoamingFolder().CreateFileAsync("removelist",
+            // multi-users
+            StorageFile file = await GetRoamingFolder().CreateFileAsync(ApplicationSetting.AccountName + ".removelist",
                 CreationCollisionOption.OpenIfExists);
             remove = SerializeHelper.DeserializeJsonToObject<List<RemoveList>>(await FileIO.ReadTextAsync(file));
             if (remove == null)
@@ -216,6 +219,35 @@ namespace LogicService.Storage
                 });
 
             await FileIO.WriteTextAsync(file, SerializeHelper.SerializeToJson(remove));
+        }
+
+        public static async void AddAddList(string position, string name)
+        {
+            List<AddList> add;
+            StorageFile file = await GetRoamingFolder().CreateFileAsync("removelist",
+                CreationCollisionOption.OpenIfExists);
+            add = SerializeHelper.DeserializeJsonToObject<List<AddList>>(await FileIO.ReadTextAsync(file));
+            if (add == null)
+                add = new List<AddList>();
+
+            // check the existing item
+            int addIndex = -1;
+            foreach (AddList item in add)
+            {
+                if (item.FileName == name && item.FilePosition == position)
+                    addIndex = add.IndexOf(item);
+            }
+            if (addIndex >= 0)
+                add[addIndex].Checked++;
+            else
+                add.Add(new AddList
+                {
+                    FileName = name,
+                    FilePosition = position,
+                    Checked = 0
+                });
+
+            await FileIO.WriteTextAsync(file, SerializeHelper.SerializeToJson(add));
         }
 
         #endregion

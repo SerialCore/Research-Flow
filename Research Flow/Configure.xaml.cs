@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -32,30 +33,37 @@ namespace Research_Flow
 
         private async void Login_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            accountStatu.Text = "Microsoft account in process";
+            accountStatu.Text = "Logging in";
             if (await GraphService.ServiceLogin())
             {
-                accountStatu.Text = await GraphService.GetPrincipalName();
-                configState.Text = "\nHi\t" + await GraphService.GetDisplayName() + "\n";
-                ApplicationSetting.AccountName = await GraphService.GetPrincipalName();
+                string name = await GraphService.GetDisplayName();
+                string email = await GraphService.GetPrincipalName();
+                BitmapImage image = new BitmapImage();
+                image.UriSource = new Uri("ms-appx:///Images/ResearchFlow_logo.jpg");
+                accountStatu.Text = email;
+                accountIcon.ProfilePicture = image;
+
+                ApplicationSetting.AccountName = email;
 
                 if(ApplicationInfo.IsFirstUse)
                     await ConfigureFile();
             }
             else
             {
-                configState.Text = "\nFail to log in, please try again.\n";
                 accountStatu.Text = "Please login again";
             }
 
             // make sure there will be an user folder
             if (ApplicationSetting.KeyContain("AccountName"))
-                finish_config.IsEnabled = true;
+            {
+                await Task.Delay(1000);
+                this.Frame.Navigate(typeof(MainPage), tempParameter);
+            }
         }
 
         private async Task ConfigureFile()
         {
-            configState.Text += "\nTracing files with OneDrive...\n";
+            configState.Text = "\nTracing files with OneDrive...\n";
             try
             {
                 await Synchronization.DownloadAll();
@@ -66,12 +74,8 @@ namespace Research_Flow
                 // load default files
                 configState.Text += "\nCan't make it, since " + ex.Message + "\n";
                 configState.Text += "\nPlease enter and sync again then restart Research Flow.\n";
+                await Task.Delay(2000);
             }
-        }
-
-        private void Finish_config_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(MainPage), tempParameter);
         }
 
     }
