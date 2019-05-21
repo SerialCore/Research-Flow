@@ -9,11 +9,12 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        
+
+        <TextBlock x:Name="configState" FontSize="20" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+
         <StackPanel Background="Transparent" VerticalAlignment="Center">
             <PersonPicture x:Name="accountIcon" Tapped="Login_Tapped" Height="150" Width="150"/>
-            <TextBlock x:Name="accountStatu" FontSize="20" Margin="0,80,0,0" HorizontalAlignment="Center"/>
-            <TextBlock x:Name="configState" FontSize="20" Margin="0,80,0,0" HorizontalAlignment="Center"/>
+            <TextBlock x:Name="accountStatu" FontSize="20" Margin="0,50,0,0" HorizontalAlignment="Center"/>
         </StackPanel>
 
     </Grid>

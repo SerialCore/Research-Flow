@@ -15,6 +15,7 @@ Picture(temporary)
 FileTracer(user)
 
 Todo:
+重新确定需要下载的RSS，不是按照时间
 在漫游文件中使用添加列表，实现个别文件的主动下行（在写方法中判断是否是新文件）
 Quartz.NET作业调度
 WebView存储收藏夹，保存在Learn文件夹里
@@ -30,7 +31,6 @@ Feed内容要包含时间，这样可以通知新Feed，并可以给用户呈现
 收集用户信息
 登录IP，保存在roam里
 Url搜索引擎
-全部导出应用信息
 不同数据源的学习方法是不同的，网页爬虫，Feed统计
 在网页上展示How-tos
 x3C对接，3.0

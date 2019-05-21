@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LogicService.Objects
 {
-    public class Crawable
+    public class Crawlable
     {
 
         public string SourceUrl { get; set; }

@@ -111,12 +111,13 @@
     <Compile Include="Helper\RegexHelper.cs" />
     <Compile Include="Helper\UrlOperator.cs" />
     <Compile Include="Helper\WebClientHelper.cs" />
-    <Compile Include="Objects\Crawable.cs" />
+    <Compile Include="Objects\Crawlable.cs" />
     <Compile Include="Objects\FeedSource.cs" />
     <Compile Include="Objects\FileTrace.cs" />
     <Compile Include="Objects\Paper.cs" />
     <Compile Include="Helper\SerializeHelper.cs" />
     <Compile Include="Helper\ToastGenerator.cs" />
+    <Compile Include="Objects\UserProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\HashCode.cs" />
     <Compile Include="Security\TripleDES.cs" />

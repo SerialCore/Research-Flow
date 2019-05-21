@@ -40,21 +40,31 @@ namespace LogicService.Storage
             return await (await GetUserFolderAsync()).CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
         }
 
-        public static async Task<StorageFolder> GetCrawAsync()
-        {
-            return await (await GetUserFolderAsync()).CreateFolderAsync("Craw", CreationCollisionOption.OpenIfExists);
-        }
-
+        // for rss feeds
         public static async Task<StorageFolder> GetFeedAsync()
         {
             return await (await GetUserFolderAsync()).CreateFolderAsync("Feed", CreationCollisionOption.OpenIfExists);
         }
 
+        // for topic and learning keys
+        public static async Task<StorageFolder> GetKeyAsync()
+        {
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Key", CreationCollisionOption.OpenIfExists);
+        }
+
+        // for searching and learning links
+        public static async Task<StorageFolder> GetLinkAsync()
+        {
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Link", CreationCollisionOption.OpenIfExists);
+        }
+
+        // for general logs and filetrace
         public static async Task<StorageFolder> GetLogAsync()
         {
             return await (await GetUserFolderAsync()).CreateFolderAsync("Log", CreationCollisionOption.OpenIfExists);
         }
 
+        // for drawable notes
         public static async Task<StorageFolder> GetNoteAsync()
         {
             return await (await GetUserFolderAsync()).CreateFolderAsync("Note", CreationCollisionOption.OpenIfExists);

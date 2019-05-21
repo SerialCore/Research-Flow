@@ -18,6 +18,8 @@ namespace LogicService.Storage
             // some rules:
             // updated files will all be tagged synced
             // local deleting in sync process will not be recorded, but checked
+            // remove file, and remove local trace
+            // download file, and update datetime
 
             // load file trace
             List<FileTrace> trace;
@@ -50,12 +52,14 @@ namespace LogicService.Storage
                         {
                             await OneDriveStorage.DownloadFileAsync(mirrorFolder,
                                 await LocalStorage.GetFolderAsync(traceItem.FilePosition), traceItem.FileName);
+                            traceItem.DateModified = DateTime.Now;
                         }
                     }
                     catch (ServiceException) // exist only in local, then delete // but network issue will cause the same exception
                     {
                         var temp = await (await LocalStorage.GetFolderAsync(traceItem.FilePosition)).GetFileAsync(traceItem.FileName);
                         await temp.DeleteAsync();
+                        deleteIntrace.Add(trace.IndexOf(traceItem));
                         // check remove list, not add
                         foreach (RemoveList removeItem in remove)
                         {
@@ -80,6 +84,7 @@ namespace LogicService.Storage
                                 await OneDriveStorage.DownloadFileAsync(mirrorFolder,
                                     await LocalStorage.GetFolderAsync(traceItem.FilePosition), traceItem.FileName);
                                 traceItem.IsSynced = true;
+                                traceItem.DateModified = DateTime.Now;
                             }
                             else
                             {
