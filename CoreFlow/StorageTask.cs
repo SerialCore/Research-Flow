@@ -19,7 +19,7 @@ namespace CoreFlow
             await GraphService.ServiceLogin();
             if (await Synchronization.FileTracer())
             {
-                await LocalStorage.GeneralLogAsync<StorageTask>("BackgroundTask.log",
+                LocalStorage.GeneralLog<Synchronization>("StorageTask.log",
                     "Synchronized successfully");
             }
             else

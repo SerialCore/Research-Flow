@@ -192,7 +192,7 @@ namespace Research_Flow
 
         private async void DeleteInvokedHandler(IUICommand command)
         {
-            if (ApplicationSetting.KeyContain("AccountName"))
+            if (ApplicationSetting.ContainKey("AccountName"))
                 Logout();
             else
                 await CoreApplication.RequestRestartAsync(string.Empty);

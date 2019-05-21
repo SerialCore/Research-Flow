@@ -27,10 +27,22 @@ namespace LogicService.Application
             }
         }
 
-        public static void KeyRemove(string key)
+        public static string Configured
+        {
+            get
+            {
+                return ApplicationData.Current.LocalSettings.Values["Configured"] as string;
+            }
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values["Configured"] = value;
+            }
+        }
+
+        public static void RemoveKey(string key)
             => ApplicationData.Current.LocalSettings.Values.Remove(key);
 
-        public static bool KeyContain(string key)
+        public static bool ContainKey(string key)
         {
             return ApplicationData.Current.LocalSettings.Values.ContainsKey(key) ? true : false;
         }

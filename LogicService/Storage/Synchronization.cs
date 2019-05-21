@@ -15,11 +15,19 @@ namespace LogicService.Storage
 
         public static async Task<bool> FileTracer()
         {
-            // some rules:
+            // some rules: associated with main syncing algorithm as a supplement
             // updated files will all be tagged synced
             // local deleting in sync process will not be recorded, but checked
             // remove file, and remove local trace
             // download file, and update datetime
+            // the files in cloud may be deleted by user, not by app, so double check all the mirrors in try
+            // the files in local may be deleted by user, if someone did this, it's not our fault
+
+            // bug in removelist
+            // if a file was deleted by user (recorded), but added again sometime, 
+            // then this file will be deleted locally
+            // so, when to clean removelist
+            // furthermore, when to clean addlist
 
             // load file trace
             List<FileTrace> trace;
@@ -37,7 +45,7 @@ namespace LogicService.Storage
             if (remove == null)
                 remove = new List<RemoveList>();
 
-            List<int> deleteIntrace = new List<int>();
+            List<FileTrace> deleteTrace = new List<FileTrace>();
 
             // check process
             foreach (FileTrace traceItem in trace)
@@ -55,19 +63,22 @@ namespace LogicService.Storage
                             traceItem.DateModified = DateTime.Now;
                         }
                     }
-                    catch (ServiceException) // exist only in local, then delete // but network issue will cause the same exception
+                    catch (ServiceException) // exist only in local, then delete
                     {
-                        var temp = await (await LocalStorage.GetFolderAsync(traceItem.FilePosition)).GetFileAsync(traceItem.FileName);
-                        await temp.DeleteAsync();
-                        deleteIntrace.Add(trace.IndexOf(traceItem));
-                        // check remove list, not add
-                        foreach (RemoveList removeItem in remove)
+                        try
                         {
-                            if (removeItem.FileName == traceItem.FileName && removeItem.FilePosition == traceItem.FilePosition)
+                            var temp = await (await LocalStorage.GetFolderAsync(traceItem.FilePosition)).GetFileAsync(traceItem.FileName);
+                            await temp.DeleteAsync();
+                            deleteTrace.Add(traceItem);
+                            // check remove list, not add
+                            foreach (RemoveList removeItem in remove)
                             {
-                                removeItem.Checked++; break;
+                                if (removeItem.FileName == traceItem.FileName && removeItem.FilePosition == traceItem.FilePosition)
+                                {
+                                    removeItem.Checked++; break;
+                                }
                             }
-                        }
+                        } catch (FileNotFoundException) { } // someone's mistake
                     }
                 }
                 else
@@ -108,7 +119,7 @@ namespace LogicService.Storage
                                 await local.DeleteAsync();
                                 // there will never be such file, so check ths list, and remove trace
                                 remove[removeIndex].Checked++;
-                                deleteIntrace.Add(trace.IndexOf(traceItem));
+                                deleteTrace.Add(traceItem);
                             }
                             else // the server has never had this file
                             {
@@ -117,21 +128,30 @@ namespace LogicService.Storage
                             }
                         }
                     }
-                    catch (FileNotFoundException) // not exist in local, logically that means existing in cloud
+                    catch (FileNotFoundException) // not exist in local, may exist in cloud
                     {
-                        // there might be no network issue, since sync process should be under the available connection
-                        var mirror = await OneDriveStorage.RetrieveFileAsync(await OneDriveStorage.GetFolderAsync(traceItem.FilePosition), traceItem.FileName);
-                        await mirror.DeleteAsync();
-                        // once deleted in cloud, remove the trace and leave the removelist recorded (untouched)
-                        deleteIntrace.Add(trace.IndexOf(traceItem));
+                        try
+                        {
+                            // there might be no network issue, since sync process should be under the available connection
+                            var mirror = await OneDriveStorage.RetrieveFileAsync(await OneDriveStorage.GetFolderAsync(traceItem.FilePosition), traceItem.FileName);
+                            await mirror.DeleteAsync();
+                        }
+                        catch (ServiceException) { } // not exist in cloud
+                        finally
+                        {
+                            // once deleted in cloud, by app or user (externally)
+                            // or not uploaded after deleted
+                            // remove the trace and leave the removelist recorded (untouched)
+                            deleteTrace.Add(traceItem);
+                        }
                     }
                 }
             }
 
             // remove some trace
-            foreach (int index in deleteIntrace)
+            foreach (FileTrace index in deleteTrace)
             {
-                trace.RemoveAt(index);
+                trace.Remove(index);
             }
 
             // save all

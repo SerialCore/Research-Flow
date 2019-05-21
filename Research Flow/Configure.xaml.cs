@@ -45,7 +45,7 @@ namespace Research_Flow
 
                 ApplicationSetting.AccountName = email;
 
-                if(ApplicationInfo.IsFirstUse)
+                if(ApplicationInfo.IsFirstUse || !ApplicationSetting.ContainKey("Configured"))
                     await ConfigureFile();
             }
             else
@@ -53,8 +53,8 @@ namespace Research_Flow
                 accountStatu.Text = "Please login again";
             }
 
-            // make sure there will be an user folder
-            if (ApplicationSetting.KeyContain("AccountName"))
+            // make sure there will be an user folder and user data
+            if (ApplicationSetting.ContainKey("AccountName") && ApplicationSetting.ContainKey("Configured"))
             {
                 await Task.Delay(1000);
                 this.Frame.Navigate(typeof(MainPage), tempParameter);
@@ -63,18 +63,18 @@ namespace Research_Flow
 
         private async Task ConfigureFile()
         {
-            configState.Text = "\nTracing files with OneDrive...\n";
+            configState.Text = "\nSyncing files with OneDrive...\n";
             try
             {
                 await Synchronization.DownloadAll();
-                configState.Text += "\nSync files successfully.\n";
+                configState.Text += "\nSync successfully.\n";
+                ApplicationSetting.Configured = "true";
             }
             catch (Exception ex)
             {
                 // load default files
                 configState.Text += "\nCan't make it, since " + ex.Message + "\n";
-                configState.Text += "\nPlease enter and sync again then restart Research Flow.\n";
-                await Task.Delay(2000);
+                configState.Text += "\nPlease login again.\n";
             }
         }
 

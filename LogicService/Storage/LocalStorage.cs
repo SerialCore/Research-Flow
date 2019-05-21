@@ -94,14 +94,12 @@ namespace LogicService.Storage
         /// <param name="name"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        public static async Task<StorageFile> GeneralWriteAsync(StorageFolder folder, string name, string content)
+        public static async void GeneralWrite(StorageFolder folder, string name, string content)
         {
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
             await FileIO.WriteTextAsync(file, content);
             // record
             AddFileTrace(folder.Name, name);
-
-            return file;
         }
 
         /// <summary>
@@ -109,7 +107,7 @@ namespace LogicService.Storage
         /// </summary>
         /// <param name="folder"></param>
         /// <param name="name"></param>
-        public static async void GeneralDeleteAsync(StorageFolder folder, string name)
+        public static async void GeneralDelete(StorageFolder folder, string name)
         {
             // create then delete, equils to get and delete
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
@@ -119,13 +117,11 @@ namespace LogicService.Storage
             AddRemoveList(folder.Name, name);
         }
 
-        public static async Task<StorageFile> GeneralLogAsync<T>(string name, string line) where T : class
+        public static async void GeneralLog<T>(string name, string line) where T : class
         {
             StorageFile file = await (await GetLogAsync()).CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
             await FileIO.AppendTextAsync(file,
                                 "[" + DateTime.Now.ToString() + "]" + typeof(T).FullName + " : " + line + "\n");
-
-            return file;
         }
 
         public async static void Compression(StorageFolder origin)
@@ -156,11 +152,10 @@ namespace LogicService.Storage
         /// <param name="folder"></param>
         /// <param name="name"></param>
         /// <param name="o"></param>
-        /// <returns></returns>
-        public static async Task<StorageFile> WriteJsonAsync(StorageFolder folder, string name, object o)
+        public static void WriteJson(StorageFolder folder, string name, object o)
         {
             string json = SerializeHelper.SerializeToJson(o);
-            return await GeneralWriteAsync(folder, name, json);
+            GeneralWrite(folder, name, json);
         }
 
         public static async Task<T> ReadJsonAsync<T>(StorageFolder folder, string name) where T : class

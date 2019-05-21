@@ -25,7 +25,7 @@ namespace Research_Flow
         public Topic()
         {
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Required;
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Research_Flow
         public WebPage()
         {
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Required;
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
             webView.Source = new Uri("https://blamder.github.io/Research-Flow/");
         }
