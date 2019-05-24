@@ -11,7 +11,7 @@
     <Grid x:Name="FullPage" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <NavigationView x:Name="NavView"
-                        PaneDisplayMode="Top"
+                        PaneDisplayMode="LeftCompact"
                         Loaded="NavView_Loaded"
                         SelectionChanged="NavView_SelectionChanged"
                         IsBackEnabled="{x:Bind ContentFrame.CanGoBack,Mode=OneWay}"
@@ -35,14 +35,26 @@
                         <FontIcon Glyph="&#xEB50;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Search" Tag="Search">
+                <NavigationViewItem Content="Learn" Tag="Learn">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE7BE;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+
+                <NavigationViewItemSeparator/>
+                <NavigationViewItem Content="Search Engine" Tag="Search">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEDE4;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Learn" Tag="Learn">
+                <NavigationViewItem Content="RSS Service" Tag="RSS">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE7BE;"/>
+                        <FontIcon Glyph="&#xEDE4;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Crawler Service" Tag="Crawler">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xEDE4;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 

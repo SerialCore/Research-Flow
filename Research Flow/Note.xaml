@@ -61,6 +61,7 @@
                         <FlyoutBase.AttachedFlyout>
                             <MenuFlyout>
                                 <MenuFlyoutItem Text="Export Image" Click="Export_Image"/>
+                                <MenuFlyoutItem Text="Upload Image" Click="Upload_Image"/>
                                 <MenuFlyoutItem Text="Share to People" Click="Share_Image"/>
                             </MenuFlyout>
                         </FlyoutBase.AttachedFlyout>

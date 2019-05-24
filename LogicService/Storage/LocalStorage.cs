@@ -229,7 +229,7 @@ namespace LogicService.Storage
         public static async void AddAddList(string position, string name)
         {
             List<AddList> add;
-            StorageFile file = await GetRoamingFolder().CreateFileAsync("removelist",
+            StorageFile file = await GetRoamingFolder().CreateFileAsync(ApplicationSetting.AccountName + ".addlist",
                 CreationCollisionOption.OpenIfExists);
             add = SerializeHelper.DeserializeJsonToObject<List<AddList>>(await FileIO.ReadTextAsync(file));
             if (add == null)

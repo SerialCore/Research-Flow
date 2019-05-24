@@ -7,7 +7,7 @@ Dialog，适用于操作限制
 List process:
 list of rsssources stored as one file
 list of feeds stored as one file which cannot be modified
-list of notes stored as files, reorderd by name
+list of notes stored as files
 
 File does not need to sync:
 GeneralLog(user)
@@ -15,11 +15,9 @@ Picture(temporary)
 FileTracer(user)
 
 Todo:
-Note中增删文件与加载列表存在线程冲突，即便是await，也无法同步
 是否允许用户同步文件，同步完是否重启，有些数据是否要实时加载，而不是依靠NavigationCache
 重新确定需要下载的RSS，不是按照时间
 在漫游文件中使用添加列表，实现个别文件的主动下行（在写方法中判断是否是新文件），删除列表和添加列表互相检查
-Quartz.NET作业调度
 WebView存储收藏夹，保存在Learn文件夹里
 RSS列表可自定义顺序，包括手动拖拽，或者一键排序
 Feed内容要包含时间，这样可以通知新Feed，并可以给用户呈现出一个热点、时间图

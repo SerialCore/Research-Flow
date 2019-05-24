@@ -88,8 +88,10 @@ namespace Research_Flow
             ("Overview", typeof(Overview)),
             ("Contact", typeof(Contact)),
             ("Topic", typeof(Topic)),
-            ("Search", typeof(Search)),
             ("Learn", typeof(Learn)),
+            ("Search", typeof(Search)),
+            ("RSS", typeof(RSS)),
+            ("Crawler", typeof(Crawler)),
             ("WebPage", typeof(WebPage)),
             ("Note", typeof(Note)),
         };
@@ -254,8 +256,7 @@ namespace Research_Flow
             request.Data.Properties.Description = "Share your current idea";
 
             var bitmap = new RenderTargetBitmap();
-            StorageFile file = await LocalStorage.GetTemporaryFolder().CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", 
-                CreationCollisionOption.ReplaceExisting);
+            StorageFile file = await LocalStorage.GetTemporaryFolder().CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
             await bitmap.RenderAsync(FullPage);
             var buffer = await bitmap.GetPixelsAsync();
             using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
@@ -283,8 +284,7 @@ namespace Research_Flow
         private async void ScreenShot_Upload(object sender, RoutedEventArgs e)
         {
             var bitmap = new RenderTargetBitmap();
-            StorageFile file = await LocalStorage.GetTemporaryFolder().CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", 
-                CreationCollisionOption.ReplaceExisting);
+            StorageFile file = await LocalStorage.GetTemporaryFolder().CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
             await bitmap.RenderAsync(FullPage);
             var buffer = await bitmap.GetPixelsAsync();
             using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
@@ -312,7 +312,7 @@ namespace Research_Flow
                 }
                 catch
                 {
-                    await file.CopyAsync(KnownFolders.PicturesLibrary, file.Name, NameCollisionOption.ReplaceExisting);
+                    await file.CopyAsync(KnownFolders.PicturesLibrary, file.Name);
                     ToastGenerator.ShowTextToast("Pictures Library", "Screen Shot Saved");
                 }
             }

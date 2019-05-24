@@ -1,10 +1,12 @@
 ﻿using LogicService.Application;
+using LogicService.Helper;
 using LogicService.Storage;
 using Microsoft.Graphics.Canvas;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
@@ -36,6 +38,8 @@ namespace Research_Flow
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
+        private ObservableCollection<NoteItem> namelist;
+
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             StorageFile file = e.Parameter as StorageFile;
@@ -50,10 +54,6 @@ namespace Research_Flow
                     InAppNotification.Show(ex.Message);
                 }
             }
-            else
-            {
-                LoadDefaultNote(null, null);
-            }
 
             InitializeNote();
         }
@@ -63,12 +63,12 @@ namespace Research_Flow
         /// </summary>
         private async void InitializeNote()
         {
-            var filelist = await (await LocalStorage.GetNoteAsync()).GetFilesAsync(CommonFileQuery.OrderByName);
-            var namelist = new List<NoteItem>();
-            foreach(var file in filelist)
+            var filelist = await (await LocalStorage.GetNoteAsync()).GetFilesAsync(CommonFileQuery.OrderByDate);
+            namelist = new ObservableCollection<NoteItem>();
+            foreach (var file in filelist)
             {
-                // name or displayname contains extention
-                namelist.Add(new NoteItem { NoteName = file.Name});
+                // name or displayname contains extention, if make CommonFileQuery not default
+                namelist.Add(new NoteItem { NoteName = file.DisplayName.Replace(".rfn", "") });
             }
             notelist.ItemsSource = namelist;
         }
@@ -114,6 +114,30 @@ namespace Research_Flow
                 using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
                 {
                     await canvas.SaveBitmapAsync(stream, BitmapFileFormat.Png);
+                }
+            }
+        }
+
+        private async void Upload_Image(object sender, RoutedEventArgs e)
+        {
+            StorageFile file = await LocalStorage.GetTemporaryFolder().CreateFileAsync("Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
+
+            if (file != null)
+            {
+                using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    await canvas.SaveBitmapAsync(stream, BitmapFileFormat.Png);
+                }
+
+                try
+                {
+                    await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetPictureAsync(), file);
+                    ToastGenerator.ShowTextToast("OneDrive", "Note Image Saved");
+                }
+                catch
+                {
+                    await file.CopyAsync(KnownFolders.PicturesLibrary, file.Name);
+                    ToastGenerator.ShowTextToast("Pictures Library", "Note Image Saved");
                 }
             }
         }
@@ -204,25 +228,29 @@ namespace Research_Flow
         private async void Notelist_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as NoteItem;
-            var fileitem = await (await LocalStorage.GetNoteAsync()).GetFileAsync(item.NoteName);
+            var fileitem = await (await LocalStorage.GetNoteAsync()).GetFileAsync(item.NoteName + ".rfn");
             canvas.ImportFromJson(await FileIO.ReadTextAsync(fileitem));
             notefilename.Text = item.NoteName;
         }
 
         private async void Save_Note(object sender, RoutedEventArgs e)
         {
+            string notename; // without extention
             if (notefilename.Text.Equals(""))
+            {
+                notename = "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss");
                 LocalStorage.GeneralWrite(await LocalStorage.GetNoteAsync(),
-                    "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".rfn",
-                    canvas.ExportAsJson());
+                    notename + ".rfn", canvas.ExportAsJson());
+            }
             else
+            {
+                notename = notefilename.Text;
                 LocalStorage.GeneralWrite(await LocalStorage.GetNoteAsync(),
-                    notefilename.Text,
-                    canvas.ExportAsJson());
+                    notename + ".rfn", canvas.ExportAsJson());
+            }
 
             ApplicationMessage.SendMessage("Note saved", 3);
-            await Task.Delay(1000);
-            InitializeNote();
+            namelist.Add(new NoteItem { NoteName = notename });
         }
 
         private async void Delete_Note(object sender, RoutedEventArgs e)
@@ -244,8 +272,7 @@ namespace Research_Flow
         {
             var item = notelist.SelectedItem as NoteItem;
             LocalStorage.GeneralDelete(await LocalStorage.GetNoteAsync(), item.NoteName);
-            await Task.Delay(1000);
-            InitializeNote();
+            namelist.Remove(item);
             notefilename.Text = "";
         }
 

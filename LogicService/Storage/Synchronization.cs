@@ -192,7 +192,7 @@ namespace LogicService.Storage
             }
 
             StorageFile file = await (await LocalStorage.GetLogAsync()).CreateFileAsync("filetrace",
-                CreationCollisionOption.ReplaceExisting);
+                CreationCollisionOption.OpenIfExists);
             await FileIO.WriteTextAsync(file, SerializeHelper.SerializeToJson(trace));
         }
 

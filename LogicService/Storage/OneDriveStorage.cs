@@ -173,7 +173,7 @@ namespace LogicService.Storage
             {
                 byte[] buffer = new byte[remoteStream.Size];
                 var localBuffer = await remoteStream.ReadAsync(buffer.AsBuffer(), (uint)remoteStream.Size, InputStreamOptions.ReadAhead);
-                myLocalFile = await target.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+                myLocalFile = await target.CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists);
                 using (var localStream = await myLocalFile.OpenAsync(FileAccessMode.ReadWrite))
                 {
                     await localStream.WriteAsync(localBuffer);
