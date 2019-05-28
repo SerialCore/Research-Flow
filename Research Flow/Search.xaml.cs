@@ -24,6 +24,13 @@ namespace Research_Flow
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+
+            InitializeEngine();
+        }
+
+        private void InitializeEngine()
+        {
+
         }
 
     }

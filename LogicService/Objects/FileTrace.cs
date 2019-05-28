@@ -10,7 +10,7 @@ using Windows.Storage;
 namespace LogicService.Objects
 {
     /// <summary>
-    /// on cloud
+    /// on local
     /// </summary>
     public class FileTrace
     {
@@ -34,6 +34,8 @@ namespace LogicService.Objects
         public string FileName { get; set; }
 
         public int Checked { get; set; }
+
+        public bool AddorDel { get; set; }
 
     }
 

@@ -49,22 +49,22 @@
                 </NavigationViewItem>
                 <NavigationViewItem Content="RSS Service" Tag="RSS">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xEDE4;"/>
+                        <FontIcon Glyph="&#xE14C;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem Content="Crawler Service" Tag="Crawler">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xEDE4;"/>
+                        <FontIcon Glyph="&#xE12B;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 
                 <NavigationViewItemSeparator/>
-                <NavigationViewItem Content="WebPage" Tag="WebPage">
+                <NavigationViewItem Content="Web Page" Tag="WebPage">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEC26;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Note" Tag="Note">
+                <NavigationViewItem Content="Drawable Note" Tag="Note">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEA86;"/>
                     </NavigationViewItem.Icon>
@@ -72,7 +72,7 @@
             </NavigationView.MenuItems>
 
             <NavigationView.AutoSuggestBox>
-                <AutoSuggestBox x:Name="ASB" QueryIcon="Find" Width="200"/>
+                <AutoSuggestBox x:Name="ASB" QueryIcon="Find"/>
             </NavigationView.AutoSuggestBox>
 
             <NavigationView.Header>
@@ -97,8 +97,8 @@
             <NavigationView.PaneFooter>
                 <ListViewItem Tapped="Flyout_Tapped">
                     <StackPanel Orientation="Horizontal">
-                        <PersonPicture x:Name="accountPhoto" Height="24" Width="24"/>
-                        <TextBlock x:Name="accountName" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                        <PersonPicture x:Name="accountPhoto" Height="20" Width="20"/>
+                        <TextBlock x:Name="accountName" Margin="16,0,0,0" VerticalAlignment="Center"/>
                     </StackPanel>
                     <FlyoutBase.AttachedFlyout>
                         <Flyout>

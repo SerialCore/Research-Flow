@@ -53,7 +53,7 @@ namespace LogicService.Services
 
         public async static Task<string> GetDisplayName()
         {
-            return (await User.GetProfileAsync()).DisplayName;
+            return (await User.GetProfileAsync()).GivenName;
         }
 
         public async static Task<string> GetPrincipalName()

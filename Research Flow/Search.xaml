@@ -10,12 +10,14 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <StackPanel Height="500" Width="500">
-            <StackPanel Orientation="Horizontal">
+        <Grid Margin="10">
+            <StackPanel Orientation="Horizontal" Height="48" VerticalAlignment="Top">
                 <TextBox Grid.Row="1" Grid.Column="0" Text="Bing"/>
                 <TextBox Grid.Row="1" Grid.Column="1" Text="https://cn.bing.com/search?q=QUEST"/>
             </StackPanel>
-        </StackPanel>
+            
+            
+        </Grid>
 
         <toolkit:InAppNotification x:Name="InAppNotification" 
                                     ShowDismissButton="True"
