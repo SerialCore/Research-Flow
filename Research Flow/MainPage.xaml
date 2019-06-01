@@ -23,11 +23,6 @@
                         <FontIcon Glyph="&#xEB68;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Contact" Tag="Contact">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xEA8F;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
 
                 <NavigationViewItemSeparator/>
                 <NavigationViewItem Content="Topic" Tag="Topic">
@@ -42,6 +37,11 @@
                 </NavigationViewItem>
 
                 <NavigationViewItemSeparator/>
+                <NavigationViewItem Content="Crawler Service" Tag="Crawler">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE12B;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
                 <NavigationViewItem Content="Search Engine" Tag="Search">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEDE4;"/>
@@ -49,12 +49,7 @@
                 </NavigationViewItem>
                 <NavigationViewItem Content="RSS Service" Tag="RSS">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE14C;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                <NavigationViewItem Content="Crawler Service" Tag="Crawler">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE12B;"/>
+                        <FontIcon Glyph="&#xE24A;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 

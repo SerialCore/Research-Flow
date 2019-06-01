@@ -16,56 +16,58 @@
                 <ColumnDefinition Width="300"/>
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                <ListView x:Name="feedSource_list" IsItemClickEnabled="True" ItemClick="RSS_SourceClick"
-                                         ReorderMode="Enabled" Margin="0,0,0,72">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="24"/>
-                                    <ColumnDefinition Width="204"/>
-                                    <ColumnDefinition Width="72"/>
-                                </Grid.ColumnDefinitions>
-                                <FontIcon Grid.Column="0" FontFamily="Segoe MDL2 Assets" Glyph="&#xE753;" />
-                                <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" Margin="12,0,0,0"/>
-                                <AppBarButton Grid.Column="2" Icon="More" Click="Modify_Source" Tag="{Binding ID}" Width="48" LabelPosition="Collapsed"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <Button Content="Add Source" Click="Add_Source"
-                                    Height="32" Width="250" VerticalAlignment="Bottom" Margin="20" Background="LightBlue"/>
-                <Grid x:Name="source_panel" Visibility="Collapsed" Background="{ThemeResource AppBarBackgroundThemeBrush}" Padding="10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssName" Header="Title" IsSpellCheckEnabled="False" Margin="0,4"/>
-                    <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssUrl" Header="Url" IsSpellCheckEnabled="False" Margin="0,4"/>
-                    <Slider Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedCount" Header="Max count of items" Minimum="20" Maximum="100" TickFrequency="10" TickPlacement="Outside" Margin="0,4"/>
-                    <CheckBox Grid.Row="3" Grid.Column="0" x:Name="isJournal" Content="Is journal" Margin="0,4"/>
-                    <RatingControl Grid.Row="3" Grid.Column="1" x:Name="rssStar"/>
-                    <Button Grid.Row="5" Grid.Column="0" Click="Confirm_FeedSetting" Content="Confirm" Margin="10" HorizontalAlignment="Stretch" Background="LightSkyBlue"/>
-                    <Button Grid.Row="5" Grid.Column="1" Click="Leave_FeedSetting" Content="Cancel" Margin="10" HorizontalAlignment="Stretch" Background="LightGray"/>
-                    <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssDelete" Click="Delete_RSSSetting" Content="Delete" Margin="10" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
-                </Grid>
+            <Grid Grid.Column="0">
+                <StackPanel Margin="0,0,0,48" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <ListView x:Name="feedSource_list" IsItemClickEnabled="True" ItemClick="RSS_SourceClick"
+                                         ReorderMode="Enabled">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="24"/>
+                                        <ColumnDefinition Width="204"/>
+                                        <ColumnDefinition Width="72"/>
+                                    </Grid.ColumnDefinitions>
+                                    <FontIcon Grid.Column="0" FontFamily="Segoe MDL2 Assets" Glyph="&#xE753;" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                                    <AppBarButton Grid.Column="2" Icon="More" Click="Modify_Source" Tag="{Binding ID}" Width="48" LabelPosition="Collapsed"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <ListViewItem Tapped="Add_Source">
+                        <TextBlock Text="+" Margin="130,0,0,0"/>
+                    </ListViewItem>
+                </StackPanel>
+                <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                    <AppBarButton Icon="Refresh" Label="GetFeed" Click="RSS_SourceRefresh"/>
+                </CommandBar>
             </Grid>
-            <Grid Grid.Column="1">
+            <Grid Grid.Row="0" x:Name="source_panel" Visibility="Collapsed" Background="{ThemeResource AppBarBackgroundThemeBrush}" Padding="10">
                 <Grid.RowDefinitions>
-                    <RowDefinition />
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <ListView Grid.Row="0" x:Name="feedItem_list" IsItemClickEnabled="True" ItemClick="Feed_ItemClick">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssName" Header="Title" IsSpellCheckEnabled="False" Margin="0,4"/>
+                <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssUrl" Header="Url" IsSpellCheckEnabled="False" Margin="0,4"/>
+                <Slider Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedCount" Header="Max count of items" Minimum="20" Maximum="100" TickFrequency="10" TickPlacement="Outside" Margin="0,4"/>
+                <CheckBox Grid.Row="3" Grid.Column="0" x:Name="isJournal" Content="Is journal" Margin="0,4"/>
+                <RatingControl Grid.Row="3" Grid.Column="1" x:Name="rssStar"/>
+                <Button Grid.Row="5" Grid.Column="0" Click="Confirm_FeedSetting" Content="Confirm" Margin="10" HorizontalAlignment="Stretch" Background="LightSkyBlue"/>
+                <Button Grid.Row="5" Grid.Column="1" Click="Leave_FeedSetting" Content="Cancel" Margin="10" HorizontalAlignment="Stretch" Background="LightGray"/>
+                <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssDelete" Click="Delete_RSSSetting" Content="Delete" Margin="10" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
+            </Grid>
+            <Grid Grid.Column="1">
+                <ListView x:Name="feedItem_list" IsItemClickEnabled="True" ItemClick="Feed_ItemClick">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel >
@@ -78,9 +80,6 @@
                     </ListView.ItemTemplate>
                 </ListView>
                 <ProgressRing x:Name="waiting_feed" Height="100" Width="100"/>
-                <CommandBar Grid.Row="1" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                    <AppBarButton Icon="Refresh" Label="Refresh"/>
-                </CommandBar>
             </Grid>
             <SplitView Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedItem_detail" OpenPaneLength="400" DisplayMode="Overlay" PanePlacement="Right">
                 <SplitView.Pane>
@@ -93,7 +92,7 @@
                                 <TextBlock x:Name="feedTitle" FontSize="20" Style="{ThemeResource TitleTextBlockStyle}"/>
                                 <StackPanel Orientation="Horizontal">
                                     <Button x:Name="feedBrowse" Click="Browse_Feed" Content="Browse this feed" Background="LightBlue" Margin="0,0,5,0"/>
-                                    <Button Content="Learn this Feed" Background="LightSkyBlue" Margin="5,0,0,0"/>
+                                    <Button Content="Crawl this Feed" Background="LightSkyBlue" Margin="5,0,0,0"/>
                                 </StackPanel>
                                 <TextBlock x:Name="feedPublished" FontSize="16" Style="{ThemeResource SubtitleTextBlockStyle}"/>
                                 <TextBlock x:Name="feedSummary" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>

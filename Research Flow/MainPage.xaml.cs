@@ -86,7 +86,6 @@ namespace Research_Flow
         private readonly List<(string Tag, Type Page)> _pages = new List<(string Tag, Type Page)>
         {
             ("Overview", typeof(Overview)),
-            ("Contact", typeof(Contact)),
             ("Topic", typeof(Topic)),
             ("Learn", typeof(Learn)),
             ("Search", typeof(Search)),

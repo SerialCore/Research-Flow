@@ -64,7 +64,8 @@ namespace Research_Flow
             {
                 feedSource_list.ItemsSource = FeedSources;
                 feedSource_list.SelectedIndex = 0;
-                LoadRss(feedSource_list.SelectedItem as RSSSource);
+                shownRSS = feedSource_list.SelectedItem as RSSSource;
+                LoadRss(shownRSS);
             }
         }
 
@@ -72,10 +73,10 @@ namespace Research_Flow
 
         public ObservableCollection<RSSSource> FeedSources { get; set; }
 
-        // Used for item modification, not clicked item.
-        private RSSSource currentRSS = null;
+        private RSSSource modifiedRSS = null; // Used for item modification, not clicked item.
+        private RSSSource shownRSS = null; // always un-null
 
-        private void Add_Source(object sender, RoutedEventArgs e) => source_panel.Visibility = Visibility.Visible;
+        private void Add_Source(object sender, TappedRoutedEventArgs e) => source_panel.Visibility = Visibility.Visible;
 
         private void Modify_Source(object sender, RoutedEventArgs e)
         {
@@ -85,7 +86,8 @@ namespace Research_Flow
                 if (item.ID.Equals((string)button.Tag))
                 {
                     source_panel.Visibility = Visibility.Visible;
-                    currentRSS = item;
+                    modifiedRSS = item;
+
                     rssName.Text = item.Name;
                     rssUrl.Text = item.Uri;
                     feedCount.Value = item.MaxCount;
@@ -112,11 +114,11 @@ namespace Research_Flow
                     Star = rssStar.Value,
                     IsJournal = (bool)(isJournal.IsChecked)
                 };
-                if (currentRSS != null)
+                if (modifiedRSS != null)
                 {
                     // create new and remain other data
-                    source.LastUpdateTime = currentRSS.LastUpdateTime;
-                    FeedSources[FeedSources.IndexOf(currentRSS)] = source;
+                    source.LastUpdateTime = modifiedRSS.LastUpdateTime;
+                    FeedSources[FeedSources.IndexOf(modifiedRSS)] = source;
                 }
                 else
                 {
@@ -153,11 +155,11 @@ namespace Research_Flow
 
         private async void DeleteInvokedHandler(IUICommand command)
         {
-            FeedSources.Remove(currentRSS);
+            FeedSources.Remove(modifiedRSS);
             LocalStorage.WriteJson(await LocalStorage.GetFeedAsync(), "rsslist", FeedSources);
             try
             {
-                LocalStorage.GeneralDelete(await LocalStorage.GetFeedAsync(), currentRSS.ID);
+                LocalStorage.GeneralDelete(await LocalStorage.GetFeedAsync(), modifiedRSS.ID);
             }
             catch { }
             ClearSettings();
@@ -169,7 +171,7 @@ namespace Research_Flow
 
         private void ClearSettings()
         {
-            currentRSS = null;
+            modifiedRSS = null;
             rssName.Text = "";
             rssUrl.Text = "";
             feedCount.Value = 20;
@@ -182,7 +184,13 @@ namespace Research_Flow
         }
 
         private void RSS_SourceClick(object sender, ItemClickEventArgs e)
-            => LoadRss(e.ClickedItem as RSSSource);
+        {
+            shownRSS = e.ClickedItem as RSSSource;
+            LoadRss(shownRSS);
+        }
+
+        private void RSS_SourceRefresh(object sender, RoutedEventArgs e)
+            => SearchRss(shownRSS);
 
         private void Feed_ItemClick(object sender, ItemClickEventArgs e)
         {
@@ -248,5 +256,6 @@ namespace Research_Flow
         }
 
         #endregion
+
     }
 }

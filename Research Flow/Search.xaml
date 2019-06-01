@@ -10,36 +10,26 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <Grid >
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="10">
+            <Grid Height="48" VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
 
-            <Grid Grid.Row="0" Margin="10">
-                <Grid Height="48" VerticalAlignment="Top">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-
-                    <TextBox Grid.Column="0" Text="Bing" VerticalAlignment="Center"/>
-                    <ComboBox Grid.Column="1" x:Name="searchlist" VerticalAlignment="Center"/>
-                    <AutoSuggestBox Grid.Column="2" x:Name="queryQuest" Text="https://cn.bing.com/search?q=QUEST"
-                                QueryIcon="Find" QuerySubmitted="AutoSuggestBox_QuerySubmitted" VerticalAlignment="Center"/>
-                </Grid>
-
-                <WebView x:Name="webview" Margin="0,48,0,0"/>
-
+                <ComboBox Grid.Column="0" x:Name="searchlist" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+                <AutoSuggestBox Grid.Column="1" x:Name="queryQuest" QueryIcon="Find"
+                                    QuerySubmitted="AutoSuggestBox_QuerySubmitted" VerticalAlignment="Center"/>
+                <InkToolbarCustomToolButton Grid.Column="2">
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE292;" />
+                </InkToolbarCustomToolButton>
             </Grid>
 
-            <CommandBar Grid.Row="1" Background="Transparent">
-                
-            </CommandBar>
-            
+            <WebView x:Name="webview" Margin="0,48,0,0"/>
+
         </Grid>
-        
+
 
         <toolkit:InAppNotification x:Name="InAppNotification" 
                                     ShowDismissButton="True"

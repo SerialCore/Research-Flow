@@ -28,14 +28,35 @@ namespace Research_Flow
             InitializeEngine();
         }
 
-        private void InitializeEngine()
+        private async void InitializeEngine()
         {
-
+            try
+            {
+                SearchSources = await LocalStorage.ReadJsonAsync<Dictionary<string, string>>(
+                    await LocalStorage.GetLinkAsync(), "searchlist");
+            }
+            catch
+            {
+                // for new user, remember to load default feed from file, not the follows
+                SearchSources = new Dictionary<string, string>()
+                {
+                    { "Bing", "https://www.bing.com/search?q=QUEST" },
+                };
+                LocalStorage.WriteJson(await LocalStorage.GetLinkAsync(), "searchlist", SearchSources);
+            }
+            finally
+            {
+                searchlist.ItemsSource = SearchSources.Keys;
+                searchlist.SelectedIndex = 0;
+            }
         }
+
+        public Dictionary<string, string> SearchSources { get; set; }
 
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            webview.Navigate(new Uri(queryQuest.Text));
+            var urlstring = SearchSources.GetValueOrDefault(searchlist.SelectedItem as string).Replace("QUEST", queryQuest.Text);
+            webview.Navigate(new Uri(urlstring));
         }
     }
 }
