@@ -18,8 +18,6 @@ namespace LogicService.Objects
 
         public int MaxCount { get; set; }
 
-        public double DaysforUpdate { get; set; }
-
         public double Star { get; set; }
 
         public bool IsJournal { get; set; }
@@ -59,9 +57,9 @@ namespace LogicService.Objects
     public class ElementLink
     {
 
-        public string Url { get; set; }
-
         public string Text { get; set; }
+
+        public string Url { get; set; }
 
     }
 }

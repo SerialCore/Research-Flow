@@ -33,5 +33,9 @@ namespace Research_Flow
 
         }
 
+        private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            webview.Navigate(new Uri(queryQuest.Text));
+        }
     }
 }

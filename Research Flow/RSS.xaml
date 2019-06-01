@@ -42,7 +42,6 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
@@ -54,16 +53,19 @@
                     <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssName" Header="Title" IsSpellCheckEnabled="False" Margin="0,4"/>
                     <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssUrl" Header="Url" IsSpellCheckEnabled="False" Margin="0,4"/>
                     <Slider Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedCount" Header="Max count of items" Minimum="20" Maximum="100" TickFrequency="10" TickPlacement="Outside" Margin="0,4"/>
-                    <Slider Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssDays" Header="Days for update" Minimum="1" Maximum="10" TickFrequency="1" TickPlacement="Outside" Margin="0,4"/>
-                    <CheckBox Grid.Row="4" Grid.Column="0" x:Name="isJournal" Content="Is journal" Margin="0,4"/>
-                    <RatingControl Grid.Row="4" Grid.Column="1" x:Name="rssStar"/>
-                    <Button Grid.Row="6" Grid.Column="0" Click="Confirm_FeedSetting" Content="Confirm" Margin="10" HorizontalAlignment="Stretch" Background="LightSkyBlue"/>
-                    <Button Grid.Row="6" Grid.Column="1" Click="Leave_FeedSetting" Content="Cancel" Margin="10" HorizontalAlignment="Stretch" Background="LightGray"/>
-                    <Button Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssDelete" Click="Delete_RSSSetting" Content="Delete" Margin="10" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
+                    <CheckBox Grid.Row="3" Grid.Column="0" x:Name="isJournal" Content="Is journal" Margin="0,4"/>
+                    <RatingControl Grid.Row="3" Grid.Column="1" x:Name="rssStar"/>
+                    <Button Grid.Row="5" Grid.Column="0" Click="Confirm_FeedSetting" Content="Confirm" Margin="10" HorizontalAlignment="Stretch" Background="LightSkyBlue"/>
+                    <Button Grid.Row="5" Grid.Column="1" Click="Leave_FeedSetting" Content="Cancel" Margin="10" HorizontalAlignment="Stretch" Background="LightGray"/>
+                    <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssDelete" Click="Delete_RSSSetting" Content="Delete" Margin="10" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
                 </Grid>
             </Grid>
             <Grid Grid.Column="1">
-                <ListView x:Name="feedItem_list" IsItemClickEnabled="True" ItemClick="Feed_ItemClick">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <ListView Grid.Row="0" x:Name="feedItem_list" IsItemClickEnabled="True" ItemClick="Feed_ItemClick">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel >
@@ -76,6 +78,9 @@
                     </ListView.ItemTemplate>
                 </ListView>
                 <ProgressRing x:Name="waiting_feed" Height="100" Width="100"/>
+                <CommandBar Grid.Row="1" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                    <AppBarButton Icon="Refresh" Label="Refresh"/>
+                </CommandBar>
             </Grid>
             <SplitView Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedItem_detail" OpenPaneLength="400" DisplayMode="Overlay" PanePlacement="Right">
                 <SplitView.Pane>

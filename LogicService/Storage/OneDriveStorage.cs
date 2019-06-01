@@ -136,7 +136,7 @@ namespace LogicService.Storage
             return await folder.GetFileAsync(name);
         }
 
-        public static async Task<BitmapImage> RetrieveFileThumbnails(OneDriveStorageFile file)
+        public static async Task<BitmapImage> GetFileThumbnails(OneDriveStorageFile file)
         {
             var stream = await file.StorageItemPlatformService.GetThumbnailAsync(ThumbnailSize.Large);
             BitmapImage bmp = new BitmapImage();

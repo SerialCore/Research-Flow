@@ -30,37 +30,27 @@ namespace CoreFlow
 
             foreach (RSSSource source in FeedSources)
             {
-                TimeSpan ts1 = new TimeSpan(DateTime.Now.Ticks);
-                TimeSpan ts2 = new TimeSpan(source.LastUpdateTime.Ticks);
-                TimeSpan ts = ts1.Subtract(ts2).Duration();
-                if (ts.Days >= source.DaysforUpdate)
-                {
-                    RssService.GetRssItems(
-                        source.Uri,
-                        async (items) =>
-                        {
-                            List<FeedItem> feeds = items as List<FeedItem>;
-                            if (feeds.Count > source.MaxCount)
-                                feeds.RemoveRange(source.MaxCount, feeds.Count - source.MaxCount);
-                            LocalStorage.WriteJson(await LocalStorage.GetFeedAsync(), source.ID, items);
-                            source.LastUpdateTime = DateTime.Now;
-                            LocalStorage.WriteJson(await LocalStorage.GetFeedAsync(), "rsslist", FeedSources);
+                RssService.GetRssItems(
+                    source.Uri,
+                    async (items) =>
+                    {
+                        List<FeedItem> feeds = items as List<FeedItem>;
+                        if (feeds.Count > source.MaxCount)
+                            feeds.RemoveRange(source.MaxCount, feeds.Count - source.MaxCount);
+                        LocalStorage.WriteJson(await LocalStorage.GetFeedAsync(), source.ID, items);
+                        source.LastUpdateTime = DateTime.Now;
+                        LocalStorage.WriteJson(await LocalStorage.GetFeedAsync(), "rsslist", FeedSources);
 
                             // inform user
                             LocalStorage.GeneralLog<RssService>("SearchTask.log",
-                                "just updated your rss feed-" + source.Name);
-                        },
-                        (exception) =>
-                        {
+                            "just updated your rss feed-" + source.Name);
+                    },
+                    (exception) =>
+                    {
                             // save to log
                             LocalStorage.GeneralLog<RssService>("SearchTask.log",
-                                exception + "-" + source.Name);
-                        }, null);
-                }
-                else
-                {
-                    // crawl
-                }
+                            exception + "-" + source.Name);
+                    }, null);
             }
 
         }

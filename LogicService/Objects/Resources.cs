@@ -11,6 +11,7 @@ namespace LogicService.Objects
     {
 
         public static string RSSList => "rsslist";
+        public static string EngineList => "searchlist";
 
         public static string FileTrace => "filetrace";
         public static string RemoveList => ApplicationSetting.AccountName + ".removelist";

@@ -10,14 +10,36 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <Grid Margin="10">
-            <StackPanel Orientation="Horizontal" Height="48" VerticalAlignment="Top">
-                <TextBox Grid.Row="1" Grid.Column="0" Text="Bing"/>
-                <TextBox Grid.Row="1" Grid.Column="1" Text="https://cn.bing.com/search?q=QUEST"/>
-            </StackPanel>
-            
+        <Grid >
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="10">
+                <Grid Height="48" VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Grid.Column="0" Text="Bing" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Column="1" x:Name="searchlist" VerticalAlignment="Center"/>
+                    <AutoSuggestBox Grid.Column="2" x:Name="queryQuest" Text="https://cn.bing.com/search?q=QUEST"
+                                QueryIcon="Find" QuerySubmitted="AutoSuggestBox_QuerySubmitted" VerticalAlignment="Center"/>
+                </Grid>
+
+                <WebView x:Name="webview" Margin="0,48,0,0"/>
+
+            </Grid>
+
+            <CommandBar Grid.Row="1" Background="Transparent">
+                
+            </CommandBar>
             
         </Grid>
+        
 
         <toolkit:InAppNotification x:Name="InAppNotification" 
                                     ShowDismissButton="True"

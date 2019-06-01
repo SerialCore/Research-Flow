@@ -10,30 +10,41 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <toolkit:OrbitView x:Name="Devices" OrbitsEnabled="True" AnchorsEnabled="True" IsItemClickEnabled="True"
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="400"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" Background="AliceBlue" BorderThickness="0,0,2,0">
+                
+            </Grid>
+
+            <toolkit:OrbitView Grid.Column="1" x:Name="Devices" OrbitsEnabled="True" AnchorsEnabled="True" IsItemClickEnabled="True"
                            MaxItemSize="43" AnchorColor="Gold" OrbitColor="Gray">
-            <toolkit:OrbitView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Width="60" Height="60" Background="White">
-                        <StackPanel>
-                            <SymbolIcon Height="30" HorizontalAlignment="Center" Foreground="Gray" Symbol="{Binding Symbol}" />
-                            <TextBlock FontSize="10" Foreground="Gray" Text="{Binding Label}" TextAlignment="Center" />
-                        </StackPanel>
+                <toolkit:OrbitView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Width="60" Height="60" Background="White">
+                            <StackPanel>
+                                <SymbolIcon Height="30" HorizontalAlignment="Center" Foreground="Gray" Symbol="{Binding Symbol}" />
+                                <TextBlock FontSize="10" Foreground="Gray" Text="{Binding Label}" TextAlignment="Center" />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </toolkit:OrbitView.ItemTemplate>
+                <toolkit:OrbitView.CenterContent>
+                    <Grid>
+                        <toolkit:DropShadowPanel BlurRadius="24" Color="{StaticResource SystemAccentColor}">
+                            <Ellipse Width="60" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="ms-appx:///Assets/Logos/OneDrive_icon_trans.png"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                        </toolkit:DropShadowPanel>
                     </Grid>
-                </DataTemplate>
-            </toolkit:OrbitView.ItemTemplate>
-            <toolkit:OrbitView.CenterContent>
-                <Grid>
-                    <toolkit:DropShadowPanel BlurRadius="24" Color="{StaticResource SystemAccentColor}">
-                        <Ellipse Width="60" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <Ellipse.Fill>
-                                <ImageBrush ImageSource="ms-appx:///Assets/Logos/OneDrive_icon_trans.png"/>
-                            </Ellipse.Fill>
-                        </Ellipse>
-                    </toolkit:DropShadowPanel>
-                </Grid>
-            </toolkit:OrbitView.CenterContent>
-        </toolkit:OrbitView>
+                </toolkit:OrbitView.CenterContent>
+            </toolkit:OrbitView>
+        </Grid>
 
         <toolkit:InAppNotification x:Name="InAppNotification" 
                                     ShowDismissButton="True"

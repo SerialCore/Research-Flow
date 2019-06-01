@@ -17,14 +17,13 @@ namespace CoreFlow
             var deferral = taskInstance.GetDeferral();
 
             await GraphService.ServiceLogin();
-            if (await Synchronization.FileTracer())
+            if (GraphService.IsSignedIn && GraphService.IsNetworkAvailable)
             {
-                LocalStorage.GeneralLog<Synchronization>("StorageTask.log",
-                    "Synchronized successfully");
-            }
-            else
-            {
-                //
+                if (await Synchronization.FileTracer())
+                {
+                    LocalStorage.GeneralLog<Synchronization>("StorageTask.log",
+                        "Synchronized successfully");
+                }
             }
 
             deferral.Complete();

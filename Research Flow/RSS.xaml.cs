@@ -50,13 +50,13 @@ namespace Research_Flow
                 FeedSources = new ObservableCollection<RSSSource>()
                 {
                     new RSSSource{ID=HashEncode.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd"),
-                        Name ="Hydrogen Bond in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
+                        Name ="Hydrogen Bond in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,Star=5,IsJournal=true},
                     new RSSSource{ID=HashEncode.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd"),
-                        Name ="Pedal Motion in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
+                        Name ="Pedal Motion in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,Star=5,IsJournal=true},
                     new RSSSource{ID=HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prl.xml"),
-                        Name ="Physical Review Letters",Uri="http://feeds.aps.org/rss/recent/prl.xml",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=true},
+                        Name ="Physical Review Letters",Uri="http://feeds.aps.org/rss/recent/prl.xml",MaxCount=50,Star=5,IsJournal=true},
                     new RSSSource{ID=HashEncode.MakeMD5("http://www.sciencenet.cn/xml/paper.aspx?di=7"),
-                        Name ="科学网-数理科学",Uri="http://www.sciencenet.cn/xml/paper.aspx?di=7",MaxCount=50,DaysforUpdate=5,Star=5,IsJournal=false}
+                        Name ="科学网-数理科学",Uri="http://www.sciencenet.cn/xml/paper.aspx?di=7",MaxCount=50,Star=5,IsJournal=false}
                 };
                 LocalStorage.WriteJson(await LocalStorage.GetFeedAsync(), "rsslist", FeedSources);
             }
@@ -64,7 +64,7 @@ namespace Research_Flow
             {
                 feedSource_list.ItemsSource = FeedSources;
                 feedSource_list.SelectedIndex = 0;
-                SearchRss(feedSource_list.SelectedItem as RSSSource);
+                LoadRss(feedSource_list.SelectedItem as RSSSource);
             }
         }
 
@@ -89,7 +89,6 @@ namespace Research_Flow
                     rssName.Text = item.Name;
                     rssUrl.Text = item.Uri;
                     feedCount.Value = item.MaxCount;
-                    rssDays.Value = item.DaysforUpdate;
                     rssStar.Value = item.Star;
                     isJournal.IsChecked = item.IsJournal;
 
@@ -110,7 +109,6 @@ namespace Research_Flow
                     Name = rssName.Text,
                     Uri = rssUrl.Text,
                     MaxCount = (int)(feedCount.Value),
-                    DaysforUpdate = rssDays.Value,
                     Star = rssStar.Value,
                     IsJournal = (bool)(isJournal.IsChecked)
                 };
@@ -184,7 +182,7 @@ namespace Research_Flow
         }
 
         private void RSS_SourceClick(object sender, ItemClickEventArgs e)
-            => SearchRss(e.ClickedItem as RSSSource);
+            => LoadRss(e.ClickedItem as RSSSource);
 
         private void Feed_ItemClick(object sender, ItemClickEventArgs e)
         {
@@ -207,51 +205,46 @@ namespace Research_Flow
         private void Close_FeedDetail(object sender, RoutedEventArgs e)
             => feedItem_detail.IsPaneOpen = false;
 
-        private async void SearchRss(RSSSource source)
+        private async void LoadRss(RSSSource source)
+        {
+            try
+            {
+                List<FeedItem> feedItems = await LocalStorage.ReadJsonAsync<List<FeedItem>>(
+                    await LocalStorage.GetFeedAsync(), source.ID);
+                feedItem_list.ItemsSource = feedItems;
+            }
+            catch { }
+        }
+
+        private void SearchRss(RSSSource source)
         {
             int selectedFeedIndex = FeedSources.IndexOf(source); // now you can modify source while fetching feed
-            TimeSpan ts1 = new TimeSpan(DateTime.Now.Ticks);
-            TimeSpan ts2 = new TimeSpan(source.LastUpdateTime.Ticks);
-            TimeSpan ts = ts1.Subtract(ts2).Duration();
-            if (ts.Days >= source.DaysforUpdate)
-            {
-                waiting_feed.IsActive = true;
-                RssService.GetRssItems(
-                    source.Uri,
-                    async (items) =>
-                    {
-                        List<FeedItem> feeds = items as List<FeedItem>;
-                        await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                        {
-                            feedItem_list.ItemsSource = feeds;
-                            waiting_feed.IsActive = false;
-                        });
-                        if (feeds.Count > source.MaxCount)
-                            feeds.RemoveRange(source.MaxCount, feeds.Count - source.MaxCount);
-                        LocalStorage.WriteJson(await LocalStorage.GetFeedAsync(), source.ID, items);
-                        FeedSources[selectedFeedIndex].LastUpdateTime = DateTime.Now;
-                        LocalStorage.WriteJson(await LocalStorage.GetFeedAsync(), "rsslist", FeedSources);
-                    },
-                    async (exception) =>
-                    {
-                        await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                        {
-                            InAppNotification.Show("RssException: " + exception);
-                            waiting_feed.IsActive = false;
-                        });
-                    }, null);
-            }
-            else
-            {
-                // if someone delete the file, then try
-                try
+
+            waiting_feed.IsActive = true;
+            RssService.GetRssItems(
+                source.Uri,
+                async (items) =>
                 {
-                    List<FeedItem> feedItems = await LocalStorage.ReadJsonAsync<List<FeedItem>>(
-                        await LocalStorage.GetFeedAsync(), source.ID);
-                    feedItem_list.ItemsSource = feedItems;
-                }
-                catch { }
-            }
+                    List<FeedItem> feeds = items as List<FeedItem>;
+                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        feedItem_list.ItemsSource = feeds;
+                        waiting_feed.IsActive = false;
+                    });
+                    if (feeds.Count > source.MaxCount)
+                        feeds.RemoveRange(source.MaxCount, feeds.Count - source.MaxCount);
+                    LocalStorage.WriteJson(await LocalStorage.GetFeedAsync(), source.ID, items);
+                    FeedSources[selectedFeedIndex].LastUpdateTime = DateTime.Now;
+                    LocalStorage.WriteJson(await LocalStorage.GetFeedAsync(), "rsslist", FeedSources);
+                },
+                async (exception) =>
+                {
+                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        InAppNotification.Show("RssException: " + exception);
+                        waiting_feed.IsActive = false;
+                    });
+                }, null);
         }
 
         #endregion

@@ -12,6 +12,14 @@ namespace LogicService.Storage
 {
     public class Synchronization
     {
+        public async static void ScanFiles()
+        {
+            var feedCloud = await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetFeedAsync());
+            foreach (var cloud in feedCloud)
+            {
+                
+            }
+        }
 
         public static async Task<bool> FileTracer()
         {
@@ -136,7 +144,7 @@ namespace LogicService.Storage
                             var mirror = await OneDriveStorage.RetrieveFileAsync(await OneDriveStorage.GetFolderAsync(traceItem.FilePosition), traceItem.FileName);
                             await mirror.DeleteAsync();
                         }
-                        catch (ServiceException) { } // not exist in cloud
+                        catch (ServiceException) { } // not exist in cloud 
                         finally
                         {
                             // once deleted in cloud, by app or user (externally)
@@ -147,7 +155,7 @@ namespace LogicService.Storage
                     }
                 }
             }
-
+            
             // remove some trace
             foreach (FileTrace index in deleteTrace)
             {
