@@ -8,9 +8,12 @@ namespace LogicService.Objects
 {
     public class Crawlable
     {
-        public string Content { get; set; }
 
-        public string SourceUrl { get; set; }
+        public string ID { get; set; }
+
+        public string Text { get; set; }
+
+        public string Url { get; set; }
 
     }
 

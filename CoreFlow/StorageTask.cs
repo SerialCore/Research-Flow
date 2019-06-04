@@ -16,7 +16,7 @@ namespace CoreFlow
         {
             var deferral = taskInstance.GetDeferral();
 
-            await GraphService.ServiceLogin();
+            await GraphService.OneDriveLogin();
             if (GraphService.IsSignedIn && GraphService.IsNetworkAvailable)
             {
                 if (await Synchronization.FileTracer())

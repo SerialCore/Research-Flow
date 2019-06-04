@@ -14,23 +14,20 @@ namespace LogicService.Services
 
         private static MicrosoftGraphUserService User = null;
 
-        public static bool IsSignedIn = false;
+        public static bool IsSignedIn => OneDriveService.Instance.Provider.IsAuthenticated;
 
         public static bool IsNetworkAvailable => NetworkInterface.GetIsNetworkAvailable();
 
-        public async static Task<bool> ServiceLogin()
+        public async static Task<bool> OneDriveLogin()
         {
-            // a specific id used for any microsoft account
             OneDriveService.Instance.Initialize("3bd1af71-d8ad-41f8-b1c9-22bef7a7028a",
                 new string[] { MicrosoftGraphScope.FilesReadWriteAll });
-            MicrosoftGraphService.Instance.Initialize("3bd1af71-d8ad-41f8-b1c9-22bef7a7028a", MicrosoftGraphEnums.ServicesToInitialize.OneDrive | MicrosoftGraphEnums.ServicesToInitialize.UserProfile,
-                new string[] { MicrosoftGraphScope.UserRead });
 
             try
             {
-                IsSignedIn = await MicrosoftGraphService.Instance.LoginAsync() && await OneDriveService.Instance.LoginAsync();
-                if (IsSignedIn) User = MicrosoftGraphService.Instance.User;
-                return IsSignedIn;
+                bool signed = await OneDriveService.Instance.LoginAsync();
+                if (signed) User = OneDriveService.Instance.Provider.User;
+                return signed;
             }
             catch
             {
@@ -38,12 +35,34 @@ namespace LogicService.Services
             }
         }
 
-        public async static void ServiceLogout()
+        public async static void OneDriveLogout()
         {
             await OneDriveService.Instance.LogoutAsync();
             ApplicationSetting.RemoveKey("AccountName");
             User = null;
-            IsSignedIn = false;
+        }
+
+        public async static Task<bool> GraphLogin()
+        {
+            MicrosoftGraphService.Instance.Initialize("3bd1af71-d8ad-41f8-b1c9-22bef7a7028a", MicrosoftGraphEnums.ServicesToInitialize.OneDrive | MicrosoftGraphEnums.ServicesToInitialize.UserProfile,
+                new string[] { MicrosoftGraphScope.UserRead });
+
+            try
+            {
+                bool signed = await MicrosoftGraphService.Instance.LoginAsync();
+                if (signed) User = MicrosoftGraphService.Instance.User;
+                return signed;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async static void GraphLogout()
+        {
+            await MicrosoftGraphService.Instance.Logout();
+            User = null;
         }
 
         public async static Task<IRandomAccessStream> GetUserPhoto()

@@ -41,7 +41,7 @@ namespace LogicService.Objects
 
         public List<ElementNode> Nodes { get; set; }
 
-        public List<ElementLink> PageLinks { get; set; }
+        public List<Crawlable> PageLinks { get; set; }
 
     }
 
@@ -54,12 +54,4 @@ namespace LogicService.Objects
 
     }
 
-    public class ElementLink
-    {
-
-        public string Text { get; set; }
-
-        public string Url { get; set; }
-
-    }
 }

@@ -9,6 +9,7 @@ using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -40,7 +41,8 @@ namespace Research_Flow
                 // for new user, remember to load default feed from file, not the follows
                 SearchSources = new Dictionary<string, string>()
                 {
-                    { "Bing", "https://www.bing.com/search?q=QUEST" },
+                    { "Bing", "https://www.bing.com/search?q=QUEST"},
+                    { "ACS", "https://pubs.acs.org/action/doSearch?AllField=QUEST"},
                 };
                 LocalStorage.WriteJson(await LocalStorage.GetLinkAsync(), "searchlist", SearchSources);
             }
@@ -48,6 +50,7 @@ namespace Research_Flow
             {
                 searchlist.ItemsSource = SearchSources.Keys;
                 searchlist.SelectedIndex = 0;
+                source_list.ItemsSource = SearchSources;
             }
         }
 
@@ -55,8 +58,75 @@ namespace Research_Flow
 
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            var urlstring = SearchSources.GetValueOrDefault(searchlist.SelectedItem as string).Replace("QUEST", queryQuest.Text);
-            webview.Navigate(new Uri(urlstring));
+            string urlstring = SearchSources.GetValueOrDefault(searchlist.SelectedItem as string).Replace("QUEST", queryQuest.Text);
+            if (viewMode.IsOn) // App View
+            {
+
+            }
+            else // User View
+            {
+                webview.Navigate(new Uri(urlstring));
+            }
+        }
+
+        private void Open_SearchList(object sender, RoutedEventArgs e)
+            => searchPane.IsPaneOpen = !searchPane.IsPaneOpen;
+
+        private void Add_Source(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+            => source_panel.Visibility = Visibility.Visible;
+
+        private void Source_list_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var item = (KeyValuePair<string, string>)e.ClickedItem;
+            source_panel.Visibility = Visibility.Visible;
+
+            searchName.Text = item.Key;
+            searchUrl.Text = item.Value;
+
+            searchUrl.IsReadOnly = true;
+            searchDelete.Visibility = Visibility;
+            source_panel.Visibility = Visibility.Visible;
+        }
+
+        private void Confirm_SearchSetting(object sender, RoutedEventArgs e)
+        {
+            // write file
+            ClearSettings();
+        }
+
+        private async void Delete_SearchSetting(object sender, RoutedEventArgs e)
+        {
+            var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.", "Operation confirming");
+            messageDialog.Commands.Add(new UICommand(
+                "True",
+                new UICommandInvokedHandler(this.DeleteInvokedHandler)));
+            messageDialog.Commands.Add(new UICommand(
+                "Joke",
+                new UICommandInvokedHandler(this.CancelInvokedHandler)));
+
+            messageDialog.DefaultCommandIndex = 0;
+            messageDialog.CancelCommandIndex = 1;
+            await messageDialog.ShowAsync();
+        }
+
+        private void DeleteInvokedHandler(IUICommand command)
+        {
+            // write file
+            ClearSettings();
+        }
+
+        private void CancelInvokedHandler(IUICommand command) => ClearSettings();
+
+        private void Leave_SearchSetting(object sender, RoutedEventArgs e) => ClearSettings();
+
+        private void ClearSettings()
+        {
+            searchName.Text = "";
+            searchUrl.Text = "";
+
+            searchUrl.IsReadOnly = false;
+            searchDelete.Visibility = Visibility.Collapsed;
+            source_panel.Visibility = Visibility.Collapsed;
         }
     }
 }

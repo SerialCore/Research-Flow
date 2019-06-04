@@ -42,14 +42,14 @@
                         <FontIcon Glyph="&#xE12B;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Search Engine" Tag="Search">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xEDE4;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
                 <NavigationViewItem Content="RSS Service" Tag="RSS">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE24A;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Search Engine" Tag="Search">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xEDE4;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 

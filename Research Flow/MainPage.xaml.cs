@@ -158,7 +158,7 @@ namespace Research_Flow
 
         private void Logout()
         {
-            GraphService.ServiceLogout();
+            GraphService.OneDriveLogout();
             
             ContentFrame.IsEnabled = false;
             accountLogout.Content = "restart this app";
@@ -166,13 +166,21 @@ namespace Research_Flow
             accountEmail.Text = "";
         }
 
-        private async void AccountSync_Click(object sender, RoutedEventArgs e)
+        private void AccountSync_Click(object sender, RoutedEventArgs e)
         {
+            //if (GraphService.IsSignedIn && GraphService.IsNetworkAvailable)
+            //{
+            //    ApplicationMessage.SendMessage("Synchronizing", 3);
+            //    if (await Synchronization.FileTracer())
+            //        ApplicationMessage.SendMessage("Synchronized successfully", 5);
+            //}
             if (GraphService.IsSignedIn && GraphService.IsNetworkAvailable)
             {
-                ApplicationMessage.SendMessage("Synchronizing", 3);
-                if (await Synchronization.FileTracer())
-                    ApplicationMessage.SendMessage("Synchronized successfully", 5);
+                ApplicationMessage.SendMessage("Connected", 3);
+            }
+            else
+            {
+                ApplicationMessage.SendMessage("Disconnected", 3);
             }
         }
 

@@ -119,7 +119,7 @@
     <Compile Include="Helper\ToastGenerator.cs" />
     <Compile Include="Objects\UserProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Security\HashCode.cs" />
+    <Compile Include="Security\HashEncode.cs" />
     <Compile Include="Security\TripleDES.cs" />
     <Compile Include="Application\ApplicationMessage.cs" />
     <Compile Include="Services\Crawler.cs" />

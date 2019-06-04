@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using LogicService.Objects;
+using LogicService.Security;
 
 namespace LogicService.Services
 {
@@ -16,7 +17,7 @@ namespace LogicService.Services
         #region 私有成员
 
         private Uri m_uri;             // 网址
-        private List<ElementLink> m_links;    // 此网页上的链接
+        private List<Crawlable> m_links;    // 此网页上的链接
         private string m_title;        // 此网页的标题
         private string m_html;         // 此网页的HTML代码
         private string m_outstr;       // 此网页可输出的纯文本
@@ -34,7 +35,7 @@ namespace LogicService.Services
         /// 这私有方法从网页的HTML代码中分析出链接信息
         /// </summary>
         /// <returns>List<Link></returns>
-        private List<ElementLink> GetLinks()
+        private List<Crawlable> GetLinks()
         {
             if (m_links.Count == 0)
             {
@@ -51,11 +52,12 @@ namespace LogicService.Services
                             string url = new Uri(m_uri, match.Groups["url"].Value).AbsoluteUri;
                             string text = "";
                             if (i == 0) text = new Regex("(<[^>]+>)|(\\s)|(&nbsp;)|&|\"", RegexOptions.Multiline | RegexOptions.IgnoreCase).Replace(match.Groups["text"].Value, "");
-                            m_links.Add(new ElementLink
+                            m_links.Add(new Crawlable
                             {
+                                ID = HashEncode.MakeMD5(url),
+                                Text = text,
                                 Url = url,
-                                Text = text
-                            });
+                            }); ;
                         }
                         catch (Exception ex) { throw ex; };
                         match = match.NextMatch();
@@ -134,11 +136,11 @@ namespace LogicService.Services
         /// <param name="pattern">正则式</param>
         /// <param name="count">返回的链接的个数</param>
         /// <returns>List<Link></returns>
-        public List<ElementLink> GetSpecialLinksByUrl(string pattern, int count)
+        public List<Crawlable> GetSpecialLinksByUrl(string pattern, int count)
         {
             if (m_links.Count == 0) GetLinks();
-            List<ElementLink> SpecialLinks = new List<ElementLink>();
-            List<ElementLink>.Enumerator i;
+            List<Crawlable> SpecialLinks = new List<Crawlable>();
+            List<Crawlable>.Enumerator i;
             i = m_links.GetEnumerator();
             int cnt = 0;
             while (i.MoveNext() && cnt < count)
@@ -158,11 +160,11 @@ namespace LogicService.Services
         /// <param name="pattern">正则式</param>
         /// <param name="count">返回的链接的个数</param>
         /// <returns>List<Link></returns>
-        public List<ElementLink> GetSpecialLinksByText(string pattern, int count)
+        public List<Crawlable> GetSpecialLinksByText(string pattern, int count)
         {
             if (m_links.Count == 0) GetLinks();
-            List<ElementLink> SpecialLinks = new List<ElementLink>();
-            List<ElementLink>.Enumerator i;
+            List<Crawlable> SpecialLinks = new List<Crawlable>();
+            List<Crawlable>.Enumerator i;
             i = m_links.GetEnumerator();
             int cnt = 0;
             while (i.MoveNext() && cnt < count)
@@ -182,13 +184,13 @@ namespace LogicService.Services
         /// <param name="_ip_start">起始IP</param>
         /// <param name="_ip_end">终止IP</param>
         /// <returns></returns>
-        public List<ElementLink> GetSpecialLinksByIP(string _ip_start, string _ip_end)
+        public List<Crawlable> GetSpecialLinksByIP(string _ip_start, string _ip_end)
         {
             IPAddress ip_start = IPAddress.Parse(_ip_start);
             IPAddress ip_end = IPAddress.Parse(_ip_end);
             if (m_links.Count == 0) GetLinks();
-            List<ElementLink> SpecialLinks = new List<ElementLink>();
-            List<ElementLink>.Enumerator i;
+            List<Crawlable> SpecialLinks = new List<Crawlable>();
+            List<Crawlable>.Enumerator i;
             i = m_links.GetEnumerator();
             while (i.MoveNext())
             {
@@ -230,7 +232,7 @@ namespace LogicService.Services
             try
             {
                 m_uri = new Uri(_url);
-                m_links = new List<ElementLink>();
+                m_links = new List<Crawlable>();
                 m_html = "";
                 m_outstr = "";
                 m_title = "";
@@ -399,7 +401,7 @@ namespace LogicService.Services
                 try
                 {
                     m_uri = new Uri(_url);
-                    m_links = new List<ElementLink>();
+                    m_links = new List<Crawlable>();
                     m_html = "";
                     m_outstr = "";
                     m_title = "";
@@ -494,7 +496,7 @@ namespace LogicService.Services
         /// <summary>
         /// 此属性获得本网页的所有链接信息，只读
         /// </summary>
-        public List<ElementLink> Links
+        public List<Crawlable> Links
         {
             get
             {
@@ -529,7 +531,7 @@ namespace LogicService.Services
         /// <summary>
         /// 此属性获得本网页的所有站内链接
         /// </summary>
-        public List<ElementLink> InsiteLinks
+        public List<Crawlable> InsiteLinks
         {
             get
             {
