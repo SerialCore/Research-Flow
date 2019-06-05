@@ -88,9 +88,38 @@ namespace Research_Flow
             source_panel.Visibility = Visibility.Visible;
         }
 
-        private void Confirm_SearchSetting(object sender, RoutedEventArgs e)
+        private async void Confirm_SearchSetting(object sender, RoutedEventArgs e)
         {
-            // write file
+            // add: change name and url
+            // modify: just change name
+            string exist = null;
+            foreach (string temp in SearchSources.Keys)
+            {
+                if (SearchSources[temp].Equals(searchUrl.Text))
+                    exist = temp;
+            }
+            if (SearchSources.ContainsValue(searchUrl.Text)) // modify name
+            {
+                // check name
+                if (!SearchSources.ContainsKey(searchName.Text))
+                {
+                    SearchSources.Remove(exist);
+                    SearchSources.Add(searchName.Text, searchUrl.Text);
+                }
+            }
+            else if (!SearchSources.ContainsKey(searchName.Text)) // add new
+            { 
+                // url will be checked
+                SearchSources.Add(searchName.Text, searchUrl.Text);
+            }
+
+            searchlist.ItemsSource = null;
+            searchlist.ItemsSource = SearchSources.Keys;
+            searchlist.SelectedIndex = 0;
+            source_list.ItemsSource = null;
+            source_list.ItemsSource = SearchSources;
+            LocalStorage.WriteJson(await LocalStorage.GetLinkAsync(), "searchlist", SearchSources);
+
             ClearSettings();
         }
 
@@ -109,9 +138,17 @@ namespace Research_Flow
             await messageDialog.ShowAsync();
         }
 
-        private void DeleteInvokedHandler(IUICommand command)
+        private async void DeleteInvokedHandler(IUICommand command)
         {
-            // write file
+            SearchSources.Remove(searchName.Text);
+
+            searchlist.ItemsSource = null;
+            searchlist.ItemsSource = SearchSources.Keys;
+            searchlist.SelectedIndex = 0;
+            source_list.ItemsSource = null;
+            source_list.ItemsSource = SearchSources;
+            LocalStorage.WriteJson(await LocalStorage.GetLinkAsync(), "searchlist", SearchSources);
+
             ClearSettings();
         }
 
