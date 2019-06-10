@@ -113,7 +113,7 @@
     <Compile Include="Helper\WebClientHelper.cs" />
     <Compile Include="Objects\Crawlable.cs" />
     <Compile Include="Objects\FeedSource.cs" />
-    <Compile Include="Objects\FileTrace.cs" />
+    <Compile Include="Objects\FileList.cs" />
     <Compile Include="Objects\Paper.cs" />
     <Compile Include="Helper\SerializeHelper.cs" />
     <Compile Include="Helper\ToastGenerator.cs" />
@@ -124,6 +124,7 @@
     <Compile Include="Application\ApplicationMessage.cs" />
     <Compile Include="Services\Crawler.cs" />
     <Compile Include="Services\GraphService.cs" />
+    <Compile Include="Storage\DataStorage.cs" />
     <Compile Include="Storage\LocalStorage.cs" />
     <Compile Include="Storage\OneDriveStorage.cs" />
     <Compile Include="Services\RssService.cs" />
@@ -132,6 +133,9 @@
     <EmbeddedResource Include="Properties\LogicService.rd.xml" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite">
+      <Version>2.2.4</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.8</Version>
     </PackageReference>

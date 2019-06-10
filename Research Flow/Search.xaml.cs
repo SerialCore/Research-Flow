@@ -54,8 +54,6 @@ namespace Research_Flow
             }
         }
 
-        public Dictionary<string, string> SearchSources { get; set; }
-
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             string urlstring = SearchSources.GetValueOrDefault(searchlist.SelectedItem as string).Replace("QUEST", queryQuest.Text);
@@ -68,6 +66,10 @@ namespace Research_Flow
                 webview.Navigate(new Uri(urlstring));
             }
         }
+
+        #region Search Engine
+
+        public Dictionary<string, string> SearchSources { get; set; }
 
         private void Open_SearchList(object sender, RoutedEventArgs e)
             => searchPane.IsPaneOpen = !searchPane.IsPaneOpen;
@@ -165,5 +167,8 @@ namespace Research_Flow
             searchDelete.Visibility = Visibility.Collapsed;
             source_panel.Visibility = Visibility.Collapsed;
         }
+
+        #endregion
+
     }
 }

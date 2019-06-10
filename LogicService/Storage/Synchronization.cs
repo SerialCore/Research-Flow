@@ -14,11 +14,55 @@ namespace LogicService.Storage
     {
         public async static void ScanFiles()
         {
-            var feedCloud = await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetFeedAsync());
-            foreach (var cloud in feedCloud)
+            // some rules: associated with main syncing algorithm as a supplement
+            // updated files will all be tagged synced
+            // local deleting in sync process will not be recorded, but checked
+            // remove file, and remove local trace
+            // download file, and update datetime
+            // the files in cloud may be deleted by user, not by app, so double check all the mirrors in try
+            // the files in local may be deleted by user, if someone did this, it's not our fault
+
+            // load file trace
+            HashSet<FileList> traceAll;
+            StorageFile tracefile = await (await LocalStorage.GetLogAsync()).CreateFileAsync("filetrace",
+                CreationCollisionOption.OpenIfExists);
+            traceAll = SerializeHelper.DeserializeJsonToObject<HashSet<FileList>>(await FileIO.ReadTextAsync(tracefile));
+            if (traceAll == null)
+                traceAll = new HashSet<FileList>();
+
+            // load file list
+            HashSet<FileList> listAll;
+            StorageFile listfile = await LocalStorage.GetRoamingFolder().CreateFileAsync(ApplicationSetting.AccountName + ".filelist",
+                CreationCollisionOption.OpenIfExists);
+            listAll = SerializeHelper.DeserializeJsonToObject<HashSet<FileList>>(await FileIO.ReadTextAsync(listfile));
+            if (listAll == null)
+                listAll = new HashSet<FileList>();
+
+            // generate temp
+            List<FileList> deleteTrace = new List<FileList>();
+            HashSet<FileList> both = new HashSet<FileList>(listAll);
+            HashSet<FileList> list = new HashSet<FileList>(listAll);
+            HashSet<FileList> trace = new HashSet<FileList>(traceAll);
+            both.IntersectWith(traceAll);
+            list.ExceptWith(traceAll);
+            trace.ExceptWith(listAll);
+
+            foreach (var item in both)
             {
-                
+
             }
+            foreach (var item in list)
+            {
+
+            }
+            foreach (var item in trace)
+            {
+
+            }
+
+            // save all
+            await FileIO.WriteTextAsync(tracefile, SerializeHelper.SerializeToJson(traceAll));
+            await FileIO.WriteTextAsync(listfile, SerializeHelper.SerializeToJson(listAll));
         }
 
         public static async Task<bool> FileTracer()
@@ -45,14 +89,6 @@ namespace LogicService.Storage
             if (trace == null)
                 trace = new List<FileTrace>();
 
-            // load remove list
-            List<RemoveList> remove;
-            StorageFile removeFile = await LocalStorage.GetRoamingFolder().CreateFileAsync(ApplicationSetting.AccountName + ".removelist",
-                CreationCollisionOption.OpenIfExists);
-            remove = SerializeHelper.DeserializeJsonToObject<List<RemoveList>>(await FileIO.ReadTextAsync(removeFile));
-            if (remove == null)
-                remove = new List<RemoveList>();
-
             List<FileTrace> deleteTrace = new List<FileTrace>();
 
             // check process
@@ -78,14 +114,6 @@ namespace LogicService.Storage
                             var temp = await (await LocalStorage.GetFolderAsync(traceItem.FilePosition)).GetFileAsync(traceItem.FileName);
                             await temp.DeleteAsync();
                             deleteTrace.Add(traceItem);
-                            // check remove list, not add
-                            foreach (RemoveList removeItem in remove)
-                            {
-                                if (removeItem.FileName == traceItem.FileName && removeItem.FilePosition == traceItem.FilePosition)
-                                {
-                                    removeItem.Checked++; break;
-                                }
-                            }
                         } catch (FileNotFoundException) { } // someone's mistake
                     }
                 }
@@ -114,19 +142,10 @@ namespace LogicService.Storage
                         catch (ServiceException) // only exist in local
                         {
                             int removeIndex = -1;
-                            foreach (RemoveList removeItem in remove)
-                            {
-                                if (removeItem.FileName == traceItem.FileName && removeItem.FilePosition == traceItem.FilePosition)
-                                {
-                                    removeIndex = remove.IndexOf(removeItem);
-                                    break;
-                                }
-                            }
                             if (removeIndex >= 0) // another client had deleted this file from server
                             {
                                 await local.DeleteAsync();
                                 // there will never be such file, so check ths list, and remove trace
-                                remove[removeIndex].Checked++;
                                 deleteTrace.Add(traceItem);
                             }
                             else // the server has never had this file
@@ -164,7 +183,6 @@ namespace LogicService.Storage
 
             // save all
             await FileIO.WriteTextAsync(traceFile, SerializeHelper.SerializeToJson(trace));
-            await FileIO.WriteTextAsync(removeFile, SerializeHelper.SerializeToJson(remove));
 
             return true;
         }
@@ -173,6 +191,7 @@ namespace LogicService.Storage
         {
             // create a new file, or replace the older trace by full-tagged one
             List<FileTrace> trace = new List<FileTrace>();
+            List<FileList> list = new List<FileList>();
 
             foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetFeedAsync()))
             {
@@ -184,6 +203,12 @@ namespace LogicService.Storage
                     FilePosition = "Feed",
                     DateModified = DateTime.Now,
                     IsSynced = true
+                });
+                list.Add(new FileList
+                {
+                    FileName = item.Name,
+                    FilePosition = "Feed",
+                    DateModified = DateTime.Now,
                 });
             }
             foreach (var item in await OneDriveStorage.RetrieveFilesAsync(await OneDriveStorage.GetNoteAsync()))
@@ -197,11 +222,20 @@ namespace LogicService.Storage
                     DateModified = DateTime.Now,
                     IsSynced = true
                 });
+                list.Add(new FileList
+                {
+                    FileName = item.Name,
+                    FilePosition = "Feed",
+                    DateModified = DateTime.Now,
+                });
             }
 
-            StorageFile file = await (await LocalStorage.GetLogAsync()).CreateFileAsync("filetrace",
+            StorageFile tracefile = await (await LocalStorage.GetLogAsync()).CreateFileAsync("filetrace",
                 CreationCollisionOption.OpenIfExists);
-            await FileIO.WriteTextAsync(file, SerializeHelper.SerializeToJson(trace));
+            StorageFile listfile = await LocalStorage.GetRoamingFolder().CreateFileAsync(ApplicationSetting.AccountName + ".filelist",
+                CreationCollisionOption.OpenIfExists);
+            await FileIO.WriteTextAsync(tracefile, SerializeHelper.SerializeToJson(trace));
+            await FileIO.WriteTextAsync(listfile, SerializeHelper.SerializeToJson(list));
         }
 
     }

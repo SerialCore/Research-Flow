@@ -14,6 +14,15 @@ namespace LogicService.Storage
 
         #region folder
 
+        public enum UserFolders
+        {
+            Feed,
+            Key,
+            Link,
+            Log,
+            Note,
+        }
+
         public static StorageFolder GetAppFolder()
         {
             return ApplicationData.Current.LocalFolder;
@@ -100,6 +109,7 @@ namespace LogicService.Storage
             await FileIO.WriteTextAsync(file, content);
             // record
             AddFileTrace(folder.Name, name);
+            AddFileList(folder.Name, name);
         }
 
         /// <summary>
@@ -114,7 +124,7 @@ namespace LogicService.Storage
             await file.DeleteAsync();
             // record
             AddFileTrace(folder.Name, name);
-            AddRemoveList(folder.Name, name);
+            RemoveFileList(folder.Name, name);
         }
 
         public static async void GeneralLog<T>(string name, string line) where T : class
@@ -196,63 +206,61 @@ namespace LogicService.Storage
             await FileIO.WriteTextAsync(file, SerializeHelper.SerializeToJson(trace));
         }
 
-        public static async void AddRemoveList(string position, string name)
+        public static async void AddFileList(string position, string name)
         {
-            List<RemoveList> remove;
+            List<FileList> list;
             // multi-users
-            StorageFile file = await GetRoamingFolder().CreateFileAsync(ApplicationSetting.AccountName + ".removelist",
+            StorageFile file = await GetRoamingFolder().CreateFileAsync(ApplicationSetting.AccountName + ".filelist",
                 CreationCollisionOption.OpenIfExists);
-            remove = SerializeHelper.DeserializeJsonToObject<List<RemoveList>>(await FileIO.ReadTextAsync(file));
-            if (remove == null)
-                remove = new List<RemoveList>();
+            list = SerializeHelper.DeserializeJsonToObject<List<FileList>>(await FileIO.ReadTextAsync(file));
+            if (list == null)
+                list = new List<FileList>();
 
             // check the existing item
-            int removeIndex = -1;
-            foreach (RemoveList item in remove)
+            int listIndex = -1;
+            foreach (FileList item in list)
             {
                 if (item.FileName == name && item.FilePosition == position)
-                    removeIndex = remove.IndexOf(item);
+                    listIndex = list.IndexOf(item);
             }
-            if (removeIndex >= 0)
-                remove[removeIndex].Checked++;
+            if (listIndex >= 0)
+            {
+                list[listIndex].DateModified = DateTime.Now;
+            }
             else
-                remove.Add(new RemoveList
+                list.Add(new FileList
                 {
                     FileName = name,
                     FilePosition = position,
-                    Checked = 0
+                    DateModified = DateTime.Now,
                 });
 
-            await FileIO.WriteTextAsync(file, SerializeHelper.SerializeToJson(remove));
+            await FileIO.WriteTextAsync(file, SerializeHelper.SerializeToJson(list));
         }
 
-        public static async void AddAddList(string position, string name)
+        public static async void RemoveFileList(string position, string name)
         {
-            List<AddList> add;
-            StorageFile file = await GetRoamingFolder().CreateFileAsync(ApplicationSetting.AccountName + ".addlist",
+            List<FileList> list;
+            // multi-users
+            StorageFile file = await GetRoamingFolder().CreateFileAsync(ApplicationSetting.AccountName + ".filelist",
                 CreationCollisionOption.OpenIfExists);
-            add = SerializeHelper.DeserializeJsonToObject<List<AddList>>(await FileIO.ReadTextAsync(file));
-            if (add == null)
-                add = new List<AddList>();
+            list = SerializeHelper.DeserializeJsonToObject<List<FileList>>(await FileIO.ReadTextAsync(file));
+            if (list == null)
+                list = new List<FileList>();
 
             // check the existing item
-            int addIndex = -1;
-            foreach (AddList item in add)
+            int listIndex = -1;
+            foreach (FileList item in list)
             {
                 if (item.FileName == name && item.FilePosition == position)
-                    addIndex = add.IndexOf(item);
+                    listIndex = list.IndexOf(item);
             }
-            if (addIndex >= 0)
-                add[addIndex].Checked++;
-            else
-                add.Add(new AddList
-                {
-                    FileName = name,
-                    FilePosition = position,
-                    Checked = 0
-                });
+            if (listIndex >= 0)
+            {
+                list.RemoveAt(listIndex);
+            }
 
-            await FileIO.WriteTextAsync(file, SerializeHelper.SerializeToJson(add));
+            await FileIO.WriteTextAsync(file, SerializeHelper.SerializeToJson(list));
         }
 
         #endregion

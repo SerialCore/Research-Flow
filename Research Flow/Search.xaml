@@ -19,9 +19,9 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
-                <AppBarButton Grid.Column="0" Click="Open_SearchList" Width="48">
+                <Button Grid.Column="0" Click="Open_SearchList" Width="48" Background="LightSkyBlue">
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE292;" />
-                </AppBarButton>
+                </Button>
                 <ComboBox Grid.Column="1" x:Name="searchlist" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
                 <AutoSuggestBox Grid.Column="2" x:Name="queryQuest" QueryIcon="Find"
                                     QuerySubmitted="AutoSuggestBox_QuerySubmitted" VerticalAlignment="Center"/>

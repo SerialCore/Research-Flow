@@ -246,6 +246,9 @@
     <PackageReference Include="Microsoft.UI.Xaml">
       <Version>2.1.190405004.2</Version>
     </PackageReference>
+    <PackageReference Include="SQLitePCLRaw.bundle_winsqlite3">
+      <Version>1.1.13</Version>
+    </PackageReference>
     <PackageReference Include="Telerik.UI.for.UniversalWindowsPlatform">
       <Version>1.0.1.5</Version>
     </PackageReference>

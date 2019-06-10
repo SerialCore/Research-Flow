@@ -34,6 +34,7 @@ namespace Research_Flow
         private async void Login_Tapped(object sender, TappedRoutedEventArgs e)
         {
             accountStatu.Text = "Logging in";
+            Synchronization.ScanFiles();
             if (await GraphService.OneDriveLogin())
             {
                 string name = await GraphService.GetDisplayName();

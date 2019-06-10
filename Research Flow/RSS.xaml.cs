@@ -65,11 +65,11 @@ namespace Research_Flow
                 feedSource_list.ItemsSource = FeedSources;
                 feedSource_list.SelectedIndex = 0;
                 shownRSS = feedSource_list.SelectedItem as RSSSource;
-                LoadRss(shownRSS);
+                LoadFeed(shownRSS);
             }
         }
 
-        #region RSS
+        #region RSS Source
 
         public ObservableCollection<RSSSource> FeedSources { get; set; }
 
@@ -186,11 +186,13 @@ namespace Research_Flow
         private void RSS_SourceClick(object sender, ItemClickEventArgs e)
         {
             shownRSS = e.ClickedItem as RSSSource;
-            LoadRss(shownRSS);
+            LoadFeed(shownRSS);
         }
 
         private void RSS_SourceRefresh(object sender, RoutedEventArgs e)
-            => SearchRss(shownRSS);
+            => SearchFeed(shownRSS);
+
+        #endregion
 
         private void Feed_ItemClick(object sender, ItemClickEventArgs e)
         {
@@ -213,7 +215,7 @@ namespace Research_Flow
         private void Close_FeedDetail(object sender, RoutedEventArgs e)
             => feedItem_detail.IsPaneOpen = false;
 
-        private async void LoadRss(RSSSource source)
+        private async void LoadFeed(RSSSource source)
         {
             try
             {
@@ -224,7 +226,7 @@ namespace Research_Flow
             catch { }
         }
 
-        private void SearchRss(RSSSource source)
+        private void SearchFeed(RSSSource source)
         {
             int selectedFeedIndex = FeedSources.IndexOf(source); // now you can modify source while fetching feed
 
@@ -254,8 +256,6 @@ namespace Research_Flow
                     });
                 }, null);
         }
-
-        #endregion
 
     }
 }
