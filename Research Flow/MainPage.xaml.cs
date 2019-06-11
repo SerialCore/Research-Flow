@@ -61,7 +61,7 @@ namespace Research_Flow
         {
             FileParameter = e.Parameter as StorageFile;
 
-            if (GraphService.IsSignedIn)
+            if (GraphService.IsConnected)
             {
                 string name = await GraphService.GetDisplayName();
                 string email = await GraphService.GetPrincipalName();
@@ -166,21 +166,13 @@ namespace Research_Flow
             accountEmail.Text = "";
         }
 
-        private void AccountSync_Click(object sender, RoutedEventArgs e)
+        private async void AccountSync_Click(object sender, RoutedEventArgs e)
         {
-            //if (GraphService.IsSignedIn && GraphService.IsNetworkAvailable)
-            //{
-            //    ApplicationMessage.SendMessage("Synchronizing", 3);
-            //    if (await Synchronization.FileTracer())
-            //        ApplicationMessage.SendMessage("Synchronized successfully", 5);
-            //}
-            if (GraphService.IsSignedIn && GraphService.IsNetworkAvailable)
+            if (GraphService.IsConnected && GraphService.IsNetworkAvailable)
             {
-                ApplicationMessage.SendMessage("Connected", 3);
-            }
-            else
-            {
-                ApplicationMessage.SendMessage("Disconnected", 3);
+                ApplicationMessage.SendMessage("Synchronizing", 3);
+                await Synchronization.ScanFiles();
+                ApplicationMessage.SendMessage("Synchronized successfully", 5);
             }
         }
 

@@ -175,16 +175,16 @@ namespace LogicService.Storage
 
         public static async void AddFileTrace(string position, string name)
         {
-            List<FileTrace> trace;
+            List<FileList> trace;
             StorageFile file = await (await GetLogAsync()).CreateFileAsync("filetrace",
                 CreationCollisionOption.OpenIfExists);
-            trace = SerializeHelper.DeserializeJsonToObject<List<FileTrace>>(await FileIO.ReadTextAsync(file));
+            trace = SerializeHelper.DeserializeJsonToObject<List<FileList>>(await FileIO.ReadTextAsync(file));
             if (trace == null)
-                trace = new List<FileTrace>();
+                trace = new List<FileList>();
 
             // check the existing item
             int traceIndex = -1;
-            foreach (FileTrace item in trace)
+            foreach (FileList item in trace)
             {
                 if (item.FileName == name && item.FilePosition == position)
                     traceIndex = trace.IndexOf(item);
@@ -192,15 +192,13 @@ namespace LogicService.Storage
             if (traceIndex >= 0)
             {
                 trace[traceIndex].DateModified = DateTime.Now;
-                trace[traceIndex].IsSynced = false;
             }
             else
-                trace.Add(new FileTrace
+                trace.Add(new FileList
                 {
                     FileName = name,
                     FilePosition = position,
                     DateModified = DateTime.Now,
-                    IsSynced = false
                 });
 
             await FileIO.WriteTextAsync(file, SerializeHelper.SerializeToJson(trace));

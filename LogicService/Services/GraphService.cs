@@ -14,7 +14,7 @@ namespace LogicService.Services
 
         private static MicrosoftGraphUserService User = null;
 
-        public static bool IsSignedIn => OneDriveService.Instance.Provider.IsAuthenticated;
+        public static bool IsConnected => OneDriveService.Instance.Provider.IsAuthenticated;
 
         public static bool IsNetworkAvailable => NetworkInterface.GetIsNetworkAvailable();
 

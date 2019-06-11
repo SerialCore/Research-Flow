@@ -17,13 +17,11 @@ namespace CoreFlow
             var deferral = taskInstance.GetDeferral();
 
             await GraphService.OneDriveLogin();
-            if (GraphService.IsSignedIn && GraphService.IsNetworkAvailable)
+            if (GraphService.IsConnected && GraphService.IsNetworkAvailable)
             {
-                if (await Synchronization.FileTracer())
-                {
-                    LocalStorage.GeneralLog<Synchronization>("StorageTask.log",
-                        "Synchronized successfully");
-                }
+                await Synchronization.ScanFiles();
+                LocalStorage.GeneralLog<Synchronization>("StorageTask.log",
+                    "Synchronized");
             }
 
             deferral.Complete();

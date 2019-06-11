@@ -142,7 +142,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <Content Include="Images\updatetreat.png" />
     <None Include="Research Flow_StoreKey.pfx" />
     <None Include="Research Flow_TemporaryKey.pfx" />
     <Content Include="Resources\readme.txt" />

@@ -18,8 +18,6 @@ namespace LogicService.Objects
 
         public DateTime DateModified { get; set; }
 
-        public bool IsSynced { get; set; }
-
         public override bool Equals(object obj)
         {
             if (obj == null)
@@ -40,6 +38,7 @@ namespace LogicService.Objects
                 return ReferenceEquals(rightHandSide, null);
             return (leftHandSide.Equals(rightHandSide));
         }
+
         public static bool operator !=(FileList leftHandSide, FileList rightHandSide)
         {
             return !(leftHandSide == rightHandSide);
@@ -52,20 +51,5 @@ namespace LogicService.Objects
                 hashCode ^= FileName.GetHashCode();
             return hashCode;
         }
-
     }
-
-    public class FileTrace
-    {
-
-        public string FilePosition { get; set; }
-
-        public string FileName { get; set; }
-
-        public DateTime DateModified { get; set; }
-
-        public bool IsSynced { get; set; }
-
-    }
-
 }

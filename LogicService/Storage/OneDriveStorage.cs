@@ -121,21 +121,6 @@ namespace LogicService.Storage
 
         #region read / write
 
-        public static async Task<IReadOnlyList<OneDriveStorageItem>> RetrieveItemsAsync(OneDriveStorageFolder folder, int top = 50, OrderBy order = OrderBy.None, string filter = null)
-        {
-            return await folder.GetItemsAsync(top, order, filter);
-        }
-
-        public static async Task<IReadOnlyList<OneDriveStorageItem>> RetrieveFilesAsync(OneDriveStorageFolder folder, int top = 50, OrderBy order = OrderBy.None, string filter = null)
-        {
-            return await folder.GetFilesAsync(top, order, filter);
-        }
-
-        public static async Task<OneDriveStorageFile> RetrieveFileAsync(OneDriveStorageFolder folder, string name)
-        {
-            return await folder.GetFileAsync(name);
-        }
-
         public static async Task<BitmapImage> GetFileThumbnails(OneDriveStorageFile file)
         {
             var stream = await file.StorageItemPlatformService.GetThumbnailAsync(ThumbnailSize.Large);
