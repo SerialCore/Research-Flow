@@ -37,7 +37,7 @@ namespace Research_Flow
         public MainPage()
         {
             this.InitializeComponent();
-
+            
             ConfigureTask();
             ApplicationMessage.MessageReached += AppMessage_MessageReached;
         }

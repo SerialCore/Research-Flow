@@ -15,11 +15,13 @@ namespace LogicService.Storage
         public async static Task ScanFiles()
         {
             // some rules:
-            // trace entry could be deleted by sync, but list entry only by general function
+            // trace entry could be modified by sync,       but list entry only by sync
+            // trace entry could be added by sync,          but list entry only by general function
+            // trace entry could only be deleted by sync,   but list entry only by general function
             // remove file, and remove local trace
-            // download file, and update datetime
+            // download file, and update trace datetime
             // the files in cloud may be deleted by user, not by app, so double check all the mirrors in try
-               // roaming info lists files that SHOULD exist in cloud and all the clients
+            // roaming info lists files that SHOULD exist in cloud and all the clients
             // the files in local may be deleted by user, if someone did this, it's not our fault
 
             // load file trace
@@ -75,10 +77,14 @@ namespace LogicService.Storage
                             try
                             {
                                 var mirrorfolder = await OneDriveStorage.GetFolderAsync(item.FilePosition);
-                                await OneDriveStorage.DownloadFileAsync(mirrorfolder,
-                                    await LocalStorage.GetFolderAsync(item.FilePosition), item.FileName);
-                                //
-                                twin.DateModified = DateTime.Now;
+                                // check if other clients have uploaded their newest file
+                                if ((await mirrorfolder.GetFileAsync(item.FileName)).DateModified.Value > twin.DateModified)
+                                {
+                                    await OneDriveStorage.DownloadFileAsync(mirrorfolder,
+                                        await LocalStorage.GetFolderAsync(item.FilePosition), item.FileName);
+                                    //
+                                    twin.DateModified = DateTime.Now;
+                                }
                             }
                             catch (ServiceException)
                             {

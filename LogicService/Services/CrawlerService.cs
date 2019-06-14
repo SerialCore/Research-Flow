@@ -1,47 +1,143 @@
-﻿using System;
+﻿using LogicService.Objects;
+using LogicService.Security;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using LogicService.Objects;
-using LogicService.Security;
+using System.Web;
 
 namespace LogicService.Services
 {
-    public class Crawler
+    public class CrawlerService
     {
-
         #region 私有成员
-
-        private Uri m_uri;             // 网址
-        private List<Crawlable> m_links;    // 此网页上的链接
-        private string m_title;        // 此网页的标题
-        private string m_html;         // 此网页的HTML代码
-        private string m_outstr;       // 此网页可输出的纯文本
-        private bool m_good;           // 此网页是否可用
-        private int m_pagesize;        // 此网页的大小
+        private Uri m_uri;  //url
+        private List<Crawlable> m_links;  //此网页上的链接
+        private string m_title;    //标题
+        private string m_html;     //HTML代码
+        private string m_outstr;    //网页可输出的纯文本
+        private bool m_good;      //网页是否可用
+        private int m_pagesize;    //网页的大小
         private static Dictionary<string, CookieContainer> webcookies = new Dictionary<string, CookieContainer>();//存放所有网页的Cookie
         private string m_post;         // 此网页的登陆页需要的POST数据
         private string m_loginurl;     // 此网页的登陆页
-        
         #endregion
 
-        #region 私有方法
-
+        #region 属性
         /// <summary>
-        /// 这私有方法从网页的HTML代码中分析出链接信息
+        /// 通过此属性可获得本网页的网址，只读
+        /// </summary>
+        public string URL
+        {
+            get
+            {
+                return m_uri.AbsoluteUri;
+            }
+        }
+        /// <summary>
+        /// 通过此属性可获得本网页的标题，只读
+        /// </summary>
+        public string Title
+        {
+            get
+            {
+                if (m_title == "")
+                {
+                    Regex reg = new Regex(@"(?m)<title[^>]*>(?<title>(?:\w|\W)*?)</title[^>]*>", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+                    Match mc = reg.Match(m_html);
+                    if (mc.Success)
+                        m_title = mc.Groups["title"].Value.Trim();
+                }
+                return m_title;
+            }
+        }
+        public string M_html
+        {
+            get
+            {
+                if (m_html == null)
+                {
+                    m_html = "";
+                }
+                return m_html;
+            }
+        }
+        /// <summary>
+        /// 此属性获得本网页的所有链接信息，只读
+        /// </summary>
+        public List<Crawlable> Links
+        {
+            get
+            {
+                if (m_links.Count == 0) getLinks();
+                return m_links;
+            }
+        }
+        /// <summary>
+        /// 此属性返回本网页的全部纯文本信息，只读
+        /// </summary>
+        public string Context
+        {
+            get
+            {
+                if (m_outstr == "") getContext(Int16.MaxValue);
+                return m_outstr;
+            }
+        }
+        /// <summary>
+        /// 此属性获得本网页的大小
+        /// </summary>
+        public int PageSize
+        {
+            get
+            {
+                return m_pagesize;
+            }
+        }
+        /// <summary>
+        /// 此属性获得本网页的所有站内链接
+        /// </summary>
+        public List<Crawlable> InsiteLinks
+        {
+            get
+            {
+                return getSpecialLinksByUrl("^http://" + m_uri.Host, Int16.MaxValue);
+            }
+        }
+        /// <summary>
+        /// 此属性表示本网页是否可用
+        /// </summary>
+        public bool IsGood
+        {
+            get
+            {
+                return m_good;
+            }
+        }
+        /// <summary>
+        /// 此属性表示网页的所在的网站
+        /// </summary>
+        public string Host
+        {
+            get
+            {
+                return m_uri.Host;
+            }
+        }
+        #endregion
+        /// <summary>
+        /// 从HTML代码中分析出链接信息
         /// </summary>
         /// <returns>List<Link></returns>
-        private List<Crawlable> GetLinks()
+        private List<Crawlable> getLinks()
         {
             if (m_links.Count == 0)
             {
                 Regex[] regex = new Regex[2];
-                regex[0] = new Regex("(?m)<a[^><]+href=(\" | ')?(?<url>([^>\"'\\s)])+)(\"|')?[^>]*>(?<text>(\\w|\\W)*?)</", RegexOptions.Multiline | RegexOptions.IgnoreCase);
-                regex[1] = new Regex("<[i]*frame[^><]+src=(\" | ')?(?<url>([^>\"'\\s)])+)(\"|')?[^>]*>", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+                regex[0] = new Regex(@"<a\shref\s*=""(?<url>[^""]*).*?>(?<text>[^<]*)</a>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                regex[1] = new Regex(@"<link\shref\s*=""(?<url>[^""]*).*?>(?<text>[^<]*)</link>", RegexOptions.IgnoreCase);
                 for (int i = 0; i < 2; i++)
                 {
                     Match match = regex[i].Match(m_html);
@@ -49,24 +145,27 @@ namespace LogicService.Services
                     {
                         try
                         {
-                            string url = new Uri(m_uri, match.Groups["url"].Value).AbsoluteUri;
+                            string url;
+                            if (match.Groups["url"].Value.StartsWith('/'))
+                                url = HttpUtility.UrlDecode(new Uri(m_uri, match.Groups["url"].Value).AbsoluteUri);
+                            else
+                                url = match.Groups["url"].Value;
                             string text = "";
-                            if (i == 0) text = new Regex("(<[^>]+>)|(\\s)|(&nbsp;)|&|\"", RegexOptions.Multiline | RegexOptions.IgnoreCase).Replace(match.Groups["text"].Value, "");
+                            if (i == 0) text = new Regex("(<[^>]+>)|(\\s)|( )|&|\"", RegexOptions.Multiline | RegexOptions.IgnoreCase).Replace(match.Groups["text"].Value, "");
                             m_links.Add(new Crawlable
                             {
                                 ID = HashEncode.MakeMD5(url),
                                 Text = text,
                                 Url = url,
-                            }); ;
+                            });
                         }
-                        catch (Exception ex) { throw ex; };
+                        catch (Exception ex) { Console.WriteLine(ex.Message); };
                         match = match.NextMatch();
                     }
                 }
             }
             return m_links;
         }
-
         /// <summary>
         /// 此私有方法从一段HTML文本中提取出一定字数的纯文本
         /// </summary>
@@ -74,7 +173,7 @@ namespace LogicService.Services
         /// <param name="firstN">提取从头数多少个字</param>
         /// <param name="withLink">是否要链接里面的字</param>
         /// <returns>纯文本</returns>
-        private string GetFirstNchar(string instr, int firstN, bool withLink)
+        private string getFirstNchar(string instr, int firstN, bool withLink)
         {
             if (m_outstr == "")
             {
@@ -83,62 +182,32 @@ namespace LogicService.Services
                 m_outstr = new Regex(@"(?m)<style[^>]*>(\w|\W)*?</style[^>]*>", RegexOptions.Multiline | RegexOptions.IgnoreCase).Replace(m_outstr, "");
                 m_outstr = new Regex(@"(?m)<select[^>]*>(\w|\W)*?</select[^>]*>", RegexOptions.Multiline | RegexOptions.IgnoreCase).Replace(m_outstr, "");
                 if (!withLink) m_outstr = new Regex(@"(?m)<a[^>]*>(\w|\W)*?</a[^>]*>", RegexOptions.Multiline | RegexOptions.IgnoreCase).Replace(m_outstr, "");
-                Regex objReg = new System.Text.RegularExpressions.Regex("(<[^>]+?>)|&nbsp;", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+                Regex objReg = new System.Text.RegularExpressions.Regex("(<[^>]+?>)| ", RegexOptions.Multiline | RegexOptions.IgnoreCase);
                 m_outstr = objReg.Replace(m_outstr, "");
                 Regex objReg2 = new System.Text.RegularExpressions.Regex("(\\s)+", RegexOptions.Multiline | RegexOptions.IgnoreCase);
                 m_outstr = objReg2.Replace(m_outstr, " ");
             }
             return m_outstr.Length > firstN ? m_outstr.Substring(0, firstN) : m_outstr;
         }
-
-        /// <summary>
-        /// 此私有方法返回一个IP地址对应的无符号整数
-        /// </summary>
-        /// <param name="x">IP地址</param>
-        /// <returns></returns>
-        private uint GetuintFromIP(IPAddress x)
-        {
-            Byte[] bt = x.GetAddressBytes();
-            uint i = (uint)(bt[0] * 256 * 256 * 256);
-            i += (uint)(bt[1] * 256 * 256);
-            i += (uint)(bt[2] * 256);
-            i += (uint)(bt[3]);
-            return i;
-        }
-
-        #endregion
-
         #region 公有文法
-
         /// <summary>
         /// 此公有方法提取网页中一定字数的纯文本，包括链接文字
         /// </summary>
         /// <param name="firstN">字数</param>
         /// <returns></returns>
-        public string GetContext(int firstN)
+        public string getContext(int firstN)
         {
-            return GetFirstNchar(m_html, firstN, true);
+            return getFirstNchar(m_html, firstN, true);
         }
-
-        /// <summary>
-        /// 此公有方法提取网页中一定字数的纯文本，不包括链接文字
-        /// </summary>
-        /// <param name="firstN"></param>
-        /// <returns></returns>
-        public string GetContextWithOutLink(int firstN)
-        {
-            return GetFirstNchar(m_html, firstN, false);
-        }
-
         /// <summary>
         /// 此公有方法从本网页的链接中提取一定数量的链接，该链接的URL满足某正则式
         /// </summary>
         /// <param name="pattern">正则式</param>
         /// <param name="count">返回的链接的个数</param>
         /// <returns>List<Link></returns>
-        public List<Crawlable> GetSpecialLinksByUrl(string pattern, int count)
+        public List<Crawlable> getSpecialLinksByUrl(string pattern, int count)
         {
-            if (m_links.Count == 0) GetLinks();
+            if (m_links.Count == 0) getLinks();
             List<Crawlable> SpecialLinks = new List<Crawlable>();
             List<Crawlable>.Enumerator i;
             i = m_links.GetEnumerator();
@@ -153,16 +222,15 @@ namespace LogicService.Services
             }
             return SpecialLinks;
         }
-
         /// <summary>
         /// 此公有方法从本网页的链接中提取一定数量的链接，该链接的文字满足某正则式
         /// </summary>
         /// <param name="pattern">正则式</param>
         /// <param name="count">返回的链接的个数</param>
         /// <returns>List<Link></returns>
-        public List<Crawlable> GetSpecialLinksByText(string pattern, int count)
+        public List<Crawlable> getSpecialLinksByText(string pattern, int count)
         {
-            if (m_links.Count == 0) GetLinks();
+            if (m_links.Count == 0) getLinks();
             List<Crawlable> SpecialLinks = new List<Crawlable>();
             List<Crawlable>.Enumerator i;
             i = m_links.GetEnumerator();
@@ -177,56 +245,22 @@ namespace LogicService.Services
             }
             return SpecialLinks;
         }
-
         /// <summary>
-        /// 此公有方法获得所有链接中在一定IP范围的链接
-        /// </summary>
-        /// <param name="_ip_start">起始IP</param>
-        /// <param name="_ip_end">终止IP</param>
-        /// <returns></returns>
-        public List<Crawlable> GetSpecialLinksByIP(string _ip_start, string _ip_end)
-        {
-            IPAddress ip_start = IPAddress.Parse(_ip_start);
-            IPAddress ip_end = IPAddress.Parse(_ip_end);
-            if (m_links.Count == 0) GetLinks();
-            List<Crawlable> SpecialLinks = new List<Crawlable>();
-            List<Crawlable>.Enumerator i;
-            i = m_links.GetEnumerator();
-            while (i.MoveNext())
-            {
-                IPAddress ip;
-                try
-                {
-                    ip = Dns.GetHostEntry(new Uri(i.Current.Url).Host).AddressList[0];
-                }
-                catch { continue; }
-                if (GetuintFromIP(ip) >= GetuintFromIP(ip_start) && GetuintFromIP(ip) <= GetuintFromIP(ip_end))
-                {
-                    SpecialLinks.Add(i.Current);
-                }
-            }
-            return SpecialLinks;
-        }
-
-        /// <summary>
-        /// 这公有方法提取本网页的纯文本中满足某正则式的文字
+        /// 这公有方法提取本网页的纯文本中满足某正则式的文字 by 何问起
         /// </summary>
         /// <param name="pattern">正则式</param>
         /// <returns>返回文字</returns>
-        public string GetSpecialWords(string pattern)
+        public string getSpecialWords(string pattern)
         {
-            if (m_outstr == "") GetContext(Int16.MaxValue);
+            if (m_outstr == "") getContext(Int16.MaxValue);
             Regex regex = new Regex(pattern, RegexOptions.Multiline | RegexOptions.IgnoreCase);
             Match mc = regex.Match(m_outstr);
             if (mc.Success)
                 return mc.Groups[1].Value;
             return string.Empty;
         }
-
         #endregion
-
         #region 构造函数
-
         private void Init(string _url)
         {
             try
@@ -245,17 +279,17 @@ namespace LogicService.Services
                 HttpWebRequest rqst = (HttpWebRequest)WebRequest.Create(m_uri);
                 rqst.AllowAutoRedirect = true;
                 rqst.MaximumAutomaticRedirections = 3;
-                rqst.UserAgent = "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)";
+                rqst.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18362";
                 rqst.KeepAlive = true;
-                rqst.Timeout = 30000;
-                lock (Crawler.webcookies)
+                rqst.Timeout = 10000;
+                lock (CrawlerService.webcookies)
                 {
-                    if (Crawler.webcookies.ContainsKey(m_uri.Host))
-                        rqst.CookieContainer = Crawler.webcookies[m_uri.Host];
+                    if (CrawlerService.webcookies.ContainsKey(m_uri.Host))
+                        rqst.CookieContainer = CrawlerService.webcookies[m_uri.Host];
                     else
                     {
                         CookieContainer cc = new CookieContainer();
-                        Crawler.webcookies[m_uri.Host] = cc;
+                        CrawlerService.webcookies[m_uri.Host] = cc;
                         rqst.CookieContainer = cc;
                     }
                 }
@@ -280,13 +314,16 @@ namespace LogicService.Services
                     {
                         cding = Encoding.Default;
                     }
+                    //该处视情况而定 有的需要解码
+                    //m_html = HttpUtility.HtmlDecode(new StreamReader(sm, cding).ReadToEnd());
                     m_html = new StreamReader(sm, cding).ReadToEnd();
                 }
                 else
                 {
+                    //该处视情况而定 有的需要解码
+                    //m_html = HttpUtility.HtmlDecode(new StreamReader(sm, cding).ReadToEnd());
                     m_html = new StreamReader(sm, cding).ReadToEnd();
-                    Regex regex = new Regex("charset=(?<cding>[^=]+)?", RegexOptions.IgnoreCase);
-
+                    Regex regex = new Regex("charset=(?<cding>[^=]+)?\"", RegexOptions.IgnoreCase);
                     string strcding = regex.Match(m_html).Groups["cding"].Value;
                     try
                     {
@@ -303,20 +340,16 @@ namespace LogicService.Services
                         m_html = Encoding.Default.GetString(bytes);
                     }
                 }
-
                 m_pagesize = m_html.Length;
                 m_uri = rsps.ResponseUri;
                 rsps.Close();
             }
             catch (Exception ex)
             {
-                m_good = false;
                 throw ex;
-
             }
         }
-
-        public Crawler(string _url)
+        public CrawlerService(string _url)
         {
             string uurl = "";
             try
@@ -325,17 +358,10 @@ namespace LogicService.Services
                 _url = uurl;
             }
             catch { };
-            Regex re = new Regex("(?<h>[^\x00-\xff]+)");
-            Match mc = re.Match(_url);
-            if (mc.Success)
-            {
-                string han = mc.Groups["h"].Value;
-                _url = _url.Replace(han, System.Web.HttpUtility.UrlEncode(han, Encoding.GetEncoding("GB2312")));
-            }
             Init(_url);
         }
 
-        public Crawler(string _url, string _loginurl, string _post)
+        public CrawlerService(string _url, string _loginurl, string _post)
         {
             string uurl = "";
             try
@@ -344,14 +370,7 @@ namespace LogicService.Services
                 _url = uurl;
             }
             catch { };
-            Regex re = new Regex("(?<h>[^\x00-\xff]+)");
-            Match mc = re.Match(_url);
-            if (mc.Success)
-            {
-                string han = mc.Groups["h"].Value;
-                _url = _url.Replace(han, System.Web.HttpUtility.UrlEncode(han, Encoding.GetEncoding("GB2312")));
-            }
-            if (_loginurl.Trim() == "" || _post.Trim() == "" || Crawler.webcookies.ContainsKey(new Uri(_url).Host))
+            if (_loginurl.Trim() == "" || _post.Trim() == "" || CrawlerService.webcookies.ContainsKey(new Uri(_url).Host))
             {
                 Init(_url);
             }
@@ -418,9 +437,9 @@ namespace LogicService.Services
                     rqst.KeepAlive = true;
                     rqst.Timeout = 30000;
                     rqst.CookieContainer = myCookieContainer;
-                    lock (Crawler.webcookies)
+                    lock (CrawlerService.webcookies)
                     {
-                        Crawler.webcookies[m_uri.Host] = myCookieContainer;
+                        CrawlerService.webcookies[m_uri.Host] = myCookieContainer;
                     }
                     HttpWebResponse rsps = (HttpWebResponse)rqst.GetResponse();
                     Stream sm = rsps.GetResponseStream();
@@ -459,132 +478,6 @@ namespace LogicService.Services
                 #endregion
             }
         }
-
         #endregion
-
-        #region 属性
-
-        /// <summary>
-        /// 通过此属性可获得本网页的网址，只读
-        /// </summary>
-        public string URL
-        {
-            get
-            {
-                return m_uri.AbsoluteUri;
-            }
-        }
-
-        /// <summary>
-        /// 通过此属性可获得本网页的标题，只读
-        /// </summary>
-        public string Title
-        {
-            get
-            {
-                if (m_title == "")
-                {
-                    Regex reg = new Regex(@"(?m)<title[^>]*>(?<title>(?:\w|\W)*?)</title[^>]*>", RegexOptions.Multiline | RegexOptions.IgnoreCase);
-                    Match mc = reg.Match(m_html);
-                    if (mc.Success)
-                        m_title = mc.Groups["title"].Value.Trim();
-                }
-                return m_title;
-            }
-        }
-
-        /// <summary>
-        /// 此属性获得本网页的所有链接信息，只读
-        /// </summary>
-        public List<Crawlable> Links
-        {
-            get
-            {
-                if (m_links.Count == 0) GetLinks();
-                return m_links;
-            }
-        }
-
-        /// <summary>
-        /// 此属性返回本网页的全部纯文本信息，只读
-        /// </summary>
-        public string Context
-        {
-            get
-            {
-                if (m_outstr == "") GetContext(Int16.MaxValue);
-                return m_outstr;
-            }
-        }
-
-        /// <summary>
-        /// 此属性获得本网页的大小
-        /// </summary>
-        public int PageSize
-        {
-            get
-            {
-                return m_pagesize;
-            }
-        }
-
-        /// <summary>
-        /// 此属性获得本网页的所有站内链接
-        /// </summary>
-        public List<Crawlable> InsiteLinks
-        {
-            get
-            {
-                return GetSpecialLinksByUrl("^http://" + m_uri.Host, Int16.MaxValue);
-            }
-        }
-
-        /// <summary>
-        /// 此属性表示本网页是否可用
-        /// </summary>
-        public bool IsGood
-        {
-            get
-            {
-                return m_good;
-            }
-        }
-
-        /// <summary>
-        /// 此属性表示网页的所在的网站
-        /// </summary>
-        public string Host
-        {
-            get
-            {
-                return m_uri.Host;
-            }
-        }
-
-        /// <summary>
-        /// 此网页的登陆页所需的POST数据
-        /// </summary>
-        public string PostStr
-        {
-            get
-            {
-                return m_post;
-            }
-        }
-
-        /// <summary>
-        /// 此网页的登陆页
-        /// </summary>
-        public string LoginURL
-        {
-            get
-            {
-                return m_loginurl;
-            }
-        }
-
-        #endregion
-
     }
-
 }

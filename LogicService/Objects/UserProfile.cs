@@ -32,7 +32,7 @@ namespace LogicService.Objects
                 return false;
 
             var one = (UserTrace)obj;
-            if (this.Device == one.Device)
+            if (this.Device == one.Device && this.IP == one.IP)
                 return true;
             else
                 return false;
@@ -52,7 +52,10 @@ namespace LogicService.Objects
 
         public override int GetHashCode()
         {
-            return Device.GetHashCode();
+            int hashcode = Device.GetHashCode();
+            if (Device.GetHashCode() != IP.GetHashCode())
+                hashcode ^= IP.GetHashCode();
+            return hashcode;
         }
 
     }

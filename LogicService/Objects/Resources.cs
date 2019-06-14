@@ -14,8 +14,9 @@ namespace LogicService.Objects
         public static string EngineList => "searchlist";
 
         public static string FileTrace => "filetrace";
-        public static string RemoveList => ApplicationSetting.AccountName + ".removelist";
-        public static string AddList => ApplicationSetting.AccountName + ".addlist";
+        public static string FileList => ApplicationSetting.AccountName + ".filelist";
+
+        public static string Profile => ApplicationSetting.AccountName + ".profile";
 
     }
 }

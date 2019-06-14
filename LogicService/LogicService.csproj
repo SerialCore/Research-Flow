@@ -122,7 +122,7 @@
     <Compile Include="Security\HashEncode.cs" />
     <Compile Include="Security\TripleDES.cs" />
     <Compile Include="Application\ApplicationMessage.cs" />
-    <Compile Include="Services\Crawler.cs" />
+    <Compile Include="Services\CrawlerService.cs" />
     <Compile Include="Services\GraphService.cs" />
     <Compile Include="Storage\DataStorage.cs" />
     <Compile Include="Storage\LocalStorage.cs" />

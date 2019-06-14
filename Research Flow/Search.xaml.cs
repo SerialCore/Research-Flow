@@ -59,7 +59,8 @@ namespace Research_Flow
             string urlstring = SearchSources.GetValueOrDefault(searchlist.SelectedItem as string).Replace("QUEST", queryQuest.Text);
             if (viewMode.IsOn) // App View
             {
-
+                webview.Navigate(new Uri(urlstring));
+                link_list.ItemsSource = new CrawlerService(urlstring).Links;
             }
             else // User View
             {
@@ -67,9 +68,33 @@ namespace Research_Flow
             }
         }
 
+        private void ViewMode_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (viewMode.IsOn) // App View
+            {
+                crawlPane.IsPaneOpen = true;
+                if (webview.Source != null)
+                    link_list.ItemsSource = new CrawlerService(webview.Source.ToString()).Links;
+            }
+            else // User View
+            {
+                crawlPane.IsPaneOpen = false;
+                link_list.ItemsSource = null;
+            }
+        }
+
         #region Search Engine
 
         public Dictionary<string, string> SearchSources { get; set; }
+
+        private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
+            => webWaiting.IsActive = true;
+
+        private void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+            => webWaiting.IsActive = false;
+
+        private void WebView_FrameNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+            => webWaiting.IsActive = false;
 
         private void Open_SearchList(object sender, RoutedEventArgs e)
             => searchPane.IsPaneOpen = !searchPane.IsPaneOpen;

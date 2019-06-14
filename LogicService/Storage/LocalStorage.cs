@@ -221,17 +221,15 @@ namespace LogicService.Storage
                 if (item.FileName == name && item.FilePosition == position)
                     listIndex = list.IndexOf(item);
             }
-            if (listIndex >= 0)
+            if (listIndex < 0)
             {
-                list[listIndex].DateModified = DateTime.Now;
-            }
-            else
                 list.Add(new FileList
                 {
                     FileName = name,
                     FilePosition = position,
-                    DateModified = DateTime.Now,
-                });
+                    DateModified = DateTime.Now
+                }); ;
+            }
 
             await FileIO.WriteTextAsync(file, SerializeHelper.SerializeToJson(list));
         }

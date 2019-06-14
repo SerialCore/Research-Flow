@@ -25,8 +25,31 @@
                 <ComboBox Grid.Column="1" x:Name="searchlist" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
                 <AutoSuggestBox Grid.Column="2" x:Name="queryQuest" QueryIcon="Find"
                                     QuerySubmitted="AutoSuggestBox_QuerySubmitted" VerticalAlignment="Center"/>
-                <ToggleSwitch Grid.Column="3" x:Name="viewMode" OnContent="App View" OffContent="User View" Margin="12,0,0,0"/>
+                <ToggleSwitch Grid.Column="3" x:Name="viewMode" OnContent="App View" OffContent="User View" Toggled="ViewMode_Toggled" Margin="12,0,0,0"/>
             </Grid>
+
+            <SplitView x:Name="crawlPane" PanePlacement="Right" OpenPaneLength="400" DisplayMode="Inline" Margin="0,48,0,0">
+                <SplitView.Pane>
+                    <ListView  x:Name="link_list" IsItemClickEnabled="True" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" ReorderMode="Enabled">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Text}" FontSize="16" Margin="12,0,0,0" Style="{ThemeResource BodyTextBlockStyle}"/>
+                                    <TextBlock Text="{Binding Url}" FontSize="16" Margin="12,0,0,0" Style="{ThemeResource BodyTextBlockStyle}"/>
+                                    <TextBlock />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </SplitView.Pane>
+                <SplitView.Content>
+                    <Grid>
+                        <WebView x:Name="webview" NavigationStarting="WebView_NavigationStarting" 
+                                 FrameNavigationCompleted="WebView_FrameNavigationCompleted" NavigationCompleted="WebView_NavigationCompleted"/>
+                        <ProgressRing x:Name="webWaiting" IsActive="False" Height="100" Width="100"/>
+                    </Grid>
+                </SplitView.Content>
+            </SplitView>
 
             <SplitView x:Name="searchPane" Margin="0,48,0,0">
                 <SplitView.Pane>
@@ -68,9 +91,6 @@
                         </StackPanel>
                     </ScrollViewer>
                 </SplitView.Pane>
-                <SplitView.Content>
-                    <WebView x:Name="webview" />
-                </SplitView.Content>
             </SplitView>
 
         </Grid>
