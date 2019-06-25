@@ -21,6 +21,9 @@ namespace LogicService.Objects
         public double Star { get; set; }
 
         public bool IsJournal { get; set; }
+        
+        // not used
+        public bool IsNotificationOn { get; set; }
 
         public DateTime LastUpdateTime { get; set; }
 
@@ -38,6 +41,8 @@ namespace LogicService.Objects
         public string Summary { get; set; }
 
         public string FullText { get; set; }
+
+        public HashSet<string> Tags { get; set; }
 
         public List<ElementNode> Nodes { get; set; }
 

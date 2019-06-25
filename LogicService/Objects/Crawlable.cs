@@ -15,6 +15,10 @@ namespace LogicService.Objects
 
         public string Url { get; set; }
 
+        public HashSet<string> Tags { get; set; }
+
+        public List<Crawlable> SubLinks { get; set; }
+
     }
 
 }

@@ -5,6 +5,7 @@ using LogicService.Storage;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -59,8 +60,30 @@ namespace Research_Flow
             string urlstring = SearchSources.GetValueOrDefault(searchlist.SelectedItem as string).Replace("QUEST", queryQuest.Text);
             if (viewMode.IsOn) // App View
             {
+                craWaiting.IsActive = true;
+                var crawled = new CrawlerService(urlstring);
+                Task.Run(() =>
+                {
+                    crawled.BeginGetResponse(
+                        async (result) =>
+                        {
+                            await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                            {
+                                link_list.ItemsSource = result.Links;
+                                craWaiting.IsActive = false;
+                            });
+                        },
+                        async (exception) =>
+                        {
+                            await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                            {
+                                InAppNotification.Show(exception);
+                                craWaiting.IsActive = false;
+                            });
+                        });
+                });
+
                 webview.Navigate(new Uri(urlstring));
-                link_list.ItemsSource = new CrawlerService(urlstring).Links;
             }
             else // User View
             {
@@ -74,7 +97,30 @@ namespace Research_Flow
             {
                 crawlPane.IsPaneOpen = true;
                 if (webview.Source != null)
-                    link_list.ItemsSource = new CrawlerService(webview.Source.ToString()).Links;
+                {
+                    craWaiting.IsActive = true;
+                    var crawled = new CrawlerService(webview.Source.ToString());
+                    Task.Run(()=>
+                    {
+                        crawled.BeginGetResponse(
+                            async (result) =>
+                            {
+                                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                                {
+                                    link_list.ItemsSource = result.Links;
+                                    craWaiting.IsActive = false;
+                                });
+                            },
+                            async (exception) =>
+                            {
+                                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                                {
+                                    InAppNotification.Show(exception);
+                                    craWaiting.IsActive = false;
+                                });
+                            });
+                    });
+                }
             }
             else // User View
             {

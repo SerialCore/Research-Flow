@@ -17,7 +17,7 @@ namespace LogicService.Objects
 
         public string Abstract { get; set; }
 
-        public List<string> Topic { get; set; }
+        public HashSet<string> Tags { get; set; }
 
         public List<Paper> References { get; set; }
 
