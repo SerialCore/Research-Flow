@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace LogicService.Services
@@ -13,14 +14,26 @@ namespace LogicService.Services
     public class CrawlerService
     {
         private string _url;
-        private Uri m_uri;  //url
+        private Uri m_url;
         private List<Crawlable> m_links;
         private string m_title;
         private string m_html;
         private string m_content;
         private bool m_good;
         private int m_pagesize;
-        private static Dictionary<string, CookieContainer> webcookies = new Dictionary<string, CookieContainer>();//存放所有网页的Cookie
+        private static Dictionary<string, CookieContainer> webcookies = new Dictionary<string, CookieContainer>();
+
+        /// <summary>
+        /// Resources of links filter
+        /// </summary>
+        public static Dictionary<string, string> LinkFilter = new Dictionary<string, string>()
+        {
+            { "Text: NotEmpty", @"\S" },
+            { "Text: Has=", "" },
+            { "Url: Has=", "" },
+            { "Url: HasDoi", "doi" },
+            { "Url: Insite", "" }, // for tag only, not truely dictionary
+        };
 
         /// <summary>
         /// Url
@@ -29,7 +42,7 @@ namespace LogicService.Services
         {
             get
             {
-                return m_uri.AbsoluteUri;
+                return m_url.AbsoluteUri;
             }
         }
 
@@ -108,7 +121,7 @@ namespace LogicService.Services
         {
             get
             {
-                return GetSpecialLinksByUrl("^http(s://|://)" + m_uri.Host, Int16.MaxValue);
+                return GetSpecialLinksByUrl("^http(s://|://)" + m_url.Host, Int16.MaxValue);
             }
         }
 
@@ -130,7 +143,7 @@ namespace LogicService.Services
         {
             get
             {
-                return m_uri.Host;
+                return m_url.Host;
             }
         }
 
@@ -150,7 +163,7 @@ namespace LogicService.Services
                         {
                             string url;
                             if (match.Groups["url"].Value.StartsWith('/') || match.Groups["url"].Value.StartsWith('#'))
-                                url = HttpUtility.UrlDecode(new Uri(m_uri, match.Groups["url"].Value).AbsoluteUri);
+                                url = HttpUtility.UrlDecode(new Uri(m_url, match.Groups["url"].Value).AbsoluteUri);
                             else
                                 url = match.Groups["url"].Value;
                             string text = "";
@@ -193,7 +206,7 @@ namespace LogicService.Services
             return GetContentFromHtml(m_html, firstN, true);
         }
 
-        public List<Crawlable> GetSpecialLinksByUrl(string pattern, int count)
+        public List<Crawlable> GetSpecialLinksByUrl(string pattern, int count = 100)
         {
             if (m_links.Count == 0) GetLinks();
             List<Crawlable> SpecialLinks = new List<Crawlable>();
@@ -211,7 +224,7 @@ namespace LogicService.Services
             return SpecialLinks;
         }
 
-        public List<Crawlable> GetSpecialLinksByText(string pattern, int count)
+        public List<Crawlable> GetSpecialLinksByText(string pattern, int count = 100)
         {
             if (m_links.Count == 0) GetLinks();
             List<Crawlable> SpecialLinks = new List<Crawlable>();
@@ -243,7 +256,7 @@ namespace LogicService.Services
         public CrawlerService(string _url)
         {
             this._url = Uri.UnescapeDataString(_url);
-            m_uri = new Uri(_url);
+            m_url = new Uri(_url);
             m_links = new List<Crawlable>();
             m_html = "";
             m_content = "";
@@ -255,106 +268,109 @@ namespace LogicService.Services
                 return;
             }
         }
-        
+
         // net work
         public void BeginGetResponse(Action<CrawlerService> onGetCrawlerCompleted = null, Action<string> onError = null, Action onFinally = null)
         {
-            try
+            Task.Run(() =>
             {
-                HttpWebRequest rqst = (HttpWebRequest)WebRequest.Create(m_uri);
-                rqst.AllowAutoRedirect = true;
-                rqst.MaximumAutomaticRedirections = 3;
-                rqst.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18362";
-                rqst.KeepAlive = true;
-                rqst.Timeout = 10000;
-                lock (CrawlerService.webcookies)
+                try
                 {
-                    if (CrawlerService.webcookies.ContainsKey(m_uri.Host))
-                        rqst.CookieContainer = CrawlerService.webcookies[m_uri.Host];
+                    HttpWebRequest rqst = (HttpWebRequest)WebRequest.Create(m_url);
+                    rqst.AllowAutoRedirect = true;
+                    rqst.MaximumAutomaticRedirections = 3;
+                    rqst.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18362";
+                    rqst.KeepAlive = true;
+                    rqst.Timeout = 10000;
+                    lock (CrawlerService.webcookies)
+                    {
+                        if (CrawlerService.webcookies.ContainsKey(m_url.Host))
+                            rqst.CookieContainer = CrawlerService.webcookies[m_url.Host];
+                        else
+                        {
+                            CookieContainer cc = new CookieContainer();
+                            CrawlerService.webcookies[m_url.Host] = cc;
+                            rqst.CookieContainer = cc;
+                        }
+                    }
+                    HttpWebResponse rsps = (HttpWebResponse)rqst.GetResponse();
+                    Stream sm = rsps.GetResponseStream();
+                    if (!rsps.ContentType.ToLower().StartsWith("text/") || rsps.ContentLength > 1 << 22)
+                    {
+                        rsps.Close();
+                        m_good = false;
+                        return;
+                    }
+                    Encoding cding = System.Text.Encoding.Default;
+                    string contenttype = rsps.ContentType.ToLower();
+                    int ix = contenttype.IndexOf("charset=");
+                    if (ix != -1)
+                    {
+                        try
+                        {
+                            cding = System.Text.Encoding.GetEncoding(rsps.ContentType.Substring(ix + "charset".Length + 1));
+                        }
+                        catch
+                        {
+                            cding = Encoding.Default;
+                        }
+                        // need decode?
+                        //m_html = HttpUtility.HtmlDecode(new StreamReader(sm, cding).ReadToEnd());
+                        m_html = new StreamReader(sm, cding).ReadToEnd();
+                    }
                     else
                     {
-                        CookieContainer cc = new CookieContainer();
-                        CrawlerService.webcookies[m_uri.Host] = cc;
-                        rqst.CookieContainer = cc;
+                        // need decode?
+                        //m_html = HttpUtility.HtmlDecode(new StreamReader(sm, cding).ReadToEnd());
+                        m_html = new StreamReader(sm, cding).ReadToEnd();
+                        Regex regex = new Regex("charset=(?<cding>[^=]+)?\"", RegexOptions.IgnoreCase);
+                        string strcding = regex.Match(m_html).Groups["cding"].Value;
+                        try
+                        {
+                            cding = Encoding.GetEncoding(strcding);
+                        }
+                        catch
+                        {
+                            cding = Encoding.Default;
+                        }
+                        byte[] bytes = Encoding.Default.GetBytes(m_html.ToCharArray());
+                        m_html = cding.GetString(bytes);
+                        if (m_html.Split('?').Length > 100)
+                        {
+                            m_html = Encoding.Default.GetString(bytes);
+                        }
                     }
-                }
-                HttpWebResponse rsps = (HttpWebResponse)rqst.GetResponse();
-                Stream sm = rsps.GetResponseStream();
-                if (!rsps.ContentType.ToLower().StartsWith("text/") || rsps.ContentLength > 1 << 22)
-                {
+                    m_pagesize = m_html.Length;
+                    m_url = rsps.ResponseUri;
                     rsps.Close();
-                    m_good = false;
-                    return;
-                }
-                Encoding cding = System.Text.Encoding.Default;
-                string contenttype = rsps.ContentType.ToLower();
-                int ix = contenttype.IndexOf("charset=");
-                if (ix != -1)
-                {
-                    try
-                    {
-                        cding = System.Text.Encoding.GetEncoding(rsps.ContentType.Substring(ix + "charset".Length + 1));
-                    }
-                    catch
-                    {
-                        cding = Encoding.Default;
-                    }
-                    // need decode?
-                    //m_html = HttpUtility.HtmlDecode(new StreamReader(sm, cding).ReadToEnd());
-                    m_html = new StreamReader(sm, cding).ReadToEnd();
-                }
-                else
-                {
-                    // need decode?
-                    //m_html = HttpUtility.HtmlDecode(new StreamReader(sm, cding).ReadToEnd());
-                    m_html = new StreamReader(sm, cding).ReadToEnd();
-                    Regex regex = new Regex("charset=(?<cding>[^=]+)?\"", RegexOptions.IgnoreCase);
-                    string strcding = regex.Match(m_html).Groups["cding"].Value;
-                    try
-                    {
-                        cding = Encoding.GetEncoding(strcding);
-                    }
-                    catch
-                    {
-                        cding = Encoding.Default;
-                    }
-                    byte[] bytes = Encoding.Default.GetBytes(m_html.ToCharArray());
-                    m_html = cding.GetString(bytes);
-                    if (m_html.Split('?').Length > 100)
-                    {
-                        m_html = Encoding.Default.GetString(bytes);
-                    }
-                }
-                m_pagesize = m_html.Length;
-                m_uri = rsps.ResponseUri;
-                rsps.Close();
 
-                if (onGetCrawlerCompleted != null)
-                {
-                    onGetCrawlerCompleted(this);
+                    if (onGetCrawlerCompleted != null)
+                    {
+                        onGetCrawlerCompleted(this);
+                    }
                 }
-            }
-            catch (WebException webEx)
-            {
-                if (onError != null)
+                catch (WebException webEx)
                 {
-                    onError(webEx.Message);
+                    if (onError != null)
+                    {
+                        onError(webEx.Message);
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                if (onError != null)
+                catch (Exception e)
                 {
-                    onError(e.Message);
+                    if (onError != null)
+                    {
+                        onError(e.Message);
+                    }
                 }
-            }
-            finally
-            {
-                if (onFinally != null)
+                finally
                 {
-                    onFinally();
+                    if (onFinally != null)
+                    {
+                        onFinally();
+                    }
                 }
-            }
+            });
 
         }
     }

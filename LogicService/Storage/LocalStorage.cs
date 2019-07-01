@@ -108,8 +108,8 @@ namespace LogicService.Storage
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
             await FileIO.WriteTextAsync(file, content);
             // record
-            AddFileTrace(folder.Name, name);
             AddFileList(folder.Name, name);
+            AddFileTrace(folder.Name, name);
         }
 
         /// <summary>

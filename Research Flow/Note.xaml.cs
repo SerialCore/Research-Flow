@@ -250,6 +250,11 @@ namespace Research_Flow
             }
 
             ApplicationMessage.SendMessage("Note saved", 3);
+            foreach (var item in namelist)
+            {
+                if (item.NoteName.Equals(notename))
+                    return;
+            }
             namelist.Add(new NoteItem { NoteName = notename });
         }
 

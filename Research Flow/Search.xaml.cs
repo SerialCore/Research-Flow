@@ -5,6 +5,7 @@ using LogicService.Storage;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Popups;
@@ -27,10 +28,10 @@ namespace Research_Flow
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
-            InitializeEngine();
+            InitializeSearch();
         }
 
-        private async void InitializeEngine()
+        private async void InitializeSearch()
         {
             try
             {
@@ -52,82 +53,89 @@ namespace Research_Flow
                 searchlist.ItemsSource = SearchSources.Keys;
                 searchlist.SelectedIndex = 0;
                 source_list.ItemsSource = SearchSources;
+                linkFilter.ItemsSource = CrawlerService.LinkFilter.Keys;
+                linkFilter.Text = "Text: NotEmpty";
             }
+        }
+
+        #region Fisrt Crawl
+
+        private CrawlerService currentCrawled;
+
+        private void ViewMode_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (viewMode.IsOn)
+                crawlPane.IsPaneOpen = true;
+            else
+                crawlPane.IsPaneOpen = false;
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            string link = e.Parameter as string;
+            if (!string.IsNullOrEmpty(link))
+                FisrtCrawl(link);
         }
 
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            string urlstring = SearchSources.GetValueOrDefault(searchlist.SelectedItem as string).Replace("QUEST", queryQuest.Text);
-            if (viewMode.IsOn) // App View
-            {
-                craWaiting.IsActive = true;
-                var crawled = new CrawlerService(urlstring);
-                Task.Run(() =>
+            string link = SearchSources.GetValueOrDefault(searchlist.SelectedItem as string).Replace("QUEST", queryQuest.Text);
+            FisrtCrawl(link);
+        }
+
+        private void FisrtCrawl(string urlstring)
+        {
+            craWaiting.IsActive = true;
+            currentCrawled = new CrawlerService(urlstring);
+            currentCrawled.BeginGetResponse(
+                async (result) =>
                 {
-                    crawled.BeginGetResponse(
-                        async (result) =>
-                        {
-                            await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                            {
-                                link_list.ItemsSource = result.Links;
-                                craWaiting.IsActive = false;
-                            });
-                        },
-                        async (exception) =>
-                        {
-                            await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                            {
-                                InAppNotification.Show(exception);
-                                craWaiting.IsActive = false;
-                            });
-                        });
+                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        link_list.ItemsSource = result.GetSpecialLinksByText(@"\S");
+                        craWaiting.IsActive = false;
+                    });
+                },
+                async (exception) =>
+                {
+                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        InAppNotification.Show(exception);
+                        craWaiting.IsActive = false;
+                    });
                 });
 
-                webview.Navigate(new Uri(urlstring));
-            }
-            else // User View
+            webview.Navigate(new Uri(urlstring));
+        }
+
+        private void LinkFilter_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            Regex regex = new Regex(@"(?<header>^(Text|Url):\s(\w+$|\w+=))(?<param>\w*$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+            Match match = regex.Match(linkFilter.Text);
+            if (match.Success)
             {
-                webview.Navigate(new Uri(urlstring));
+                string header = match.Groups["header"].Value;
+                string param = match.Groups["param"].Value;
+                if (header.StartsWith("Text"))
+                {
+                    if (header.Equals("Url: Insite"))
+                        link_list.ItemsSource = currentCrawled.InsiteLinks;
+                    else
+                        link_list.ItemsSource = currentCrawled.GetSpecialLinksByText(CrawlerService.LinkFilter.GetValueOrDefault(header) + param);
+                }
+                if (header.StartsWith("Url"))
+                {
+                    link_list.ItemsSource = currentCrawled.GetSpecialLinksByUrl(CrawlerService.LinkFilter.GetValueOrDefault(header) + param);
+                }
             }
         }
 
-        private void ViewMode_Toggled(object sender, RoutedEventArgs e)
+        private void SubmitToCrawler()
         {
-            if (viewMode.IsOn) // App View
-            {
-                crawlPane.IsPaneOpen = true;
-                if (webview.Source != null)
-                {
-                    craWaiting.IsActive = true;
-                    var crawled = new CrawlerService(webview.Source.ToString());
-                    Task.Run(()=>
-                    {
-                        crawled.BeginGetResponse(
-                            async (result) =>
-                            {
-                                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                                {
-                                    link_list.ItemsSource = result.Links;
-                                    craWaiting.IsActive = false;
-                                });
-                            },
-                            async (exception) =>
-                            {
-                                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                                {
-                                    InAppNotification.Show(exception);
-                                    craWaiting.IsActive = false;
-                                });
-                            });
-                    });
-                }
-            }
-            else // User View
-            {
-                crawlPane.IsPaneOpen = false;
-                link_list.ItemsSource = null;
-            }
+
         }
+
+        #endregion
 
         #region Search Engine
 

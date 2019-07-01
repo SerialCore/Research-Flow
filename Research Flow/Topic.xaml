@@ -15,7 +15,39 @@
 
             </PivotItem>
             <PivotItem Header="Project">
-                <TextBox Text="Key words here" />
+                <toolkit:OrbitView x:Name="orbitView"
+                                   AnchorColor="LightSkyBlue"
+                                   AnchorsEnabled="True"
+                                   IsItemClickEnabled="True"
+                                   MinItemSize="30"
+                                   MaxItemSize="40"
+                                   OrbitColor="Black"
+                                   OrbitsEnabled="false">
+                    <toolkit:OrbitView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Label}"/>
+                        </DataTemplate>
+                    </toolkit:OrbitView.ItemTemplate>
+                    <toolkit:OrbitView.ItemsSource>
+                        <toolkit:OrbitViewDataItemCollection>
+                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
+                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
+                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
+                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
+                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
+                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
+                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
+                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
+                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
+                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
+                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
+                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
+                        </toolkit:OrbitViewDataItemCollection>
+                    </toolkit:OrbitView.ItemsSource>
+                    <toolkit:OrbitView.CenterContent>
+                        <TextBlock Text="Center"/>
+                    </toolkit:OrbitView.CenterContent>
+                </toolkit:OrbitView>
             </PivotItem>
         </Pivot>
 

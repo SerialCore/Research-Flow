@@ -76,10 +76,8 @@ namespace Research_Flow
         private async void OpenBrowser(object sender, RoutedEventArgs e)
             => await Launcher.LaunchUriAsync(webView.Source);
 
-        private void SavetoLearn(object sender, RoutedEventArgs e)
-        {
-
-        }
+        private void CrawlLink(object sender, RoutedEventArgs e)
+            => this.Frame.Navigate(typeof(Search), webView.Source.ToString());
 
         private void ShareLink(object sender, RoutedEventArgs e)
         {

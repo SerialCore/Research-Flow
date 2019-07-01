@@ -29,7 +29,7 @@
                             DefaultLabelPosition="Right"
                             Background="Transparent"
                             OverflowButtonVisibility="Collapsed">
-                    <AppBarButton Label="Learn" Icon="Favorite" Click="SavetoLearn"/>
+                    <AppBarButton Label="Crawl" Icon="Favorite" Click="CrawlLink"/>
                     <AppBarButton Label="Share" Icon="Share" Click="ShareLink"/>
                     <AppBarButton Label="Browser" Icon="Account" Click="OpenBrowser"/>
                     <AppBarSeparator/>

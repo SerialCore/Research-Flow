@@ -117,20 +117,16 @@ namespace LogicService.Storage
                     var localfolder = await LocalStorage.GetFolderAsync(item.FilePosition);
                     var local = await localfolder.GetFileAsync(item.FileName);
                     await local.DeleteAsync();
+                    //
+                    var mirrorfolder = await OneDriveStorage.GetFolderAsync(item.FilePosition);
+                    var mirror = await mirrorfolder.GetFileAsync(item.FileName);
+                    await mirror.DeleteAsync();
                     // 
                     deleteTrace.Add(item);
                 }
                 catch (FileNotFoundException)
                 {
 
-                }
-                try
-                {
-                    var mirrorfolder = await OneDriveStorage.GetFolderAsync(item.FilePosition);
-                    var mirror = await mirrorfolder.GetFileAsync(item.FileName);
-                    await mirror.DeleteAsync();
-                    //
-                    deleteTrace.Add(item);
                 }
                 catch (ServiceException)
                 {

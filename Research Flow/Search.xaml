@@ -30,13 +30,14 @@
 
             <SplitView x:Name="crawlPane" PanePlacement="Right" OpenPaneLength="400" DisplayMode="Inline" Margin="0,48,0,0">
                 <SplitView.Pane>
-                    <Grid>
-                        <ListView  x:Name="link_list" IsItemClickEnabled="True" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" ReorderMode="Enabled">
+                    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                        <AutoSuggestBox x:Name="linkFilter" QueryIcon="Filter" QuerySubmitted="LinkFilter_QuerySubmitted" Height="32" Padding="4"/>
+                        <ListView  x:Name="link_list" IsItemClickEnabled="True" Margin="0,36,0,0" BorderBrush="Black" BorderThickness="1,0,0,0">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel>
                                         <TextBlock Text="{Binding Text}" FontSize="16" Margin="12,0,0,0" Style="{ThemeResource BodyTextBlockStyle}"/>
-                                        <TextBlock Text="{Binding Url}" FontSize="16" Margin="12,0,0,0" Style="{ThemeResource BodyTextBlockStyle}"/>
+                                        <TextBlock Text="{Binding Url}" FontSize="16" Margin="12,0,0,0" Style="{ThemeResource BodyTextBlockStyle}" Foreground="SkyBlue"/>
                                         <TextBlock />
                                     </StackPanel>
                                 </DataTemplate>
@@ -46,7 +47,8 @@
                     </Grid>
                 </SplitView.Pane>
                 <SplitView.Content>
-                    <Grid>
+                    <Grid>                        
+                        <TextBlock Text="Search | Fisrt Crawler" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <WebView x:Name="webview" NavigationStarting="WebView_NavigationStarting" 
                                  FrameNavigationCompleted="WebView_FrameNavigationCompleted" NavigationCompleted="WebView_NavigationCompleted"/>
                         <ProgressRing x:Name="webWaiting" IsActive="False" Height="100" Width="100"/>
@@ -58,13 +60,11 @@
                 <SplitView.Pane>
                     <ScrollViewer>
                         <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                            <ListView x:Name="source_list" IsItemClickEnabled="True" ItemClick="Source_list_ItemClick"
-                                         ReorderMode="Enabled">
+                            <ListView x:Name="source_list" IsItemClickEnabled="True" ItemClick="Source_list_ItemClick">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel>
                                             <TextBlock Text="{Binding Key}" FontSize="16" Margin="12,0,0,0" Style="{ThemeResource BodyTextBlockStyle}"/>
-                                            <!--<TextBlock Text="{Binding Value}" Margin="12,0,0,0"/>-->
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
