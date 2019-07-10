@@ -42,7 +42,7 @@ namespace Research_Flow
             try
             {
                 FeedSources = await LocalStorage.ReadJsonAsync<ObservableCollection<RSSSource>>(
-                    await LocalStorage.GetFeedAsync(), "rsslist");
+                    await LocalStorage.GetDataAsync(), "rsslist");
             }
             catch
             {
@@ -58,7 +58,7 @@ namespace Research_Flow
                     new RSSSource{ID=HashEncode.MakeMD5("http://www.sciencenet.cn/xml/paper.aspx?di=7"),
                         Name ="科学网-数理科学",Uri="http://www.sciencenet.cn/xml/paper.aspx?di=7",MaxCount=50,Star=5,IsJournal=false}
                 };
-                LocalStorage.WriteJson(await LocalStorage.GetFeedAsync(), "rsslist", FeedSources);
+                LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
             }
             finally
             {
@@ -133,7 +133,7 @@ namespace Research_Flow
                     }
                     FeedSources.Add(source);
                 }
-                LocalStorage.WriteJson(await LocalStorage.GetFeedAsync(), "rsslist", FeedSources);
+                LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
             }
             ClearSettings();
         }
@@ -156,10 +156,10 @@ namespace Research_Flow
         private async void DeleteInvokedHandler(IUICommand command)
         {
             FeedSources.Remove(modifiedRSS);
-            LocalStorage.WriteJson(await LocalStorage.GetFeedAsync(), "rsslist", FeedSources);
+            LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
             try
             {
-                LocalStorage.GeneralDelete(await LocalStorage.GetFeedAsync(), modifiedRSS.ID);
+                LocalStorage.GeneralDeleteAsync(await LocalStorage.GetDataAsync(), modifiedRSS.ID);
             }
             catch { }
             ClearSettings();
@@ -223,7 +223,7 @@ namespace Research_Flow
             try
             {
                 List<FeedItem> feedItems = await LocalStorage.ReadJsonAsync<List<FeedItem>>(
-                    await LocalStorage.GetFeedAsync(), source.ID);
+                    await LocalStorage.GetDataAsync(), source.ID);
                 feedItem_list.ItemsSource = feedItems;
             }
             catch { }
@@ -246,9 +246,9 @@ namespace Research_Flow
                     });
                     if (feeds.Count > source.MaxCount)
                         feeds.RemoveRange(source.MaxCount, feeds.Count - source.MaxCount);
-                    LocalStorage.WriteJson(await LocalStorage.GetFeedAsync(), source.ID, items);
+                    LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), source.ID, items);
                     FeedSources[selectedFeedIndex].LastUpdateTime = DateTime.Now;
-                    LocalStorage.WriteJson(await LocalStorage.GetFeedAsync(), "rsslist", FeedSources);
+                    LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
                 },
                 async (exception) =>
                 {

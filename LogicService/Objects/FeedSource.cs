@@ -29,6 +29,9 @@ namespace LogicService.Objects
 
     }
 
+    /// <summary>
+    /// Database? or files?
+    /// </summary>
     public class FeedItem
     {
 

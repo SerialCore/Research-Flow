@@ -1,5 +1,8 @@
-﻿using System;
+﻿using LogicService.Helper;
+using LogicService.Objects;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -26,6 +29,34 @@ namespace Research_Flow
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+
+            InitializeTag();
+        }
+
+        private void InitializeTag()
+        {
+            List<TopicTag> tags = new List<TopicTag>();
+            tags.Add(new TopicTag { Tag = "QCD" });
+            tags.Add(new TopicTag { Tag = "QED" });
+            tags.Add(new TopicTag { Tag = "Pedal Motion" });
+            tags.Add(new TopicTag { Tag = "DNA" });
+            tags.Add(new TopicTag { Tag = "AI" });
+
+            Func<TopicTag, string> AlphaKey = (tag) =>
+            {
+                return tag.Tag.Substring(0, 1).ToUpper();
+            };
+
+            var groups = from t in tags
+                         orderby t.Tag
+                         group t by AlphaKey(t);
+
+            CollectionViewSource collectionVS = new CollectionViewSource();
+            collectionVS.IsSourceGrouped = true;
+            collectionVS.Source = groups;
+            taglist.ItemsSource = collectionVS.View;
+            tagKlist.ItemsSource = collectionVS.View.CollectionGroups;
         }
     }
+  
 }

@@ -10,46 +10,45 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <Pivot Margin="20,0,20,10">
-            <PivotItem Header="Flow">
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
 
-            </PivotItem>
-            <PivotItem Header="Project">
-                <toolkit:OrbitView x:Name="orbitView"
-                                   AnchorColor="LightSkyBlue"
-                                   AnchorsEnabled="True"
-                                   IsItemClickEnabled="True"
-                                   MinItemSize="30"
-                                   MaxItemSize="40"
-                                   OrbitColor="Black"
-                                   OrbitsEnabled="false">
-                    <toolkit:OrbitView.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Label}"/>
-                        </DataTemplate>
-                    </toolkit:OrbitView.ItemTemplate>
-                    <toolkit:OrbitView.ItemsSource>
-                        <toolkit:OrbitViewDataItemCollection>
-                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
-                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
-                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
-                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
-                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
-                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
-                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
-                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
-                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
-                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
-                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
-                            <toolkit:OrbitViewDataItem Diameter="2" Distance="1" Label="Pedal Motion"/>
-                        </toolkit:OrbitViewDataItemCollection>
-                    </toolkit:OrbitView.ItemsSource>
-                    <toolkit:OrbitView.CenterContent>
-                        <TextBlock Text="Center"/>
-                    </toolkit:OrbitView.CenterContent>
-                </toolkit:OrbitView>
-            </PivotItem>
-        </Pivot>
+            <Grid Grid.Column="0">
+                <TextBlock Text="Tags" Style="{ThemeResource SubtitleTextBlockStyle}" Height="36" VerticalAlignment="Top" Padding="5"/>
+                <SemanticZoom Margin="0,36,0,0">
+                    <SemanticZoom.ZoomedInView>
+                        <ListView x:Name="taglist" ScrollViewer.IsHorizontalScrollChainingEnabled="False">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Tag}"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.GroupStyle>
+                                <GroupStyle HidesIfEmpty="True" >
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Key}" FontSize="25" Foreground="Red"/>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ListView.GroupStyle>
+                        </ListView>
+                    </SemanticZoom.ZoomedInView>
+                    <SemanticZoom.ZoomedOutView>
+                        <ListView x:Name="tagKlist" ScrollViewer.IsHorizontalScrollChainingEnabled="False">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Group.Key}" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </SemanticZoom.ZoomedOutView>
+                </SemanticZoom>
+            </Grid>
+        </Grid>
 
         <toolkit:InAppNotification x:Name="InAppNotification" 
                                     ShowDismissButton="True"

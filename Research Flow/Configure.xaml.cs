@@ -1,8 +1,10 @@
 ﻿using LogicService.Application;
+using LogicService.Objects;
 using LogicService.Services;
 using LogicService.Storage;
 using System;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;

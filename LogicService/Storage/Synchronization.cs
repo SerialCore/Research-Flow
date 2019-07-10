@@ -150,20 +150,20 @@ namespace LogicService.Storage
             List<FileList> trace = new List<FileList>();
             List<FileList> list = new List<FileList>();
 
-            foreach (var item in await (await OneDriveStorage.GetFeedAsync()).GetFilesAsync(50))
+            foreach (var item in await (await OneDriveStorage.GetDataAsync()).GetFilesAsync(50))
             {
-                await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetFeedAsync(),
-                    await LocalStorage.GetFeedAsync(), item.Name);
+                await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetDataAsync(),
+                    await LocalStorage.GetDataAsync(), item.Name);
                 trace.Add(new FileList
                 {
                     FileName = item.Name,
-                    FilePosition = "Feed",
+                    FilePosition = "Data",
                     DateModified = DateTime.Now,
                 });
                 list.Add(new FileList
                 {
                     FileName = item.Name,
-                    FilePosition = "Feed",
+                    FilePosition = "Data",
                     DateModified = DateTime.Now,
                 });
             }
@@ -180,7 +180,7 @@ namespace LogicService.Storage
                 list.Add(new FileList
                 {
                     FileName = item.Name,
-                    FilePosition = "Feed",
+                    FilePosition = "Note",
                     DateModified = DateTime.Now,
                 });
             }

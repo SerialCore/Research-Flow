@@ -36,7 +36,7 @@ namespace Research_Flow
             try
             {
                 SearchSources = await LocalStorage.ReadJsonAsync<Dictionary<string, string>>(
-                    await LocalStorage.GetLinkAsync(), "searchlist");
+                    await LocalStorage.GetDataAsync(), "searchlist");
             }
             catch
             {
@@ -46,7 +46,7 @@ namespace Research_Flow
                     { "Bing", "https://www.bing.com/search?q=QUEST"},
                     { "ACS", "https://pubs.acs.org/action/doSearch?AllField=QUEST"},
                 };
-                LocalStorage.WriteJson(await LocalStorage.GetLinkAsync(), "searchlist", SearchSources);
+                LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "searchlist", SearchSources);
             }
             finally
             {
@@ -61,6 +61,7 @@ namespace Research_Flow
         #region Fisrt Crawl
 
         private CrawlerService currentCrawled;
+        private Stack<string> crawledHistory = new Stack<string>();
 
         private void ViewMode_Toggled(object sender, RoutedEventArgs e)
         {
@@ -74,16 +75,29 @@ namespace Research_Flow
         {
             string link = e.Parameter as string;
             if (!string.IsNullOrEmpty(link))
-                FisrtCrawl(link);
+            {
+                FirstCrawl(link);
+                crawledHistory.Push(link);
+            }
         }
 
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             string link = SearchSources.GetValueOrDefault(searchlist.SelectedItem as string).Replace("QUEST", queryQuest.Text);
-            FisrtCrawl(link);
+            FirstCrawl(link);
+            crawledHistory.Push(link);
         }
 
-        private void FisrtCrawl(string urlstring)
+        private void Crawl_Back(object sender, RoutedEventArgs e)
+        {
+            if (crawledHistory.Count > 1)
+            {
+                crawledHistory.Pop();
+                FirstCrawl(crawledHistory.Peek());
+            }
+        }
+
+        private void FirstCrawl(string urlstring)
         {
             craWaiting.IsActive = true;
             currentCrawled = new CrawlerService(urlstring);
@@ -92,7 +106,7 @@ namespace Research_Flow
                 {
                     await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
-                        link_list.ItemsSource = result.GetSpecialLinksByText(@"\S");
+                        LinkFilter_QuerySubmitted(null, null);
                         craWaiting.IsActive = false;
                     });
                 },
@@ -108,11 +122,14 @@ namespace Research_Flow
             webview.Navigate(new Uri(urlstring));
         }
 
+        private void LinkFilter_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+            => LinkFilter_QuerySubmitted(null, null);
+
         private void LinkFilter_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             Regex regex = new Regex(@"(?<header>^(Text|Url):\s(\w+$|\w+=))(?<param>\w*$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
             Match match = regex.Match(linkFilter.Text);
-            if (match.Success)
+            if (match.Success && currentCrawled != null)
             {
                 string header = match.Groups["header"].Value;
                 string param = match.Groups["param"].Value;
@@ -128,6 +145,15 @@ namespace Research_Flow
                     link_list.ItemsSource = currentCrawled.GetSpecialLinksByUrl(CrawlerService.LinkFilter.GetValueOrDefault(header) + param);
                 }
             }
+            else if (string.IsNullOrEmpty(linkFilter.Text))
+                link_list.ItemsSource = currentCrawled.Links;
+        }
+
+        private void Link_list_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            string link = (e.ClickedItem as Crawlable).Url;
+            FirstCrawl(link);
+            crawledHistory.Push(link);
         }
 
         private void SubmitToCrawler()
@@ -199,7 +225,7 @@ namespace Research_Flow
             searchlist.SelectedIndex = 0;
             source_list.ItemsSource = null;
             source_list.ItemsSource = SearchSources;
-            LocalStorage.WriteJson(await LocalStorage.GetLinkAsync(), "searchlist", SearchSources);
+            LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "searchlist", SearchSources);
 
             ClearSettings();
         }
@@ -228,7 +254,7 @@ namespace Research_Flow
             searchlist.SelectedIndex = 0;
             source_list.ItemsSource = null;
             source_list.ItemsSource = SearchSources;
-            LocalStorage.WriteJson(await LocalStorage.GetLinkAsync(), "searchlist", SearchSources);
+            LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "searchlist", SearchSources);
 
             ClearSettings();
         }

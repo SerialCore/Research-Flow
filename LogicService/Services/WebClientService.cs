@@ -7,7 +7,7 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
-namespace LogicService.Helper
+namespace LogicService.Services
 {
     /// <summary>    
     /// 上传数据参数    
@@ -75,7 +75,7 @@ namespace LogicService.Helper
     /// <summary>
     /// 网络客户端帮助类
     /// </summary>
-    public class WebClientHelper
+    public class WebClientService
     {
         Encoding encoding = Encoding.Default;
         string respHtml = "";
@@ -86,7 +86,7 @@ namespace LogicService.Helper
         int bufferSize = 15240;
         public event EventHandler<UploadEventArgs> UploadProgressChanged;
         public event EventHandler<DownloadEventArgs> DownloadProgressChanged;
-        static WebClientHelper()
+        static WebClientService()
         {
             LoadCookiesFromDisk();
         }
@@ -94,7 +94,7 @@ namespace LogicService.Helper
         /// <summary>    
         /// 创建WebClient的实例    
         /// </summary>    
-        public WebClientHelper()
+        public WebClientService()
         {
             requestHeaders = new WebHeaderCollection();
             responseHeaders = new WebHeaderCollection();

@@ -9,13 +9,8 @@ list of rsssources stored as one file
 list of feeds stored as one file which cannot be modified
 list of notes stored as files
 
-File does not need to sync:
-GeneralLog(user)
-Picture(temporary)
-FileTracer(user)
-
 Todo:
-是否应该同步文件，是否应该多用户管理，是否应该把文件列表放在漫游文件夹，是否同时删除本地和云端文件，检查同一账号是否同时登陆两台机器
+是否应该多用户管理，是否应该把文件列表放在漫游文件夹（系统用户负责漫游文件，同一应用用户可能无法共享漫游文件）
 所有的默认数据应当统一放在安装目录里，而不是代码里
 是否允许用户同步文件，同步完是否重启，有些数据是否要实时加载，而不是依靠NavigationCache
 Feed内容要包含时间，这样可以通知新Feed，并可以给用户呈现出一个热点、时间图

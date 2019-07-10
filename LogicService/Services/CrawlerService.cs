@@ -30,8 +30,11 @@ namespace LogicService.Services
         {
             { "Text: NotEmpty", @"\S" },
             { "Text: Has=", "" },
+            { "Text: HasPDF", "pdf" },
             { "Url: Has=", "" },
             { "Url: HasDoi", "doi" },
+            { "Url: HasAbs", "abs" },
+            { "Url: HasPDF", "pdf" },
             { "Url: Insite", "" }, // for tag only, not truely dictionary
         };
 
@@ -171,6 +174,7 @@ namespace LogicService.Services
                             m_links.Add(new Crawlable
                             {
                                 ID = HashEncode.MakeMD5(url),
+                                ParentID = HashEncode.MakeMD5(_url),
                                 Text = text,
                                 Url = url,
                             });
@@ -206,7 +210,7 @@ namespace LogicService.Services
             return GetContentFromHtml(m_html, firstN, true);
         }
 
-        public List<Crawlable> GetSpecialLinksByUrl(string pattern, int count = 100)
+        public List<Crawlable> GetSpecialLinksByUrl(string pattern, int count = 500)
         {
             if (m_links.Count == 0) GetLinks();
             List<Crawlable> SpecialLinks = new List<Crawlable>();
@@ -224,7 +228,7 @@ namespace LogicService.Services
             return SpecialLinks;
         }
 
-        public List<Crawlable> GetSpecialLinksByText(string pattern, int count = 100)
+        public List<Crawlable> GetSpecialLinksByText(string pattern, int count = 500)
         {
             if (m_links.Count == 0) GetLinks();
             List<Crawlable> SpecialLinks = new List<Crawlable>();

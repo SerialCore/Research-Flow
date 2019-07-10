@@ -63,7 +63,7 @@ namespace Research_Flow
         /// </summary>
         private async void InitializeNote()
         {
-            var filelist = await (await LocalStorage.GetNoteAsync()).GetFilesAsync(CommonFileQuery.OrderByDate);
+            var filelist = await (await LocalStorage.GetNoteAsync()).GetFilesAsync();
             namelist = new ObservableCollection<NoteItem>();
             foreach (var file in filelist)
             {
@@ -239,13 +239,13 @@ namespace Research_Flow
             if (notefilename.Text.Equals(""))
             {
                 notename = "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                LocalStorage.GeneralWrite(await LocalStorage.GetNoteAsync(),
+                LocalStorage.GeneralWriteAsync(await LocalStorage.GetNoteAsync(),
                     notename + ".rfn", canvas.ExportAsJson());
             }
             else
             {
                 notename = notefilename.Text;
-                LocalStorage.GeneralWrite(await LocalStorage.GetNoteAsync(),
+                LocalStorage.GeneralWriteAsync(await LocalStorage.GetNoteAsync(),
                     notename + ".rfn", canvas.ExportAsJson());
             }
 
@@ -276,7 +276,7 @@ namespace Research_Flow
         private async void DeleteInvokedHandler(IUICommand command)
         {
             var item = notelist.SelectedItem as NoteItem;
-            LocalStorage.GeneralDelete(await LocalStorage.GetNoteAsync(), item.NoteName);
+            LocalStorage.GeneralDeleteAsync(await LocalStorage.GetNoteAsync(), item.NoteName);
             namelist.Remove(item);
             notefilename.Text = "";
         }

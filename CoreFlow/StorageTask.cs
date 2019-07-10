@@ -20,7 +20,7 @@ namespace CoreFlow
             if (GraphService.IsConnected && GraphService.IsNetworkAvailable)
             {
                 await Synchronization.ScanFiles();
-                LocalStorage.GeneralLog<Synchronization>("StorageTask.log",
+                LocalStorage.GeneralLogAsync<Synchronization>("StorageTask.log",
                     "Synchronized");
             }
 

@@ -14,15 +14,6 @@ namespace LogicService.Storage
 
         #region folder
 
-        public enum UserFolders
-        {
-            Feed,
-            Key,
-            Link,
-            Log,
-            Note,
-        }
-
         public static StorageFolder GetAppFolder()
         {
             return ApplicationData.Current.LocalFolder;
@@ -49,22 +40,9 @@ namespace LogicService.Storage
             return await (await GetUserFolderAsync()).CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
         }
 
-        // for rss feeds
-        public static async Task<StorageFolder> GetFeedAsync()
+        public static async Task<StorageFolder> GetDataAsync()
         {
-            return await (await GetUserFolderAsync()).CreateFolderAsync("Feed", CreationCollisionOption.OpenIfExists);
-        }
-
-        // for topic and learning keys
-        public static async Task<StorageFolder> GetKeyAsync()
-        {
-            return await (await GetUserFolderAsync()).CreateFolderAsync("Key", CreationCollisionOption.OpenIfExists);
-        }
-
-        // for searching and learning links
-        public static async Task<StorageFolder> GetLinkAsync()
-        {
-            return await (await GetUserFolderAsync()).CreateFolderAsync("Link", CreationCollisionOption.OpenIfExists);
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Data", CreationCollisionOption.OpenIfExists);
         }
 
         // for general logs and filetrace
@@ -103,7 +81,7 @@ namespace LogicService.Storage
         /// <param name="name"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        public static async void GeneralWrite(StorageFolder folder, string name, string content)
+        public static async void GeneralWriteAsync(StorageFolder folder, string name, string content)
         {
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
             await FileIO.WriteTextAsync(file, content);
@@ -117,7 +95,7 @@ namespace LogicService.Storage
         /// </summary>
         /// <param name="folder"></param>
         /// <param name="name"></param>
-        public static async void GeneralDelete(StorageFolder folder, string name)
+        public static async void GeneralDeleteAsync(StorageFolder folder, string name)
         {
             // create then delete, equils to get and delete
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
@@ -127,7 +105,7 @@ namespace LogicService.Storage
             RemoveFileList(folder.Name, name);
         }
 
-        public static async void GeneralLog<T>(string name, string line) where T : class
+        public static async void GeneralLogAsync<T>(string name, string line) where T : class
         {
             StorageFile file = await (await GetLogAsync()).CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
             await FileIO.AppendTextAsync(file,
@@ -165,7 +143,7 @@ namespace LogicService.Storage
         public static void WriteJson(StorageFolder folder, string name, object o)
         {
             string json = SerializeHelper.SerializeToJson(o);
-            GeneralWrite(folder, name, json);
+            GeneralWriteAsync(folder, name, json);
         }
 
         public static async Task<T> ReadJsonAsync<T>(StorageFolder folder, string name) where T : class
