@@ -38,7 +38,7 @@ namespace Research_Flow
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
-        private ObservableCollection<NoteItem> namelist;
+        public ObservableCollection<string> namelist { get; set; } = new ObservableCollection<string>();
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -64,11 +64,10 @@ namespace Research_Flow
         private async void InitializeNote()
         {
             var filelist = await (await LocalStorage.GetNoteAsync()).GetFilesAsync();
-            namelist = new ObservableCollection<NoteItem>();
             foreach (var file in filelist)
             {
                 // name or displayname contains extention, if make CommonFileQuery not default
-                namelist.Add(new NoteItem { NoteName = file.DisplayName.Replace(".rfn", "") });
+                namelist.Add(file.DisplayName.Replace(".rfn", ""));
             }
             notelist.ItemsSource = namelist;
         }
@@ -227,10 +226,10 @@ namespace Research_Flow
 
         private async void Notelist_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var item = e.ClickedItem as NoteItem;
-            var fileitem = await (await LocalStorage.GetNoteAsync()).GetFileAsync(item.NoteName + ".rfn");
+            var name = e.ClickedItem as string;
+            var fileitem = await (await LocalStorage.GetNoteAsync()).GetFileAsync(name + ".rfn");
             canvas.ImportFromJson(await FileIO.ReadTextAsync(fileitem));
-            notefilename.Text = item.NoteName;
+            notefilename.Text = name;
         }
 
         private async void Save_Note(object sender, RoutedEventArgs e)
@@ -250,12 +249,12 @@ namespace Research_Flow
             }
 
             ApplicationMessage.SendMessage("Note saved", 3);
-            foreach (var item in namelist)
+            foreach (string item in namelist)
             {
-                if (item.NoteName.Equals(notename))
+                if (item.Equals(notename))
                     return;
             }
-            namelist.Add(new NoteItem { NoteName = notename });
+            namelist.Add(notename);
         }
 
         private async void Delete_Note(object sender, RoutedEventArgs e)
@@ -275,9 +274,9 @@ namespace Research_Flow
 
         private async void DeleteInvokedHandler(IUICommand command)
         {
-            var item = notelist.SelectedItem as NoteItem;
-            LocalStorage.GeneralDeleteAsync(await LocalStorage.GetNoteAsync(), item.NoteName);
-            namelist.Remove(item);
+            var name = notelist.SelectedItem as string;
+            LocalStorage.GeneralDeleteAsync(await LocalStorage.GetNoteAsync(), name);
+            namelist.Remove(name);
             notefilename.Text = "";
         }
 
@@ -287,9 +286,4 @@ namespace Research_Flow
 
     }
 
-    public class NoteItem
-    {
-        public string NoteName { get; set; }
-
-    }
 }

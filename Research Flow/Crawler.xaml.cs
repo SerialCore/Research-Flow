@@ -27,11 +27,17 @@ namespace Research_Flow
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+
+            a();
         }
 
         private void a()
         {
+            DataStorage.CrawlData.Connection.Open();
 
+            // op
+
+            DataStorage.CrawlData.Connection.Close();
         }
     }
 }

@@ -41,10 +41,26 @@ namespace Research_Flow
             tags.Add(new TopicTag { Tag = "Pedal Motion" });
             tags.Add(new TopicTag { Tag = "DNA" });
             tags.Add(new TopicTag { Tag = "AI" });
+            tags.Add(new TopicTag { Tag = "Bond" });
+            tags.Add(new TopicTag { Tag = "Computer" });
+            tags.Add(new TopicTag { Tag = "FAT" });
+            tags.Add(new TopicTag { Tag = "Hydrogen" });
+            tags.Add(new TopicTag { Tag = "Halogen" });
+            tags.Add(new TopicTag { Tag = "OS" });
+            tags.Add(new TopicTag { Tag = "Positron" });
+            tags.Add(new TopicTag { Tag = "2019" });
+            tags.Add(new TopicTag { Tag = "算法" });
+            tags.Add(new TopicTag { Tag = "理论" });
 
             Func<TopicTag, string> AlphaKey = (tag) =>
             {
-                return tag.Tag.Substring(0, 1).ToUpper();
+                char head = tag.Tag[0];
+                if (head >= '0' && head <= '9')
+                    return "#";
+                else if (head >= 'A' && head <= 'Z' || head >= 'a' && head <= 'z')
+                    return head.ToString().ToUpper();
+                else
+                    return "Other";
             };
 
             var groups = from t in tags

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,219 +11,147 @@ namespace LogicService.Storage
 {
     public class DataStorage
     {
-        /// <summary>
-        /// will be recorded
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        private static void InitDatabase()
+
+        #region Static
+
+        private static DataStorage _crawldata;
+
+        private DataStorage()
         {
-            using (SqliteConnection connection = new SqliteConnection("Data Source=crawlable.db"))
-            {
-                connection.Open();
-
-                string sql = @"CREATE TABLE IF NOT EXISTS [Crawlable] (
-                    [ID] VARCHAR(50) NOT NULL PRIMARY KEY,
-                    [ParentID] VARCHAR(50),
-                    [Text] VARCHAR(50) NOT NULL,
-                    [Url] VARCHAR(100) NOT NULL,
-                    [LinkTarget] VARCHAR(20),
-                    [Content] VARCHAR(1000))";
-                SqliteCommand command = new SqliteCommand(sql, connection);
-                command.ExecuteNonQuery();
-
-                connection.Close();
-            }
-            //LocalStorage.AddFileList("Data", "crawlable.db");
-            //LocalStorage.AddFileTrace("Data", "crawlable.db");
+            DBSetting();
         }
 
         /// <summary>
-        /// will be recorded
+        /// only essential parameters
         /// </summary>
-        /// <param name="obj"></param>
-        public void DataWrite(object obj)
+        private void DBSetting()
         {
-            using (SqliteConnection connection = new SqliteConnection("Data Source=crawlable.db"))
-            {
-                connection.Open();
-
-                string sql = "insert into Crawlable values(@ImageList)";
-                SqliteCommand command = new SqliteCommand(sql, connection);
-                command.Parameters.Add("ImageList", SqliteType.Text);
-                command.Parameters["ImageList"].Value = "";
-                command.ExecuteNonQuery();
-
-                connection.Close();
-            }
-        }
-
-        public DataTable DataReadTable<T>() where T : class
-        {
-            DataTable data = new DataTable();
-
-            using (SqliteConnection connection = new SqliteConnection("Data Source=crawlable.db"))
-            {
-                connection.Open();
-
-                string sql = "insert into Crawlable values(@ImageList)";
-                SqliteCommand command = new SqliteCommand(sql, connection);
-                var result = command.ExecuteReader();
-
-                connection.Close();
-            }
-
-            return data;
+            _dbname = "crawlable.db";
+            _dbpath = LocalStorage.TryGetDataPath() + "\\" + _dbname;
         }
 
         public static DataStorage CrawlData
         {
             get
             {
-                if (_crawldata != null)
-                    return _crawldata;
-                else
-                    return _crawldata = new DataStorage();
+                if (_crawldata == null)
+                    _crawldata = new DataStorage();
+                return _crawldata;
             }
         }
 
-        private static DataStorage _crawldata;
+        public static string CMDCreateCrawlable
+            => @"CREATE TABLE IF NOT EXISTS [Crawlable] (
+                    [ID] VARCHAR(50) NOT NULL PRIMARY KEY,
+                    [ParentID] VARCHAR(50),
+                    [Text] VARCHAR(50) NOT NULL,
+                    [Url] VARCHAR(100) NOT NULL,
+                    [LinkTarget] VARCHAR(20),
+                    [Content] VARCHAR(1000))";
+
+        public static string CMDInsert
+            => @"INSERT INTO Users(Username, Email, Password)
+                VALUES('admin', 'testing@gmail.com', 'test')";
+
+        public static string CMDSelect
+            => "SELECT * From Users WHERE Id = @UserId;";
+
+        public static string CMDDelete
+            => "DELETE FROM Users";
+
+        #endregion
+
+        #region Settings
+
+        private string _dbname;
         private string _dbpath;
         private SqliteConnection _conn;
 
         /// <summary>
-        /// SQLite连接
+        /// current connection
         /// </summary>
-        private SqliteConnection conn
+        public SqliteConnection Connection
         {
             get
             {
                 if (_conn == null)
-                {
-                    _conn = new SqliteConnection(
-                        string.Format("Data Source={0};Version=3;",
-                        this._dbpath));
-                    _conn.Open();
-                }
+                    _conn = new SqliteConnection(string.Format("Data Source={0};", this._dbpath));
                 return _conn;
             }
         }
 
-        public DataStorage()
+        public string Database
         {
+            get
+            {
+                return _dbname;
+            }
+        }
 
-        }
-        
-        /// <summary>
-        /// 获取多行
-        /// </summary>
-        /// <param name="sql">执行sql</param>
-        /// <param name="param">sql参数</param>
-        /// <returns>多行结果</returns>
-        public DataRow[] getRows(string sql, Dictionary<string, object> param=null)
+        public string AbsolutePath
         {
-            List<SqliteParameter> sqlite_param = new List<SqliteParameter>();
-            if (param != null)
+            get
             {
-                foreach (KeyValuePair<string, object> row in param)
-                {
-                    sqlite_param.Add(new SqliteParameter(row.Key, row.Value.ToString()));
-                }
+                return _dbpath;
             }
-            DataTable dt = this.ExecuteDataTable(sql, sqlite_param.ToArray());
-            return dt.Select();
         }
-        
+
+        #endregion
+
+        #region Operations
+
         /// <summary>
-        /// 获取单行
+        /// will be recorded
         /// </summary>
-        /// <param name="sql">执行sql</param>
-        /// <param name="param">sql参数</param>
-        /// <returns>单行数据</returns>
-        public DataRow getRow(string sql, Dictionary<string, object> param=null)
-        {
-            DataRow[] rows = this.getRows(sql, param);
-            return rows[0];
-        }
-        
-        /// <summary>
-        /// 获取字段
-        /// </summary>
-        /// <param name="sql">执行sql</param>
-        /// <param name="param">sql参数</param>
-        /// <returns>字段数据</returns>
-        public Object getOne(string sql, Dictionary<string, object> param=null)
-        {
-            DataRow row = this.getRow(sql, param);
-            return row[0];
-        }
-        
-        /// <summary>
-        /// SQLite增删改
-        /// </summary>
-        /// <param name="sql">要执行的sql语句</param>
-        /// <param name="parameters">所需参数</param>
-        /// <returns>所受影响的行数</returns>
-        public int query(string sql, Dictionary<string, object> param = null)
-        {
-            List<SqliteParameter> sqlite_param = new List<SqliteParameter>();
-            if (param != null)
-            {
-                foreach (KeyValuePair<string, object> row in param)
-                {
-                    sqlite_param.Add(new SqliteParameter(row.Key, row.Value.ToString()));
-                }
-            }
-            return this.ExecuteNonQuery(sql, sqlite_param.ToArray());
-        }
-        
-        /// <summary> 
-        /// SQLite增删改
-        /// </summary>
-        /// <param name="sql">要执行的sql语句</param>
-        /// <param name="parameters">所需参数</param>
-        /// <returns>所受影响的行数</returns>
-        private int ExecuteNonQuery(string sql, SqliteParameter[] parameters)
+        /// <param name="obj"></param>
+        public int ExecuteWrite(string sql, SqliteParameter[] parameters)
         {
             int affectedRows = 0;
-            System.Data.Common.DbTransaction transaction = conn.BeginTransaction();
             SqliteCommand command = new SqliteCommand(sql, _conn);
-            command.CommandText = sql;
+
             if (parameters != null)
             {
                 command.Parameters.AddRange(parameters);
             }
+
+            DbTransaction transaction = _conn.BeginTransaction();
             affectedRows = command.ExecuteNonQuery();
             transaction.Commit();
+
+            LocalStorage.AddFileList("Data", _dbname);
+            LocalStorage.AddFileTrace("Data", _dbname);
+
             return affectedRows;
         }
-        
-        /// <summary>
-        /// SQLite查询
-        /// </summary>
-        /// <param name="sql">要执行的sql语句</param>
-        /// <param name="parameters">所需参数</param>
-        /// <returns>结果DataTable</returns>
-        private DataTable ExecuteDataTable(string sql, SqliteParameter[] parameters)
+
+        public SqliteDataReader ExecuteRead(string sql)
         {
-            DataTable data = new DataTable();
-            SqliteCommand command = new SqliteCommand(sql, conn);
+            List<string> entries = new List<string>();
+
+            SqliteCommand command = new SqliteCommand(sql, _conn);
+
+            return command.ExecuteReader();
+        }
+
+        public Array SetParameters(string sql, Dictionary<string, object> parameters = null)
+        {
+            List<SqliteParameter> sqlite_param = new List<SqliteParameter>();
             if (parameters != null)
             {
-                command.Parameters.AddRange(parameters);
+                foreach (KeyValuePair<string, object> row in parameters)
+                {
+                    sqlite_param.Add(new SqliteParameter(row.Key, row.Value));
+                }
             }
-            return data;
+            return sqlite_param.ToArray();
         }
         
-        /// <summary>
-        /// 查询数据库表信息
-        /// </summary>
-        /// <returns>数据库表信息DataTable</returns>
         public DataTable GetSchema()
         {
-            DataTable data = new DataTable();
-            data = conn.GetSchema("TABLES");
-            return data;
+            return _conn.GetSchema("TABLES");
         }
+
+        #endregion
 
     }
 }

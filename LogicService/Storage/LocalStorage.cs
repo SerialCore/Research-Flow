@@ -45,16 +45,31 @@ namespace LogicService.Storage
             return await (await GetUserFolderAsync()).CreateFolderAsync("Data", CreationCollisionOption.OpenIfExists);
         }
 
+        public static string TryGetDataPath()
+        {
+            return ApplicationData.Current.LocalFolder.Path + "\\" + ApplicationSetting.AccountName + "\\Data";
+        }
+
         // for general logs and filetrace
         public static async Task<StorageFolder> GetLogAsync()
         {
             return await (await GetUserFolderAsync()).CreateFolderAsync("Log", CreationCollisionOption.OpenIfExists);
         }
 
+        public static string TryGetLogPath()
+        {
+            return ApplicationData.Current.LocalFolder.Path + "\\" + ApplicationSetting.AccountName + "\\Log";
+        }
+
         // for drawable notes
         public static async Task<StorageFolder> GetNoteAsync()
         {
             return await (await GetUserFolderAsync()).CreateFolderAsync("Note", CreationCollisionOption.OpenIfExists);
+        }
+
+        public static string TryGetNotePath()
+        {
+            return ApplicationData.Current.LocalFolder.Path + "\\" + ApplicationSetting.AccountName + "\\Note";
         }
 
         #endregion

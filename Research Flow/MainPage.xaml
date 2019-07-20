@@ -54,6 +54,11 @@
                 </NavigationViewItem>
 
                 <NavigationViewItemSeparator/>
+                <NavigationViewItem Content="PDF Viewer" Tag="Pdf">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE736;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
                 <NavigationViewItem Content="Web Page" Tag="WebPage">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEC26;"/>

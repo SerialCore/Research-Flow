@@ -17,7 +17,9 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
-                <TextBlock Text="Tags" Style="{ThemeResource SubtitleTextBlockStyle}" Height="36" VerticalAlignment="Top" Padding="5"/>
+                <Grid Height="36" VerticalAlignment="Top">
+                    <TextBlock Text="Tags" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="12,0,0,0"/>
+                </Grid>
                 <SemanticZoom Margin="0,36,0,0">
                     <SemanticZoom.ZoomedInView>
                         <ListView x:Name="taglist" ScrollViewer.IsHorizontalScrollChainingEnabled="False">
@@ -27,7 +29,7 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                             <ListView.GroupStyle>
-                                <GroupStyle HidesIfEmpty="True" >
+                                <GroupStyle HidesIfEmpty="False">
                                     <GroupStyle.HeaderTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Key}" FontSize="25" Foreground="Red"/>
@@ -38,15 +40,26 @@
                         </ListView>
                     </SemanticZoom.ZoomedInView>
                     <SemanticZoom.ZoomedOutView>
-                        <ListView x:Name="tagKlist" ScrollViewer.IsHorizontalScrollChainingEnabled="False">
-                            <ListView.ItemTemplate>
+                        <GridView x:Name="tagKlist" ScrollViewer.IsHorizontalScrollChainingEnabled="False">
+                            <GridView.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Group.Key}" />
+                                    <Grid Height="96" Width="96" Background="SpringGreen">
+                                        <TextBlock Text="{Binding Group.Key}" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Grid>
                                 </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                            </GridView.ItemTemplate>
+                        </GridView>
                     </SemanticZoom.ZoomedOutView>
                 </SemanticZoom>
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <StackPanel>
+                    <CalendarView VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <CalendarDatePicker HorizontalAlignment="Center"/>
+                    <DatePicker HorizontalAlignment="Center"/>
+                    <TimePicker HorizontalAlignment="Center"/>
+                </StackPanel>
             </Grid>
         </Grid>
 

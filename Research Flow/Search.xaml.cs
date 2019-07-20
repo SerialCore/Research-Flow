@@ -127,6 +127,9 @@ namespace Research_Flow
 
         private void LinkFilter_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
+            if (currentCrawled == null)
+                return;
+
             Regex regex = new Regex(@"(?<header>^(Text|Url):\s(\w+$|\w+=))(?<param>\w*$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
             Match match = regex.Match(linkFilter.Text);
             if (match.Success && currentCrawled != null)

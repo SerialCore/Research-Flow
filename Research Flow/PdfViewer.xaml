@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="Research_Flow.Crawler"
+    x:Class="Research_Flow.PdfViewer"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Research_Flow"
@@ -11,14 +11,22 @@
 
     <Grid>
 
-        <TextBlock x:Name="msg" Text="Pool" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="12,0,0,0"/>
+        <ScrollViewer ZoomMode="Enabled" Background="WhiteSmoke" >
+            <ItemsControl x:Name="pagelist">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding}" Margin="0 10"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
 
         <toolkit:InAppNotification x:Name="InAppNotification" 
                                     ShowDismissButton="True"
                                     AnimationDuration="00:00:00.1000000"
                                     VerticalOffset="100"
                                     HorizontalOffset="0"/>
-        
+
     </Grid>
     
 </Page>
