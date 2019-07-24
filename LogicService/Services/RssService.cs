@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using LogicService.Objects;
 using Windows.Web.Syndication;
+using LogicService.Security;
 
 namespace LogicService.Services
 {
@@ -35,6 +36,7 @@ namespace LogicService.Services
                             {
                                 rssItems.Add(new FeedItem
                                 {
+                                    ID = HashEncode.MakeMD5(f.Links[0].Uri.AbsoluteUri),
                                     Title = f.Title.Text,
                                     Published = f.PublishedDate.ToString(),
                                     Link = f.Links[0].Uri.AbsoluteUri,

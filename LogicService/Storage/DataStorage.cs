@@ -14,54 +14,56 @@ namespace LogicService.Storage
 
         #region Static
 
-        private static DataStorage _crawldata;
-
-        private DataStorage()
+        private DataStorage(DataType type)
         {
-            DBSetting();
+            DBSetting(type);
         }
 
         /// <summary>
         /// only essential parameters
         /// </summary>
-        private void DBSetting()
+        private void DBSetting(DataType type)
         {
-            _dbname = "crawlable.db";
+            switch (type)
+            {
+                case DataType.CrawlData:
+                    _dbname = "crawlable.db";
+                    break;
+                case DataType.PaperData:
+                    _dbname = "paper.db";
+                    break;
+            }
             _dbpath = LocalStorage.TryGetDataPath() + "\\" + _dbname;
         }
+
+        enum DataType { CrawlData, PaperData }
+
+        private static DataStorage _crawldata;
+        private static DataStorage _paperdata;
 
         public static DataStorage CrawlData
         {
             get
             {
                 if (_crawldata == null)
-                    _crawldata = new DataStorage();
+                    _crawldata = new DataStorage(DataType.CrawlData);
                 return _crawldata;
             }
         }
 
-        public static string CMDCreateCrawlable
-            => @"CREATE TABLE IF NOT EXISTS [Crawlable] (
-                    [ID] VARCHAR(50) NOT NULL PRIMARY KEY,
-                    [ParentID] VARCHAR(50),
-                    [Text] VARCHAR(50) NOT NULL,
-                    [Url] VARCHAR(100) NOT NULL,
-                    [LinkTarget] VARCHAR(20),
-                    [Content] VARCHAR(1000))";
-
-        public static string CMDInsert
-            => @"INSERT INTO Users(Username, Email, Password)
-                VALUES('admin', 'testing@gmail.com', 'test')";
-
-        public static string CMDSelect
-            => "SELECT * From Users WHERE Id = @UserId;";
-
-        public static string CMDDelete
-            => "DELETE FROM Users";
+        public static DataStorage PaperData
+        {
+            get
+            {
+                if (_paperdata == null)
+                    _paperdata = new DataStorage(DataType.PaperData);
+                return _paperdata;
+            }
+        }
 
         #endregion
 
-        #region Settings
+        #region Non-Static
 
         private string _dbname;
         private string _dbpath;
@@ -104,14 +106,14 @@ namespace LogicService.Storage
         /// will be recorded
         /// </summary>
         /// <param name="obj"></param>
-        public int ExecuteWrite(string sql, SqliteParameter[] parameters)
+        public int ExecuteWrite(string sql, Dictionary<string, object> parameters = null)
         {
             int affectedRows = 0;
             SqliteCommand command = new SqliteCommand(sql, _conn);
 
             if (parameters != null)
             {
-                command.Parameters.AddRange(parameters);
+                command.Parameters.AddRange(SetParameters(parameters));
             }
 
             DbTransaction transaction = _conn.BeginTransaction();
@@ -126,14 +128,12 @@ namespace LogicService.Storage
 
         public SqliteDataReader ExecuteRead(string sql)
         {
-            List<string> entries = new List<string>();
-
             SqliteCommand command = new SqliteCommand(sql, _conn);
 
             return command.ExecuteReader();
         }
 
-        public Array SetParameters(string sql, Dictionary<string, object> parameters = null)
+        public Array SetParameters(Dictionary<string, object> parameters = null)
         {
             List<SqliteParameter> sqlite_param = new List<SqliteParameter>();
             if (parameters != null)

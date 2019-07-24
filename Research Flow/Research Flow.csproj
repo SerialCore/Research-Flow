@@ -133,9 +133,6 @@
     <Compile Include="Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WebPage.xaml.cs">
-      <DependentUpon>WebPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Topic.xaml.cs">
       <DependentUpon>Topic.xaml</DependentUpon>
     </Compile>
@@ -222,10 +219,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Settings.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WebPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

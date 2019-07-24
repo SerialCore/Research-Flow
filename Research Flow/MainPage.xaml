@@ -11,6 +11,7 @@
     <Grid x:Name="FullPage" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <NavigationView x:Name="NavView"
+                        Background="LightSteelBlue"
                         PaneDisplayMode="LeftCompact"
                         Loaded="NavView_Loaded"
                         SelectionChanged="NavView_SelectionChanged"
@@ -57,11 +58,6 @@
                 <NavigationViewItem Content="PDF Viewer" Tag="Pdf">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE736;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                <NavigationViewItem Content="Web Page" Tag="WebPage">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xEC26;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem Content="Drawable Note" Tag="Note">

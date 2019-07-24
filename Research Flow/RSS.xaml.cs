@@ -210,9 +210,6 @@ namespace Research_Flow
         }
 
         private void Browse_Feed(object sender, RoutedEventArgs e)
-            => this.Frame.Navigate(typeof(WebPage), feedBrowse.Tag);
-
-        private void Crawl_Feed(object sender, RoutedEventArgs e)
             => this.Frame.Navigate(typeof(Search), feedBrowse.Tag);
 
         private void Close_FeedDetail(object sender, RoutedEventArgs e)

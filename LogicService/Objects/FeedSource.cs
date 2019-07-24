@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Web.Syndication;
+using LogicService.Storage;
 
 namespace LogicService.Objects
 {
@@ -29,11 +30,10 @@ namespace LogicService.Objects
 
     }
 
-    /// <summary>
-    /// Database? or files?
-    /// </summary>
     public class FeedItem
     {
+
+        public string ID { get; set; }
 
         public string Title { get; set; }
 
@@ -50,6 +50,61 @@ namespace LogicService.Objects
         public List<ElementNode> Nodes { get; set; }
 
         public List<Crawlable> PageLinks { get; set; }
+
+        #region Equals
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            if (this.GetType() != obj.GetType())
+                return false;
+
+            var one = (FeedItem)obj;
+            if (this.ID == one.ID)
+                return true;
+            else
+                return false;
+        }
+
+        public static bool operator ==(FeedItem leftHandSide, FeedItem rightHandSide)
+        {
+            if (ReferenceEquals(leftHandSide, null))
+                return ReferenceEquals(rightHandSide, null);
+            return (leftHandSide.Equals(rightHandSide));
+        }
+
+        public static bool operator !=(FeedItem leftHandSide, FeedItem rightHandSide)
+        {
+            return !(leftHandSide == rightHandSide);
+        }
+
+        public override int GetHashCode()
+        {
+            return ID.GetHashCode(); ;
+        }
+
+        #endregion
+
+        #region DB
+
+        public static void InitializeTable()
+        {
+            DataStorage.CrawlData.Connection.Open();
+
+            string sql = @"CREATE TABLE IF NOT EXISTS [Crawlable] (
+                    [ID] VARCHAR(50) NOT NULL PRIMARY KEY,
+                    [ParentID] VARCHAR(50),
+                    [Text] VARCHAR(50) NOT NULL,
+                    [Url] VARCHAR(100) NOT NULL,
+                    [LinkTarget] VARCHAR(20),
+                    [Content] VARCHAR(1000))";
+            DataStorage.CrawlData.ExecuteWrite(sql);
+
+            DataStorage.CrawlData.Connection.Close();
+        }
+
+        #endregion
 
     }
 

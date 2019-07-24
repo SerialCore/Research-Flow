@@ -11,7 +11,16 @@
 
     <Grid>
 
-        <TextBlock x:Name="msg" Text="Pool" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="12,0,0,0"/>
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="1">
+                <TextBlock x:Name="msg" Text="Flow | Pool" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="12,0,0,0"/>
+            </Grid>
+        </Grid>
 
         <toolkit:InAppNotification x:Name="InAppNotification" 
                                     ShowDismissButton="True"

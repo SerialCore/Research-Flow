@@ -84,5 +84,23 @@ namespace Research_Flow
 
             pagelist.ItemsSource = PdfPages;
         }
+
+        private void ReadPanel_ZoomIn(object sender, RoutedEventArgs e)
+        {
+            scale_panel.CenterX = readPanel.ActualWidth / 2;
+            scale_panel.CenterY = readPanel.ActualHeight / 2;
+            scale_panel.ScaleX += 0.1;
+            scale_panel.ScaleY += 0.1;
+            //scale_panel.ScaleX += 0.1 * (ZoomSlider.Value - currentScale);
+            //scale_panel.ScaleY += 0.1 * (ZoomSlider.Value - currentScale);
+        }
+
+        private void ReadPanel_ZoomOut(object sender, RoutedEventArgs e)
+        {
+            scale_panel.CenterX = readPanel.ActualWidth / 2;
+            scale_panel.CenterY = readPanel.ActualHeight / 2;
+            scale_panel.ScaleX -= 0.1;
+            scale_panel.ScaleY -= 0.1;
+        }
     }
 }

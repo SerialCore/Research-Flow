@@ -46,8 +46,11 @@ namespace Research_Flow
 
                 ApplicationSetting.AccountName = email;
 
-                if(ApplicationInfo.IsFirstUse || !ApplicationSetting.ContainKey("Configured"))
+                if (ApplicationInfo.IsFirstUse || !ApplicationSetting.ContainKey("Configured"))
+                {
                     await ConfigureFile();
+                    ConfigureDB();
+                }
             }
             else
             {
@@ -62,7 +65,7 @@ namespace Research_Flow
             }
         }
 
-        private async Task ConfigureFile()
+        private async Task<bool> ConfigureFile()
         {
             configState.Text = "\nSyncing files with OneDrive...\n";
             try
@@ -70,13 +73,20 @@ namespace Research_Flow
                 await Synchronization.DownloadAll();
                 configState.Text += "\nSync successfully.\n";
                 ApplicationSetting.Configured = "true";
+                return true;
             }
             catch (Exception ex)
             {
                 // load default files
                 configState.Text += "\nCan't make it, since " + ex.Message + "\n";
                 configState.Text += "\nPlease login again.\n";
+                return false;
             }
+        }
+
+        private void ConfigureDB()
+        {
+
         }
 
     }

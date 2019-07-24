@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using LogicService.Storage;
+using LogicService.Objects;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -28,16 +28,12 @@ namespace Research_Flow
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
-            a();
+            InitializeCrawl();
         }
 
-        private void a()
+        private void InitializeCrawl()
         {
-            DataStorage.CrawlData.Connection.Open();
-
-            // op
-
-            DataStorage.CrawlData.Connection.Close();
+            
         }
     }
 }

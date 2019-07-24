@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.DataTransfer;
+using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -43,8 +45,9 @@ namespace Research_Flow
                 // for new user, remember to load default feed from file, not the follows
                 SearchSources = new Dictionary<string, string>()
                 {
-                    { "Bing", "https://www.bing.com/search?q=QUEST"},
-                    { "ACS", "https://pubs.acs.org/action/doSearch?AllField=QUEST"},
+                    { "Bing", "https://www.bing.com/search?q=QUERY"},
+                    { "ACS", "https://pubs.acs.org/action/doSearch?AllField=QUERY"},
+                    { "arXiv All", "https://arxiv.org/search/?query=QUERY&searchtype=all"},
                 };
                 LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "searchlist", SearchSources);
             }
@@ -76,12 +79,13 @@ namespace Research_Flow
             string link = e.Parameter as string;
             if (!string.IsNullOrEmpty(link))
             {
+                viewMode.IsOn = true;
                 FirstCrawl(link);
                 crawledHistory.Push(link);
             }
         }
 
-        private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        private void Search_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             string link = SearchSources.GetValueOrDefault(searchlist.SelectedItem as string).Replace("QUEST", queryQuest.Text);
             FirstCrawl(link);
@@ -119,7 +123,7 @@ namespace Research_Flow
                     });
                 });
 
-            webview.Navigate(new Uri(urlstring));
+            webView.Navigate(new Uri(urlstring));
         }
 
         private void LinkFilter_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
@@ -169,15 +173,6 @@ namespace Research_Flow
         #region Search Engine
 
         public Dictionary<string, string> SearchSources { get; set; }
-
-        private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
-            => webWaiting.IsActive = true;
-
-        private void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
-            => webWaiting.IsActive = false;
-
-        private void WebView_FrameNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
-            => webWaiting.IsActive = false;
 
         private void Open_SearchList(object sender, RoutedEventArgs e)
             => searchPane.IsPaneOpen = !searchPane.IsPaneOpen;
@@ -274,6 +269,78 @@ namespace Research_Flow
             searchUrl.IsReadOnly = false;
             searchDelete.Visibility = Visibility.Collapsed;
             source_panel.Visibility = Visibility.Collapsed;
+        }
+
+        #endregion
+
+        #region Browser
+
+        private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
+            => webWaiting.IsActive = true;
+
+        private void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        {
+            webWaiting.IsActive = false;
+            siteUrl.Text = webView.Source.AbsoluteUri;
+        }
+
+        private void WebView_FrameNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        {
+            webWaiting.IsActive = false;
+            siteUrl.Text = webView.Source.AbsoluteUri;
+        }
+
+        private void Browse_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            try
+            {
+                string uri = siteUrl.Text;
+                uri = uri.StartsWith("http") ? uri : "http://" + uri;
+                webView.Navigate(new Uri(uri));
+            }
+            catch { }
+        }
+
+        private void PageBack(object sender, RoutedEventArgs e)
+        {
+            if (webView.CanGoBack) webView.GoBack();
+        }
+
+        private void PageForward(object sender, RoutedEventArgs e)
+        {
+            if (webView.CanGoForward) webView.GoForward();
+        }
+
+        private void PageRefresh(object sender, RoutedEventArgs e)
+            => webView.Refresh();
+
+        private async void OpenBrowser(object sender, RoutedEventArgs e)
+            => await Launcher.LaunchUriAsync(webView.Source);
+
+        private void ShareLink(object sender, RoutedEventArgs e)
+        {
+            DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
+            dataTransferManager.DataRequested += DataTransferManager_DataRequested;
+            DataTransferManager.ShowShareUI();
+        }
+
+        private void DataTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
+        {
+            if (webView.Source != null)
+            {
+                // deferral code for catching data
+                DataRequestDeferral deferral = args.Request.GetDeferral();
+
+                // info of share request
+                DataRequest request = args.Request;
+                request.Data.Properties.Title = "Search Result";
+                request.Data.Properties.Description = "Share your search result";
+
+                request.Data.SetWebLink(webView.Source);
+
+                // end if deferral
+                deferral.Complete();
+            }
         }
 
         #endregion

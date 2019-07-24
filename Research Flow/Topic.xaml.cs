@@ -74,5 +74,10 @@ namespace Research_Flow
             tagKlist.ItemsSource = collectionVS.View.CollectionGroups;
         }
     }
+
+    public class TopicTag
+    {
+        public string Tag { get; set; }
+    }
   
 }

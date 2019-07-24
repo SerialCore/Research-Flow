@@ -11,15 +11,31 @@
 
     <Grid>
 
-        <ScrollViewer ZoomMode="Enabled" Background="WhiteSmoke" >
-            <ItemsControl x:Name="pagelist">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Image Source="{Binding}" Margin="0 10"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <ScrollViewer x:Name="readPanel" ZoomMode="Enabled" Background="WhiteSmoke" >
+                <ItemsControl x:Name="pagelist">
+                    <ItemsControl.RenderTransform>
+                        <ScaleTransform x:Name="scale_panel" />
+                    </ItemsControl.RenderTransform>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding}" Margin="0,0,0,10"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <CommandBar Grid.Row="1" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                <AppBarButton Icon="Add" Label="ZoomIn" Click="ReadPanel_ZoomIn"/>
+                <AppBarButton Icon="Remove" Label="ZoomOut" Click="ReadPanel_ZoomOut"/>
+                <AppBarButton Icon="Save" Label="Save"/>
+            </CommandBar>
+        </Grid>
 
         <toolkit:InAppNotification x:Name="InAppNotification" 
                                     ShowDismissButton="True"

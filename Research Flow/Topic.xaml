@@ -55,7 +55,7 @@
 
             <Grid Grid.Column="1">
                 <StackPanel>
-                    <CalendarView VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <CalendarView x:Name="calendar" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     <CalendarDatePicker HorizontalAlignment="Center"/>
                     <DatePicker HorizontalAlignment="Center"/>
                     <TimePicker HorizontalAlignment="Center"/>

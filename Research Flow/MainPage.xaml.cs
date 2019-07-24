@@ -92,7 +92,6 @@ namespace Research_Flow
             ("Search", typeof(Search)),
             ("Crawler", typeof(Crawler)),
             ("Pdf", typeof(PdfViewer)),
-            ("WebPage", typeof(WebPage)),
             ("Note", typeof(Note)),
         };
 
