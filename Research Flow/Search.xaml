@@ -23,7 +23,6 @@
                     <ColumnDefinition Width="150"/>
                     <ColumnDefinition />
                     <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Column="0" Click="Open_SearchList" Width="48" Background="LightSkyBlue">
@@ -32,10 +31,7 @@
                 <ComboBox Grid.Column="1" x:Name="searchlist" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
                 <AutoSuggestBox Grid.Column="2" x:Name="queryQuest" QueryIcon="Find"
                                     QuerySubmitted="Search_QuerySubmitted" VerticalAlignment="Center"/>
-                <Button Grid.Column="3" Click="Crawl_Back" Width="48" Background="LightSkyBlue">
-                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE0A6;" />
-                </Button>
-                <ToggleSwitch Grid.Column="4" x:Name="viewMode" OnContent="App View" OffContent="User View" Toggled="ViewMode_Toggled" Margin="12,0,0,0"/>
+                <ToggleSwitch Grid.Column="3" x:Name="viewMode" OnContent="App View" OffContent="User View" Toggled="ViewMode_Toggled" Margin="12,0,0,0"/>
             </Grid>
 
             <SplitView Grid.Row="1" x:Name="crawlPane" PanePlacement="Right" OpenPaneLength="400" DisplayMode="Inline">
@@ -120,6 +116,7 @@
                             OverflowButtonVisibility="Collapsed">
                     <AppBarButton Label="Share" Icon="Share" Click="ShareLink"/>
                     <AppBarButton Label="Browser" Icon="Account" Click="OpenBrowser"/>
+                    <AppBarButton Label="Crawl" Icon="Favorite" Click="FirstCrawl_Click"/>
                     <AppBarSeparator/>
                     <AppBarButton Label="Back" Icon="Previous" Click="PageBack" IsEnabled="{x:Bind webView.CanGoBack,Mode=OneWay}"/>
                     <AppBarButton Label="Forward" Icon="Next" Click="PageForward" IsEnabled="{x:Bind webView.CanGoForward,Mode=OneWay}"/>

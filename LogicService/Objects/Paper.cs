@@ -16,11 +16,9 @@ namespace LogicService.Objects
 
         public string Title { get; set; }
 
-        public string Doi { get; set; }
+        public string Abstract { get; set; }
 
         public List<string> Authors { get; set; }
-
-        public string Abstract { get; set; }
 
         public HashSet<string> Tags { get; set; }
 
@@ -61,17 +59,17 @@ namespace LogicService.Objects
 
         #region DB
 
-        public static void InitializeTable()
+        public static void DBInitialize()
         {
             DataStorage.PaperData.Connection.Open();
 
-            string sql = @"CREATE TABLE IF NOT EXISTS [Crawlable] (
+            string sql = @"CREATE TABLE IF NOT EXISTS [Paper] (
                     [ID] VARCHAR(50) NOT NULL PRIMARY KEY,
                     [ParentID] VARCHAR(50),
-                    [Text] VARCHAR(50) NOT NULL,
-                    [Url] VARCHAR(100) NOT NULL,
-                    [LinkTarget] VARCHAR(20),
-                    [Content] VARCHAR(1000))";
+                    [Title] VARCHAR(100) NOT NULL,
+                    [Abstract] VARCHAR(1000),
+                    [Authors] VARCHAR(500)),
+                    [Tags] VARCHAR(500))";
             DataStorage.PaperData.ExecuteWrite(sql);
 
             DataStorage.PaperData.Connection.Close();

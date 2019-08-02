@@ -112,14 +112,14 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Learn.xaml.cs">
-      <DependentUpon>Learn.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Note.xaml.cs">
       <DependentUpon>Note.xaml</DependentUpon>
     </Compile>
     <Compile Include="Overview.xaml.cs">
       <DependentUpon>Overview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Paper.xaml.cs">
+      <DependentUpon>Paper.xaml</DependentUpon>
     </Compile>
     <Compile Include="PdfViewer.xaml.cs">
       <DependentUpon>PdfViewer.xaml</DependentUpon>
@@ -194,15 +194,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Learn.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Note.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Overview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Paper.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -194,6 +194,8 @@ namespace Research_Flow
 
         #endregion
 
+        #region RSS Feed
+
         private void Feed_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as FeedItem;
@@ -256,6 +258,8 @@ namespace Research_Flow
                     });
                 }, null);
         }
+
+        #endregion
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using LogicService.Helper;
 using LogicService.Objects;
+using LogicService.Storage;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,28 +34,37 @@ namespace Research_Flow
             InitializeTag();
         }
 
-        private void InitializeTag()
+        private async void InitializeTag()
         {
-            List<TopicTag> tags = new List<TopicTag>();
-            tags.Add(new TopicTag { Tag = "QCD" });
-            tags.Add(new TopicTag { Tag = "QED" });
-            tags.Add(new TopicTag { Tag = "Pedal Motion" });
-            tags.Add(new TopicTag { Tag = "DNA" });
-            tags.Add(new TopicTag { Tag = "AI" });
-            tags.Add(new TopicTag { Tag = "Bond" });
-            tags.Add(new TopicTag { Tag = "Computer" });
-            tags.Add(new TopicTag { Tag = "FAT" });
-            tags.Add(new TopicTag { Tag = "Hydrogen" });
-            tags.Add(new TopicTag { Tag = "Halogen" });
-            tags.Add(new TopicTag { Tag = "OS" });
-            tags.Add(new TopicTag { Tag = "Positron" });
-            tags.Add(new TopicTag { Tag = "2019" });
-            tags.Add(new TopicTag { Tag = "算法" });
-            tags.Add(new TopicTag { Tag = "理论" });
-
-            Func<TopicTag, string> AlphaKey = (tag) =>
+            try
             {
-                char head = tag.Tag[0];
+                tags = await LocalStorage.ReadJsonAsync<List<string>>(
+                    await LocalStorage.GetDataAsync(), "taglist");
+            }
+            catch
+            {
+                // for new user, remember to load default feed from file, not the follows
+                tags = new List<string>()
+                {
+                    "QCD", "QED", "Pedal Motion", "DNA", "AI", "Bond", "Computer", "Hydrogen", "Halogen", "OS"
+                };
+                LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "taglist", tags);
+            }
+            finally
+            {
+                LoadTagView();
+            }
+        }
+
+        #region Tag Management
+
+        public List<string> tags { get; set; }
+
+        private void LoadTagView()
+        {
+            Func<string, string> AlphaKey = (tag) =>
+            {
+                char head = tag[0];
                 if (head >= '0' && head <= '9')
                     return "#";
                 else if (head >= 'A' && head <= 'Z' || head >= 'a' && head <= 'z')
@@ -64,7 +74,7 @@ namespace Research_Flow
             };
 
             var groups = from t in tags
-                         orderby t.Tag
+                         orderby t
                          group t by AlphaKey(t);
 
             CollectionViewSource collectionVS = new CollectionViewSource();
@@ -73,11 +83,9 @@ namespace Research_Flow
             taglist.ItemsSource = collectionVS.View;
             tagKlist.ItemsSource = collectionVS.View.CollectionGroups;
         }
+
+        #endregion
+
     }
 
-    public class TopicTag
-    {
-        public string Tag { get; set; }
-    }
-  
 }

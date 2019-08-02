@@ -11,7 +11,7 @@
     <Grid x:Name="FullPage" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <NavigationView x:Name="NavView"
-                        Background="LightSteelBlue"
+                        Background="{ThemeResource SystemAccentColorLight1}"
                         PaneDisplayMode="LeftCompact"
                         Loaded="NavView_Loaded"
                         SelectionChanged="NavView_SelectionChanged"
@@ -31,7 +31,7 @@
                         <FontIcon Glyph="&#xEB50;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Learn" Tag="Learn">
+                <NavigationViewItem Content="Paper" Tag="Paper">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE7BE;"/>
                     </NavigationViewItem.Icon>
@@ -74,10 +74,12 @@
             <NavigationView.Header>
                 <Grid >
                     <TextBlock x:Name="appMessage" FontSize="18" VerticalAlignment="Center"/>
-                    <CommandBar HorizontalAlignment="Right" VerticalAlignment="Top" DefaultLabelPosition="Right" 
+                    <CommandBar HorizontalAlignment="Right" VerticalAlignment="Top" DefaultLabelPosition="Collapsed" 
                                 Background="Transparent" OverflowButtonVisibility="Collapsed">
-                        <AppBarButton Label="Synchronize" Icon="Sync" Click="AccountSync_Click" Background="Transparent"/>
-                        <AppBarButton Label="ScreenShot" Icon="AttachCamera" Tapped="Flyout_Tapped" Background="Transparent">
+                        <AppBarButton Icon="Remote" Click="AccountSync_Click" ToolTipService.ToolTip="Synchronize"/>
+                        <AppBarSeparator />
+                        <AppBarButton Icon="FullScreen" Click="FullScreen_Click" ToolTipService.ToolTip="FullScreen"/>
+                        <AppBarButton Icon="AttachCamera" Tapped="Flyout_Tapped" ToolTipService.ToolTip="ScreenShot">
                             <FlyoutBase.AttachedFlyout>
                                 <MenuFlyout>
                                     <MenuFlyoutItem Text="Export" Click="ScreenShot_Export"/>

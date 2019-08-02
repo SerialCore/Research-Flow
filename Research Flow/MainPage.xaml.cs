@@ -16,6 +16,7 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI.Popups;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -87,7 +88,7 @@ namespace Research_Flow
         {
             ("Overview", typeof(Overview)),
             ("Topic", typeof(Topic)),
-            ("Learn", typeof(Learn)),
+            ("Paper", typeof(Paper)),
             ("RSS", typeof(RSS)),
             ("Search", typeof(Search)),
             ("Crawler", typeof(Crawler)),
@@ -314,6 +315,19 @@ namespace Research_Flow
                     await file.CopyAsync(KnownFolders.PicturesLibrary, file.Name);
                     ToastGenerator.ShowTextToast("Pictures Library", "Screen Shot Saved");
                 }
+            }
+        }
+
+        private void FullScreen_Click(object sender, RoutedEventArgs e)
+        {
+            ApplicationView view = ApplicationView.GetForCurrentView();
+            if (view.IsFullScreenMode)
+            {
+                view.ExitFullScreenMode();
+            }
+            else
+            {
+                view.TryEnterFullScreenMode();
             }
         }
 

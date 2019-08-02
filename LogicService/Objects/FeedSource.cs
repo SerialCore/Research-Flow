@@ -49,8 +49,6 @@ namespace LogicService.Objects
 
         public List<ElementNode> Nodes { get; set; }
 
-        public List<Crawlable> PageLinks { get; set; }
-
         #region Equals
 
         public override bool Equals(object obj)
@@ -88,17 +86,20 @@ namespace LogicService.Objects
 
         #region DB
 
-        public static void InitializeTable()
+        public static void DBInitialize()
         {
             DataStorage.CrawlData.Connection.Open();
 
-            string sql = @"CREATE TABLE IF NOT EXISTS [Crawlable] (
+            string sql = @"CREATE TABLE IF NOT EXISTS [Feed] (
                     [ID] VARCHAR(50) NOT NULL PRIMARY KEY,
-                    [ParentID] VARCHAR(50),
-                    [Text] VARCHAR(50) NOT NULL,
-                    [Url] VARCHAR(100) NOT NULL,
-                    [LinkTarget] VARCHAR(20),
-                    [Content] VARCHAR(1000))";
+                    [Title] VARCHAR(100) NOT NULL,
+                    [Published] VARCHAR(50) NOT NULL,
+                    [Link] VARCHAR(100) NOT NULL,
+                    [Summary] VARCHAR(500)),
+                    [FullText] VARCHAR(1000)),
+                    [Tags] VARCHAR(500)),
+                    [Nodes] VARCHAR(500)),
+                    [Tags] VARCHAR(500))";
             DataStorage.CrawlData.ExecuteWrite(sql);
 
             DataStorage.CrawlData.Connection.Close();

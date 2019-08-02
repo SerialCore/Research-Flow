@@ -66,7 +66,7 @@
                     </StackPanel>
                 </ScrollViewer>
                 <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                    <AppBarButton Icon="Refresh" Label="GetFeed" Click="RSS_SourceRefresh"/>
+                    <AppBarButton Icon="Download" Label="GetFeed" Click="RSS_SourceRefresh"/>
                 </CommandBar>
             </Grid>
             <Grid Grid.Column="1">

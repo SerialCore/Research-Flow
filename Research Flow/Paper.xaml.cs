@@ -20,12 +20,11 @@ namespace Research_Flow
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class Learn : Page
+    public sealed partial class Paper : Page
     {
-        public Learn()
+        public Paper()
         {
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
     }
 }

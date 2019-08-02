@@ -45,7 +45,6 @@ namespace Research_Flow
                 // for new user, remember to load default feed from file, not the follows
                 SearchSources = new Dictionary<string, string>()
                 {
-                    { "Bing", "https://www.bing.com/search?q=QUERY"},
                     { "ACS", "https://pubs.acs.org/action/doSearch?AllField=QUERY"},
                     { "arXiv All", "https://arxiv.org/search/?query=QUERY&searchtype=all"},
                 };
@@ -60,115 +59,6 @@ namespace Research_Flow
                 linkFilter.Text = "Text: NotEmpty";
             }
         }
-
-        #region Fisrt Crawl
-
-        private CrawlerService currentCrawled;
-        private Stack<string> crawledHistory = new Stack<string>();
-
-        private void ViewMode_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (viewMode.IsOn)
-                crawlPane.IsPaneOpen = true;
-            else
-                crawlPane.IsPaneOpen = false;
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            string link = e.Parameter as string;
-            if (!string.IsNullOrEmpty(link))
-            {
-                viewMode.IsOn = true;
-                FirstCrawl(link);
-                crawledHistory.Push(link);
-            }
-        }
-
-        private void Search_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-        {
-            string link = SearchSources.GetValueOrDefault(searchlist.SelectedItem as string).Replace("QUEST", queryQuest.Text);
-            FirstCrawl(link);
-            crawledHistory.Push(link);
-        }
-
-        private void Crawl_Back(object sender, RoutedEventArgs e)
-        {
-            if (crawledHistory.Count > 1)
-            {
-                crawledHistory.Pop();
-                FirstCrawl(crawledHistory.Peek());
-            }
-        }
-
-        private void FirstCrawl(string urlstring)
-        {
-            craWaiting.IsActive = true;
-            currentCrawled = new CrawlerService(urlstring);
-            currentCrawled.BeginGetResponse(
-                async (result) =>
-                {
-                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    {
-                        LinkFilter_QuerySubmitted(null, null);
-                        craWaiting.IsActive = false;
-                    });
-                },
-                async (exception) =>
-                {
-                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    {
-                        InAppNotification.Show(exception);
-                        craWaiting.IsActive = false;
-                    });
-                });
-
-            webView.Navigate(new Uri(urlstring));
-        }
-
-        private void LinkFilter_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
-            => LinkFilter_QuerySubmitted(null, null);
-
-        private void LinkFilter_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-        {
-            if (currentCrawled == null)
-                return;
-
-            Regex regex = new Regex(@"(?<header>^(Text|Url):\s(\w+$|\w+=))(?<param>\w*$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
-            Match match = regex.Match(linkFilter.Text);
-            if (match.Success && currentCrawled != null)
-            {
-                string header = match.Groups["header"].Value;
-                string param = match.Groups["param"].Value;
-                if (header.StartsWith("Text"))
-                {
-                    if (header.Equals("Url: Insite"))
-                        link_list.ItemsSource = currentCrawled.InsiteLinks;
-                    else
-                        link_list.ItemsSource = currentCrawled.GetSpecialLinksByText(CrawlerService.LinkFilter.GetValueOrDefault(header) + param);
-                }
-                if (header.StartsWith("Url"))
-                {
-                    link_list.ItemsSource = currentCrawled.GetSpecialLinksByUrl(CrawlerService.LinkFilter.GetValueOrDefault(header) + param);
-                }
-            }
-            else if (string.IsNullOrEmpty(linkFilter.Text))
-                link_list.ItemsSource = currentCrawled.Links;
-        }
-
-        private void Link_list_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            string link = (e.ClickedItem as Crawlable).Url;
-            FirstCrawl(link);
-            crawledHistory.Push(link);
-        }
-
-        private void SubmitToCrawler()
-        {
-
-        }
-
-        #endregion
 
         #region Search Engine
 
@@ -296,7 +186,7 @@ namespace Research_Flow
             {
                 string uri = siteUrl.Text;
                 uri = uri.StartsWith("http") ? uri : "http://" + uri;
-                webView.Navigate(new Uri(uri));
+                webView.Source = new Uri(uri);
             }
             catch { }
         }
@@ -333,14 +223,115 @@ namespace Research_Flow
 
                 // info of share request
                 DataRequest request = args.Request;
-                request.Data.Properties.Title = "Search Result";
-                request.Data.Properties.Description = "Share your search result";
+                request.Data.Properties.Title = "WebSite";
+                request.Data.Properties.Description = "Share the website you found";
 
                 request.Data.SetWebLink(webView.Source);
 
                 // end if deferral
                 deferral.Complete();
             }
+        }
+
+        #endregion
+
+        #region Fisrt Crawl
+
+        private CrawlerService currentCrawled = null;
+
+        private void ViewMode_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (viewMode.IsOn)
+                crawlPane.IsPaneOpen = true;
+            else
+                crawlPane.IsPaneOpen = false;
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            string link = e.Parameter as string;
+            if (!string.IsNullOrEmpty(link))
+            {
+                webView.Source = new Uri(link);
+            }
+        }
+
+        private void Search_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            string link = SearchSources.GetValueOrDefault(searchlist.SelectedItem as string).Replace("QUEST", queryQuest.Text);
+            webView.Source = new Uri(link);
+        }
+
+        private void FirstCrawl_Click(object sender, RoutedEventArgs e)
+        {
+            if (webView.Source != null)
+                FirstCrawl(webView.Source.ToString());
+        }
+
+        private void FirstCrawl(string urlstring)
+        {
+            viewMode.IsOn = true;
+            craWaiting.IsActive = true;
+
+            currentCrawled = new CrawlerService(urlstring);
+            currentCrawled.BeginGetResponse(
+                async (result) =>
+                {
+                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        LinkFilter_QuerySubmitted(null, null);
+                        craWaiting.IsActive = false;
+                    });
+                },
+                async (exception) =>
+                {
+                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        InAppNotification.Show(exception);
+                        craWaiting.IsActive = false;
+                    });
+                });
+        }
+
+        private void LinkFilter_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+            => LinkFilter_QuerySubmitted(null, null);
+
+        private void LinkFilter_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            if (currentCrawled == null)
+                return;
+
+            Regex regex = new Regex(@"(?<header>^(Text|Url):\s(\w+$|\w+=))(?<param>\w*$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+            Match match = regex.Match(linkFilter.Text);
+            if (match.Success && currentCrawled != null)
+            {
+                string header = match.Groups["header"].Value;
+                string param = match.Groups["param"].Value;
+                if (header.StartsWith("Text"))
+                {
+                    if (header.Equals("Url: Insite"))
+                        link_list.ItemsSource = currentCrawled.InsiteLinks;
+                    else
+                        link_list.ItemsSource = currentCrawled.GetSpecialLinksByText(CrawlerService.LinkFilter.GetValueOrDefault(header) + param);
+                }
+                if (header.StartsWith("Url"))
+                {
+                    link_list.ItemsSource = currentCrawled.GetSpecialLinksByUrl(CrawlerService.LinkFilter.GetValueOrDefault(header) + param);
+                }
+            }
+            else if (string.IsNullOrEmpty(linkFilter.Text))
+                link_list.ItemsSource = currentCrawled.Links;
+        }
+
+        private void Link_list_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            string link = (e.ClickedItem as Crawlable).Url;
+            webView.Source = new Uri(link);
+        }
+
+        private void SubmitToCrawler()
+        {
+
         }
 
         #endregion

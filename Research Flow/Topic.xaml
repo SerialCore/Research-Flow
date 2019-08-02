@@ -25,7 +25,7 @@
                         <ListView x:Name="taglist" ScrollViewer.IsHorizontalScrollChainingEnabled="False">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Tag}"/>
+                                    <TextBlock Text="{Binding}"/>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                             <ListView.GroupStyle>
@@ -43,7 +43,7 @@
                         <GridView x:Name="tagKlist" ScrollViewer.IsHorizontalScrollChainingEnabled="False">
                             <GridView.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Height="96" Width="96" Background="SpringGreen">
+                                    <Grid Height="96" Width="96" Background="{ThemeResource SystemAccentColorLight2}" >
                                         <TextBlock Text="{Binding Group.Key}" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                     </Grid>
                                 </DataTemplate>
@@ -54,11 +54,9 @@
             </Grid>
 
             <Grid Grid.Column="1">
-                <StackPanel>
-                    <CalendarView x:Name="calendar" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <StackPanel Height="500" Width="500">
+                    <TextBox Text="#Tag#" Height="100" Margin="20"/>
                     <CalendarDatePicker HorizontalAlignment="Center"/>
-                    <DatePicker HorizontalAlignment="Center"/>
-                    <TimePicker HorizontalAlignment="Center"/>
                 </StackPanel>
             </Grid>
         </Grid>
