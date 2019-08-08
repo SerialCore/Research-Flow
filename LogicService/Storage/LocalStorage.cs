@@ -124,7 +124,7 @@ namespace LogicService.Storage
         {
             StorageFile file = await (await GetLogAsync()).CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
             await FileIO.AppendTextAsync(file,
-                                "[" + DateTime.Now.ToString() + "]" + typeof(T).FullName + " : " + line + "\n");
+                                "[" + DateTime.Now.ToString() + "]" + typeof(T).Name + " : " + line + "\n");
         }
 
         public async static void Compression(StorageFolder origin)

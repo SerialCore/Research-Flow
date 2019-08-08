@@ -3,6 +3,7 @@ using System;
 using Windows.System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using LogicService.Storage;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -58,6 +59,12 @@ namespace Research_Flow
         private async void Give_Rate(object sender, Windows.UI.Xaml.RoutedEventArgs e)
             => await ApplicationInfo.ShowRatingReviewDialog();
 
+        private async void Show_SearchLog(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            var folder = await LocalStorage.GetLogAsync();
+            var file = await folder.GetFileAsync("SearchTask.log");
+            await Launcher.LaunchFileAsync(file);
+        }
     }
 
 }

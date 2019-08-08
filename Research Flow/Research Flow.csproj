@@ -121,9 +121,6 @@
     <Compile Include="Paper.xaml.cs">
       <DependentUpon>Paper.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PdfViewer.xaml.cs">
-      <DependentUpon>PdfViewer.xaml</DependentUpon>
-    </Compile>
     <Compile Include="RSS.xaml.cs">
       <DependentUpon>RSS.xaml</DependentUpon>
     </Compile>
@@ -146,7 +143,6 @@
     <None Include="Research Flow_TemporaryKey.pfx" />
     <Content Include="Resources\readme.txt" />
     <Content Include="Resources\DefaultNote.txt" />
-    <Content Include="Resources\paper.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Package.xml" />
@@ -203,10 +199,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Paper.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PdfViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -109,10 +109,11 @@
     <Compile Include="Application\ApplicationSetting.cs" />
     <Compile Include="Helper\NetHelper.cs" />
     <Compile Include="Helper\RegexHelper.cs" />
+    <Compile Include="Objects\Topic.cs" />
     <Compile Include="Services\UrlOperator.cs" />
     <Compile Include="Services\WebClientService.cs" />
     <Compile Include="Objects\Crawlable.cs" />
-    <Compile Include="Objects\FeedSource.cs" />
+    <Compile Include="Objects\FeedItem.cs" />
     <Compile Include="Objects\FileList.cs" />
     <Compile Include="Objects\Paper.cs" />
     <Compile Include="Helper\SerializeHelper.cs" />

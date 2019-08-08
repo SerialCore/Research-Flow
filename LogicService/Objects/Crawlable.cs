@@ -19,7 +19,7 @@ namespace LogicService.Objects
 
         public string Content { get; set; }
 
-        public HashSet<string> Tags { get; set; }
+        public string Tags { get; set; }
 
         #region Equals
 
@@ -67,7 +67,7 @@ namespace LogicService.Objects
                     [ParentID] VARCHAR(50),
                     [Text] VARCHAR(50),
                     [Url] VARCHAR(100) NOT NULL,
-                    [Content] VARCHAR(1000)),
+                    [Content] VARCHAR(5000)),
                     [Tags] VARCHAR(500))";
             DataStorage.CrawlData.ExecuteWrite(sql);
 

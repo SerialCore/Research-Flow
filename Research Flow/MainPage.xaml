@@ -55,11 +55,6 @@
                 </NavigationViewItem>
 
                 <NavigationViewItemSeparator/>
-                <NavigationViewItem Content="PDF Viewer" Tag="Pdf">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE736;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
                 <NavigationViewItem Content="Drawable Note" Tag="Note">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEA86;"/>

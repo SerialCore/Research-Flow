@@ -54,7 +54,7 @@
                 </SplitView.Pane>
                 <SplitView.Content>
                     <Grid>
-                        <TextBlock Text="Search | First Crawler" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Search | First Crawl" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <WebView x:Name="webView" NavigationStarting="WebView_NavigationStarting" 
                                  FrameNavigationCompleted="WebView_FrameNavigationCompleted" NavigationCompleted="WebView_NavigationCompleted"/>
                         <ProgressRing x:Name="webWaiting" IsActive="False" Height="100" Width="100"/>
@@ -114,10 +114,11 @@
                             DefaultLabelPosition="Right"
                             Background="Transparent"
                             OverflowButtonVisibility="Collapsed">
+                    <AppBarButton Label="First" Icon="Globe" Click="FirstCrawl_Click"/>
+                    <AppBarButton Label="Crawl" Icon="Upload" Click="SubmitToCrawler"/>
+                    <AppBarSeparator/>
                     <AppBarButton Label="Share" Icon="Share" Click="ShareLink"/>
                     <AppBarButton Label="Browser" Icon="Account" Click="OpenBrowser"/>
-                    <AppBarButton Label="Crawl" Icon="Favorite" Click="FirstCrawl_Click"/>
-                    <AppBarSeparator/>
                     <AppBarButton Label="Back" Icon="Previous" Click="PageBack" IsEnabled="{x:Bind webView.CanGoBack,Mode=OneWay}"/>
                     <AppBarButton Label="Forward" Icon="Next" Click="PageForward" IsEnabled="{x:Bind webView.CanGoForward,Mode=OneWay}"/>
                     <AppBarButton Label="Refresh" Icon="Refresh" Click="PageRefresh"/>

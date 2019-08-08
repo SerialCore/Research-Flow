@@ -56,6 +56,25 @@ namespace Research_Flow
             }
         }
 
+        private async void InitializeTopic()
+        {
+            try
+            {
+                topics = await LocalStorage.ReadJsonAsync<List<Topic>>(
+                    await LocalStorage.GetDataAsync(), "topiclist");
+            }
+            catch
+            {
+                // for new user, remember to load default feed from file, not the follows
+                topics = new List<Topic>();
+                LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "topiclist", topics);
+            }
+            finally
+            {
+
+            }
+        }
+
         #region Tag Management
 
         public List<string> tags { get; set; }
@@ -83,6 +102,12 @@ namespace Research_Flow
             taglist.ItemsSource = collectionVS.View;
             tagKlist.ItemsSource = collectionVS.View.CollectionGroups;
         }
+
+        #endregion
+
+        #region Task Management
+
+        public List<Topic> topics { get; set; }
 
         #endregion
 

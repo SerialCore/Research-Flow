@@ -33,6 +33,15 @@ namespace Research_Flow
             InitializeSearch();
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            string link = e.Parameter as string;
+            if (!string.IsNullOrEmpty(link))
+            {
+                webView.Source = new Uri(link);
+            }
+        }
+
         private async void InitializeSearch()
         {
             try
@@ -60,9 +69,18 @@ namespace Research_Flow
             }
         }
 
+        private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+            => FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+
         #region Search Engine
 
         public Dictionary<string, string> SearchSources { get; set; }
+
+        private void Search_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            string link = SearchSources.GetValueOrDefault(searchlist.SelectedItem as string).Replace("QUEST", queryQuest.Text);
+            webView.Source = new Uri(link);
+        }
 
         private void Open_SearchList(object sender, RoutedEventArgs e)
             => searchPane.IsPaneOpen = !searchPane.IsPaneOpen;
@@ -247,21 +265,6 @@ namespace Research_Flow
                 crawlPane.IsPaneOpen = false;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            string link = e.Parameter as string;
-            if (!string.IsNullOrEmpty(link))
-            {
-                webView.Source = new Uri(link);
-            }
-        }
-
-        private void Search_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-        {
-            string link = SearchSources.GetValueOrDefault(searchlist.SelectedItem as string).Replace("QUEST", queryQuest.Text);
-            webView.Source = new Uri(link);
-        }
-
         private void FirstCrawl_Click(object sender, RoutedEventArgs e)
         {
             if (webView.Source != null)
@@ -326,12 +329,13 @@ namespace Research_Flow
         private void Link_list_ItemClick(object sender, ItemClickEventArgs e)
         {
             string link = (e.ClickedItem as Crawlable).Url;
+            // if not a downloadable link
             webView.Source = new Uri(link);
         }
 
-        private void SubmitToCrawler()
+        private void SubmitToCrawler(object sender, RoutedEventArgs e)
         {
-
+            this.Frame.Navigate(typeof(Crawler), currentCrawled);
         }
 
         #endregion

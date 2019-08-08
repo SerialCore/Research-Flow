@@ -31,6 +31,15 @@ namespace Research_Flow
             InitializeCrawl();
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            Crawlable first = e.Parameter as Crawlable;
+            if (first != null)
+            {
+                
+            }
+        }
+
         private void InitializeCrawl()
         {
             

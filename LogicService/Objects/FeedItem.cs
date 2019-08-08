@@ -35,6 +35,8 @@ namespace LogicService.Objects
 
         public string ID { get; set; }
 
+        public string ParentID { get; set; }
+
         public string Title { get; set; }
 
         public string Published { get; set; }
@@ -45,7 +47,7 @@ namespace LogicService.Objects
 
         public string FullText { get; set; }
 
-        public HashSet<string> Tags { get; set; }
+        public string Tags { get; set; }
 
         public List<ElementNode> Nodes { get; set; }
 
@@ -92,17 +94,25 @@ namespace LogicService.Objects
 
             string sql = @"CREATE TABLE IF NOT EXISTS [Feed] (
                     [ID] VARCHAR(50) NOT NULL PRIMARY KEY,
+                    [ParentID] VARCHAR(50),
                     [Title] VARCHAR(100) NOT NULL,
                     [Published] VARCHAR(50) NOT NULL,
                     [Link] VARCHAR(100) NOT NULL,
                     [Summary] VARCHAR(500)),
                     [FullText] VARCHAR(1000)),
-                    [Tags] VARCHAR(500)),
-                    [Nodes] VARCHAR(500)),
                     [Tags] VARCHAR(500))";
             DataStorage.CrawlData.ExecuteWrite(sql);
 
             DataStorage.CrawlData.Connection.Close();
+        }
+
+        #endregion
+
+        #region Helper
+
+        public static List<ElementNode> GetNodes(string xml)
+        {
+            return new List<ElementNode>();
         }
 
         #endregion

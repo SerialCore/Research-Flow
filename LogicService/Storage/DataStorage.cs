@@ -32,14 +32,18 @@ namespace LogicService.Storage
                 case DataType.PaperData:
                     _dbname = "paper.db";
                     break;
+                case DataType.FeedData:
+                    _dbname = "feed.db";
+                    break;
             }
             _dbpath = LocalStorage.TryGetDataPath() + "\\" + _dbname;
         }
 
-        enum DataType { CrawlData, PaperData }
+        enum DataType { CrawlData, PaperData, FeedData }
 
         private static DataStorage _crawldata;
         private static DataStorage _paperdata;
+        private static DataStorage _feeddata;
 
         public static DataStorage CrawlData
         {
@@ -58,6 +62,16 @@ namespace LogicService.Storage
                 if (_paperdata == null)
                     _paperdata = new DataStorage(DataType.PaperData);
                 return _paperdata;
+            }
+        }
+
+        public static DataStorage FeedData
+        {
+            get
+            {
+                if (_feeddata == null)
+                    _feeddata = new DataStorage(DataType.FeedData);
+                return _feeddata;
             }
         }
 
@@ -122,7 +136,7 @@ namespace LogicService.Storage
 
             LocalStorage.AddFileList("Data", _dbname);
             LocalStorage.AddFileTrace("Data", _dbname);
-
+            
             return affectedRows;
         }
 

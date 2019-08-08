@@ -38,8 +38,6 @@ namespace Research_Flow
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
-        public ObservableCollection<string> namelist { get; set; } = new ObservableCollection<string>();
-
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             StorageFile file = e.Parameter as StorageFile;
@@ -217,6 +215,8 @@ namespace Research_Flow
         #endregion
 
         #region File Management
+
+        public ObservableCollection<string> namelist { get; set; } = new ObservableCollection<string>();
 
         private void Open_Document(object sender, RoutedEventArgs e)
             => notepanel.IsPaneOpen = !notepanel.IsPaneOpen;

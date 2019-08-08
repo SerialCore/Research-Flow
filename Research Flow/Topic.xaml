@@ -54,11 +54,20 @@
             </Grid>
 
             <Grid Grid.Column="1">
-                <StackPanel Height="500" Width="500">
-                    <TextBox Text="#Tag#" Height="100" Margin="20"/>
-                    <CalendarDatePicker HorizontalAlignment="Center"/>
+                <StackPanel Height="200" Width="500" VerticalAlignment="Bottom">
+                    <TextBox PlaceholderText="#Tag1##Tag2#Content/Topic/Project/TODO" AcceptsReturn="True" Height="100" Margin="20"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <CalendarDatePicker Header="Start Date"/>
+                        <CalendarDatePicker Header="End Date"/>
+                        <Button Content="Submit" Height="56" Width="100"/>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
+
+            <SplitView Grid.Column="1">
+                
+            </SplitView>
+            
         </Grid>
 
         <toolkit:InAppNotification x:Name="InAppNotification" 
