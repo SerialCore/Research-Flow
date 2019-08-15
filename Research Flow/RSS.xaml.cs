@@ -8,6 +8,8 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
+using System.Xml;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
@@ -204,11 +206,13 @@ namespace Research_Flow
             feedPublished.Text = item.Published;
             feedBrowse.Tag = item.Link;
             feedSummary.Text = item.Summary + "\n";
-            feedNodes.Text = "";
-            foreach (var pair in item.Nodes)
+
+            StringBuilder builder = new StringBuilder();
+            foreach (XmlElement pair in FeedItem.GetNodes(item.Nodes))
             {
-                feedNodes.Text += pair.Name + " : " + pair.Value + "\n";
+                builder.AppendLine(pair.Name + " : " + pair.InnerText);
             }
+            feedNodes.Text = builder.ToString();
         }
 
         private void Browse_Feed(object sender, RoutedEventArgs e)

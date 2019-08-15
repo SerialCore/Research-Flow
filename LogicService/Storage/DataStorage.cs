@@ -140,9 +140,14 @@ namespace LogicService.Storage
             return affectedRows;
         }
 
-        public SqliteDataReader ExecuteRead(string sql)
+        public SqliteDataReader ExecuteRead(string sql, Dictionary<string, object> parameters = null)
         {
             SqliteCommand command = new SqliteCommand(sql, _conn);
+
+            if (parameters != null)
+            {
+                command.Parameters.AddRange(SetParameters(parameters));
+            }
 
             return command.ExecuteReader();
         }

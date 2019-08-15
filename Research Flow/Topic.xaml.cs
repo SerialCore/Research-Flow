@@ -46,7 +46,7 @@ namespace Research_Flow
                 // for new user, remember to load default feed from file, not the follows
                 tags = new List<string>()
                 {
-                    "QCD", "QED", "Pedal Motion", "DNA", "AI", "Bond", "Computer", "Hydrogen", "Halogen", "OS"
+                    "AnOS", "QCD", "QED", "Pedal Motion", "DNA", "AI", "Bond", "Computer", "Hydrogen", "Halogen", "OS"
                 };
                 LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "taglist", tags);
             }

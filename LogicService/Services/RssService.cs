@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using LogicService.Objects;
 using Windows.Web.Syndication;
@@ -41,7 +40,7 @@ namespace LogicService.Services
                                     Published = f.PublishedDate.ToString(),
                                     Link = f.Links[0].Uri.AbsoluteUri,
                                     Summary = WebUtility.HtmlDecode(Regex.Replace(f.Summary.Text, "<[^>]+?>", "")),
-                                    Nodes = GetNodes(f),
+                                    Nodes = f.GetXmlDocument(SyndicationFormat.Rss20).GetXml(),
                                 });
                             }
                             if (onGetRssItemsCompleted != null)
@@ -75,16 +74,6 @@ namespace LogicService.Services
                 }
             }, request);
 
-        }
-
-        private static List<ElementNode> GetNodes(SyndicationItem item)
-        {
-            var pairs = new List<ElementNode>();
-            foreach (SyndicationNode node in item.ElementExtensions)
-            {
-                pairs.Add(new ElementNode { Name = node.NodeName, Value = node.NodeValue });
-            }
-            return pairs;
         }
     }
 }

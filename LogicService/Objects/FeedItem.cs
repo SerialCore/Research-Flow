@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Web.Syndication;
 using LogicService.Storage;
+using System.Xml;
 
 namespace LogicService.Objects
 {
@@ -49,7 +50,7 @@ namespace LogicService.Objects
 
         public string Tags { get; set; }
 
-        public List<ElementNode> Nodes { get; set; }
+        public string Nodes { get; set; }
 
         #region Equals
 
@@ -88,10 +89,14 @@ namespace LogicService.Objects
 
         #region DB
 
+        public static void DBOpen()
+            => DataStorage.FeedData.Connection.Open();
+
+        public static void DBClose()
+            => DataStorage.FeedData.Connection.Close();
+
         public static void DBInitialize()
         {
-            DataStorage.CrawlData.Connection.Open();
-
             string sql = @"CREATE TABLE IF NOT EXISTS [Feed] (
                     [ID] VARCHAR(50) NOT NULL PRIMARY KEY,
                     [ParentID] VARCHAR(50),
@@ -100,31 +105,39 @@ namespace LogicService.Objects
                     [Link] VARCHAR(100) NOT NULL,
                     [Summary] VARCHAR(500)),
                     [FullText] VARCHAR(1000)),
-                    [Tags] VARCHAR(500))";
-            DataStorage.CrawlData.ExecuteWrite(sql);
+                    [Tags] VARCHAR(500))
+                    [Nodes] VARCHAR(1000))";
+            DataStorage.FeedData.ExecuteWrite(sql);
+        }
 
-            DataStorage.CrawlData.Connection.Close();
+        public static void DBSelect(string pid)
+        {
+            string sql = "select * from Feed where ParentID = @ParentId;";
+            DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { });
+        }
+
+        public static void DBAppend(string pid, int max)
+        {
+
+        }
+
+        public static void DBDelete(string id)
+        {
+
         }
 
         #endregion
 
         #region Helper
 
-        public static List<ElementNode> GetNodes(string xml)
+        public static XmlNodeList GetNodes(string xml)
         {
-            return new List<ElementNode>();
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            return doc.DocumentElement.ChildNodes;
         }
 
         #endregion
-
-    }
-
-    public class ElementNode
-    {
-
-        public string Name { get; set; }
-
-        public string Value { get; set; }
 
     }
 

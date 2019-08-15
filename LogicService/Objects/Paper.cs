@@ -59,10 +59,14 @@ namespace LogicService.Objects
 
         #region DB
 
+        public static void DBOpen()
+            => DataStorage.PaperData.Connection.Open();
+
+        public static void DBClose()
+            => DataStorage.PaperData.Connection.Close();
+
         public static void DBInitialize()
         {
-            DataStorage.PaperData.Connection.Open();
-
             string sql = @"CREATE TABLE IF NOT EXISTS [Paper] (
                     [ID] VARCHAR(50) NOT NULL PRIMARY KEY,
                     [ParentID] VARCHAR(50),
@@ -71,8 +75,6 @@ namespace LogicService.Objects
                     [Authors] VARCHAR(500)),
                     [Tags] VARCHAR(500))";
             DataStorage.PaperData.ExecuteWrite(sql);
-
-            DataStorage.PaperData.Connection.Close();
         }
 
         #endregion
