@@ -97,33 +97,74 @@ namespace LogicService.Objects
 
         public static void DBInitialize()
         {
-            string sql = @"CREATE TABLE IF NOT EXISTS [Feed] (
-                    [ID] VARCHAR(50) NOT NULL PRIMARY KEY,
-                    [ParentID] VARCHAR(50),
-                    [Title] VARCHAR(100) NOT NULL,
-                    [Published] VARCHAR(50) NOT NULL,
-                    [Link] VARCHAR(100) NOT NULL,
-                    [Summary] VARCHAR(500)),
-                    [FullText] VARCHAR(1000)),
-                    [Tags] VARCHAR(500))
-                    [Nodes] VARCHAR(1000))";
+            DataStorage.FeedData.Connection.Open();
+
+            string sql = @"create table if not exists [Feed] (
+                    [ID] varchar(50) not null primary key,
+                    [ParentID] varchar(50) not null,
+                    [Title] varchar(100) not null,
+                    [Published] varchar(50) not null,
+                    [Link] varchar(100) not null,
+                    [Summary] varchar(500),
+                    [FullText] varchar(1000),
+                    [Tags] varchar(500),
+                    [Nodes] varchar(1000))";
             DataStorage.FeedData.ExecuteWrite(sql);
+
+            DataStorage.FeedData.Connection.Close();
         }
 
-        public static void DBSelect(string pid)
+        public static int DBAppend(FeedItem feed, int max)
         {
-            string sql = "select * from Feed where ParentID = @ParentId;";
-            DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { });
+            int affectedRows = 0;
+            string sql = @"insert into Feed(ID, ParentID, Title, Published, Link, Summary, FullText, Tags, Nodes)
+                values(@ID, @ParentID, @Title, @Published, @Link, @Summary, @FullText, @Tags, @Nodes)";
+            affectedRows = DataStorage.FeedData.ExecuteWrite(sql, new Dictionary<string, object>
+            {
+                { "ID", feed.ID },
+                { "ParentID", feed.ParentID },
+                { "Title", feed.Title },
+                { "Published", feed.Published },
+                { "Link", feed.Link },
+                { "Summary", feed.Summary },
+                { "FullText", feed.FullText },
+                { "Tags", feed.Tags },
+                { "Nodes", feed.Nodes },
+            });
+
+            // delete
+
+            return affectedRows;
         }
 
-        public static void DBAppend(string pid, int max)
+        public static List<FeedItem> DBSelectByPID(string pid)
         {
+            string sql = "select * from Feed where ParentID = @ParentID;";
+            var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "ParentID", pid } });
 
+            List<FeedItem> feeds = new List<FeedItem>();
+            while (reader.Read())
+            {
+                feeds.Add(new FeedItem
+                {
+                    ID = reader.GetString(0),
+                    ParentID = reader.GetString(1),
+                    Title = reader.GetString(2),
+                    Published = reader.GetString(3),
+                    Link = reader.GetString(4),
+                    Summary = reader.GetString(5),
+                    FullText = reader.GetString(6),
+                    Tags = reader.GetString(7),
+                    Nodes = reader.GetString(8)
+                });
+            }
+            return feeds;
         }
 
         public static void DBDelete(string id)
         {
-
+            string sql = "delete from Feed";
+            DataStorage.FeedData.ExecuteWrite(sql);
         }
 
         #endregion

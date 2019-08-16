@@ -17,8 +17,8 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
-                <ScrollViewer>
-                    <StackPanel Margin="0,0,0,48" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                <ScrollViewer Margin="0,0,0,48">
+                    <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                         <ListView x:Name="feedSource_list" IsItemClickEnabled="True" ItemClick="RSS_SourceClick"
                                          ReorderMode="Enabled">
                             <ListView.ItemTemplate>
@@ -66,6 +66,9 @@
                     </StackPanel>
                 </ScrollViewer>
                 <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                    <CommandBar.Content>
+                        <TextBlock Text="RSS" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
+                    </CommandBar.Content>
                     <AppBarButton Icon="Download" Label="GetFeed" Click="RSS_SourceRefresh"/>
                 </CommandBar>
             </Grid>
@@ -84,7 +87,7 @@
                 </ListView>
                 <ProgressRing x:Name="waiting_feed" Height="100" Width="100"/>
             </Grid>
-            <SplitView Grid.Column="0" Grid.ColumnSpan="2" x:Name="feedItem_detail" OpenPaneLength="400" DisplayMode="Overlay" PanePlacement="Right">
+            <SplitView Grid.Column="1" Grid.ColumnSpan="2" x:Name="feedItem_detail" OpenPaneLength="400" DisplayMode="Overlay" PanePlacement="Right">
                 <SplitView.Pane>
                     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                         <Button Height="32" Click="Close_FeedDetail" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="LightBlue">

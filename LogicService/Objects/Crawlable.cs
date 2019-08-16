@@ -66,45 +66,37 @@ namespace LogicService.Objects
 
         public static void DBInitialize()
         {
-            string sql = @"CREATE TABLE IF NOT EXISTS [Crawlable] (
-                    [ID] VARCHAR(50) NOT NULL PRIMARY KEY,
-                    [ParentID] VARCHAR(50),
-                    [Text] VARCHAR(50),
-                    [Url] VARCHAR(100) NOT NULL,
-                    [Content] VARCHAR(5000)),
-                    [Tags] VARCHAR(500))";
+            DataStorage.CrawlData.Connection.Open();
+
+            string sql = @"create table if not exists [Crawlable] (
+                    [ID] varchar(50) not null primary key,
+                    [ParentID] varchar(50),
+                    [Text] varchar(50),
+                    [Url] varchar(100) not null,
+                    [Content] varchar(5000),
+                    [Tags] varchar(500))";
             DataStorage.CrawlData.ExecuteWrite(sql);
+
+            DataStorage.CrawlData.Connection.Close();
         }
 
         public static void DBInsert()
         {
-            DataStorage.CrawlData.Connection.Open();
-
             string sql = @"INSERT INTO Users(Username, Email, Password)
                 VALUES('admin', 'testing@gmail.com', 'test')";
             DataStorage.CrawlData.ExecuteWrite(sql);
-
-            DataStorage.CrawlData.Connection.Close();
         }
 
         public static void DBSelect()
         {
-            DataStorage.CrawlData.Connection.Open();
-
             string sql = "SELECT * From Users WHERE Id = @UserId;";
             DataStorage.CrawlData.ExecuteRead(sql);
-
-            DataStorage.CrawlData.Connection.Close();
         }
 
         public static void DBDelete()
         {
-            DataStorage.CrawlData.Connection.Open();
-
             string sql = "DELETE FROM Users";
             DataStorage.CrawlData.ExecuteWrite(sql);
-
-            DataStorage.CrawlData.Connection.Close();
         }
 
         #endregion

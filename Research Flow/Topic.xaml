@@ -18,10 +18,7 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
-                <Grid Height="36" VerticalAlignment="Top">
-                    <TextBlock Text="Tags" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="12,0,0,0"/>
-                </Grid>
-                <SemanticZoom Margin="0,36,0,0">
+                <SemanticZoom Margin="0,0,0,48">
                     <SemanticZoom.ZoomedInView>
                         <ListView x:Name="taglist" ScrollViewer.IsHorizontalScrollChainingEnabled="False">
                             <ListView.ItemTemplate>
@@ -52,10 +49,20 @@
                         </GridView>
                     </SemanticZoom.ZoomedOutView>
                 </SemanticZoom>
+                <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                    <CommandBar.Content>
+                        <TextBlock Text="Tags" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
+                    </CommandBar.Content>
+                    <AppBarButton Icon="Add" Label="Add"/>
+                </CommandBar>
             </Grid>
 
             <Grid Grid.Column="1">
-                <StackPanel Height="200" Width="500" VerticalAlignment="Bottom">
+                
+            </Grid>
+
+            <Grid Grid.Column="2" BorderBrush="Black" BorderThickness="1,0,0,0">
+                <StackPanel Height="200" VerticalAlignment="Bottom">
                     <TextBox PlaceholderText="#Tag1##Tag2#Content/Topic/Project/TODO" AcceptsReturn="True" Height="100" Margin="20"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <CalendarDatePicker Header="Start Date"/>
@@ -64,10 +71,6 @@
                     </StackPanel>
                 </StackPanel>
             </Grid>
-
-            <SplitView Grid.Column="1">
-                
-            </SplitView>
             
         </Grid>
 

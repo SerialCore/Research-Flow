@@ -48,8 +48,8 @@ namespace Research_Flow
 
                 if (ApplicationInfo.IsFirstUse || !ApplicationSetting.ContainKey("Configured"))
                 {
-                    await ConfigureFile();
-                    ConfigureDB();
+                    if (await ConfigureFile()) // and then, check db
+                        ConfigureDB();
                 }
             }
             else
@@ -86,7 +86,9 @@ namespace Research_Flow
 
         private void ConfigureDB()
         {
-
+            Crawlable.DBInitialize();
+            FeedItem.DBInitialize();
+            // in future updates, some alter commands may be wrote here
         }
 
     }

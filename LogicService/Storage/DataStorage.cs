@@ -130,7 +130,8 @@ namespace LogicService.Storage
                 command.Parameters.AddRange(SetParameters(parameters));
             }
 
-            DbTransaction transaction = _conn.BeginTransaction();
+            SqliteTransaction transaction = _conn.BeginTransaction();
+            command.Transaction = transaction;
             affectedRows = command.ExecuteNonQuery();
             transaction.Commit();
 
@@ -152,16 +153,15 @@ namespace LogicService.Storage
             return command.ExecuteReader();
         }
 
-        public Array SetParameters(Dictionary<string, object> parameters = null)
+        public Array SetParameters(Dictionary<string, object> parameters)
         {
             List<SqliteParameter> sqlite_param = new List<SqliteParameter>();
-            if (parameters != null)
+
+            foreach (KeyValuePair<string, object> row in parameters)
             {
-                foreach (KeyValuePair<string, object> row in parameters)
-                {
-                    sqlite_param.Add(new SqliteParameter(row.Key, row.Value));
-                }
+                sqlite_param.Add(new SqliteParameter(row.Key, row.Value));
             }
+
             return sqlite_param.ToArray();
         }
         
