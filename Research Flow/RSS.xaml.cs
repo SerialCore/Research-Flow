@@ -221,15 +221,13 @@ namespace Research_Flow
         private void Close_FeedDetail(object sender, RoutedEventArgs e)
             => feedItem_detail.IsPaneOpen = false;
 
-        private async void LoadFeed(RSSSource source)
+        private void LoadFeed(RSSSource source)
         {
-            try
-            {
-                List<FeedItem> feedItems = await LocalStorage.ReadJsonAsync<List<FeedItem>>(
-                    await LocalStorage.GetDataAsync(), source.ID);
-                feedItem_list.ItemsSource = feedItems;
-            }
-            catch { }
+            //List<FeedItem> feedItems = await LocalStorage.ReadJsonAsync<List<FeedItem>>(
+            //await LocalStorage.GetDataAsync(), source.ID);
+            FeedItem.DBOpen();
+            feedItem_list.ItemsSource = FeedItem.DBSelectUIByPID(source.ID);
+            FeedItem.DBClose();
         }
 
         private void SearchFeed(RSSSource source)
@@ -249,9 +247,14 @@ namespace Research_Flow
                     });
                     if (feeds.Count > source.MaxCount)
                         feeds.RemoveRange(source.MaxCount, feeds.Count - source.MaxCount);
-                    LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), source.ID, items);
+                    //LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), source.ID, items);
+
+                    FeedItem.DBOpen();
+                    FeedItem.DBInsert(feeds, source.MaxCount);
+                    FeedItem.DBClose();
+
                     FeedSources[selectedFeedIndex].LastUpdateTime = DateTime.Now;
-                    LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
+                    //LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
                 },
                 async (exception) =>
                 {

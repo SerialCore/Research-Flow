@@ -18,6 +18,8 @@ namespace LogicService.Objects
 
         public DateTime DateModified { get; set; }
 
+        #region Equals
+
         public override bool Equals(object obj)
         {
             if (obj == null)
@@ -51,5 +53,7 @@ namespace LogicService.Objects
                 hashCode ^= FileName.GetHashCode();
             return hashCode;
         }
+
+        #endregion
     }
 }

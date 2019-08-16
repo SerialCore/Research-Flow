@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Windows.Web.Syndication;
 using LogicService.Storage;
 using System.Xml;
+using Microsoft.Data.Sqlite;
 
 namespace LogicService.Objects
 {
@@ -108,39 +109,46 @@ namespace LogicService.Objects
                     [Summary] varchar(500),
                     [FullText] varchar(1000),
                     [Tags] varchar(500),
-                    [Nodes] varchar(1000))";
+                    [Nodes] varchar(1000));";
             DataStorage.FeedData.ExecuteWrite(sql);
 
             DataStorage.FeedData.Connection.Close();
         }
 
-        public static int DBAppend(FeedItem feed, int max)
+        public static int DBInsert(List<FeedItem> feeds, int max)
         {
+            DBDeleteAllByPID(feeds[0].ParentID);
+
             int affectedRows = 0;
-            string sql = @"insert into Feed(ID, ParentID, Title, Published, Link, Summary, FullText, Tags, Nodes)
-                values(@ID, @ParentID, @Title, @Published, @Link, @Summary, @FullText, @Tags, @Nodes)";
-            affectedRows = DataStorage.FeedData.ExecuteWrite(sql, new Dictionary<string, object>
+            string sql = @"insert into Feed(ID, ParentID, Title, Published, Link, Summary, Nodes)
+                values(@ID, @ParentID, @Title, @Published, @Link, @Summary, @Nodes);";
+            foreach (FeedItem feed in feeds)
             {
-                { "ID", feed.ID },
-                { "ParentID", feed.ParentID },
-                { "Title", feed.Title },
-                { "Published", feed.Published },
-                { "Link", feed.Link },
-                { "Summary", feed.Summary },
-                { "FullText", feed.FullText },
-                { "Tags", feed.Tags },
-                { "Nodes", feed.Nodes },
-            });
+                    affectedRows += DataStorage.FeedData.ExecuteWrite(sql, new Dictionary<string, object>
+                {
+                    { "@ID", feed.ID },
+                    { "@ParentID", feed.ParentID },
+                    { "@Title", feed.Title },
+                    { "@Published", feed.Published },
+                    { "@Link", feed.Link },
+                    { "@Summary", feed.Summary },
+                    { "@Nodes", feed.Nodes },
+                });
+            }
 
             // delete
+
+
+            LocalStorage.AddFileList("Data", DataStorage.FeedData.Database);
+            LocalStorage.AddFileTrace("Data", DataStorage.FeedData.Database);
 
             return affectedRows;
         }
 
-        public static List<FeedItem> DBSelectByPID(string pid)
+        public static List<FeedItem> DBSelectUIByPID(string pid)
         {
             string sql = "select * from Feed where ParentID = @ParentID;";
-            var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "ParentID", pid } });
+            var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@ParentID", pid } });
 
             List<FeedItem> feeds = new List<FeedItem>();
             while (reader.Read())
@@ -153,18 +161,23 @@ namespace LogicService.Objects
                     Published = reader.GetString(3),
                     Link = reader.GetString(4),
                     Summary = reader.GetString(5),
-                    FullText = reader.GetString(6),
-                    Tags = reader.GetString(7),
                     Nodes = reader.GetString(8)
                 });
             }
             return feeds;
         }
 
-        public static void DBDelete(string id)
+        public static void DBUpdate(string id)
         {
-            string sql = "delete from Feed";
-            DataStorage.FeedData.ExecuteWrite(sql);
+
+        }
+
+        public static int DBDeleteAllByPID(string pid)
+        {
+            int affectedRows = 0;
+            string sql = "delete from Feed where ParentID = @ParentID;";
+            affectedRows = DataStorage.FeedData.ExecuteWrite(sql, new Dictionary<string, object> { { "@ParentID", pid } });
+            return affectedRows;
         }
 
         #endregion

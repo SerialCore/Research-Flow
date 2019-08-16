@@ -134,9 +134,6 @@ namespace LogicService.Storage
             command.Transaction = transaction;
             affectedRows = command.ExecuteNonQuery();
             transaction.Commit();
-
-            LocalStorage.AddFileList("Data", _dbname);
-            LocalStorage.AddFileTrace("Data", _dbname);
             
             return affectedRows;
         }

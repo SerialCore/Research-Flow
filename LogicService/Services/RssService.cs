@@ -28,6 +28,7 @@ namespace LogicService.Services
                         using (StreamReader reader = new StreamReader(stream))
                         {
                             string content = reader.ReadToEnd();
+                            string parentID = HashEncode.MakeMD5(rssFeed);
                             List<FeedItem> rssItems = new List<FeedItem>();
                             SyndicationFeed feeds = new SyndicationFeed();
                             feeds.Load(content);
@@ -36,6 +37,7 @@ namespace LogicService.Services
                                 rssItems.Add(new FeedItem
                                 {
                                     ID = HashEncode.MakeMD5(f.Links[0].Uri.AbsoluteUri),
+                                    ParentID = parentID,
                                     Title = f.Title.Text,
                                     Published = f.PublishedDate.ToString(),
                                     Link = f.Links[0].Uri.AbsoluteUri,
