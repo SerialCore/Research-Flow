@@ -1,5 +1,6 @@
 ﻿using LogicService.Application;
 using LogicService.Helper;
+using LogicService.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,5 +56,76 @@ namespace LogicService.Objects
         }
 
         #endregion
+
+        #region Trace DB
+
+        public static void DBOpenTrace()
+            => DataStorage.FileTrace.Connection.Open();
+
+        public static void DBCloseTrace()
+            => DataStorage.FileTrace.Connection.Close();
+
+        public static void DBInitializeTrace()
+        {
+
+        }
+
+        public static void DBInsertTrace()
+        {
+
+        }
+
+        public static void DBSelectTrace()
+        {
+
+        }
+
+        public static void DBUpdateTrace()
+        {
+
+        }
+
+        public static void DBDeleteTrace()
+        {
+
+        }
+
+        #endregion
+
+        #region List DB
+
+        public static void DBOpenList()
+            => DataStorage.FileList.Connection.Open();
+
+        public static void DBCloseList()
+            => DataStorage.FileList.Connection.Close();
+
+        public static void DBInitializeList()
+        {
+
+        }
+
+        public static void DBInsertList()
+        {
+
+        }
+
+        public static void DBSelectList()
+        {
+
+        }
+
+        public static void DBUpdateList()
+        {
+
+        }
+
+        public static void DBDeleteList()
+        {
+
+        }
+
+        #endregion
+
     }
 }

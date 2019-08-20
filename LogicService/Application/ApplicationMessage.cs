@@ -12,7 +12,13 @@ namespace LogicService.Application
     public class ApplicationMessage
     {
 
-        public delegate void MessageHandle(string message, int span);
+        public enum MessageType
+        {
+            TopBanner,
+            InAppNotification,
+        }
+
+        public delegate void MessageHandle(string message, MessageType type);
 
         /// <summary>
         /// Each page should have defined a eventhandle, but they just need one if there is a Public defination.
@@ -25,11 +31,11 @@ namespace LogicService.Application
         /// </summary>
         /// <param name="text">message</param>
         /// <param name="span">time span for message in second</param>
-        public static void SendMessage(string text, int span)
+        public static void SendMessage(string text, MessageType type)
         {
             if (MessageReached != null)
             {
-                MessageReached(text, span);
+                MessageReached(text, type);
             }
         }
 

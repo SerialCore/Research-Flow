@@ -6,6 +6,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LogicService.Application;
 
 namespace LogicService.Storage
 {
@@ -28,22 +29,34 @@ namespace LogicService.Storage
             {
                 case DataType.CrawlData:
                     _dbname = "crawlable.db";
+                    _dbpath = LocalStorage.TryGetDataPath() + "\\" + _dbname;
                     break;
                 case DataType.PaperData:
                     _dbname = "paper.db";
+                    _dbpath = LocalStorage.TryGetDataPath() + "\\" + _dbname;
                     break;
                 case DataType.FeedData:
                     _dbname = "feed.db";
+                    _dbpath = LocalStorage.TryGetDataPath() + "\\" + _dbname;
+                    break;
+                case DataType.FileTrace:
+                    _dbname = ApplicationSetting.AccountName + "filetrace.db";
+                    _dbpath = LocalStorage.TryGetLogPath() + "\\" + _dbname;
+                    break;
+                case DataType.FileList:
+                    _dbname = ApplicationSetting.AccountName + "filelist.db";
+                    _dbpath = LocalStorage.GetRoamingFolder().Path + "\\" + _dbname;
                     break;
             }
-            _dbpath = LocalStorage.TryGetDataPath() + "\\" + _dbname;
         }
 
-        enum DataType { CrawlData, PaperData, FeedData }
+        enum DataType { CrawlData, PaperData, FeedData, FileTrace, FileList }
 
         private static DataStorage _crawldata;
         private static DataStorage _paperdata;
         private static DataStorage _feeddata;
+        private static DataStorage _filetrace;
+        private static DataStorage _filelist;
 
         public static DataStorage CrawlData
         {
@@ -75,6 +88,26 @@ namespace LogicService.Storage
             }
         }
 
+        public static DataStorage FileTrace
+        {
+            get
+            {
+                if (_filetrace == null)
+                    _filetrace = new DataStorage(DataType.FileTrace);
+                return _filetrace;
+            }
+        }
+
+        public static DataStorage FileList
+        {
+            get
+            {
+                if (_filelist == null)
+                    _filelist = new DataStorage(DataType.FileList);
+                return _filelist;
+            }
+        }
+
         #endregion
 
         #region Non-Static
@@ -90,7 +123,7 @@ namespace LogicService.Storage
         {
             get
             {
-                if (_conn == null)
+                if (_conn == null) // always new？
                     _conn = new SqliteConnection(string.Format("Data Source={0};", this._dbpath));
                 return _conn;
             }
@@ -130,10 +163,7 @@ namespace LogicService.Storage
                 command.Parameters.AddRange(SetParameters(parameters));
             }
 
-            SqliteTransaction transaction = _conn.BeginTransaction();
-            command.Transaction = transaction;
             affectedRows = command.ExecuteNonQuery();
-            transaction.Commit();
             
             return affectedRows;
         }

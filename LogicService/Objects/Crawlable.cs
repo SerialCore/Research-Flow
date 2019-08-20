@@ -82,21 +82,41 @@ namespace LogicService.Objects
 
         public static void DBInsert()
         {
-            string sql = @"INSERT INTO Users(Username, Email, Password)
-                VALUES('admin', 'testing@gmail.com', 'test')";
-            DataStorage.CrawlData.ExecuteWrite(sql);
+            int affectedRows = 0;
+            string sql = @"insert into Crawlable(ID, ParentID, Text, Url)
+                values(@ID, @ParentID, @Text, @Url);";
         }
 
-        public static void DBSelect()
+        public static List<Crawlable> DBSelectUIByPID(string pid)
         {
-            string sql = "SELECT * From Users WHERE Id = @UserId;";
-            DataStorage.CrawlData.ExecuteRead(sql);
+            string sql = "select * from Crawlable where ParentID = @ParentID;";
+            var reader = DataStorage.CrawlData.ExecuteRead(sql, new Dictionary<string, object> { { "@ParentID", pid } });
+
+            List<Crawlable> crawl = new List<Crawlable>();
+            while (reader.Read())
+            {
+                crawl.Add(new Crawlable
+                {
+                    ID = reader.GetString(0),
+                    ParentID = reader.GetString(1), // if null
+                    Text = reader.GetString(2),
+                    Url = reader.GetString(3)
+                });
+            }
+            return crawl;
         }
 
-        public static void DBDelete()
+        public static void DBUpdate()
         {
-            string sql = "DELETE FROM Users";
-            DataStorage.CrawlData.ExecuteWrite(sql);
+
+        }
+
+        public static int DBDeleteByID(string id)
+        {
+            int affectedRows = 0;
+            string sql = "delete from Crawlable where ID = @ID;";
+            affectedRows = DataStorage.FeedData.ExecuteWrite(sql, new Dictionary<string, object> { { "@ID", id } });
+            return affectedRows;
         }
 
         #endregion

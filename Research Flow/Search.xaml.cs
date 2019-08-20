@@ -1,12 +1,10 @@
-﻿using LogicService.Objects;
-using LogicService.Security;
+﻿using LogicService.Application;
+using LogicService.Objects;
 using LogicService.Services;
 using LogicService.Storage;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.System;
 using Windows.UI.Core;
@@ -290,7 +288,7 @@ namespace Research_Flow
                 {
                     await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
-                        InAppNotification.Show(exception);
+                        ApplicationMessage.SendMessage("SearchException: " + exception, ApplicationMessage.MessageType.InAppNotification);
                         craWaiting.IsActive = false;
                     });
                 });

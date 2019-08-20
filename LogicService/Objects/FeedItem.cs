@@ -19,8 +19,6 @@ namespace LogicService.Objects
 
         public string Uri { get; set; }
 
-        public int MaxCount { get; set; }
-
         public double Star { get; set; }
 
         public bool IsJournal { get; set; }
@@ -115,16 +113,16 @@ namespace LogicService.Objects
             DataStorage.FeedData.Connection.Close();
         }
 
-        public static int DBInsert(List<FeedItem> feeds, int max)
+        public static int DBInsert(List<FeedItem> feeds)
         {
-            DBDeleteAllByPID(feeds[0].ParentID);
+            DBDeleteByPID(feeds[0].ParentID);
 
             int affectedRows = 0;
             string sql = @"insert into Feed(ID, ParentID, Title, Published, Link, Summary, Nodes)
                 values(@ID, @ParentID, @Title, @Published, @Link, @Summary, @Nodes);";
             foreach (FeedItem feed in feeds)
             {
-                    affectedRows += DataStorage.FeedData.ExecuteWrite(sql, new Dictionary<string, object>
+                affectedRows += DataStorage.FeedData.ExecuteWrite(sql, new Dictionary<string, object>
                 {
                     { "@ID", feed.ID },
                     { "@ParentID", feed.ParentID },
@@ -135,9 +133,6 @@ namespace LogicService.Objects
                     { "@Nodes", feed.Nodes },
                 });
             }
-
-            // delete
-
 
             LocalStorage.AddFileList("Data", DataStorage.FeedData.Database);
             LocalStorage.AddFileTrace("Data", DataStorage.FeedData.Database);
@@ -172,7 +167,7 @@ namespace LogicService.Objects
 
         }
 
-        public static int DBDeleteAllByPID(string pid)
+        public static int DBDeleteByPID(string pid)
         {
             int affectedRows = 0;
             string sql = "delete from Feed where ParentID = @ParentID;";

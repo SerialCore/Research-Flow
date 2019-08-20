@@ -1,26 +1,18 @@
 ﻿using LogicService.Application;
 using LogicService.Helper;
 using LogicService.Storage;
-using Microsoft.Graphics.Canvas;
-using Microsoft.Toolkit.Uwp.Helpers;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.Storage.Pickers;
-using Windows.Storage.Search;
 using Windows.Storage.Streams;
-using Windows.UI;
-using Windows.UI.Input.Inking;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -49,7 +41,7 @@ namespace Research_Flow
                 }
                 catch (Exception ex)
                 {
-                    InAppNotification.Show(ex.Message);
+                    ApplicationMessage.SendMessage("NoteException: " + ex.Message, ApplicationMessage.MessageType.InAppNotification);
                 }
             }
 
@@ -92,7 +84,7 @@ namespace Research_Flow
                 }
                 catch (Exception ex)
                 {
-                    InAppNotification.Show(ex.Message);
+                    ApplicationMessage.SendMessage("NoteException: " + ex.Message, ApplicationMessage.MessageType.InAppNotification);
                 }
             }
         }
@@ -248,7 +240,7 @@ namespace Research_Flow
                     notename + ".rfn", canvas.ExportAsJson());
             }
 
-            ApplicationMessage.SendMessage("Note saved", 3);
+            ApplicationMessage.SendMessage("Note saved", ApplicationMessage.MessageType.TopBanner);
             foreach (string item in namelist)
             {
                 if (item.Equals(notename))

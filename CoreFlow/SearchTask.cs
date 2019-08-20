@@ -35,9 +35,11 @@ namespace CoreFlow
                     async (items) =>
                     {
                         List<FeedItem> feeds = items as List<FeedItem>;
-                        if (feeds.Count > source.MaxCount)
-                            feeds.RemoveRange(source.MaxCount, feeds.Count - source.MaxCount);
-                        LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), source.ID, items);
+
+                        FeedItem.DBOpen();
+                        FeedItem.DBInsert(feeds);
+                        FeedItem.DBClose();
+
                         source.LastUpdateTime = DateTime.Now;
                         LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
 

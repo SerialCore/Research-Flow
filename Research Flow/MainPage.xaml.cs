@@ -43,12 +43,18 @@ namespace Research_Flow
             ApplicationMessage.MessageReached += AppMessage_MessageReached;
         }
 
-        private async void AppMessage_MessageReached(string message, int span)
+        private async void AppMessage_MessageReached(string message, ApplicationMessage.MessageType type)
         {
-            appMessage.Text = message;
-
-            await Task.Delay(span * 1000);
-            appMessage.Text = "";
+            switch (type)
+            {
+                case ApplicationMessage.MessageType.TopBanner:
+                    appMessage.Text = message;
+                    await Task.Delay(3000);
+                    break;
+                case ApplicationMessage.MessageType.InAppNotification:
+                    InAppNotification.Show(message);
+                    break;
+            }
         }
 
         private async void ConfigureTask()
@@ -170,9 +176,9 @@ namespace Research_Flow
         {
             if (GraphService.IsConnected && GraphService.IsNetworkAvailable)
             {
-                ApplicationMessage.SendMessage("Synchronizing", 3);
+                ApplicationMessage.SendMessage("Synchronizing", ApplicationMessage.MessageType.TopBanner);
                 await Synchronization.ScanFiles();
-                ApplicationMessage.SendMessage("Synchronized successfully", 5);
+                ApplicationMessage.SendMessage("Synchronized successfully", ApplicationMessage.MessageType.TopBanner);
             }
         }
 

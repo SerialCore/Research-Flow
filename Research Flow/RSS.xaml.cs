@@ -1,25 +1,18 @@
-﻿using LogicService.Objects;
+﻿using LogicService.Application;
+using LogicService.Objects;
 using LogicService.Security;
 using LogicService.Services;
 using LogicService.Storage;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Xml;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -52,13 +45,13 @@ namespace Research_Flow
                 FeedSources = new ObservableCollection<RSSSource>()
                 {
                     new RSSSource{ID=HashEncode.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd"),
-                        Name ="Hydrogen Bond in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,Star=5,IsJournal=true},
+                        Name ="Hydrogen Bond in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd",Star=5,IsJournal=true},
                     new RSSSource{ID=HashEncode.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd"),
-                        Name ="Pedal Motion in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd",MaxCount=50,Star=5,IsJournal=true},
+                        Name ="Pedal Motion in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd",Star=5,IsJournal=true},
                     new RSSSource{ID=HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prl.xml"),
-                        Name ="Physical Review Letters",Uri="http://feeds.aps.org/rss/recent/prl.xml",MaxCount=50,Star=5,IsJournal=true},
+                        Name ="Physical Review Letters",Uri="http://feeds.aps.org/rss/recent/prl.xml",Star=5,IsJournal=true},
                     new RSSSource{ID=HashEncode.MakeMD5("http://www.sciencenet.cn/xml/paper.aspx?di=7"),
-                        Name ="科学网-数理科学",Uri="http://www.sciencenet.cn/xml/paper.aspx?di=7",MaxCount=50,Star=5,IsJournal=false}
+                        Name ="科学网-数理科学",Uri="http://www.sciencenet.cn/xml/paper.aspx?di=7",Star=5,IsJournal=false}
                 };
                 LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
             }
@@ -92,7 +85,6 @@ namespace Research_Flow
 
                     rssName.Text = item.Name;
                     rssUrl.Text = item.Uri;
-                    feedCount.Value = item.MaxCount;
                     rssStar.Value = item.Star;
                     isJournal.IsChecked = item.IsJournal;
 
@@ -112,7 +104,6 @@ namespace Research_Flow
                     ID = HashEncode.MakeMD5(rssUrl.Text),
                     Name = rssName.Text,
                     Uri = rssUrl.Text,
-                    MaxCount = (int)(feedCount.Value),
                     Star = rssStar.Value,
                     IsJournal = (bool)(isJournal.IsChecked)
                 };
@@ -128,7 +119,7 @@ namespace Research_Flow
                     {
                         if (item.Uri.Equals(rssUrl.Text))
                         {
-                            InAppNotification.Show("There has been the same url.");
+                            ApplicationMessage.SendMessage("RssException: There has been the same url.", ApplicationMessage.MessageType.InAppNotification);
                             ClearSettings();
                             return;
                         }
@@ -176,7 +167,6 @@ namespace Research_Flow
             modifiedRSS = null;
             rssName.Text = "";
             rssUrl.Text = "";
-            feedCount.Value = 20;
             rssStar.Value = -1;
             isJournal.IsChecked = false;
 
@@ -223,8 +213,6 @@ namespace Research_Flow
 
         private void LoadFeed(RSSSource source)
         {
-            //List<FeedItem> feedItems = await LocalStorage.ReadJsonAsync<List<FeedItem>>(
-            //await LocalStorage.GetDataAsync(), source.ID);
             FeedItem.DBOpen();
             feedItem_list.ItemsSource = FeedItem.DBSelectUIByPID(source.ID);
             FeedItem.DBClose();
@@ -245,22 +233,18 @@ namespace Research_Flow
                         feedItem_list.ItemsSource = feeds;
                         waiting_feed.IsActive = false;
                     });
-                    if (feeds.Count > source.MaxCount)
-                        feeds.RemoveRange(source.MaxCount, feeds.Count - source.MaxCount);
-                    //LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), source.ID, items);
-
                     FeedItem.DBOpen();
-                    FeedItem.DBInsert(feeds, source.MaxCount);
+                    FeedItem.DBInsert(feeds);
                     FeedItem.DBClose();
 
                     FeedSources[selectedFeedIndex].LastUpdateTime = DateTime.Now;
-                    //LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
+                    LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
                 },
                 async (exception) =>
                 {
                     await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
-                        InAppNotification.Show("RssException: " + exception);
+                        ApplicationMessage.SendMessage("RssException: " + exception, ApplicationMessage.MessageType.InAppNotification);
                         waiting_feed.IsActive = false;
                     });
                 }, null);
