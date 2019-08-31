@@ -150,11 +150,11 @@ namespace Research_Flow
         {
             FeedSources.Remove(modifiedRSS);
             LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
-            try
-            {
-                LocalStorage.GeneralDeleteAsync(await LocalStorage.GetDataAsync(), modifiedRSS.ID);
-            }
-            catch { }
+
+            FeedItem.DBOpen();
+            FeedItem.DBDeleteByPID(modifiedRSS.ID);
+            FeedItem.DBClose();
+
             ClearSettings();
         }
 

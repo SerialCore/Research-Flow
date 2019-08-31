@@ -36,7 +36,7 @@ namespace Research_Flow
             string link = e.Parameter as string;
             if (!string.IsNullOrEmpty(link))
             {
-                webView.Source = new Uri(link);
+                webView.Source = new Uri(link); // BUG: always show old site when NavigatedTo
             }
         }
 

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -24,14 +25,15 @@ namespace Research_Flow
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class Topic : Page
+    public sealed partial class TagTopic : Page
     {
-        public Topic()
+        public TagTopic()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
             InitializeTag();
+            InitializeTopic();
         }
 
         private async void InitializeTag()
@@ -60,18 +62,18 @@ namespace Research_Flow
         {
             try
             {
-                topics = await LocalStorage.ReadJsonAsync<List<Topic>>(
+                topics = await LocalStorage.ReadJsonAsync<ObservableCollection<Topic>>(
                     await LocalStorage.GetDataAsync(), "topiclist");
             }
             catch
             {
                 // for new user, remember to load default feed from file, not the follows
-                topics = new List<Topic>();
+                topics = new ObservableCollection<Topic>();
                 LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "topiclist", topics);
             }
             finally
             {
-
+                topiclist.ItemsSource = topics;
             }
         }
 
@@ -107,7 +109,65 @@ namespace Research_Flow
 
         #region Task Management
 
-        public List<Topic> topics { get; set; }
+        public ObservableCollection<Topic> topics { get; set; }
+
+        private Topic currentTopic = null;
+
+        private void AddTopicSetting(object sender, TappedRoutedEventArgs e) => topicSetting.Visibility = Visibility.Visible;
+
+        private async void SubmitTopic(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(topicTitle.Text))
+            {
+                Topic topic = new Topic();
+                topic.Title = topicTitle.Text;
+                if (startDate.Date != null)
+                    topic.StartDate = startDate.Date.Value.UtcDateTime;
+                if (endDate.Date != null)
+                    topic.EndDate = endDate.Date.Value.UtcDateTime;
+                topics.Add(topic);
+                LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "topiclist", topics);
+
+                // add tags
+            }
+            ClearTopicSetting();
+        }
+
+        private async void DeleteTopic(object sender, RoutedEventArgs e)
+        {
+            var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.", "Operation confirming");
+            messageDialog.Commands.Add(new UICommand(
+                "True",
+                new UICommandInvokedHandler(this.DeleteInvokedHandler)));
+            messageDialog.Commands.Add(new UICommand(
+                "Joke",
+                new UICommandInvokedHandler(this.CancelInvokedHandler)));
+
+            messageDialog.DefaultCommandIndex = 0;
+            messageDialog.CancelCommandIndex = 1;
+            await messageDialog.ShowAsync();
+        }
+
+        private async void DeleteInvokedHandler(IUICommand command)
+        {
+            topics.Remove(currentTopic);
+            LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "topiclist", topics);
+            ClearTopicSetting();
+        }
+
+        private void CancelInvokedHandler(IUICommand command) => ClearTopicSetting();
+
+        private void CancelTopic(object sender, RoutedEventArgs e) => ClearTopicSetting();
+
+        private void ClearTopicSetting()
+        {
+            topicTitle.Text = "";
+            startDate.Date = null;
+            endDate.Date = null;
+
+            topicDelete.Visibility = Visibility.Collapsed;
+            topicSetting.Visibility = Visibility.Collapsed;
+        }
 
         #endregion
 

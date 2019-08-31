@@ -26,7 +26,7 @@
                 </NavigationViewItem>
 
                 <NavigationViewItemSeparator/>
-                <NavigationViewItem Content="Topic" Tag="Topic">
+                <NavigationViewItem Content="Tag + Topic" Tag="TagTopic">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEB50;"/>
                     </NavigationViewItem.Icon>

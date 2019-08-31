@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="Research_Flow.Topic"
+    x:Class="Research_Flow.TagTopic"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Research_Flow"
@@ -62,14 +62,38 @@
             </Grid>
 
             <Grid Grid.Column="2" BorderBrush="Black" BorderThickness="1,0,0,0">
-                <StackPanel Height="200" VerticalAlignment="Bottom">
-                    <TextBox PlaceholderText="#Tag1##Tag2#Content/Topic/Project/TODO" AcceptsReturn="True" Height="100" Margin="20"/>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <CalendarDatePicker Header="Start Date"/>
-                        <CalendarDatePicker Header="End Date"/>
-                        <Button Content="Submit" Height="56" Width="100"/>
+                <ScrollViewer >
+                    <StackPanel >
+                        <ListViewItem Tapped="AddTopicSetting">
+                            <TextBlock Text="+" Margin="180,0,0,0"/>
+                        </ListViewItem>
+                        <ListView x:Name="topiclist">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Title}"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <Grid x:Name="topicSetting" Visibility="Collapsed" Padding="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="100"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="topicTitle" PlaceholderText="#Tag1##Tag2#Idea/Topic/Project/TODO" AcceptsReturn="True" TextWrapping="Wrap"/>
+                            <CalendarDatePicker Grid.Row="1" Grid.Column="0" x:Name="startDate" Header="Start Date" HorizontalAlignment="Stretch" Margin="0,5,5,5"/>
+                            <CalendarDatePicker Grid.Row="1" Grid.Column="1" x:Name="endDate" Header="End Date" HorizontalAlignment="Stretch" Margin="5,5,0,5"/>
+                            <Button Grid.Row="2" Grid.Column="0" Content="Submit" Click="SubmitTopic" HorizontalAlignment="Stretch" Margin="0,5,5,5" Background="LightSkyBlue"/>
+                            <Button Grid.Row="2" Grid.Column="1" Content="Cancel" Click="CancelTopic" HorizontalAlignment="Stretch" Margin="5,10,0,10" Background="LightGray"/>
+                            <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" x:Name="topicDelete" Content="Delete" Click="DeleteTopic" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
+                        </Grid>
                     </StackPanel>
-                </StackPanel>
+                </ScrollViewer>
             </Grid>
             
         </Grid>

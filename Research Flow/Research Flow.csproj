@@ -132,8 +132,8 @@
     <Compile Include="Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Topic.xaml.cs">
-      <DependentUpon>Topic.xaml</DependentUpon>
+    <Compile Include="TagTopic.xaml.cs">
+      <DependentUpon>TagTopic.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -143,7 +143,6 @@
     </AppxManifest>
     <None Include="Research Flow_StoreKey.pfx" />
     <None Include="Research Flow_TemporaryKey.pfx" />
-    <Content Include="Resources\readme.txt" />
     <Content Include="Resources\DefaultNote.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -216,7 +215,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Topic.xaml">
+    <Page Include="TagTopic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

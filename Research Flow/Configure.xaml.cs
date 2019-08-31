@@ -34,6 +34,7 @@ namespace Research_Flow
 
         private async void Login_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            accountIcon.IsTapEnabled = false;
             accountStatu.Text = "Logging in";
             if (await GraphService.OneDriveLogin())
             {
@@ -51,17 +52,19 @@ namespace Research_Flow
                     if (await ConfigureFile()) // and then, check db
                         ConfigureDB();
                 }
+
+                // make sure there will be an user folder and user data
+                if (ApplicationSetting.ContainKey("AccountName") && ApplicationSetting.ContainKey("Configured"))
+                {
+                    await Task.Delay(1000);
+                    this.Frame.Navigate(typeof(MainPage), tempParameter);
+                }
             }
             else
             {
                 accountStatu.Text = "Please login again";
-            }
-
-            // make sure there will be an user folder and user data
-            if (ApplicationSetting.ContainKey("AccountName") && ApplicationSetting.ContainKey("Configured"))
-            {
-                await Task.Delay(1000);
-                this.Frame.Navigate(typeof(MainPage), tempParameter);
+                accountIcon.IsTapEnabled = true;
+                // then navigate or not, give an option
             }
         }
 
