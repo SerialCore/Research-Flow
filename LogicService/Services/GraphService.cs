@@ -65,11 +65,6 @@ namespace LogicService.Services
             User = null;
         }
 
-        public async static Task<IRandomAccessStream> GetUserPhoto()
-        {
-            return (IRandomAccessStream)(await User.PhotosService.GetPhotoAsync());
-        }
-
         public async static Task<string> GetDisplayName()
         {
             return (await User.GetProfileAsync()).GivenName;

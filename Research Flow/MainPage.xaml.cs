@@ -70,13 +70,20 @@ namespace Research_Flow
 
             if (GraphService.IsConnected)
             {
-                string name = await GraphService.GetDisplayName();
-                string email = await GraphService.GetPrincipalName();
-                BitmapImage image = new BitmapImage();
-                image.UriSource = new Uri("ms-appx:///Images/ResearchFlow_logo.jpg");
-                accountName.Text = name;
-                accountEmail.Text = email;
-                accountPhoto.ProfilePicture = image;
+                try
+                {
+                    string name = await GraphService.GetDisplayName();
+                    string email = await GraphService.GetPrincipalName();
+                    BitmapImage image = new BitmapImage();
+                    image.UriSource = new Uri("ms-appx:///Images/ResearchFlow_logo.jpg");
+                    accountName.Text = name;
+                    accountEmail.Text = email;
+                    accountPhoto.ProfilePicture = image;
+                }
+                catch (Exception ex)
+                {
+                    InAppNotification.Show(ex.Source + ": " + ex.Message);
+                }
             }
             else
             {

@@ -44,14 +44,14 @@ namespace Research_Flow
                 // for new user, remember to load default feed from file, not the follows
                 FeedSources = new ObservableCollection<RSSSource>()
                 {
-                    new RSSSource{ID=HashEncode.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd"),
-                        Name ="Hydrogen Bond in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd",Star=5,IsJournal=true},
-                    new RSSSource{ID=HashEncode.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd"),
-                        Name ="Pedal Motion in ACS",Uri="https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd",Star=5,IsJournal=true},
-                    new RSSSource{ID=HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prl.xml"),
-                        Name ="Physical Review Letters",Uri="http://feeds.aps.org/rss/recent/prl.xml",Star=5,IsJournal=true},
-                    new RSSSource{ID=HashEncode.MakeMD5("http://www.sciencenet.cn/xml/paper.aspx?di=7"),
-                        Name ="科学网-数理科学",Uri="http://www.sciencenet.cn/xml/paper.aspx?di=7",Star=5,IsJournal=false}
+                    new RSSSource{ ID = HashEncode.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd"),
+                        Name = "Hydrogen Bond in ACS", Uri = "https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd", Star = 5, IsJournal = true },
+                    new RSSSource{ ID = HashEncode.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd"),
+                        Name = "Pedal Motion in ACS", Uri = "https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd", Star = 5, IsJournal = true },
+                    new RSSSource{ ID = HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prl.xml"),
+                        Name = "Physical Review Letters", Uri = "http://feeds.aps.org/rss/recent/prl.xml", Star = 5, IsJournal = true },
+                    new RSSSource{ ID = HashEncode.MakeMD5("http://www.sciencenet.cn/xml/paper.aspx?di=7"),
+                        Name = "科学网-数理科学", Uri = "http://www.sciencenet.cn/xml/paper.aspx?di=7", Star = 5, IsJournal = false}
                 };
                 LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
             }
@@ -81,16 +81,14 @@ namespace Research_Flow
                 if (item.ID.Equals((string)button.Tag))
                 {
                     source_panel.Visibility = Visibility.Visible;
+                    rssDelete.Visibility = Visibility;
                     modifiedRSS = item;
 
                     rssName.Text = item.Name;
                     rssUrl.Text = item.Uri;
                     rssStar.Value = item.Star;
                     isJournal.IsChecked = item.IsJournal;
-
                     rssUrl.IsReadOnly = true;
-                    rssDelete.Visibility = Visibility;
-                    source_panel.Visibility = Visibility.Visible;
                 }
             }
         }
@@ -117,7 +115,7 @@ namespace Research_Flow
                 {
                     foreach (RSSSource item in FeedSources)
                     {
-                        if (item.Uri.Equals(rssUrl.Text))
+                        if (item == source) // require the Equals method
                         {
                             ApplicationMessage.SendMessage("RssException: There has been the same url.", ApplicationMessage.MessageType.InAppNotification);
                             ClearSettings();

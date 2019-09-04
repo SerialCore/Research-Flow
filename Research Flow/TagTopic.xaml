@@ -67,7 +67,7 @@
                         <ListViewItem Tapped="AddTopicSetting">
                             <TextBlock Text="+" Margin="180,0,0,0"/>
                         </ListViewItem>
-                        <ListView x:Name="topiclist">
+                        <ListView x:Name="topiclist" IsItemClickEnabled="True" ItemClick="Topiclist_ItemClick">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Title}"/>
@@ -80,17 +80,19 @@
                                 <RowDefinition Height="auto"/>
                                 <RowDefinition Height="auto"/>
                                 <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="topicTitle" PlaceholderText="#Tag1##Tag2#Idea/Topic/Project/TODO" AcceptsReturn="True" TextWrapping="Wrap"/>
+                            <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="topicTitle" PlaceholderText="#Tag1##Tag2#Idea/Topic/Project/TODO" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap"/>
                             <CalendarDatePicker Grid.Row="1" Grid.Column="0" x:Name="startDate" Header="Start Date" HorizontalAlignment="Stretch" Margin="0,5,5,5"/>
                             <CalendarDatePicker Grid.Row="1" Grid.Column="1" x:Name="endDate" Header="End Date" HorizontalAlignment="Stretch" Margin="5,5,0,5"/>
-                            <Button Grid.Row="2" Grid.Column="0" Content="Submit" Click="SubmitTopic" HorizontalAlignment="Stretch" Margin="0,5,5,5" Background="LightSkyBlue"/>
-                            <Button Grid.Row="2" Grid.Column="1" Content="Cancel" Click="CancelTopic" HorizontalAlignment="Stretch" Margin="5,10,0,10" Background="LightGray"/>
-                            <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" x:Name="topicDelete" Content="Delete" Click="DeleteTopic" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
+                            <TimePicker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="remindTime" Header="Remind Me" HorizontalAlignment="Stretch" Margin="0,5,0,5"/>
+                            <Button Grid.Row="3" Grid.Column="0" Content="Submit" Click="SubmitTopic" HorizontalAlignment="Stretch" Margin="0,5,5,5" Background="LightSkyBlue"/>
+                            <Button Grid.Row="3" Grid.Column="1" Content="Cancel" Click="CancelTopic" HorizontalAlignment="Stretch" Margin="5,10,0,10" Background="LightGray"/>
+                            <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" x:Name="topicDelete" Content="Delete" Click="DeleteTopic" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
                         </Grid>
                     </StackPanel>
                 </ScrollViewer>

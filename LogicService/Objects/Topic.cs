@@ -12,9 +12,46 @@ namespace LogicService.Objects
 
         public string Title { get; set; }
 
-        public DateTime StartDate { get; set; }
+        public DateTimeOffset StartDate { get; set; } // DateTime for only date, and DateTimeOffset for whole date and time
 
-        public DateTime EndDate { get; set; }
+        public DateTimeOffset EndDate { get; set; }
+
+        public TimeSpan RemindTime { get; set; }
+
+        #region Equals
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            if (this.GetType() != obj.GetType())
+                return false;
+
+            var one = (Topic)obj;
+            if (this.Title == one.Title)
+                return true;
+            else
+                return false;
+        }
+
+        public static bool operator ==(Topic leftHandSide, Topic rightHandSide)
+        {
+            if (ReferenceEquals(leftHandSide, null))
+                return ReferenceEquals(rightHandSide, null);
+            return (leftHandSide.Equals(rightHandSide));
+        }
+
+        public static bool operator !=(Topic leftHandSide, Topic rightHandSide)
+        {
+            return !(leftHandSide == rightHandSide);
+        }
+
+        public override int GetHashCode()
+        {
+            return Title.GetHashCode(); ;
+        }
+
+        #endregion
 
         #region Tag Management
 

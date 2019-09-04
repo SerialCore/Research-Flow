@@ -24,7 +24,11 @@ namespace Research_Flow
         public App()
         {
             AppCenter.Start("5314ea3e-424f-4841-8399-7e8252fef7af", typeof(Push));
-            UWPnode.Handler.Start();
+            try
+            {
+                UWPnode.Handler.Start();
+            }
+            catch { }
 
             this.InitializeComponent();
             this.Suspending += OnSuspending;

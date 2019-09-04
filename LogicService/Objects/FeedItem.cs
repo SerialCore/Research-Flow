@@ -28,6 +28,42 @@ namespace LogicService.Objects
 
         public DateTime LastUpdateTime { get; set; }
 
+        #region Equals
+
+        // when add a new source
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            if (this.GetType() != obj.GetType())
+                return false;
+
+            var one = (RSSSource)obj;
+            if (this.ID == one.ID)
+                return true;
+            else
+                return false;
+        }
+
+        public static bool operator ==(RSSSource leftHandSide, RSSSource rightHandSide)
+        {
+            if (ReferenceEquals(leftHandSide, null))
+                return ReferenceEquals(rightHandSide, null);
+            return (leftHandSide.Equals(rightHandSide));
+        }
+
+        public static bool operator !=(RSSSource leftHandSide, RSSSource rightHandSide)
+        {
+            return !(leftHandSide == rightHandSide);
+        }
+
+        public override int GetHashCode()
+        {
+            return ID.GetHashCode(); ;
+        }
+
+        #endregion
+
     }
 
     public class FeedItem

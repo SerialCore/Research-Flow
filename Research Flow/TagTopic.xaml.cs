@@ -1,4 +1,5 @@
-﻿using LogicService.Helper;
+﻿using LogicService.Application;
+using LogicService.Helper;
 using LogicService.Objects;
 using LogicService.Storage;
 using System;
@@ -122,13 +123,35 @@ namespace Research_Flow
                 Topic topic = new Topic();
                 topic.Title = topicTitle.Text;
                 if (startDate.Date != null)
-                    topic.StartDate = startDate.Date.Value.UtcDateTime;
+                    topic.StartDate = startDate.Date.Value;
                 if (endDate.Date != null)
-                    topic.EndDate = endDate.Date.Value.UtcDateTime;
-                topics.Add(topic);
+                    topic.EndDate = endDate.Date.Value;
+                if (remindTime.Time != null)
+                    topic.RemindTime = remindTime.Time;
+
+                if (currentTopic != null)
+                {
+                    topics[topics.IndexOf(currentTopic)] = topic;
+                }
+                else
+                {
+                    foreach (Topic item in topics)
+                    {
+                        if (item == topic)
+                        {
+                            ApplicationMessage.SendMessage("RssException: There has been the same topic.", ApplicationMessage.MessageType.InAppNotification);
+                            ClearTopicSetting();
+                            return;
+                        }
+                    }
+                    topics.Add(topic);
+                }
+
                 LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "topiclist", topics);
 
-                // add tags
+                // double check tags and add them
+                tags.AddRange(Topic.TagPicker(topicTitle.Text));
+                LoadTagView();
             }
             ClearTopicSetting();
         }
@@ -161,12 +184,28 @@ namespace Research_Flow
 
         private void ClearTopicSetting()
         {
+            currentTopic = null;
             topicTitle.Text = "";
             startDate.Date = null;
             endDate.Date = null;
 
             topicDelete.Visibility = Visibility.Collapsed;
             topicSetting.Visibility = Visibility.Collapsed;
+        }
+
+        private void Topiclist_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            topicDelete.Visibility = Visibility.Visible;
+            topicSetting.Visibility = Visibility.Visible;
+
+            currentTopic = e.ClickedItem as Topic;
+            topicTitle.Text = currentTopic.Title;
+            if (currentTopic.StartDate != DateTimeOffset.MinValue)
+                startDate.Date = currentTopic.StartDate;
+            if (currentTopic.EndDate != DateTimeOffset.MinValue)
+                endDate.Date = currentTopic.EndDate;
+            if (currentTopic.RemindTime != TimeSpan.Zero)
+                remindTime.Time = currentTopic.RemindTime;
         }
 
         #endregion
