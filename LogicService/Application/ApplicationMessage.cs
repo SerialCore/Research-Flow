@@ -16,6 +16,7 @@ namespace LogicService.Application
         {
             TopBanner,
             InAppNotification,
+            ToastNotification
         }
 
         public delegate void MessageHandle(string message, MessageType type);

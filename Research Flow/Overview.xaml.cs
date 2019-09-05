@@ -1,6 +1,8 @@
-﻿using LogicService.Services;
+﻿using LogicService.Objects;
+using LogicService.Storage;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -28,6 +30,49 @@ namespace Research_Flow
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+
+            InitializeMessage();
         }
+
+        private async void InitializeMessage()
+        {
+            try
+            {
+                messages = await LocalStorage.ReadJsonAsync<ObservableCollection<MessageBot>>(
+                    await LocalStorage.GetLogAsync(), "messagelist");
+            }
+            catch
+            {
+                // for new user, remember to load default feed from file, not the follows
+                messages = new ObservableCollection<MessageBot>()
+                {
+                    new MessageBot { Comment = "Hello", IsSelf = false },
+                    new MessageBot { Comment = "Hello", IsSelf = true },
+                    new MessageBot { Comment = "Hello", IsSelf = false },
+                    new MessageBot { Comment = "Hello", IsSelf = true },
+                    new MessageBot { Comment = "Hello", IsSelf = false },
+                    new MessageBot { Comment = "Hello", IsSelf = true },
+                    new MessageBot { Comment = "Hello", IsSelf = false },
+                    new MessageBot { Comment = "Hello", IsSelf = true },
+                    new MessageBot { Comment = "Hello", IsSelf = false },
+                    new MessageBot { Comment = "Hello", IsSelf = true },
+                    new MessageBot { Comment = "Hello", IsSelf = false },
+                    new MessageBot { Comment = "Hello", IsSelf = true },
+                    new MessageBot { Comment = "Hello", IsSelf = false },
+                    new MessageBot { Comment = "Hello", IsSelf = true },
+                    new MessageBot { Comment = "Hello", IsSelf = false },
+                    new MessageBot { Comment = "Hello", IsSelf = true },
+                    new MessageBot { Comment = "Hello", IsSelf = false },
+                    new MessageBot { Comment = "Hello", IsSelf = true },
+                };
+                //LocalStorage.WriteJson(await LocalStorage.GetLogAsync(), "messagelist", messages);
+            }
+            finally
+            {
+                messagelist.ItemsSource = messages;
+            }
+        }
+
+        public ObservableCollection<MessageBot> messages { get; set; }
     }
 }

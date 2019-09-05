@@ -125,6 +125,8 @@ namespace LogicService.Storage
             {
                 if (_conn == null) // always new？
                     _conn = new SqliteConnection(string.Format("Data Source={0};", this._dbpath));
+                if (_conn.State != ConnectionState.Open)
+                    _conn.Open();
                 return _conn;
             }
         }

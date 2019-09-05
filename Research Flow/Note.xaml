@@ -19,7 +19,7 @@
 
             <SplitView Grid.Row="0" x:Name="notepanel" OpenPaneLength="400" PanePlacement="Right" DisplayMode="Overlay">
                 <SplitView.Pane>
-                    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="2,0,0,0">
+                    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                         <ListView x:Name="notelist" IsItemClickEnabled="True" ItemClick="Notelist_ItemClick">
                             <ListView.ItemTemplate>
                                 <DataTemplate>

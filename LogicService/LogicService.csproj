@@ -109,6 +109,7 @@
     <Compile Include="Application\ApplicationSetting.cs" />
     <Compile Include="Helper\NetHelper.cs" />
     <Compile Include="Helper\RegexHelper.cs" />
+    <Compile Include="Objects\MessageBot.cs" />
     <Compile Include="Objects\Topic.cs" />
     <Compile Include="Services\UrlOperator.cs" />
     <Compile Include="Services\WebClientService.cs" />
