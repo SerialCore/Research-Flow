@@ -50,6 +50,7 @@ namespace Research_Flow
                 case ApplicationMessage.MessageType.TopBanner:
                     appMessage.Text = message;
                     await Task.Delay(3000);
+                    appMessage.Text = "";
                     break;
                 case ApplicationMessage.MessageType.InAppNotification:
                     InAppNotification.Show(message);
@@ -61,7 +62,7 @@ namespace Research_Flow
         {
             await ApplicationTask.RegisterSearchTask();
             await ApplicationTask.RegisterStorageTask();
-            //await ApplicationTask.RegisterLearnTask();
+            await ApplicationTask.RegisterTopicTask();
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
@@ -350,10 +351,14 @@ namespace Research_Flow
     public class ApplicationTask
     {
 
-        public static async Task<BackgroundTaskRegistration> RegisterLearnTask()
+        /*
+         * UserPresent and UserAway are both most frequent
+         */
+
+        public static async Task<BackgroundTaskRegistration> RegisterTopicTask()
         {
-            return await RegisterBackgroundTask(typeof(CoreFlow.LearnTask),
-                "LearnTask", new SystemTrigger(SystemTriggerType.UserAway, false),
+            return await RegisterBackgroundTask(typeof(CoreFlow.TopicTask),
+                "LearnTask", new SystemTrigger(SystemTriggerType.UserPresent, false),
                 new SystemCondition(SystemConditionType.InternetAvailable));
         }
 
@@ -367,7 +372,7 @@ namespace Research_Flow
         public static async Task<BackgroundTaskRegistration> RegisterStorageTask()
         {
             return await RegisterBackgroundTask(typeof(CoreFlow.StorageTask),
-                "StorageTask", new SystemTrigger(SystemTriggerType.UserPresent, false),
+                "StorageTask", new SystemTrigger(SystemTriggerType.InternetAvailable, false),
                 new SystemCondition(SystemConditionType.InternetAvailable));
         }
 

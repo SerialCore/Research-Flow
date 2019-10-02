@@ -148,11 +148,8 @@ namespace Research_Flow
         {
             FeedSources.Remove(modifiedRSS);
             LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
-
-            FeedItem.DBOpen();
+            // check
             FeedItem.DBDeleteByPID(modifiedRSS.ID);
-            FeedItem.DBClose();
-
             ClearSettings();
         }
 
@@ -211,9 +208,7 @@ namespace Research_Flow
 
         private void LoadFeed(RSSSource source)
         {
-            FeedItem.DBOpen();
             feedItem_list.ItemsSource = FeedItem.DBSelectUIByPID(source.ID);
-            FeedItem.DBClose();
         }
 
         private void SearchFeed(RSSSource source)
@@ -231,10 +226,7 @@ namespace Research_Flow
                         feedItem_list.ItemsSource = feeds;
                         waiting_feed.IsActive = false;
                     });
-                    FeedItem.DBOpen();
                     FeedItem.DBInsert(feeds);
-                    FeedItem.DBClose();
-
                     FeedSources[selectedFeedIndex].LastUpdateTime = DateTime.Now;
                     LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
                 },

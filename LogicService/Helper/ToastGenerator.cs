@@ -10,7 +10,7 @@ namespace LogicService.Helper
         {
             var toast = new ToastContent()
             {
-                Scenario = ToastScenario.Default,
+                Scenario = ToastScenario.Reminder,
 
                 Visual = new ToastVisual()
                 {
@@ -27,6 +27,17 @@ namespace LogicService.Helper
                             {
                                 Text = content
                             }
+                        },
+
+                        AppLogoOverride = new ToastGenericAppLogo()
+                        {
+                            Source = "ms-appx:///LargeTile.scale-100.png",
+                            HintCrop = ToastGenericAppLogoCrop.Circle
+                        },
+
+                        Attribution = new ToastGenericAttributionText()
+                        {
+                            Text = "Via Research Flow"
                         }
                     }
                 }

@@ -59,12 +59,6 @@ namespace LogicService.Objects
 
         #region Trace DB
 
-        public static void DBOpenTrace()
-            => DataStorage.FileTrace.Connection.Open();
-
-        public static void DBCloseTrace()
-            => DataStorage.FileTrace.Connection.Close();
-
         public static void DBInitializeTrace()
         {
 
@@ -93,12 +87,6 @@ namespace LogicService.Objects
         #endregion
 
         #region List DB
-
-        public static void DBOpenList()
-            => DataStorage.FileList.Connection.Open();
-
-        public static void DBCloseList()
-            => DataStorage.FileList.Connection.Close();
 
         public static void DBInitializeList()
         {

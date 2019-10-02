@@ -123,7 +123,7 @@ namespace LogicService.Storage
         {
             get
             {
-                if (_conn == null) // always new？
+                if (_conn == null) // always new for multithreads supporting
                     _conn = new SqliteConnection(string.Format("Data Source={0};", this._dbpath));
                 if (_conn.State != ConnectionState.Open)
                     _conn.Open();
@@ -158,7 +158,7 @@ namespace LogicService.Storage
         public int ExecuteWrite(string sql, Dictionary<string, object> parameters = null)
         {
             int affectedRows = 0;
-            SqliteCommand command = new SqliteCommand(sql, _conn);
+            SqliteCommand command = new SqliteCommand(sql, Connection);
 
             if (parameters != null)
             {
@@ -172,7 +172,7 @@ namespace LogicService.Storage
 
         public SqliteDataReader ExecuteRead(string sql, Dictionary<string, object> parameters = null)
         {
-            SqliteCommand command = new SqliteCommand(sql, _conn);
+            SqliteCommand command = new SqliteCommand(sql, Connection);
 
             if (parameters != null)
             {

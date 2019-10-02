@@ -48,22 +48,6 @@ namespace Research_Flow
                 {
                     new MessageBot { Comment = "Hello", IsSelf = false },
                     new MessageBot { Comment = "Hello", IsSelf = true },
-                    new MessageBot { Comment = "Hello", IsSelf = false },
-                    new MessageBot { Comment = "Hello", IsSelf = true },
-                    new MessageBot { Comment = "Hello", IsSelf = false },
-                    new MessageBot { Comment = "Hello", IsSelf = true },
-                    new MessageBot { Comment = "Hello", IsSelf = false },
-                    new MessageBot { Comment = "Hello", IsSelf = true },
-                    new MessageBot { Comment = "Hello", IsSelf = false },
-                    new MessageBot { Comment = "Hello", IsSelf = true },
-                    new MessageBot { Comment = "Hello", IsSelf = false },
-                    new MessageBot { Comment = "Hello", IsSelf = true },
-                    new MessageBot { Comment = "Hello", IsSelf = false },
-                    new MessageBot { Comment = "Hello", IsSelf = true },
-                    new MessageBot { Comment = "Hello", IsSelf = false },
-                    new MessageBot { Comment = "Hello", IsSelf = true },
-                    new MessageBot { Comment = "Hello", IsSelf = false },
-                    new MessageBot { Comment = "Hello", IsSelf = true },
                 };
                 //LocalStorage.WriteJson(await LocalStorage.GetLogAsync(), "messagelist", messages);
             }

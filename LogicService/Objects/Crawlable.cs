@@ -58,16 +58,8 @@ namespace LogicService.Objects
 
         #region DB
 
-        public static void DBOpen()
-            => DataStorage.CrawlData.Connection.Open();
-
-        public static void DBClose()
-            => DataStorage.CrawlData.Connection.Close();
-
         public static void DBInitialize()
         {
-            DataStorage.CrawlData.Connection.Open();
-
             string sql = @"create table if not exists [Crawlable] (
                     [ID] varchar(50) not null primary key,
                     [ParentID] varchar(50),
@@ -76,8 +68,6 @@ namespace LogicService.Objects
                     [Content] varchar(5000),
                     [Tags] varchar(500))";
             DataStorage.CrawlData.ExecuteWrite(sql);
-
-            DataStorage.CrawlData.Connection.Close();
         }
 
         public static void DBInsert()

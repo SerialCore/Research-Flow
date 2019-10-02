@@ -17,7 +17,12 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="1">
-                <ListView x:Name="messagelist" SelectionMode="None"  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="32"/>
+                </Grid.RowDefinitions>
+                <ListView x:Name="messagelist" Grid.Row="0" SelectionMode="None" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                     <ListView.Resources>
                         <DataTemplate x:Key="MessageDataTemplate">
                             <Grid HorizontalAlignment="Left">
@@ -63,6 +68,9 @@
                             SelfMessageDataTemplate="{StaticResource SelfMessageDataTemplate}" />
                     </ListView.ItemTemplateSelector>
                 </ListView>
+
+                <TextBox Grid.Row="1" AcceptsReturn="True" TextWrapping="Wrap"/>
+                <Button Grid.Row="2" Content="Sumbit" Height="32" Width="100" HorizontalAlignment="Right" Background="LightSkyBlue"/>
             </Grid>
 
         </Grid>

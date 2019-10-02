@@ -59,12 +59,6 @@ namespace LogicService.Objects
 
         #region DB
 
-        public static void DBOpen()
-            => DataStorage.PaperData.Connection.Open();
-
-        public static void DBClose()
-            => DataStorage.PaperData.Connection.Close();
-
         public static void DBInitialize()
         {
             string sql = @"CREATE TABLE IF NOT EXISTS [Paper] (

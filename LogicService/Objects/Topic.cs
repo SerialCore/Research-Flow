@@ -55,20 +55,21 @@ namespace LogicService.Objects
 
         #region Tag Management
 
-        public static List<string> TagPicker(string content)
+        public static HashSet<string> TagPicker(string content)
         {
-            List<string> tags = new List<string>();
+            HashSet<string> tags = new HashSet<string>();
 
-            Regex reg = new Regex(@"#(?<tag>(?:\w|\W)#)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+            Regex reg = new Regex(@"#(?<tag>[^#]+)#", RegexOptions.Multiline | RegexOptions.IgnoreCase);
             Match mc = reg.Match(content);
             while (mc.Success)
             {
                 tags.Add(mc.Groups["tag"].Value);
+                mc = mc.NextMatch();
             }
             return tags;
         }
 
-        public static string TagEmbed(List<string> tags)
+        public static string TagEmbed(HashSet<string> tags)
         {
             StringBuilder embed = new StringBuilder();
             foreach (string tag in tags)
@@ -82,5 +83,13 @@ namespace LogicService.Objects
 
         #endregion
 
+    }
+
+    /// <summary>
+    /// just for database modeling
+    /// </summary>
+    public class TagBase
+    {
+        public string Tag { get; set; }
     }
 }

@@ -41,13 +41,13 @@ namespace Research_Flow
         {
             try
             {
-                tags = await LocalStorage.ReadJsonAsync<List<string>>(
+                tags = await LocalStorage.ReadJsonAsync<HashSet<string>>(
                     await LocalStorage.GetDataAsync(), "taglist");
             }
             catch
             {
                 // for new user, remember to load default feed from file, not the follows
-                tags = new List<string>()
+                tags = new HashSet<string>()
                 {
                     "AnOS", "QCD", "QED", "Pedal Motion", "DNA", "AI", "Bond", "Computer", "Hydrogen", "Halogen", "OS"
                 };
@@ -80,7 +80,13 @@ namespace Research_Flow
 
         #region Tag Management
 
-        public List<string> tags { get; set; }
+        public HashSet<string> tags { get; set; }
+
+        private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+            => FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+
+        private void Flyout_Opened(object sender, object e)
+            => tagEmbed.Focus(FocusState.Programmatic);
 
         private void LoadTagView()
         {
@@ -106,6 +112,16 @@ namespace Research_Flow
             tagKlist.ItemsSource = collectionVS.View.CollectionGroups;
         }
 
+        private async void AddTagManually(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(tagEmbed.Text))
+            {
+                tags.UnionWith(Topic.TagPicker(tagEmbed.Text));
+                LoadTagView();
+                LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "taglist", tags);
+            }
+        }
+
         #endregion
 
         #region Task Management
@@ -113,6 +129,11 @@ namespace Research_Flow
         public ObservableCollection<Topic> topics { get; set; }
 
         private Topic currentTopic = null;
+
+        private void LoadTaskView()
+        {
+            
+        }
 
         private void AddTopicSetting(object sender, TappedRoutedEventArgs e) => topicSetting.Visibility = Visibility.Visible;
 
@@ -150,8 +171,9 @@ namespace Research_Flow
                 LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "topiclist", topics);
 
                 // double check tags and add them
-                tags.AddRange(Topic.TagPicker(topicTitle.Text));
+                tags.UnionWith(Topic.TagPicker(topicTitle.Text));
                 LoadTagView();
+                LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "taglist", tags);
             }
             ClearTopicSetting();
         }

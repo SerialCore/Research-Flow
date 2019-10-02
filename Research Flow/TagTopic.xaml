@@ -53,7 +53,16 @@
                     <CommandBar.Content>
                         <TextBlock Text="Tags" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
                     </CommandBar.Content>
-                    <AppBarButton Icon="Add" Label="Add"/>
+                    <AppBarButton Icon="Add" Label="Add" Tapped="Flyout_Tapped">
+                        <FlyoutBase.AttachedFlyout>
+                            <Flyout Opened="Flyout_Opened">
+                                <StackPanel >
+                                    <TextBox x:Name="tagEmbed" PlaceholderText="#Tag1##Tag2#" Width="300" TextWrapping="Wrap"/>
+                                    <Button Content="Add" Click="AddTagManually" Height="32" Width="48" Background="LightBlue"/>
+                                </StackPanel>
+                            </Flyout>
+                        </FlyoutBase.AttachedFlyout>
+                    </AppBarButton>
                 </CommandBar>
             </Grid>
 

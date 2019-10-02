@@ -10,6 +10,31 @@
 
     <Grid>
 
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <TextBlock Text="Panel" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+
+            <SplitView Grid.Column="1" PanePlacement="Right" OpenPaneLength="400" IsPaneOpen="True">
+                <SplitView.Content>
+                    <ListView>
+
+                    </ListView>
+                </SplitView.Content>
+                <SplitView.Pane>
+                    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                        <TextBlock Text="Detials" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                </SplitView.Pane>
+            </SplitView>
+            
+        </Grid>
+        
     </Grid>
     
 </Page>

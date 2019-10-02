@@ -18,12 +18,12 @@ namespace CoreFlow
         {
             var deferral = taskInstance.GetDeferral();
 
-            SearchRss();
+            SearchRSS();
 
             deferral.Complete();
         }
 
-        private async void SearchRss()
+        private async void SearchRSS()
         {
             List<RSSSource> FeedSources = await LocalStorage.ReadJsonAsync<List<RSSSource>>(
                     await LocalStorage.GetDataAsync(), "rsslist");
@@ -35,29 +35,25 @@ namespace CoreFlow
                     async (items) =>
                     {
                         List<FeedItem> feeds = items as List<FeedItem>;
-
-                        FeedItem.DBOpen();
                         FeedItem.DBInsert(feeds);
-                        FeedItem.DBClose();
-
                         source.LastUpdateTime = DateTime.Now;
                         LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
 
-                            // inform user
-                            LocalStorage.GeneralLogAsync<RssService>("SearchTask.log",
+                        // inform user
+                        LocalStorage.GeneralLogAsync<RssService>("SearchTask.log",
                             "just updated your rss feed-" + source.Name);
                     },
                     (exception) =>
                     {
-                            // save to log
-                            LocalStorage.GeneralLogAsync<RssService>("SearchTask.log",
+                        // save to log
+                        LocalStorage.GeneralLogAsync<RssService>("SearchTask.log",
                             exception + "-" + source.Name);
                     }, null);
             }
 
         }
 
-        private void SearchKeys()
+        private void SearchTags()
         {
 
         }

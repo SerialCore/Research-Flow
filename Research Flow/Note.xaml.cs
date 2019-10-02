@@ -9,6 +9,8 @@ using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
+using Windows.System.Threading;
+using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -44,8 +46,13 @@ namespace Research_Flow
                     ApplicationMessage.SendMessage("NoteException: " + ex.Message, ApplicationMessage.MessageType.InAppNotification);
                 }
             }
-
+            
             InitializeNote();
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            // cancel timer
         }
 
         /// <summary>
@@ -53,10 +60,10 @@ namespace Research_Flow
         /// </summary>
         private async void InitializeNote()
         {
+            namelist.Clear();
             var filelist = await (await LocalStorage.GetNoteAsync()).GetFilesAsync();
             foreach (var file in filelist)
             {
-                // name or displayname contains extention, if make CommonFileQuery not default
                 namelist.Add(file.DisplayName.Replace(".rfn", ""));
             }
             notelist.ItemsSource = namelist;
@@ -89,24 +96,6 @@ namespace Research_Flow
             }
         }
 
-        private async void Export_Image(object sender, RoutedEventArgs e)
-        {
-            FileSavePicker picker = new FileSavePicker
-            {
-                SuggestedStartLocation = PickerLocationId.Desktop,
-                SuggestedFileName = "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png",
-            };
-            picker.FileTypeChoices.Add("Note", new string[] { ".png" });
-            StorageFile file = await picker.PickSaveFileAsync();
-            if (file != null)
-            {
-                using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
-                {
-                    await canvas.SaveBitmapAsync(stream, BitmapFileFormat.Png);
-                }
-            }
-        }
-
         private async void Upload_Image(object sender, RoutedEventArgs e)
         {
             StorageFile file = await LocalStorage.GetTemporaryFolder().CreateFileAsync("Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
@@ -127,6 +116,24 @@ namespace Research_Flow
                 {
                     await file.CopyAsync(KnownFolders.PicturesLibrary, file.Name);
                     ToastGenerator.ShowTextToast("Pictures Library", "Note Image Saved");
+                }
+            }
+        }
+
+        private async void Export_Image(object sender, RoutedEventArgs e)
+        {
+            FileSavePicker picker = new FileSavePicker
+            {
+                SuggestedStartLocation = PickerLocationId.Desktop,
+                SuggestedFileName = "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png",
+            };
+            picker.FileTypeChoices.Add("Note", new string[] { ".png" });
+            StorageFile file = await picker.PickSaveFileAsync();
+            if (file != null)
+            {
+                using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    await canvas.SaveBitmapAsync(stream, BitmapFileFormat.Png);
                 }
             }
         }
@@ -210,6 +217,10 @@ namespace Research_Flow
 
         public ObservableCollection<string> namelist { get; set; } = new ObservableCollection<string>();
 
+        private ThreadPoolTimer autoSaver;
+
+        private string currentNote;
+
         private void Open_Document(object sender, RoutedEventArgs e)
             => notepanel.IsPaneOpen = !notepanel.IsPaneOpen;
 
@@ -222,6 +233,24 @@ namespace Research_Flow
             var fileitem = await (await LocalStorage.GetNoteAsync()).GetFileAsync(name + ".rfn");
             canvas.ImportFromJson(await FileIO.ReadTextAsync(fileitem));
             notefilename.Text = name;
+        }
+
+        private void BeginAutoSaver()
+        {
+            autoSaver = ThreadPoolTimer.CreatePeriodicTimer(async (source) =>
+            {
+                // save
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                    () =>
+                    {
+                        // noti
+                    });
+            }, TimeSpan.FromSeconds(1));
+        }
+
+        private void EndAutoSaver()
+        {
+            autoSaver.Cancel();
         }
 
         private async void Save_Note(object sender, RoutedEventArgs e)
@@ -267,7 +296,7 @@ namespace Research_Flow
         private async void DeleteInvokedHandler(IUICommand command)
         {
             var name = notelist.SelectedItem as string;
-            LocalStorage.GeneralDeleteAsync(await LocalStorage.GetNoteAsync(), name);
+            LocalStorage.GeneralDeleteAsync(await LocalStorage.GetNoteAsync(), name + ".rfn");
             namelist.Remove(name);
             notefilename.Text = "";
         }

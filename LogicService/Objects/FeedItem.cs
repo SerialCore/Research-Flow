@@ -124,16 +124,8 @@ namespace LogicService.Objects
 
         #region DB
 
-        public static void DBOpen()
-            => DataStorage.FeedData.Connection.Open();
-
-        public static void DBClose()
-            => DataStorage.FeedData.Connection.Close();
-
         public static void DBInitialize()
         {
-            DataStorage.FeedData.Connection.Open();
-
             string sql = @"create table if not exists [Feed] (
                     [ID] varchar(50) not null primary key,
                     [ParentID] varchar(50) not null,
@@ -145,8 +137,6 @@ namespace LogicService.Objects
                     [Tags] varchar(500),
                     [Nodes] varchar(1000));";
             DataStorage.FeedData.ExecuteWrite(sql);
-
-            DataStorage.FeedData.Connection.Close();
         }
 
         public static int DBInsert(List<FeedItem> feeds)
