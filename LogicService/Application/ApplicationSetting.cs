@@ -39,6 +39,54 @@ namespace LogicService.Application
             }
         }
 
+        public static object HeaderColorA
+        {
+            get
+            {
+                return ApplicationData.Current.LocalSettings.Values["HeaderColorA"];
+            }
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values["HeaderColorA"] = value;
+            }
+        }
+
+        public static object HeaderColorR
+        {
+            get
+            {
+                return ApplicationData.Current.LocalSettings.Values["HeaderColorR"];
+            }
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values["HeaderColorR"] = value;
+            }
+        }
+
+        public static object HeaderColorG
+        {
+            get
+            {
+                return ApplicationData.Current.LocalSettings.Values["HeaderColorG"];
+            }
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values["HeaderColorG"] = value;
+            }
+        }
+
+        public static object HeaderColorB
+        {
+            get
+            {
+                return ApplicationData.Current.LocalSettings.Values["HeaderColorB"];
+            }
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values["HeaderColorB"] = value;
+            }
+        }
+
         public static void RemoveKey(string key)
             => ApplicationData.Current.LocalSettings.Values.Remove(key);
 

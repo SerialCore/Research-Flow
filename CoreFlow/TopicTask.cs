@@ -33,7 +33,7 @@ namespace CoreFlow
          * Start On, End On, Remind On          a proctect with alarm
          */
 
-        private async void TopicNatification()
+        private void TopicNatification()
         {
             //ToastGenerator.ShowTextToast("TopicTask", "TopicNatification");
         }

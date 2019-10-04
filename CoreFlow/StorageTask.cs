@@ -12,10 +12,17 @@ namespace CoreFlow
     public sealed class StorageTask : IBackgroundTask
     {
 
-        public async void Run(IBackgroundTaskInstance taskInstance)
+        public void Run(IBackgroundTaskInstance taskInstance)
         {
             var deferral = taskInstance.GetDeferral();
 
+            StorageSync();
+
+            deferral.Complete();
+        }
+
+        private async void StorageSync()
+        {
             await GraphService.OneDriveLogin();
             if (GraphService.IsConnected && GraphService.IsNetworkAvailable)
             {
@@ -23,8 +30,15 @@ namespace CoreFlow
                 LocalStorage.GeneralLogAsync<Synchronization>("StorageTask.log",
                     "Synchronized");
             }
+        }
 
-            deferral.Complete();
+        /// <summary>
+        /// Clean unnecessary data
+        /// </summary>
+        private void StorageClean()
+        {
+            // clean database
+
         }
 
     }

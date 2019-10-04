@@ -188,7 +188,7 @@ namespace LogicService.Objects
             return feeds;
         }
 
-        public static void DBUpdate(string id)
+        public static void DBUpdate()
         {
 
         }

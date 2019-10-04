@@ -33,10 +33,13 @@ namespace Research_Flow
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            string link = e.Parameter as string;
-            if (!string.IsNullOrEmpty(link))
+            if (e.Parameter != null) // to solve the BUG: always show old site when NavigatedTo
             {
-                webView.Source = new Uri(link); // BUG: always show old site when NavigatedTo
+                string link = e.Parameter as string;
+                if (!string.IsNullOrEmpty(link))
+                {
+                    webView.Source = new Uri(link);
+                }
             }
         }
 
@@ -196,6 +199,12 @@ namespace Research_Flow
             siteUrl.Text = webView.Source.AbsoluteUri;
         }
 
+        private void WebView_ManipulationCompleted(object sender, Windows.UI.Xaml.Input.ManipulationCompletedRoutedEventArgs e)
+        {
+            webWaiting.IsActive = false;
+            siteUrl.Text = webView.Source.AbsoluteUri;
+        }
+
         private void Browse_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             try
@@ -255,13 +264,7 @@ namespace Research_Flow
 
         private CrawlerService currentCrawled = null;
 
-        private void ViewMode_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (viewMode.IsOn)
-                crawlPane.IsPaneOpen = true;
-            else
-                crawlPane.IsPaneOpen = false;
-        }
+        private void Open_CrawlerPanel(object sender, RoutedEventArgs e) => crawlPane.IsPaneOpen = !crawlPane.IsPaneOpen;
 
         private void FirstCrawl_Click(object sender, RoutedEventArgs e)
         {
@@ -271,7 +274,7 @@ namespace Research_Flow
 
         private void FirstCrawl(string urlstring)
         {
-            viewMode.IsOn = true;
+            crawlPane.IsPaneOpen = true;
             craWaiting.IsActive = true;
 
             currentCrawled = new CrawlerService(urlstring);

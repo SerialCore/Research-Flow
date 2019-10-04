@@ -267,11 +267,11 @@
   <ItemGroup>
     <Reference Include="AppUtils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Downloads\UWP SDK\9597827620290011319192\AppUtils.dll</HintPath>
+      <HintPath>..\..\..\..\Downloads\9597827620290011319192\AppUtils.dll</HintPath>
     </Reference>
     <Reference Include="dotlib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Downloads\UWP SDK\9597827620290011319192\dotlib.dll</HintPath>
+      <HintPath>..\..\..\..\Downloads\9597827620290011319192\dotlib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

@@ -71,9 +71,16 @@
                     <TextBlock x:Name="appMessage" FontSize="18" VerticalAlignment="Center"/>
                     <CommandBar HorizontalAlignment="Right" VerticalAlignment="Top" DefaultLabelPosition="Collapsed" 
                                 Background="Transparent" OverflowButtonVisibility="Collapsed">
-                        <AppBarButton Icon="Remote" Click="AccountSync_Click" ToolTipService.ToolTip="Synchronize"/>
+                        <AppBarButton Icon="FourBars" Click="AccountSync_Click" ToolTipService.ToolTip="Synchronize"/>
                         <AppBarSeparator />
                         <AppBarButton Icon="FullScreen" Click="FullScreen_Click" ToolTipService.ToolTip="FullScreen"/>
+                        <AppBarButton Icon="Placeholder" Tapped="Flyout_Tapped" ToolTipService.ToolTip="Background">
+                            <FlyoutBase.AttachedFlyout>
+                                <Flyout Closed="ColorPicker_Closed">
+                                    <ColorPicker x:Name="colorPicker" ColorChanged="ColorPicker_ColorChanged"/>
+                                </Flyout>
+                            </FlyoutBase.AttachedFlyout>
+                        </AppBarButton>
                         <AppBarButton Icon="AttachCamera" Tapped="Flyout_Tapped" ToolTipService.ToolTip="ScreenShot">
                             <FlyoutBase.AttachedFlyout>
                                 <MenuFlyout>

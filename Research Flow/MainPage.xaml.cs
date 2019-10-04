@@ -15,11 +15,13 @@ using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
+using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
@@ -38,7 +40,8 @@ namespace Research_Flow
         public MainPage()
         {
             this.InitializeComponent();
-            
+
+            ConfigureUI();
             ConfigureTask();
             ApplicationMessage.MessageReached += AppMessage_MessageReached;
         }
@@ -55,6 +58,18 @@ namespace Research_Flow
                 case ApplicationMessage.MessageType.InAppNotification:
                     InAppNotification.Show(message);
                     break;
+            }
+        }
+        
+        private void ConfigureUI()
+        {
+            if (ApplicationSetting.ContainKey("HeaderColorA"))
+            {
+                   Color color = Color.FromArgb(Convert.ToByte(ApplicationSetting.HeaderColorA),
+                    Convert.ToByte(ApplicationSetting.HeaderColorR),
+                    Convert.ToByte(ApplicationSetting.HeaderColorG),
+                    Convert.ToByte(ApplicationSetting.HeaderColorB));
+                NavView.Background = new SolidColorBrush(color);
             }
         }
 
@@ -342,6 +357,19 @@ namespace Research_Flow
             {
                 view.TryEnterFullScreenMode();
             }
+        }
+
+        private void ColorPicker_ColorChanged(ColorPicker sender, ColorChangedEventArgs args)
+        {
+            NavView.Background = new SolidColorBrush(args.NewColor);
+        }
+
+        private void ColorPicker_Closed(object sender, object e)
+        {
+            ApplicationSetting.HeaderColorA = Convert.ToInt32(colorPicker.Color.A);
+            ApplicationSetting.HeaderColorR = Convert.ToInt32(colorPicker.Color.R);
+            ApplicationSetting.HeaderColorG = Convert.ToInt32(colorPicker.Color.G);
+            ApplicationSetting.HeaderColorB = Convert.ToInt32(colorPicker.Color.B);
         }
 
         #endregion

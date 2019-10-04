@@ -18,6 +18,7 @@ namespace CoreFlow
         {
             var deferral = taskInstance.GetDeferral();
 
+            // pick random number for task choosing
             SearchRSS();
 
             deferral.Complete();
@@ -50,14 +51,19 @@ namespace CoreFlow
                             exception + "-" + source.Name);
                     }, null);
             }
-
         }
 
+        /// <summary>
+        /// Search Engine
+        /// </summary>
         private void SearchTags()
         {
 
         }
 
+        /// <summary>
+        /// Crawler
+        /// </summary>
         private void SearchUrls()
         {
 

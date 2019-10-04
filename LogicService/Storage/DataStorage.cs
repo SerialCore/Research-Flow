@@ -40,7 +40,7 @@ namespace LogicService.Storage
                     _dbpath = LocalStorage.TryGetDataPath() + "\\" + _dbname;
                     break;
                 case DataType.FileTrace:
-                    _dbname = ApplicationSetting.AccountName + "filetrace.db";
+                    _dbname = "filetrace.db";
                     _dbpath = LocalStorage.TryGetLogPath() + "\\" + _dbname;
                     break;
                 case DataType.FileList:
@@ -114,38 +114,22 @@ namespace LogicService.Storage
 
         private string _dbname;
         private string _dbpath;
-        private SqliteConnection _conn;
-
-        /// <summary>
-        /// current connection
-        /// </summary>
-        public SqliteConnection Connection
+        private SqliteConnection _conn
         {
             get
             {
-                if (_conn == null) // always new for multithreads supporting
-                    _conn = new SqliteConnection(string.Format("Data Source={0};", this._dbpath));
-                if (_conn.State != ConnectionState.Open)
-                    _conn.Open();
-                return _conn;
+                // always new, if needed, define a private con to store old object
+                var con = new SqliteConnection(string.Format("Data Source={0};", this._dbpath));
+                con.Open();
+                return con;
             }
         }
 
-        public string Database
-        {
-            get
-            {
-                return _dbname;
-            }
-        }
+        public SqliteConnection Connection => _conn;
 
-        public string AbsolutePath
-        {
-            get
-            {
-                return _dbpath;
-            }
-        }
+        public string Database => _dbname;
+
+        public string AbsolutePath => _dbpath;
 
         #endregion
 
@@ -158,21 +142,28 @@ namespace LogicService.Storage
         public int ExecuteWrite(string sql, Dictionary<string, object> parameters = null)
         {
             int affectedRows = 0;
-            SqliteCommand command = new SqliteCommand(sql, Connection);
+            SqliteCommand command = new SqliteCommand(sql, _conn);
 
             if (parameters != null)
             {
                 command.Parameters.AddRange(SetParameters(parameters));
             }
 
-            affectedRows = command.ExecuteNonQuery();
+            try
+            {
+                affectedRows = command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                ApplicationMessage.SendMessage("DatabaseException: " + ex.Message, ApplicationMessage.MessageType.InAppNotification);
+            }
             
             return affectedRows;
         }
 
         public SqliteDataReader ExecuteRead(string sql, Dictionary<string, object> parameters = null)
         {
-            SqliteCommand command = new SqliteCommand(sql, Connection);
+            SqliteCommand command = new SqliteCommand(sql, _conn);
 
             if (parameters != null)
             {
