@@ -56,7 +56,6 @@
                         <TextBlock Text="Search | First Crawl" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <WebView x:Name="webView" NavigationStarting="WebView_NavigationStarting" ManipulationCompleted="WebView_ManipulationCompleted"
                                  FrameNavigationCompleted="WebView_FrameNavigationCompleted" NavigationCompleted="WebView_NavigationCompleted"/>
-                        <ProgressRing x:Name="webWaiting" IsActive="False" Height="50" Width="50"/>
                     </Grid>
                 </SplitView.Content>
             </SplitView>
@@ -102,11 +101,13 @@
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
                 <AutoSuggestBox Grid.Column="0" x:Name="siteUrl" QueryIcon="Find" Text="http://" 
                                 QuerySubmitted="Browse_QuerySubmitted" Margin="5,5,0,0"/>
-                <CommandBar Grid.Column="1"
+                <ProgressRing Grid.Column="1" x:Name="webWaiting" IsActive="False" Margin="4,0,0,0" Height="32" Width="32"/>
+                <CommandBar Grid.Column="2"
                             HorizontalAlignment="Right"
                             DefaultLabelPosition="Right"
                             Background="Transparent"

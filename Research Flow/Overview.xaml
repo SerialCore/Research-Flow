@@ -22,44 +22,40 @@
                     <RowDefinition Height="100"/>
                     <RowDefinition Height="32"/>
                 </Grid.RowDefinitions>
-                <ListView x:Name="messagelist" Grid.Row="0" SelectionMode="None" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                <Image Source="ms-appx:///Images/ResearchFlow_logo.jpg"/>
+
+                <ListView x:Name="messagelist" Grid.Row="0" SelectionMode="None">
                     <ListView.Resources>
                         <DataTemplate x:Key="MessageDataTemplate">
-                            <Grid HorizontalAlignment="Left">
+                            <Grid HorizontalAlignment="Left" Margin="0,5,0,10">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <Grid Grid.Row="0" CornerRadius="4" Background="LightGray" Padding="15">
-                                    <TextBlock Text="{Binding Comment}"/>
+                                <Grid Grid.Row="0" CornerRadius="4" Background="{ThemeResource SystemAccentColorDark1}" Padding="10">
+                                    <TextBlock Text="{Binding Comment}" Foreground="White" IsTextSelectionEnabled="True" TextWrapping="Wrap" MaxWidth="300"/>
                                 </Grid>
-                                <StackPanel Grid.Row="1" Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Name}" Foreground="LightGray"/>
-                                    <TextBlock Text="{Binding Published}" Foreground="LightGray" Margin="10,0,0,0"/>
-                                </StackPanel>
+                                <TextBlock Grid.Row="1" Text="{Binding Published}" Foreground="{ThemeResource SystemAccentColorDark1}"/>
                             </Grid>
                         </DataTemplate>
 
                         <DataTemplate x:Key="SelfMessageDataTemplate">
-                            <Grid HorizontalAlignment="Right">
+                            <Grid HorizontalAlignment="Right" Margin="0,5,0,10">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <Grid Grid.Row="0" CornerRadius="4" Background="Green" Padding="15">
-                                    <TextBlock Text="{Binding Comment}" Foreground="White"/>
+                                <Grid Grid.Row="0" CornerRadius="4" Background="{ThemeResource SystemAccentColorLight1}" Padding="10">
+                                    <TextBlock Text="{Binding Comment}" Foreground="White" IsTextSelectionEnabled="True" TextWrapping="Wrap" MaxWidth="300"/>
                                 </Grid>
-                                <StackPanel Grid.Row="1"  Orientation="Horizontal" HorizontalAlignment="Right">
-                                    <TextBlock Text="{Binding Published}" Foreground="LightGray" Margin="0,0,10,0"/>
-                                    <TextBlock Text="{Binding Name}" Foreground="LightGray"/>
-                                </StackPanel>
+                                <TextBlock Grid.Row="1" Text="{Binding Published}" Foreground="{ThemeResource SystemAccentColorLight1}" HorizontalAlignment="Right"/>
                             </Grid>
                         </DataTemplate>
                     </ListView.Resources>
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            <Setter Property="Margin" Value="10"/>
+                            <!--<Setter Property="Margin" Value="10"/>-->
                         </Style>
                     </ListView.ItemContainerStyle>
                     <ListView.ItemTemplateSelector>
@@ -70,6 +66,7 @@
                 </ListView>
 
                 <TextBox Grid.Row="1" AcceptsReturn="True" TextWrapping="Wrap"/>
+                <ComboBox Grid.Row="2" HorizontalAlignment="Stretch" Margin="0,0,100,0"/>
                 <Button Grid.Row="2" Content="Sumbit" Height="32" Width="100" HorizontalAlignment="Right" Background="LightSkyBlue"/>
             </Grid>
 

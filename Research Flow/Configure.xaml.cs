@@ -49,8 +49,8 @@ namespace Research_Flow
 
                 if (ApplicationInfo.IsFirstUse || !ApplicationSetting.ContainKey("Configured"))
                 {
-                    if (await ConfigureFile()) // and then, check db
-                        ConfigureDB();
+                    ConfigureDB();
+                    await ConfigureFile();
                 }
 
                 // make sure there will be an user folder and user data
@@ -90,9 +90,12 @@ namespace Research_Flow
 
         private void ConfigureDB()
         {
+            FileList.DBInitializeList();
+            FileList.DBInitializeTrace();
             Crawlable.DBInitialize();
             FeedItem.DBInitialize();
             // in future updates, some alter commands may be wrote here
+            // DBUpdate();
         }
 
     }

@@ -29,7 +29,7 @@
       <Extensions>
         <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.SearchTask">
           <BackgroundTasks>
-            <Task Type="timer" />
+            <Task Type="general"/>
           </BackgroundTasks>
         </Extension>
         <uap:Extension Category="windows.protocol">
@@ -37,7 +37,7 @@
         </uap:Extension>
         <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.StorageTask">
           <BackgroundTasks>
-            <Task Type="timer" />
+            <Task Type="general"/>
           </BackgroundTasks>
         </Extension>
         <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.VoiceCommandService">
@@ -48,6 +48,7 @@
         <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.TopicTask">
           <BackgroundTasks>
             <Task Type="timer"/>
+            <Task Type="pushNotification"/>
           </BackgroundTasks>
         </Extension>
         <uap:Extension Category="windows.fileTypeAssociation">

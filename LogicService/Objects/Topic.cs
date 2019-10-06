@@ -10,6 +10,8 @@ namespace LogicService.Objects
     public class Topic
     {
 
+        public string ID { get; set; }
+
         public string Title { get; set; }
 
         public DateTimeOffset StartDate { get; set; } // DateTime for only date, and DateTimeOffset for whole date and time
@@ -28,7 +30,7 @@ namespace LogicService.Objects
                 return false;
 
             var one = (Topic)obj;
-            if (this.Title == one.Title)
+            if (this.ID == one.ID)
                 return true;
             else
                 return false;
@@ -48,7 +50,7 @@ namespace LogicService.Objects
 
         public override int GetHashCode()
         {
-            return Title.GetHashCode(); ;
+            return ID.GetHashCode();
         }
 
         #endregion

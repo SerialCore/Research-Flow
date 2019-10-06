@@ -101,8 +101,10 @@ namespace LogicService.Storage
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
             await FileIO.WriteTextAsync(file, content);
             // record
-            AddFileList(folder.Name, name);
-            AddFileTrace(folder.Name, name);
+            //AddFileList(folder.Name, name);
+            //AddFileTrace(folder.Name, name);
+            FileList.DBInsertList(folder.Name, name);
+            FileList.DBInsertTrace(folder.Name, name);
         }
 
         /// <summary>
@@ -116,8 +118,12 @@ namespace LogicService.Storage
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
             await file.DeleteAsync();
             // record
-            AddFileTrace(folder.Name, name);
-            RemoveFileList(folder.Name, name);
+            //AddFileTrace(folder.Name, name);
+            //RemoveFileList(folder.Name, name);
+            // or FileList.DBUpdateTrace
+            FileList.DBInsertTrace(folder.Name, name);
+            FileList.DBDeleteList(folder.Name, name);
+
         }
 
         public static async void GeneralLogAsync<T>(string name, string line) where T : class

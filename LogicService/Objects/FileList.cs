@@ -69,43 +69,43 @@ namespace LogicService.Objects
             DataStorage.FileTrace.ExecuteWrite(sql);
         }
 
-        public static int DBInsertTrace(FileList trace)
+        public static int DBInsertTrace(string position, string name)
         {
-            if (DBSelectTraceByKey(trace.FilePosition, trace.FileName) != null) // insert a new 
+            if (DBSelectTrace(position, name) != null) // insert a new 
             {
                 int affectedRows = 0;
                 string sql = @"insert into FileTrace(FilePosition, FileName, DateModified) 
                     values(@FilePosition, @FileName, @DateModified);";
                 affectedRows += DataStorage.FileTrace.ExecuteWrite(sql, new Dictionary<string, object>
                 {
-                    { "@FilePosition", trace.FilePosition },
-                    { "@FileName", trace.FileName },
-                    { "@DateModified", trace.DateModified }
+                    { "@FilePosition", position },
+                    { "@FileName", name },
+                    { "@DateModified", DateTime.Now.ToString() }
                 });
 
                 return affectedRows;
             }
             else // update an existing
             {
-                return DBUpdateTrace(trace);
+                return DBUpdateTrace(position, name);
             }
         }
 
-        public static int DBUpdateTrace(FileList trace)
+        public static int DBUpdateTrace(string position, string name)
         {
             int affectedRows = 0;
-            string sql = "update FileTrace set DateModified = @DateModified WHERE " +
-                "FilePosition = @FilePosition and FileName = @FileName";
+            string sql = @"update FileTrace set DateModified = @DateModified where
+                FilePosition = @FilePosition and FileName = @FileName";
             affectedRows = DataStorage.FileTrace.ExecuteWrite(sql, new Dictionary<string, object>
             {
-                { "@FilePosition", trace.FilePosition },
-                { "@FileName", trace.FileName },
-                { "@DateModified", trace.DateModified }
+                { "@FilePosition", position },
+                { "@FileName", name },
+                { "@DateModified", DateTime.Now.ToString() }
             });
-            return 0;
+            return affectedRows;
         }
 
-        public static HashSet<FileList> DBSelectTrace()
+        public static HashSet<FileList> DBSelectAllTrace()
         {
             string sql = "select * from FileTrace;";
             var reader = DataStorage.FileTrace.ExecuteRead(sql);
@@ -129,7 +129,7 @@ namespace LogicService.Objects
         /// <param name="position"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static FileList DBSelectTraceByKey(string position, string name)
+        public static FileList DBSelectTrace(string position, string name)
         {
             string sql = "select * from FileTrace where FilePosition = @FilePosition and FileName = @FileName;";
             var reader = DataStorage.FileTrace.ExecuteRead(sql, new Dictionary<string, object> {
@@ -151,12 +151,12 @@ namespace LogicService.Objects
         /// </summary>
         /// <param name="trace"></param>
         /// <returns></returns>
-        public static int DBDeleteTraceByKey(FileList trace)
+        public static int DBDeleteTrace(string position, string name)
         {
             int affectedRows = 0;
             string sql = "delete from FileTrace where FilePosition = @FilePosition and FileName = @FileName;";
             affectedRows = DataStorage.FileTrace.ExecuteWrite(sql, new Dictionary<string, object> {
-                { "@FilePosition", trace.FilePosition }, { "@FileName", trace.FileName } });
+                { "@FilePosition", position }, { "@FileName", name } });
             return affectedRows;
         }
 
@@ -174,43 +174,43 @@ namespace LogicService.Objects
             DataStorage.FileList.ExecuteWrite(sql);
         }
 
-        public static int DBInsertList(FileList list)
+        public static int DBInsertList(string postition, string name)
         {
-            if (DBSelectListByKey(list.FilePosition, list.FileName) != null) // insert a new 
+            if (DBSelectList(postition, name) != null) // insert a new 
             {
                 int affectedRows = 0;
                 string sql = @"insert into FileList(FilePosition, FileName, DateModified) 
                     values(@FilePosition, @FileName, @DateModified);";
                 affectedRows += DataStorage.FileList.ExecuteWrite(sql, new Dictionary<string, object>
                 {
-                    { "@FilePosition", list.FilePosition },
-                    { "@FileName", list.FileName },
-                    { "@DateModified", list.DateModified }
+                    { "@FilePosition", postition },
+                    { "@FileName", name },
+                    { "@DateModified", DateTime.Now.ToString() }
                 });
 
                 return affectedRows;
             }
             else // update an existing
             {
-                return DBUpdateList(list);
+                return DBUpdateList(postition, name);
             }
         }
 
-        public static int DBUpdateList(FileList list)
+        public static int DBUpdateList(string position, string name)
         {
             int affectedRows = 0;
-            string sql = "update FileList set DateModified = @DateModified WHERE " +
-                "FilePosition = @FilePosition and FileName = @FileName";
+            string sql = @"update FileList set DateModified = @DateModified where
+                FilePosition = @FilePosition and FileName = @FileName";
             affectedRows = DataStorage.FileList.ExecuteWrite(sql, new Dictionary<string, object>
             {
-                { "@FilePosition", list.FilePosition },
-                { "@FileName", list.FileName },
-                { "@DateModified", list.DateModified }
+                { "@FilePosition", position },
+                { "@FileName", position },
+                { "@DateModified", DateTime.Now.ToString() }
             });
-            return 0;
+            return affectedRows;
         }
 
-        public static HashSet<FileList> DBSelectList()
+        public static HashSet<FileList> DBSelectAllList()
         {
             string sql = "select * from FileList;";
             var reader = DataStorage.FileList.ExecuteRead(sql);
@@ -234,7 +234,7 @@ namespace LogicService.Objects
         /// <param name="position"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static FileList DBSelectListByKey(string position, string name)
+        public static FileList DBSelectList(string position, string name)
         {
             string sql = "select * from FileList where FilePosition = @FilePosition and FileName = @FileName;";
             var reader = DataStorage.FileList.ExecuteRead(sql, new Dictionary<string, object> {
@@ -256,7 +256,7 @@ namespace LogicService.Objects
         /// </summary>
         /// <param name="trace"></param>
         /// <returns></returns>
-        public static int DBDeleteListByKey(string position, string name)
+        public static int DBDeleteList(string position, string name)
         {
             int affectedRows = 0;
             string sql = "delete from FileList where FilePosition = @FilePosition and FileName = @FileName;";

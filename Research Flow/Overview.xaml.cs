@@ -47,7 +47,7 @@ namespace Research_Flow
                 messages = new ObservableCollection<MessageBot>()
                 {
                     new MessageBot { Comment = "Hello", IsSelf = false },
-                    new MessageBot { Comment = "Hello", IsSelf = true },
+                    new MessageBot { Comment = "for new user, remember to load default feed from file, not the follows", IsSelf = true },
                 };
                 //LocalStorage.WriteJson(await LocalStorage.GetLogAsync(), "messagelist", messages);
             }

@@ -63,9 +63,10 @@ namespace Research_Flow
         
         private void ConfigureUI()
         {
-            if (ApplicationSetting.ContainKey("HeaderColorA"))
+            if (ApplicationSetting.ContainKey("HeaderColorA") && ApplicationSetting.ContainKey("HeaderColorR") &&
+                ApplicationSetting.ContainKey("HeaderColorG") && ApplicationSetting.ContainKey("HeaderColorB"))
             {
-                   Color color = Color.FromArgb(Convert.ToByte(ApplicationSetting.HeaderColorA),
+                Color color = Color.FromArgb(Convert.ToByte(ApplicationSetting.HeaderColorA),
                     Convert.ToByte(ApplicationSetting.HeaderColorR),
                     Convert.ToByte(ApplicationSetting.HeaderColorG),
                     Convert.ToByte(ApplicationSetting.HeaderColorB));
@@ -404,8 +405,26 @@ namespace Research_Flow
                 new SystemCondition(SystemConditionType.InternetAvailable));
         }
 
+        public static async Task<BackgroundTaskRegistration> RegisterRemindTask(string taskID, DateTimeOffset dateTime)
+        {
+            uint freshnessTime = Convert.ToUInt32(dateTime.Subtract(DateTimeOffset.Now).TotalMinutes);
+            return await RegisterBackgroundTask(typeof(CoreFlow.TopicTask),
+                taskID, new TimeTrigger(freshnessTime, true));
+        }
+
+        public static void CancelBackgroundTask(string taskName)
+        {
+            foreach (var cur in BackgroundTaskRegistration.AllTasks)
+            {
+                if (cur.Value.Name == taskName)
+                {
+                    cur.Value.Unregister(true);
+                }
+            }
+        }
+
         private static async Task<BackgroundTaskRegistration> RegisterBackgroundTask(Type taskEntryPoint,
-            string taskName, IBackgroundTrigger trigger, IBackgroundCondition condition)
+            string taskName, IBackgroundTrigger trigger, IBackgroundCondition condition = null)
         {
             var status = await BackgroundExecutionManager.RequestAccessAsync();
             if (status == BackgroundAccessStatus.Unspecified || status == BackgroundAccessStatus.DeniedByUser

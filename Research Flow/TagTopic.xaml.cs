@@ -1,6 +1,7 @@
 ﻿using LogicService.Application;
 using LogicService.Helper;
 using LogicService.Objects;
+using LogicService.Security;
 using LogicService.Storage;
 using System;
 using System.Collections.Generic;
@@ -142,6 +143,8 @@ namespace Research_Flow
             if (!string.IsNullOrEmpty(topicTitle.Text))
             {
                 Topic topic = new Topic();
+                //
+                topic.ID = HashEncode.MakeMD5(DateTimeOffset.Now.ToString());
                 topic.Title = topicTitle.Text;
                 if (startDate.Date != null)
                     topic.StartDate = startDate.Date.Value;
@@ -150,21 +153,16 @@ namespace Research_Flow
                 if (remindTime.Time != null)
                     topic.RemindTime = remindTime.Time;
 
-                if (currentTopic != null)
+                if (currentTopic != null) // modify
                 {
-                    topics[topics.IndexOf(currentTopic)] = topic;
+                    int index = topics.IndexOf(currentTopic);
+                    topics[index].Title = topic.Title;
+                    topics[index].StartDate = topic.StartDate;
+                    topics[index].EndDate = topic.EndDate;
+                    topics[index].RemindTime = topic.RemindTime;
                 }
-                else
+                else // add new
                 {
-                    foreach (Topic item in topics)
-                    {
-                        if (item == topic)
-                        {
-                            ApplicationMessage.SendMessage("RssException: There has been the same topic.", ApplicationMessage.MessageType.InAppNotification);
-                            ClearTopicSetting();
-                            return;
-                        }
-                    }
                     topics.Add(topic);
                 }
 
