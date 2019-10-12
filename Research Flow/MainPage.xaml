@@ -40,7 +40,7 @@
                 <NavigationViewItemSeparator/>
                 <NavigationViewItem Content="RSS Service" Tag="RSS">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE24A;" />
+                        <FontIcon Glyph="&#xE753;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem Content="Search Engine" Tag="Search">
@@ -50,7 +50,7 @@
                 </NavigationViewItem>
                 <NavigationViewItem Content="Crawler Service" Tag="Crawler">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE12B;"/>
+                        <FontIcon Glyph="&#xE24A;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 

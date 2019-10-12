@@ -70,11 +70,12 @@ namespace LogicService.Objects
             DataStorage.CrawlData.ExecuteWrite(sql);
         }
 
-        public static void DBInsert()
+        public static int DBInsert()
         {
             int affectedRows = 0;
             string sql = @"insert into Crawlable(ID, ParentID, Text, Url)
                 values(@ID, @ParentID, @Text, @Url);";
+            return affectedRows;
         }
 
         public static List<Crawlable> DBSelectUIByPID(string pid)

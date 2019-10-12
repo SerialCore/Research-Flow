@@ -155,7 +155,7 @@ namespace LogicService.Storage
             }
             catch (Exception ex)
             {
-                ApplicationMessage.SendMessage("DatabaseException: " + ex.Message, ApplicationMessage.MessageType.InAppNotification);
+                ApplicationMessage.SendMessage("DatabaseException: " + ex.Message, ApplicationMessage.MessageType.InApp);
             }
             
             return affectedRows;

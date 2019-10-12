@@ -146,10 +146,8 @@ namespace Research_Flow
                 //
                 topic.ID = HashEncode.MakeMD5(DateTimeOffset.Now.ToString());
                 topic.Title = topicTitle.Text;
-                if (startDate.Date != null)
-                    topic.StartDate = startDate.Date.Value;
-                if (endDate.Date != null)
-                    topic.EndDate = endDate.Date.Value;
+                if (deadLine.Date != null)
+                    topic.Deadline = deadLine.Date.Value;
                 if (remindTime.Time != null)
                     topic.RemindTime = remindTime.Time;
 
@@ -157,8 +155,7 @@ namespace Research_Flow
                 {
                     int index = topics.IndexOf(currentTopic);
                     topics[index].Title = topic.Title;
-                    topics[index].StartDate = topic.StartDate;
-                    topics[index].EndDate = topic.EndDate;
+                    topics[index].Deadline = topic.Deadline;
                     topics[index].RemindTime = topic.RemindTime;
                 }
                 else // add new
@@ -168,12 +165,42 @@ namespace Research_Flow
 
                 LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "topiclist", topics);
 
-                // double check tags and add them
+                // double check tags then add them
+                int count = tags.Count;
                 tags.UnionWith(Topic.TagPicker(topicTitle.Text));
-                LoadTagView();
+                if (count != tags.Count)
+                    LoadTagView();
                 LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "taglist", tags);
+
+                // register a task
+                SubmitTopictoTask(topic);
             }
             ClearTopicSetting();
+        }
+
+        private void SubmitTopictoTask(Topic topic)
+        {
+            if (topic.Deadline == DateTimeOffset.MinValue && topic.RemindTime == TimeSpan.Zero) // an idea
+            {
+                ;
+            }
+            else if (topic.Deadline == DateTimeOffset.MinValue && topic.RemindTime != TimeSpan.Zero) // an alarm
+            {
+
+            }
+            else if (topic.RemindTime == TimeSpan.Zero) // a deadline
+            {
+                // make a setting about default time
+                DateTimeOffset date = new DateTimeOffset(topic.Deadline.Year, topic.Deadline.Month, topic.Deadline.Day,
+                    0, 0, 0, DateTimeOffset.Now.Offset);
+                ApplicationNotification.ScheduleAlarmToast(topic.ID,"Research Topic", topic.Title, date);
+            }
+            else // a deadline with alarm
+            {
+                DateTimeOffset date = new DateTimeOffset(topic.Deadline.Year, topic.Deadline.Month, topic.Deadline.Day,
+                    topic.RemindTime.Hours, topic.RemindTime.Minutes, topic.RemindTime.Seconds, DateTimeOffset.Now.Offset);
+                ApplicationNotification.ScheduleAlarmToast(topic.ID, "Research Topic", topic.Title, date);
+            }
         }
 
         private async void DeleteTopic(object sender, RoutedEventArgs e)
@@ -193,6 +220,9 @@ namespace Research_Flow
 
         private async void DeleteInvokedHandler(IUICommand command)
         {
+            // cancel notification
+            ApplicationNotification.CancelAlarmToast(currentTopic.ID);
+
             topics.Remove(currentTopic);
             LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "topiclist", topics);
             ClearTopicSetting();
@@ -206,8 +236,8 @@ namespace Research_Flow
         {
             currentTopic = null;
             topicTitle.Text = "";
-            startDate.Date = null;
-            endDate.Date = null;
+            deadLine.Date = null;
+            remindTime.Time = TimeSpan.Zero;
 
             topicDelete.Visibility = Visibility.Collapsed;
             topicSetting.Visibility = Visibility.Collapsed;
@@ -220,10 +250,8 @@ namespace Research_Flow
 
             currentTopic = e.ClickedItem as Topic;
             topicTitle.Text = currentTopic.Title;
-            if (currentTopic.StartDate != DateTimeOffset.MinValue)
-                startDate.Date = currentTopic.StartDate;
-            if (currentTopic.EndDate != DateTimeOffset.MinValue)
-                endDate.Date = currentTopic.EndDate;
+            if (currentTopic.Deadline != DateTimeOffset.MinValue)
+                deadLine.Date = currentTopic.Deadline;
             if (currentTopic.RemindTime != TimeSpan.Zero)
                 remindTime.Time = currentTopic.RemindTime;
         }

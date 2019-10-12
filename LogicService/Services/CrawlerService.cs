@@ -34,7 +34,7 @@ namespace LogicService.Services
             { "Url: Has=", "" },
             { "Url: HasDoi", "doi" },
             { "Url: HasAbs", "abs" },
-            { "Url: HasPDF", "pdf" },
+            { "Url: HasPDF", @"(.pdf\z)|(/pdf/)" },
             { "Url: Insite", "" }, // for tag only, not truely dictionary
         };
 

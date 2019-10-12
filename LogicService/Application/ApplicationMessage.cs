@@ -14,9 +14,18 @@ namespace LogicService.Application
 
         public enum MessageType
         {
-            TopBanner,
-            InAppNotification,
-            ToastNotification
+            /// <summary>
+            /// Information
+            /// </summary>
+            Banner,
+            /// <summary>
+            /// Exception
+            /// </summary>
+            InApp,
+            /// <summary>
+            /// Reminder
+            /// </summary>
+            Toast
         }
 
         public delegate void MessageHandle(string message, MessageType type);

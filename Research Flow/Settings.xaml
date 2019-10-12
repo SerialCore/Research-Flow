@@ -13,6 +13,14 @@
             <PivotItem Header="Panel">
                 <ScrollViewer>
                     <StackPanel>
+                        <StackPanel >
+                            <TextBlock Text="Topic Reminding" FontSize="25"/>
+                            <TextBlock Text="Days before dealine"/>
+                        </StackPanel>
+                        <StackPanel >
+                            <TextBlock Text="File Saving" FontSize="25"/>
+                            <TextBlock Text="PDF file download location"/>
+                        </StackPanel>
                         <Button Content="Show Search Log" Click="Show_SearchLog"/>
                     </StackPanel>
                 </ScrollViewer>

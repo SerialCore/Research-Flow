@@ -45,12 +45,6 @@
             <Task Type="timer" />
           </BackgroundTasks>
         </Extension>
-        <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.TopicTask">
-          <BackgroundTasks>
-            <Task Type="timer"/>
-            <Task Type="pushNotification"/>
-          </BackgroundTasks>
-        </Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
           <uap:FileTypeAssociation Name="note">
             <uap:SupportedFileTypes>

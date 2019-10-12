@@ -291,7 +291,7 @@ namespace Research_Flow
                 {
                     await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
-                        ApplicationMessage.SendMessage("SearchException: " + exception, ApplicationMessage.MessageType.InAppNotification);
+                        ApplicationMessage.SendMessage("SearchException: " + exception, ApplicationMessage.MessageType.InApp);
                         craWaiting.IsActive = false;
                     });
                 });
@@ -330,8 +330,20 @@ namespace Research_Flow
         private void Link_list_ItemClick(object sender, ItemClickEventArgs e)
         {
             string link = (e.ClickedItem as Crawlable).Url;
-            // if not a downloadable link
-            webView.Source = new Uri(link);
+            // check if a downloadable link
+            if (Regex.IsMatch(link, CrawlerService.LinkFilter["Url: HasPDF"]))
+            {
+                WebClientService webClient = new WebClientService();
+                //webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
+                //webClient.DownloadFile(link, "");
+            }
+            else
+                webView.Source = new Uri(link);
+        }
+
+        private void WebClient_DownloadProgressChanged(object sender, DownloadEventArgs e)
+        {
+            
         }
 
         private void SubmitToCrawler(object sender, RoutedEventArgs e)

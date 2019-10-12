@@ -50,12 +50,12 @@ namespace Research_Flow
         {
             switch (type)
             {
-                case ApplicationMessage.MessageType.TopBanner:
+                case ApplicationMessage.MessageType.Banner:
                     appMessage.Text = message;
                     await Task.Delay(3000);
                     appMessage.Text = "";
                     break;
-                case ApplicationMessage.MessageType.InAppNotification:
+                case ApplicationMessage.MessageType.InApp:
                     InAppNotification.Show(message);
                     break;
             }
@@ -76,9 +76,8 @@ namespace Research_Flow
 
         private async void ConfigureTask()
         {
-            await ApplicationTask.RegisterSearchTask();
-            await ApplicationTask.RegisterStorageTask();
-            await ApplicationTask.RegisterTopicTask();
+            await ResearchTask.RegisterSearchTask();
+            await ResearchTask.RegisterStorageTask();
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
@@ -200,9 +199,9 @@ namespace Research_Flow
         {
             if (GraphService.IsConnected && GraphService.IsNetworkAvailable)
             {
-                ApplicationMessage.SendMessage("Synchronizing", ApplicationMessage.MessageType.TopBanner);
+                ApplicationMessage.SendMessage("Synchronizing", ApplicationMessage.MessageType.Banner);
                 await Synchronization.ScanFiles();
-                ApplicationMessage.SendMessage("Synchronized successfully", ApplicationMessage.MessageType.TopBanner);
+                ApplicationMessage.SendMessage("Synchronized successfully", ApplicationMessage.MessageType.Banner);
             }
         }
 
@@ -337,26 +336,29 @@ namespace Research_Flow
                 try
                 {
                     await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetPictureAsync(), file);
-                    ToastGenerator.ShowTextToast("OneDrive", "Screen Shot Saved");
+                    ApplicationNotification.ShowTextToast("OneDrive", "Screen Shot Saved");
                 }
                 catch
                 {
                     await file.CopyAsync(KnownFolders.PicturesLibrary, file.Name);
-                    ToastGenerator.ShowTextToast("Pictures Library", "Screen Shot Saved");
+                    ApplicationNotification.ShowTextToast("Pictures Library", "Screen Shot Saved");
                 }
             }
         }
 
         private void FullScreen_Click(object sender, RoutedEventArgs e)
         {
+            AppBarButton button = sender as AppBarButton;
             ApplicationView view = ApplicationView.GetForCurrentView();
             if (view.IsFullScreenMode)
             {
                 view.ExitFullScreenMode();
+                button.Icon = new SymbolIcon(Symbol.FullScreen);
             }
             else
             {
                 view.TryEnterFullScreenMode();
+                button.Icon = new SymbolIcon(Symbol.BackToWindow);
             }
         }
 
@@ -377,19 +379,12 @@ namespace Research_Flow
 
     }
 
-    public class ApplicationTask
+    public class ResearchTask
     {
 
         /*
-         * UserPresent and UserAway are both most frequent
+         * UserPresent and UserAway are both mostly frequent
          */
-
-        public static async Task<BackgroundTaskRegistration> RegisterTopicTask()
-        {
-            return await RegisterBackgroundTask(typeof(CoreFlow.TopicTask),
-                "LearnTask", new SystemTrigger(SystemTriggerType.UserPresent, false),
-                new SystemCondition(SystemConditionType.InternetAvailable));
-        }
 
         public static async Task<BackgroundTaskRegistration> RegisterSearchTask()
         {
@@ -405,11 +400,16 @@ namespace Research_Flow
                 new SystemCondition(SystemConditionType.InternetAvailable));
         }
 
-        public static async Task<BackgroundTaskRegistration> RegisterRemindTask(string taskID, DateTimeOffset dateTime)
+        public static bool ContainBackgroundTask(string taskName)
         {
-            uint freshnessTime = Convert.ToUInt32(dateTime.Subtract(DateTimeOffset.Now).TotalMinutes);
-            return await RegisterBackgroundTask(typeof(CoreFlow.TopicTask),
-                taskID, new TimeTrigger(freshnessTime, true));
+            foreach (var cur in BackgroundTaskRegistration.AllTasks)
+            {
+                if (cur.Value.Name == taskName)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public static void CancelBackgroundTask(string taskName)

@@ -117,7 +117,7 @@ namespace Research_Flow
                     {
                         if (item == source) // require the Equals method
                         {
-                            ApplicationMessage.SendMessage("RssException: There has been the same url.", ApplicationMessage.MessageType.InAppNotification);
+                            ApplicationMessage.SendMessage("RssException: There has been the same url.", ApplicationMessage.MessageType.InApp);
                             ClearSettings();
                             return;
                         }
@@ -234,7 +234,7 @@ namespace Research_Flow
                 {
                     await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
-                        ApplicationMessage.SendMessage("RssException: " + exception, ApplicationMessage.MessageType.InAppNotification);
+                        ApplicationMessage.SendMessage("RssException: " + exception, ApplicationMessage.MessageType.InApp);
                         waiting_feed.IsActive = false;
                     });
                 }, null);

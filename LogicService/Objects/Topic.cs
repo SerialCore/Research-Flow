@@ -14,9 +14,7 @@ namespace LogicService.Objects
 
         public string Title { get; set; }
 
-        public DateTimeOffset StartDate { get; set; } // DateTime for only date, and DateTimeOffset for whole date and time
-
-        public DateTimeOffset EndDate { get; set; }
+        public DateTimeOffset Deadline { get; set; } // DateTime for only date, and DateTimeOffset for whole date and time
 
         public TimeSpan RemindTime { get; set; }
 
@@ -55,7 +53,7 @@ namespace LogicService.Objects
 
         #endregion
 
-        #region Tag Management
+        #region Tag Helper
 
         public static HashSet<string> TagPicker(string content)
         {

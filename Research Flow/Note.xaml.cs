@@ -34,17 +34,21 @@ namespace Research_Flow
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            StorageFile file = e.Parameter as StorageFile;
-            if (file != null)
+            if (e.Parameter != null)
             {
+                StorageFile file = e.Parameter as StorageFile;
                 try
                 {
                     canvas.ImportFromJson(await FileIO.ReadTextAsync(file));
                 }
                 catch (Exception ex)
                 {
-                    ApplicationMessage.SendMessage("NoteException: " + ex.Message, ApplicationMessage.MessageType.InAppNotification);
+                    ApplicationMessage.SendMessage("NoteException: " + ex.Message, ApplicationMessage.MessageType.InApp);
                 }
+            }
+            else
+            {
+                LoadDefaultNote(null, null);
             }
             
             InitializeNote();
@@ -91,7 +95,7 @@ namespace Research_Flow
                 }
                 catch (Exception ex)
                 {
-                    ApplicationMessage.SendMessage("NoteException: " + ex.Message, ApplicationMessage.MessageType.InAppNotification);
+                    ApplicationMessage.SendMessage("NoteException: " + ex.Message, ApplicationMessage.MessageType.InApp);
                 }
             }
         }
@@ -110,12 +114,12 @@ namespace Research_Flow
                 try
                 {
                     await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetPictureAsync(), file);
-                    ToastGenerator.ShowTextToast("OneDrive", "Note Image Saved");
+                    ApplicationNotification.ShowTextToast("OneDrive", "Note Image Saved");
                 }
                 catch
                 {
                     await file.CopyAsync(KnownFolders.PicturesLibrary, file.Name);
-                    ToastGenerator.ShowTextToast("Pictures Library", "Note Image Saved");
+                    ApplicationNotification.ShowTextToast("Pictures Library", "Note Image Saved");
                 }
             }
         }
@@ -219,8 +223,6 @@ namespace Research_Flow
 
         private ThreadPoolTimer autoSaver;
 
-        private string currentNote;
-
         private void Open_Document(object sender, RoutedEventArgs e)
             => notepanel.IsPaneOpen = !notepanel.IsPaneOpen;
 
@@ -269,7 +271,7 @@ namespace Research_Flow
                     notename + ".rfn", canvas.ExportAsJson());
             }
 
-            ApplicationMessage.SendMessage("Note saved", ApplicationMessage.MessageType.TopBanner);
+            ApplicationMessage.SendMessage("Note saved", ApplicationMessage.MessageType.Banner);
             foreach (string item in namelist)
             {
                 if (item.Equals(notename))

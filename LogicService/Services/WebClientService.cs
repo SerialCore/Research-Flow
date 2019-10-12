@@ -8,63 +8,43 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace LogicService.Services
-{
-    /// <summary>    
-    /// 上传数据参数    
-    /// </summary>    
+{  
     public class UploadEventArgs : EventArgs
     {
-        int bytesSent;
-        int totalBytes;
+        private int bytesSent;
+        private int totalBytes;
 
-        /// <summary>       
-        /// 已发送的字节数    
-        /// </summary>    
         public int BytesSent
         {
             get { return bytesSent; }
             set { bytesSent = value; }
         }
-
-        /// <summary>    
-        /// 总字节数    
-        /// </summary>    
+        
         public int TotalBytes
         {
             get { return totalBytes; }
             set { totalBytes = value; }
         }
     }
-    /// <summary>    
-    /// 下载数据参数    
-    /// </summary>    
+
     public class DownloadEventArgs : EventArgs
     {
-        int bytesReceived;
-        int totalBytes;
-        byte[] receivedData;
+        private int bytesReceived;
+        private int totalBytes;
+        private byte[] receivedData;
 
-        /// <summary>    
-        /// 已接收的字节数    
-        /// </summary>    
         public int BytesReceived
         {
             get { return bytesReceived; }
             set { bytesReceived = value; }
         }
-
-        /// <summary>    
-        /// 总字节数    
-        /// </summary>    
+ 
         public int TotalBytes
         {
             get { return totalBytes; }
             set { totalBytes = value; }
         }
-
-        /// <summary>    
-        /// 当前缓冲区接收的数据    
-        /// </summary>    
+ 
         public byte[] ReceivedData
         {
             get { return receivedData; }
@@ -72,112 +52,77 @@ namespace LogicService.Services
         }
     }
 
-    /// <summary>
-    /// 网络客户端帮助类
-    /// </summary>
     public class WebClientService
     {
-        Encoding encoding = Encoding.Default;
-        string respHtml = "";
-        WebProxy proxy;
-        static CookieContainer cc;
-        WebHeaderCollection requestHeaders;
-        WebHeaderCollection responseHeaders;
-        int bufferSize = 15240;
+        private Encoding encoding = Encoding.Default;
+        private string respHtml = "";
+        private WebProxy proxy;
+        private static CookieContainer cc;
+        private WebHeaderCollection requestHeaders;
+        private WebHeaderCollection responseHeaders;
+        private int bufferSize = 15240;
+
         public event EventHandler<UploadEventArgs> UploadProgressChanged;
         public event EventHandler<DownloadEventArgs> DownloadProgressChanged;
+
         static WebClientService()
         {
             LoadCookiesFromDisk();
         }
 
-        /// <summary>    
-        /// 创建WebClient的实例    
-        /// </summary>    
         public WebClientService()
         {
             requestHeaders = new WebHeaderCollection();
             responseHeaders = new WebHeaderCollection();
         }
-
-        /// <summary>    
-        /// 设置发送和接收的数据缓冲大小    
-        /// </summary>    
+        
         public int BufferSize
         {
             get { return bufferSize; }
             set { bufferSize = value; }
         }
 
-        /// <summary>    
-        /// 获取响应头集合    
-        /// </summary>    
         public WebHeaderCollection ResponseHeaders
         {
             get { return responseHeaders; }
         }
 
-        /// <summary>    
-        /// 获取请求头集合    
-        /// </summary>    
         public WebHeaderCollection RequestHeaders
         {
             get { return requestHeaders; }
         }
 
-        /// <summary>    
-        /// 获取或设置代理    
-        /// </summary>    
         public WebProxy Proxy
         {
             get { return proxy; }
             set { proxy = value; }
         }
 
-        /// <summary>    
-        /// 获取或设置请求与响应的文本编码方式    
-        /// </summary>    
         public Encoding Encoding
         {
             get { return encoding; }
             set { encoding = value; }
         }
 
-        /// <summary>    
-        /// 获取或设置响应的html代码    
-        /// </summary>    
         public string RespHtml
         {
             get { return respHtml; }
             set { respHtml = value; }
         }
 
-        /// <summary>    
-        /// 获取或设置与请求关联的Cookie容器    
-        /// </summary>    
         public CookieContainer CookieContainer
         {
             get { return cc; }
             set { cc = value; }
         }
 
-        /// <summary>    
-        ///  获取网页源代码    
-        /// </summary>    
-        /// <param name="url">网址</param>    
-        /// <returns></returns>    
         public string GetHtml(string url)
         {
             HttpWebRequest request = CreateRequest(url, "GET");
             respHtml = encoding.GetString(GetData(request));
             return respHtml;
         }
-
-        /// <summary>    
-        /// 下载文件    
-        /// </summary>    
-        /// <param name="url">文件URL地址</param>    
-        /// <param name="filename">文件保存完整路径</param>    
+ 
         public void DownloadFile(string url, string filename)
         {
             FileStream fs = null;
@@ -194,35 +139,30 @@ namespace LogicService.Services
             }
         }
 
-        /// <summary>    
-        /// 从指定URL下载数据    
-        /// </summary>    
-        /// <param name="url">网址</param>    
-        /// <returns></returns>    
         public byte[] GetData(string url)
         {
             HttpWebRequest request = CreateRequest(url, "GET");
             return GetData(request);
         }
 
-        /// <summary>    
-        /// 向指定URL发送文本数据    
-        /// </summary>    
-        /// <param name="url">网址</param>    
-        /// <param name="postData">urlencode编码的文本数据</param>    
-        /// <returns></returns>    
+        /// <summary>
+        /// Post text data to a specific url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="postData">url encode</param>
+        /// <returns></returns>
         public string Post(string url, string postData)
         {
             byte[] data = encoding.GetBytes(postData);
             return Post(url, data);
         }
 
-        /// <summary>    
-        /// 向指定URL发送字节数据    
-        /// </summary>    
-        /// <param name="url">网址</param>    
-        /// <param name="postData">发送的字节数组</param>    
-        /// <returns></returns>    
+        /// <summary>
+        /// Post byte data to a specific url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="postData">url encode</param>
+        /// <returns></returns>
         public string Post(string url, byte[] postData)
         {
             HttpWebRequest request = CreateRequest(url, "POST");
@@ -235,9 +175,9 @@ namespace LogicService.Services
         }
 
         /// <summary>    
-        /// 向指定网址发送mulitpart编码的数据    
+        /// Post mulitpart form data to a specific url
         /// </summary>    
-        /// <param name="url">网址</param>    
+        /// <param name="url"></param>    
         /// <param name="mulitpartForm">mulitpart form data</param>    
         /// <returns></returns>    
         public string Post(string url, MultipartForm mulitpartForm)
@@ -251,11 +191,6 @@ namespace LogicService.Services
             return respHtml;
         }
 
-        /// <summary>    
-        /// 读取请求返回的数据    
-        /// </summary>    
-        /// <param name="request">请求对象</param>    
-        /// <returns></returns>    
         private byte[] GetData(HttpWebRequest request)
         {
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -282,7 +217,7 @@ namespace LogicService.Services
                 }
             }
             stream.Close();
-            //解压    
+            // compress
             if (ResponseHeaders[HttpResponseHeader.ContentEncoding] != null)
             {
                 MemoryStream msTemp = new MemoryStream();
@@ -311,11 +246,6 @@ namespace LogicService.Services
             return ms.ToArray();
         }
 
-        /// <summary>    
-        /// 发送请求数据    
-        /// </summary>    
-        /// <param name="request">请求对象</param>    
-        /// <param name="postData">请求发送的字节数组</param>    
         private void PostData(HttpWebRequest request, byte[] postData)
         {
             int offset = 0;
@@ -337,12 +267,7 @@ namespace LogicService.Services
             }
             stream.Close();
         }
-
-        /// <summary>    
-        /// 创建HTTP请求    
-        /// </summary>    
-        /// <param name="url">URL地址</param>    
-        /// <returns></returns>    
+        
         private HttpWebRequest CreateRequest(string url, string method)
         {
             Uri uri = new Uri(url);
@@ -373,10 +298,7 @@ namespace LogicService.Services
         {
             return true;
         }
-
-        /// <summary>    
-        /// 将Cookie保存到磁盘    
-        /// </summary>    
+ 
         private static void SaveCookiesToDisk()
         {
             string cookieFile = System.Environment.GetFolderPath(Environment.SpecialFolder.Cookies) + "\\webclient.cookie";
@@ -392,10 +314,7 @@ namespace LogicService.Services
                 if (fs != null) fs.Close();
             }
         }
-
-        /// <summary>    
-        /// 从磁盘加载Cookie    
-        /// </summary>    
+  
         private static void LoadCookiesFromDisk()
         {
             cc = new CookieContainer();
@@ -416,22 +335,13 @@ namespace LogicService.Services
         }
     }
 
-    /// <summary>    
-    /// 对文件和文本数据进行Multipart形式的编码    
-    /// </summary>    
     public class MultipartForm
     {
-        #region 自定义变量
         private Encoding encoding;
         private MemoryStream ms;
         private string boundary;
         private byte[] formData;
-        #endregion
 
-        #region 获取编码后的字节数组
-        /// <summary>    
-        /// 获取编码后的字节数组    
-        /// </summary>    
         public byte[] FormData
         {
             get
@@ -445,47 +355,25 @@ namespace LogicService.Services
                 return formData;
             }
         }
-        #endregion
 
-        #region 获取此编码内容的类型
-        /// <summary>    
-        /// 获取此编码内容的类型    
-        /// </summary>    
         public string ContentType
         {
             get { return string.Format("multipart/form-data; boundary={0}", this.boundary); }
         }
-        #endregion
 
-        #region 获取或设置对字符串采用的编码类型
-        /// <summary>    
-        /// 获取或设置对字符串采用的编码类型    
-        /// </summary>    
         public Encoding StringEncoding
         {
             set { encoding = value; }
             get { return encoding; }
         }
-        #endregion
 
-        #region 实例化
-        /// <summary>    
-        /// 实例化    
-        /// </summary>    
         public MultipartForm()
         {
             boundary = string.Format("--{0}--", Guid.NewGuid());
             ms = new MemoryStream();
             encoding = Encoding.Default;
-        } 
-        #endregion
-
-        #region 添加字符串 
-        /// <summary>    
-        /// 添加字符串    
-        /// </summary>    
-        /// <param name="name">文本域名称</param>    
-        /// <param name="value">文本值</param>    
+        }
+ 
         public void AddString(string name, string value)
         {
             StringBuilder sb = new StringBuilder();
@@ -495,8 +383,6 @@ namespace LogicService.Services
             sb.AppendFormat("{0}\r\n", value);
             byte[] buf = encoding.GetBytes(sb.ToString());
             ms.Write(buf, 0, buf.Length);
-        } 
-        #endregion
-
+        }
     }
 }

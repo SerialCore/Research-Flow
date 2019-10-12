@@ -10,8 +10,6 @@ namespace LogicService.Helper
     public class RegexHelper
     {
 
-        public static string IsEmial => @"^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$";
-
         /// <summary>
         /// Group: src
         /// </summary>
@@ -20,7 +18,7 @@ namespace LogicService.Helper
         /// <summary>
         /// Group: url, text
         /// </summary>
-        public static string MatchALink => @"<a\shref\s*=""(?<url>[^""]*).*?>(?<text>[^<]*)</a>";
+        public static string MatchLinkA => @"<a\shref\s*=""(?<url>[^""]*).*?>(?<text>[^<]*)</a>";
 
         /// <summary>
         /// Group: url, text
