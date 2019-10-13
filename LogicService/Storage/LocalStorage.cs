@@ -101,8 +101,6 @@ namespace LogicService.Storage
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
             await FileIO.WriteTextAsync(file, content);
             // record
-            //AddFileList(folder.Name, name);
-            //AddFileTrace(folder.Name, name);
             FileList.DBInsertList(folder.Name, name);
             FileList.DBInsertTrace(folder.Name, name);
         }
@@ -118,12 +116,7 @@ namespace LogicService.Storage
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
             await file.DeleteAsync();
             // record
-            //AddFileTrace(folder.Name, name);
-            //RemoveFileList(folder.Name, name);
-            // or FileList.DBUpdateTrace
-            FileList.DBInsertTrace(folder.Name, name);
             FileList.DBDeleteList(folder.Name, name);
-
         }
 
         public static async void GeneralLogAsync<T>(string name, string line) where T : class
@@ -170,92 +163,6 @@ namespace LogicService.Storage
         public static async Task<T> ReadJsonAsync<T>(StorageFolder folder, string name) where T : class
         {
             return SerializeHelper.DeserializeJsonToObject<T>(await GeneralReadAsync(folder, name));
-        }
-
-        public static async void AddFileTrace(string position, string name)
-        {
-            List<FileList> trace;
-            StorageFile file = await (await GetLogAsync()).CreateFileAsync("filetrace",
-                CreationCollisionOption.OpenIfExists);
-            trace = SerializeHelper.DeserializeJsonToObject<List<FileList>>(await FileIO.ReadTextAsync(file));
-            if (trace == null)
-                trace = new List<FileList>();
-
-            // check the existing item
-            int traceIndex = -1;
-            foreach (FileList item in trace)
-            {
-                if (item.FileName == name && item.FilePosition == position)
-                    traceIndex = trace.IndexOf(item);
-            }
-            if (traceIndex >= 0)
-            {
-                trace[traceIndex].DateModified = DateTime.Now;
-            }
-            else
-                trace.Add(new FileList
-                {
-                    FileName = name,
-                    FilePosition = position,
-                    DateModified = DateTime.Now,
-                });
-
-            await FileIO.WriteTextAsync(file, SerializeHelper.SerializeToJson(trace));
-        }
-
-        public static async void AddFileList(string position, string name)
-        {
-            List<FileList> list;
-            // multi-users
-            StorageFile file = await GetRoamingFolder().CreateFileAsync(ApplicationSetting.AccountName + ".filelist",
-                CreationCollisionOption.OpenIfExists);
-            list = SerializeHelper.DeserializeJsonToObject<List<FileList>>(await FileIO.ReadTextAsync(file));
-            if (list == null)
-                list = new List<FileList>();
-
-            // check the existing item
-            int listIndex = -1;
-            foreach (FileList item in list)
-            {
-                if (item.FileName == name && item.FilePosition == position)
-                    listIndex = list.IndexOf(item);
-            }
-            if (listIndex < 0)
-            {
-                list.Add(new FileList
-                {
-                    FileName = name,
-                    FilePosition = position,
-                    DateModified = DateTime.Now
-                }); ;
-            }
-
-            await FileIO.WriteTextAsync(file, SerializeHelper.SerializeToJson(list));
-        }
-
-        public static async void RemoveFileList(string position, string name)
-        {
-            List<FileList> list;
-            // multi-users
-            StorageFile file = await GetRoamingFolder().CreateFileAsync(ApplicationSetting.AccountName + ".filelist",
-                CreationCollisionOption.OpenIfExists);
-            list = SerializeHelper.DeserializeJsonToObject<List<FileList>>(await FileIO.ReadTextAsync(file));
-            if (list == null)
-                list = new List<FileList>();
-
-            // check the existing item
-            int listIndex = -1;
-            foreach (FileList item in list)
-            {
-                if (item.FileName == name && item.FilePosition == position)
-                    listIndex = list.IndexOf(item);
-            }
-            if (listIndex >= 0)
-            {
-                list.RemoveAt(listIndex);
-            }
-
-            await FileIO.WriteTextAsync(file, SerializeHelper.SerializeToJson(list));
         }
 
         #endregion

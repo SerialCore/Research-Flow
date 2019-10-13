@@ -160,8 +160,8 @@ namespace LogicService.Objects
                 });
             }
 
-            LocalStorage.AddFileList("Data", DataStorage.FeedData.Database);
-            LocalStorage.AddFileTrace("Data", DataStorage.FeedData.Database);
+            FileList.DBInsertList("Data", DataStorage.FeedData.Database);
+            FileList.DBInsertTrace("Data", DataStorage.FeedData.Database);
 
             return affectedRows;
         }
@@ -198,6 +198,10 @@ namespace LogicService.Objects
             int affectedRows = 0;
             string sql = "delete from Feed where ParentID = @ParentID;";
             affectedRows = DataStorage.FeedData.ExecuteWrite(sql, new Dictionary<string, object> { { "@ParentID", pid } });
+
+            FileList.DBInsertList("Data", DataStorage.FeedData.Database);
+            FileList.DBInsertTrace("Data", DataStorage.FeedData.Database);
+
             return affectedRows;
         }
 

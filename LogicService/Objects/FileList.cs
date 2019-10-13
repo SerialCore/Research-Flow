@@ -69,9 +69,15 @@ namespace LogicService.Objects
             DataStorage.FileTrace.ExecuteWrite(sql);
         }
 
+        /// <summary>
+        /// Insert or update
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static int DBInsertTrace(string position, string name)
         {
-            if (DBSelectTrace(position, name) != null) // insert a new 
+            if (DBSelectTrace(position, name) == null) // insert a new 
             {
                 int affectedRows = 0;
                 string sql = @"insert into FileTrace(FilePosition, FileName, DateModified) 
@@ -96,7 +102,7 @@ namespace LogicService.Objects
             int affectedRows = 0;
             string sql = @"update FileTrace set DateModified = @DateModified where
                 FilePosition = @FilePosition and FileName = @FileName";
-            affectedRows = DataStorage.FileTrace.ExecuteWrite(sql, new Dictionary<string, object>
+            affectedRows += DataStorage.FileTrace.ExecuteWrite(sql, new Dictionary<string, object>
             {
                 { "@FilePosition", position },
                 { "@FileName", name },
@@ -155,7 +161,7 @@ namespace LogicService.Objects
         {
             int affectedRows = 0;
             string sql = "delete from FileTrace where FilePosition = @FilePosition and FileName = @FileName;";
-            affectedRows = DataStorage.FileTrace.ExecuteWrite(sql, new Dictionary<string, object> {
+            affectedRows += DataStorage.FileTrace.ExecuteWrite(sql, new Dictionary<string, object> {
                 { "@FilePosition", position }, { "@FileName", name } });
             return affectedRows;
         }
@@ -174,9 +180,15 @@ namespace LogicService.Objects
             DataStorage.FileList.ExecuteWrite(sql);
         }
 
+        /// <summary>
+        /// Only insert
+        /// </summary>
+        /// <param name="postition"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static int DBInsertList(string postition, string name)
         {
-            if (DBSelectList(postition, name) != null) // insert a new 
+            if (DBSelectList(postition, name) == null) // insert a new 
             {
                 int affectedRows = 0;
                 string sql = @"insert into FileList(FilePosition, FileName, DateModified) 
@@ -190,9 +202,9 @@ namespace LogicService.Objects
 
                 return affectedRows;
             }
-            else // update an existing
+            else
             {
-                return DBUpdateList(postition, name);
+                return 0;
             }
         }
 
@@ -201,7 +213,7 @@ namespace LogicService.Objects
             int affectedRows = 0;
             string sql = @"update FileList set DateModified = @DateModified where
                 FilePosition = @FilePosition and FileName = @FileName";
-            affectedRows = DataStorage.FileList.ExecuteWrite(sql, new Dictionary<string, object>
+            affectedRows += DataStorage.FileList.ExecuteWrite(sql, new Dictionary<string, object>
             {
                 { "@FilePosition", position },
                 { "@FileName", position },
@@ -260,7 +272,7 @@ namespace LogicService.Objects
         {
             int affectedRows = 0;
             string sql = "delete from FileList where FilePosition = @FilePosition and FileName = @FileName;";
-            affectedRows = DataStorage.FileList.ExecuteWrite(sql, new Dictionary<string, object> {
+            affectedRows += DataStorage.FileList.ExecuteWrite(sql, new Dictionary<string, object> {
                 { "@FilePosition", position }, { "@FileName", name } });
             return affectedRows;
         }

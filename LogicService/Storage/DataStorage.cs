@@ -44,7 +44,7 @@ namespace LogicService.Storage
                     _dbpath = LocalStorage.TryGetLogPath() + "\\" + _dbname;
                     break;
                 case DataType.FileList:
-                    _dbname = ApplicationSetting.AccountName + "filelist.db";
+                    _dbname = ApplicationSetting.AccountName + ".filelist.db";
                     _dbpath = LocalStorage.GetRoamingFolder().Path + "\\" + _dbname;
                     break;
             }
