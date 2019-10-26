@@ -274,9 +274,9 @@ namespace LogicService.Services
         }
 
         // net work
-        public void BeginGetResponse(Action<CrawlerService> onGetCrawlerCompleted = null, Action<string> onError = null, Action onFinally = null)
+        public async void BeginGetResponse(Action<CrawlerService> onGetCrawlerCompleted = null, Action<string> onError = null, Action onFinally = null)
         {
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 try
                 {

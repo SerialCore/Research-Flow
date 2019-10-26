@@ -37,7 +37,7 @@ namespace Research_Flow
             try
             {
                 FeedSources = await LocalStorage.ReadJsonAsync<ObservableCollection<RSSSource>>(
-                    await LocalStorage.GetDataAsync(), "rsslist");
+                    await LocalStorage.GetDataFolderAsync(), "rsslist");
             }
             catch
             {
@@ -53,7 +53,7 @@ namespace Research_Flow
                     new RSSSource{ ID = HashEncode.MakeMD5("http://www.sciencenet.cn/xml/paper.aspx?di=7"),
                         Name = "科学网-数理科学", Uri = "http://www.sciencenet.cn/xml/paper.aspx?di=7", Star = 5, IsJournal = false}
                 };
-                LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rsslist", FeedSources);
             }
             finally
             {
@@ -124,7 +124,7 @@ namespace Research_Flow
                     }
                     FeedSources.Add(source);
                 }
-                LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rsslist", FeedSources);
             }
             ClearSettings();
         }
@@ -147,7 +147,7 @@ namespace Research_Flow
         private async void DeleteInvokedHandler(IUICommand command)
         {
             FeedSources.Remove(modifiedRSS);
-            LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
+            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rsslist", FeedSources);
             // check
             FeedItem.DBDeleteByPID(modifiedRSS.ID);
             ClearSettings();
@@ -208,7 +208,11 @@ namespace Research_Flow
 
         private void LoadFeed(RSSSource source)
         {
-            feedItem_list.ItemsSource = FeedItem.DBSelectUIByPID(source.ID);
+            try
+            {
+                feedItem_list.ItemsSource = FeedItem.DBSelectUIByPID(source.ID);
+            }
+            catch { }
         }
 
         private void SearchFeed(RSSSource source)
@@ -228,7 +232,7 @@ namespace Research_Flow
                     });
                     FeedItem.DBInsert(feeds);
                     FeedSources[selectedFeedIndex].LastUpdateTime = DateTime.Now;
-                    LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
+                    LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rsslist", FeedSources);
                 },
                 async (exception) =>
                 {

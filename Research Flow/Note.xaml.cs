@@ -65,7 +65,7 @@ namespace Research_Flow
         private async void InitializeNote()
         {
             namelist.Clear();
-            var filelist = await (await LocalStorage.GetNoteAsync()).GetFilesAsync();
+            var filelist = await (await LocalStorage.GetNoteFolderAsync()).GetFilesAsync();
             foreach (var file in filelist)
             {
                 namelist.Add(file.DisplayName.Replace(".rfn", ""));
@@ -232,7 +232,7 @@ namespace Research_Flow
         private async void Notelist_ItemClick(object sender, ItemClickEventArgs e)
         {
             var name = e.ClickedItem as string;
-            var fileitem = await (await LocalStorage.GetNoteAsync()).GetFileAsync(name + ".rfn");
+            var fileitem = await (await LocalStorage.GetNoteFolderAsync()).GetFileAsync(name + ".rfn");
             canvas.ImportFromJson(await FileIO.ReadTextAsync(fileitem));
             notefilename.Text = name;
         }
@@ -261,13 +261,13 @@ namespace Research_Flow
             if (notefilename.Text.Equals(""))
             {
                 notename = "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                LocalStorage.GeneralWriteAsync(await LocalStorage.GetNoteAsync(),
+                LocalStorage.GeneralWriteAsync(await LocalStorage.GetNoteFolderAsync(),
                     notename + ".rfn", canvas.ExportAsJson());
             }
             else
             {
                 notename = notefilename.Text;
-                LocalStorage.GeneralWriteAsync(await LocalStorage.GetNoteAsync(),
+                LocalStorage.GeneralWriteAsync(await LocalStorage.GetNoteFolderAsync(),
                     notename + ".rfn", canvas.ExportAsJson());
             }
 
@@ -298,7 +298,7 @@ namespace Research_Flow
         private async void DeleteInvokedHandler(IUICommand command)
         {
             var name = notelist.SelectedItem as string;
-            LocalStorage.GeneralDeleteAsync(await LocalStorage.GetNoteAsync(), name + ".rfn");
+            LocalStorage.GeneralDeleteAsync(await LocalStorage.GetNoteFolderAsync(), name + ".rfn");
             namelist.Remove(name);
             notefilename.Text = "";
         }

@@ -6,6 +6,7 @@ using System.Net.Cache;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LogicService.Services
 {  
@@ -122,21 +123,41 @@ namespace LogicService.Services
             respHtml = encoding.GetString(GetData(request));
             return respHtml;
         }
- 
-        public void DownloadFile(string url, string filename)
+
+        public async void DownloadFile(string url, string filepath, string filename,
+            Action onDownloadCompleted = null, Action<string> onError = null, Action onFinally = null)
         {
-            FileStream fs = null;
-            try
+            await Task.Run(() =>
             {
-                HttpWebRequest request = CreateRequest(url, "GET");
-                byte[] data = GetData(request);
-                fs = new FileStream(filename, FileMode.Create, FileAccess.Write);
-                fs.Write(data, 0, data.Length);
-            }
-            finally
-            {
-                if (fs != null) fs.Close();
-            }
+                FileStream fs = null;
+                try
+                {
+                    HttpWebRequest request = CreateRequest(url, "GET");
+                    byte[] data = GetData(request);
+                    fs = new FileStream(filepath + "\\" + filename, FileMode.Create, FileAccess.Write);
+                    fs.Write(data, 0, data.Length);
+
+                    if (onDownloadCompleted != null)
+                    {
+                        onDownloadCompleted();
+                    }
+                }
+                catch (Exception e)
+                {
+                    if (onError != null)
+                    {
+                        onError(e.Message);
+                    }
+                }
+                finally
+                {
+                    if (fs != null) fs.Close();
+                    if (onFinally != null)
+                    {
+                        onFinally();
+                    }
+                }
+            });
         }
 
         public byte[] GetData(string url)
@@ -280,7 +301,8 @@ namespace LogicService.Services
             HttpWebRequest.DefaultCachePolicy = policy;
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-            request.AllowAutoRedirect = false;
+            request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18362";
+            request.AllowAutoRedirect = true;
             request.AllowWriteStreamBuffering = false;
             request.Method = method;
             if (proxy != null)

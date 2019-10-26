@@ -43,7 +43,7 @@ namespace Research_Flow
             try
             {
                 tags = await LocalStorage.ReadJsonAsync<HashSet<string>>(
-                    await LocalStorage.GetDataAsync(), "taglist");
+                    await LocalStorage.GetDataFolderAsync(), "taglist");
             }
             catch
             {
@@ -52,7 +52,7 @@ namespace Research_Flow
                 {
                     "AnOS", "QCD", "QED", "Pedal Motion", "DNA", "AI", "Bond", "Computer", "Hydrogen", "Halogen", "OS"
                 };
-                LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "taglist", tags);
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "taglist", tags);
             }
             finally
             {
@@ -65,13 +65,13 @@ namespace Research_Flow
             try
             {
                 topics = await LocalStorage.ReadJsonAsync<ObservableCollection<Topic>>(
-                    await LocalStorage.GetDataAsync(), "topiclist");
+                    await LocalStorage.GetDataFolderAsync(), "topiclist");
             }
             catch
             {
                 // for new user, remember to load default feed from file, not the follows
                 topics = new ObservableCollection<Topic>();
-                LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "topiclist", topics);
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topiclist", topics);
             }
             finally
             {
@@ -119,7 +119,7 @@ namespace Research_Flow
             {
                 tags.UnionWith(Topic.TagPicker(tagEmbed.Text));
                 LoadTagView();
-                LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "taglist", tags);
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "taglist", tags);
             }
         }
 
@@ -163,14 +163,14 @@ namespace Research_Flow
                     topics.Add(topic);
                 }
 
-                LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "topiclist", topics);
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topiclist", topics);
 
                 // double check tags then add them
                 int count = tags.Count;
                 tags.UnionWith(Topic.TagPicker(topicTitle.Text));
                 if (count != tags.Count)
                     LoadTagView();
-                LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "taglist", tags);
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "taglist", tags);
 
                 // register a task
                 SubmitTopictoTask(topic);
@@ -224,7 +224,7 @@ namespace Research_Flow
             ApplicationNotification.CancelAlarmToast(currentTopic.ID);
 
             topics.Remove(currentTopic);
-            LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "topiclist", topics);
+            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topiclist", topics);
             ClearTopicSetting();
         }
 
@@ -258,6 +258,10 @@ namespace Research_Flow
 
         #endregion
 
+        private void TextBlock_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            
+        }
     }
 
 }

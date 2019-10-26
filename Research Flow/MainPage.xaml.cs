@@ -16,6 +16,7 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -48,17 +49,20 @@ namespace Research_Flow
 
         private async void AppMessage_MessageReached(string message, ApplicationMessage.MessageType type)
         {
-            switch (type)
-            {
-                case ApplicationMessage.MessageType.Banner:
-                    appMessage.Text = message;
-                    await Task.Delay(3000);
-                    appMessage.Text = "";
-                    break;
-                case ApplicationMessage.MessageType.InApp:
-                    InAppNotification.Show(message);
-                    break;
-            }
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+             {
+                 switch (type)
+                 {
+                     case ApplicationMessage.MessageType.Banner:
+                         appMessage.Text = message;
+                         await Task.Delay(3000);
+                         appMessage.Text = "";
+                         break;
+                     case ApplicationMessage.MessageType.InApp:
+                         InAppNotification.Show(message);
+                         break;
+                 }
+             });
         }
         
         private void ConfigureUI()
@@ -104,7 +108,8 @@ namespace Research_Flow
             else
             {
                 accountName.Text = "Offline";
-                accountEmail.Text = ApplicationSetting.AccountName;
+                if (ApplicationSetting.ContainKey("AccountName")) // will be removed
+                    accountEmail.Text = ApplicationSetting.AccountName;
             }
         }
 
@@ -233,6 +238,8 @@ namespace Research_Flow
         #endregion
 
         #region Content
+
+        private bool IsHeaderColorChanged = false;
 
         private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
             => FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
@@ -365,14 +372,18 @@ namespace Research_Flow
         private void ColorPicker_ColorChanged(ColorPicker sender, ColorChangedEventArgs args)
         {
             NavView.Background = new SolidColorBrush(args.NewColor);
+            IsHeaderColorChanged = true;
         }
 
         private void ColorPicker_Closed(object sender, object e)
         {
-            ApplicationSetting.HeaderColorA = Convert.ToInt32(colorPicker.Color.A);
-            ApplicationSetting.HeaderColorR = Convert.ToInt32(colorPicker.Color.R);
-            ApplicationSetting.HeaderColorG = Convert.ToInt32(colorPicker.Color.G);
-            ApplicationSetting.HeaderColorB = Convert.ToInt32(colorPicker.Color.B);
+            if (IsHeaderColorChanged)
+            {
+                ApplicationSetting.HeaderColorA = Convert.ToInt32(colorPicker.Color.A);
+                ApplicationSetting.HeaderColorR = Convert.ToInt32(colorPicker.Color.R);
+                ApplicationSetting.HeaderColorG = Convert.ToInt32(colorPicker.Color.G);
+                ApplicationSetting.HeaderColorB = Convert.ToInt32(colorPicker.Color.B);
+            }
         }
 
         #endregion

@@ -56,7 +56,7 @@ namespace Research_Flow
                 // make sure there will be an user folder and user data
                 if (ApplicationSetting.ContainKey("AccountName") && ApplicationSetting.ContainKey("Configured"))
                 {
-                    await Task.Delay(1000);
+                    await Task.Delay(500);
                     this.Frame.Navigate(typeof(MainPage), tempParameter);
                 }
             }
@@ -67,6 +67,15 @@ namespace Research_Flow
                 // then navigate or not, give an option
                 this.Frame.Navigate(typeof(MainPage), tempParameter);
             }
+        }
+
+        private async Task<bool> ConfigurePath()
+        {
+            return await LocalStorage.GetDataFolderAsync() != null
+                && await LocalStorage.GetDataFolderAsync() != null
+                && await LocalStorage.GetLogFolderAsync() != null
+                && await LocalStorage.GetNoteFolderAsync() != null
+                && await LocalStorage.GetPaperFolderAsync() != null;
         }
 
         private async Task<bool> ConfigureFile()
@@ -90,8 +99,8 @@ namespace Research_Flow
 
         private void ConfigureDB()
         {
-            FileList.DBInitializeList();
             FileList.DBInitializeTrace();
+            FileList.DBInitializeList();
             Crawlable.DBInitialize();
             FeedItem.DBInitialize();
             // in future updates, some alter commands may be wrote here

@@ -27,7 +27,7 @@ namespace CoreFlow
         private async void SearchRSS()
         {
             List<RSSSource> FeedSources = await LocalStorage.ReadJsonAsync<List<RSSSource>>(
-                    await LocalStorage.GetDataAsync(), "rsslist");
+                    await LocalStorage.GetDataFolderAsync(), "rsslist");
 
             foreach (RSSSource source in FeedSources)
             {
@@ -38,7 +38,7 @@ namespace CoreFlow
                         List<FeedItem> feeds = items as List<FeedItem>;
                         FeedItem.DBInsert(feeds);
                         source.LastUpdateTime = DateTime.Now;
-                        LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "rsslist", FeedSources);
+                        LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rsslist", FeedSources);
 
                         // inform user
                         LocalStorage.GeneralLogAsync<RssService>("SearchTask.log",

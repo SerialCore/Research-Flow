@@ -61,7 +61,7 @@ namespace Research_Flow
 
         private async void Show_SearchLog(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            var folder = await LocalStorage.GetLogAsync();
+            var folder = await LocalStorage.GetLogFolderAsync();
             var file = await folder.GetFileAsync("SearchTask.log");
             await Launcher.LaunchFileAsync(file);
         }

@@ -39,7 +39,7 @@ namespace Research_Flow
             try
             {
                 messages = await LocalStorage.ReadJsonAsync<ObservableCollection<MessageBot>>(
-                    await LocalStorage.GetLogAsync(), "messagelist");
+                    await LocalStorage.GetLogFolderAsync(), "messagelist");
             }
             catch
             {

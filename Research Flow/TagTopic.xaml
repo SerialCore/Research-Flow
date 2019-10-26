@@ -30,7 +30,7 @@
                                 <GroupStyle HidesIfEmpty="False">
                                     <GroupStyle.HeaderTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Key}" FontSize="25" Foreground="Red"/>
+                                            <TextBlock RightTapped="TextBlock_RightTapped" Text="{Binding Key}" FontSize="25" Foreground="Red"/>
                                         </DataTemplate>
                                     </GroupStyle.HeaderTemplate>
                                 </GroupStyle>

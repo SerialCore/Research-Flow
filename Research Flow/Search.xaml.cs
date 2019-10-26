@@ -5,6 +5,7 @@ using LogicService.Storage;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.System;
 using Windows.UI.Core;
@@ -48,7 +49,7 @@ namespace Research_Flow
             try
             {
                 SearchSources = await LocalStorage.ReadJsonAsync<Dictionary<string, string>>(
-                    await LocalStorage.GetDataAsync(), "searchlist");
+                    await LocalStorage.GetDataFolderAsync(), "searchlist");
             }
             catch
             {
@@ -58,7 +59,7 @@ namespace Research_Flow
                     { "ACS", "https://pubs.acs.org/action/doSearch?AllField=QUERY"},
                     { "arXiv All", "https://arxiv.org/search/?query=QUERY&searchtype=all"},
                 };
-                LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "searchlist", SearchSources);
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "searchlist", SearchSources);
             }
             finally
             {
@@ -132,7 +133,7 @@ namespace Research_Flow
             searchlist.SelectedIndex = 0;
             source_list.ItemsSource = null;
             source_list.ItemsSource = SearchSources;
-            LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "searchlist", SearchSources);
+            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "searchlist", SearchSources);
 
             ClearSettings();
         }
@@ -161,7 +162,7 @@ namespace Research_Flow
             searchlist.SelectedIndex = 0;
             source_list.ItemsSource = null;
             source_list.ItemsSource = SearchSources;
-            LocalStorage.WriteJson(await LocalStorage.GetDataAsync(), "searchlist", SearchSources);
+            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "searchlist", SearchSources);
 
             ClearSettings();
         }
@@ -258,6 +259,56 @@ namespace Research_Flow
             }
         }
 
+        private async void Link_list_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            string link = (e.ClickedItem as Crawlable).Url;
+            // check if a downloadable link
+            if (Regex.IsMatch(link, CrawlerService.LinkFilter["Url: HasPDF"]))
+            {
+                downloadPanel.Visibility = Visibility.Visible;
+                downloadStatus.Text = "Downloading";
+                WebClientService webClient = new WebClientService();
+                webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
+                webClient.DownloadFile(link, (await LocalStorage.GetPaperFolderAsync()).Path, DateTime.Now.ToString("yyyyMMddhhmmss") + ".pdf",
+                    () =>
+                    {
+                        webClient.DownloadProgressChanged -= WebClient_DownloadProgressChanged;
+                    },
+                    async (exception) =>
+                    {
+                        await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        {
+                            ApplicationMessage.SendMessage("RssException: " + exception, ApplicationMessage.MessageType.InApp);
+                        });
+                    });
+            }
+            else
+                webView.Source = new Uri(link);
+        }
+
+        private async void WebClient_DownloadProgressChanged(object sender, DownloadEventArgs e)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                int received = e.BytesReceived / 1024;
+                int total = e.TotalBytes / 1024;
+                downloadBar.Maximum = total;
+                downloadBar.Value = received;
+                downloadStatus.Text = received + " / " + total + " KB";
+            });
+        }
+
+        private void CloseDownloadPanel(object sender, RoutedEventArgs e)
+        {
+            downloadBar.Value = 0;
+            downloadPanel.Visibility = Visibility.Collapsed;
+        }
+
+        private void OpenDownloaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         #endregion
 
         #region Fisrt Crawl
@@ -327,31 +378,11 @@ namespace Research_Flow
                 link_list.ItemsSource = currentCrawled.Links;
         }
 
-        private void Link_list_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            string link = (e.ClickedItem as Crawlable).Url;
-            // check if a downloadable link
-            if (Regex.IsMatch(link, CrawlerService.LinkFilter["Url: HasPDF"]))
-            {
-                WebClientService webClient = new WebClientService();
-                //webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
-                //webClient.DownloadFile(link, "");
-            }
-            else
-                webView.Source = new Uri(link);
-        }
-
-        private void WebClient_DownloadProgressChanged(object sender, DownloadEventArgs e)
-        {
-            
-        }
-
         private void SubmitToCrawler(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Crawler), currentCrawled);
         }
 
         #endregion
-
     }
 }

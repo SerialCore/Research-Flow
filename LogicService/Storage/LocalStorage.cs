@@ -14,7 +14,7 @@ namespace LogicService.Storage
 
         #region folder
 
-        public static StorageFolder GetAppFolder()
+        public static StorageFolder GetLocalFolder()
         {
             return ApplicationData.Current.LocalFolder;
         }
@@ -29,10 +29,14 @@ namespace LogicService.Storage
             return ApplicationData.Current.TemporaryFolder;
         }
 
+        public static StorageFolder GetCacheFolder()
+        {
+            return ApplicationData.Current.LocalCacheFolder;
+        }
+
         public async static Task<StorageFolder> GetUserFolderAsync()
         {
-            return await GetAppFolder().CreateFolderAsync(ApplicationSetting.AccountName,
-                    CreationCollisionOption.OpenIfExists);
+            return await GetLocalFolder().CreateFolderAsync(ApplicationSetting.AccountName, CreationCollisionOption.OpenIfExists);
         }
 
         public static async Task<StorageFolder> GetFolderAsync(string folder)
@@ -40,7 +44,8 @@ namespace LogicService.Storage
             return await (await GetUserFolderAsync()).CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
         }
 
-        public static async Task<StorageFolder> GetDataAsync()
+        // for database and list
+        public static async Task<StorageFolder> GetDataFolderAsync()
         {
             return await (await GetUserFolderAsync()).CreateFolderAsync("Data", CreationCollisionOption.OpenIfExists);
         }
@@ -51,7 +56,7 @@ namespace LogicService.Storage
         }
 
         // for general logs and filetrace
-        public static async Task<StorageFolder> GetLogAsync()
+        public static async Task<StorageFolder> GetLogFolderAsync()
         {
             return await (await GetUserFolderAsync()).CreateFolderAsync("Log", CreationCollisionOption.OpenIfExists);
         }
@@ -62,7 +67,7 @@ namespace LogicService.Storage
         }
 
         // for drawable notes
-        public static async Task<StorageFolder> GetNoteAsync()
+        public static async Task<StorageFolder> GetNoteFolderAsync()
         {
             return await (await GetUserFolderAsync()).CreateFolderAsync("Note", CreationCollisionOption.OpenIfExists);
         }
@@ -70,6 +75,17 @@ namespace LogicService.Storage
         public static string TryGetNotePath()
         {
             return ApplicationData.Current.LocalFolder.Path + "\\" + ApplicationSetting.AccountName + "\\Note";
+        }
+
+        // for paper downloaded
+        public async static Task<StorageFolder> GetPaperFolderAsync()
+        {
+            return await (await GetUserFolderAsync()).CreateFolderAsync("Paper", CreationCollisionOption.OpenIfExists);
+        }
+
+        public static string TryGetPaperPath()
+        {
+            return ApplicationData.Current.LocalFolder.Path + "\\" + ApplicationSetting.AccountName + "\\Paper";
         }
 
         #endregion
@@ -121,7 +137,7 @@ namespace LogicService.Storage
 
         public static async void GeneralLogAsync<T>(string name, string line) where T : class
         {
-            StorageFile file = await (await GetLogAsync()).CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
+            StorageFile file = await (await GetLogFolderAsync()).CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
             await FileIO.AppendTextAsync(file,
                                 "[" + DateTime.Now.ToString() + "]" + typeof(T).Name + " : " + line + "\n");
         }

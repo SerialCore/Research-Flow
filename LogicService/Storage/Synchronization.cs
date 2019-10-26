@@ -159,7 +159,7 @@ namespace LogicService.Storage
             foreach (var item in await (await OneDriveStorage.GetDataAsync()).GetFilesAsync(50))
             {
                 await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetDataAsync(),
-                    await LocalStorage.GetDataAsync(), item.Name);
+                    await LocalStorage.GetDataFolderAsync(), item.Name);
                 //trace.Add(new FileList
                 //{
                 //    FileName = item.Name,
@@ -178,7 +178,7 @@ namespace LogicService.Storage
             foreach (var item in await (await OneDriveStorage.GetNoteAsync()).GetFilesAsync(50))
             {
                 await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetNoteAsync(),
-                    await LocalStorage.GetNoteAsync(), item.Name);
+                    await LocalStorage.GetNoteFolderAsync(), item.Name);
                 //trace.Add(new FileList
                 //{
                 //    FileName = item.Name,

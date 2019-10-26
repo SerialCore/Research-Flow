@@ -118,7 +118,7 @@ namespace LogicService.Application
             };
 
             var alarm = new ScheduledToastNotification(toast.GetXml(), dateTime);
-            alarm.Id = id;
+            alarm.Tag = id;
             ToastNotificationManager.CreateToastNotifier().AddToSchedule(alarm);
         }
 
@@ -127,7 +127,7 @@ namespace LogicService.Application
             var notifier = ToastNotificationManager.CreateToastNotifier();
             foreach (var toast in notifier.GetScheduledToastNotifications())
             {
-                if (toast.Id.Equals(id))
+                if (toast.Tag.Equals(id))
                     notifier.RemoveFromSchedule(toast);
             }
         }
