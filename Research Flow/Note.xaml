@@ -46,7 +46,7 @@
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBox Grid.Column="0" x:Name="notefilename" VerticalAlignment="Center" Margin="5,0"/>
-                    <AppBarButton Grid.Column="1" Icon="Save" LabelPosition="Collapsed" Click="Save_Note"/>
+                    <AppBarButton Grid.Column="1" Icon="Save" Click="Save_Note" Width="48" LabelPosition="Collapsed"/>
                 </Grid>
                 <CommandBar Grid.Column="1" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
                     <AppBarButton Icon="Share" Label="Share" Tapped="Flyout_Tapped">

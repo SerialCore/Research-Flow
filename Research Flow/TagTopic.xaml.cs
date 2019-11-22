@@ -81,11 +81,16 @@ namespace Research_Flow
 
         #region Tag Management
 
-        public HashSet<string> tags { get; set; }
+        private HashSet<string> tags;
 
         private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
             => FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
 
+        /// <summary>
+        /// shall be removed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Flyout_Opened(object sender, object e)
             => tagEmbed.Focus(FocusState.Programmatic);
 
@@ -127,7 +132,7 @@ namespace Research_Flow
 
         #region Task Management
 
-        public ObservableCollection<Topic> topics { get; set; }
+        private ObservableCollection<Topic> topics;
 
         private Topic currentTopic = null;
 
@@ -180,23 +185,26 @@ namespace Research_Flow
 
         private void SubmitTopictoTask(Topic topic)
         {
+            // TimeSpan.Zero equals 12:00 AM
             if (topic.Deadline == DateTimeOffset.MinValue && topic.RemindTime == TimeSpan.Zero) // an idea
             {
                 ;
             }
             else if (topic.Deadline == DateTimeOffset.MinValue && topic.RemindTime != TimeSpan.Zero) // an alarm
             {
-
+                ;
             }
             else if (topic.RemindTime == TimeSpan.Zero) // a deadline
             {
+                ApplicationNotification.CancelAlarmToast(topic.ID);
                 // make a setting about default time
                 DateTimeOffset date = new DateTimeOffset(topic.Deadline.Year, topic.Deadline.Month, topic.Deadline.Day,
                     0, 0, 0, DateTimeOffset.Now.Offset);
-                ApplicationNotification.ScheduleAlarmToast(topic.ID,"Research Topic", topic.Title, date);
+                ApplicationNotification.ScheduleAlarmToast(topic.ID, "Research Topic", topic.Title, date);
             }
             else // a deadline with alarm
             {
+                ApplicationNotification.CancelAlarmToast(topic.ID);
                 DateTimeOffset date = new DateTimeOffset(topic.Deadline.Year, topic.Deadline.Month, topic.Deadline.Day,
                     topic.RemindTime.Hours, topic.RemindTime.Minutes, topic.RemindTime.Seconds, DateTimeOffset.Now.Offset);
                 ApplicationNotification.ScheduleAlarmToast(topic.ID, "Research Topic", topic.Title, date);

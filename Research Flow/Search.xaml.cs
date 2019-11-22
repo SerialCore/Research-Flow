@@ -76,7 +76,7 @@ namespace Research_Flow
 
         #region Search Engine
 
-        public Dictionary<string, string> SearchSources { get; set; }
+        private Dictionary<string, string> SearchSources;
 
         private void Search_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
@@ -231,7 +231,10 @@ namespace Research_Flow
             => webView.Refresh();
 
         private async void OpenBrowser(object sender, RoutedEventArgs e)
-            => await Launcher.LaunchUriAsync(webView.Source);
+        {
+            if (webView.Source!=null)
+                await Launcher.LaunchUriAsync(webView.Source);
+        }
 
         private void ShareLink(object sender, RoutedEventArgs e)
         {
@@ -266,7 +269,7 @@ namespace Research_Flow
             if (Regex.IsMatch(link, CrawlerService.LinkFilter["Url: HasPDF"]))
             {
                 downloadPanel.Visibility = Visibility.Visible;
-                downloadStatus.Text = "Downloading";
+                downloadStatus.Text = "Processing";
                 WebClientService webClient = new WebClientService();
                 webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
                 webClient.DownloadFile(link, (await LocalStorage.GetPaperFolderAsync()).Path, DateTime.Now.ToString("yyyyMMddhhmmss") + ".pdf",
@@ -315,8 +318,6 @@ namespace Research_Flow
 
         private CrawlerService currentCrawled = null;
 
-        private void Open_CrawlerPanel(object sender, RoutedEventArgs e) => crawlPane.IsPaneOpen = !crawlPane.IsPaneOpen;
-
         private void FirstCrawl_Click(object sender, RoutedEventArgs e)
         {
             if (webView.Source != null)
@@ -326,6 +327,9 @@ namespace Research_Flow
         private void FirstCrawl(string urlstring)
         {
             crawlPane.IsPaneOpen = true;
+            if (currentCrawled != null)
+                if (currentCrawled.URL.Equals(urlstring))
+                    return;
             craWaiting.IsActive = true;
 
             currentCrawled = new CrawlerService(urlstring);

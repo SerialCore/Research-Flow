@@ -75,6 +75,10 @@ namespace LogicService.Objects
             int affectedRows = 0;
             string sql = @"insert into Crawlable(ID, ParentID, Text, Url)
                 values(@ID, @ParentID, @Text, @Url);";
+
+            FileList.DBInsertList("Data", DataStorage.CrawlData.Database);
+            FileList.DBInsertTrace("Data", DataStorage.CrawlData.Database);
+
             return affectedRows;
         }
 
@@ -107,6 +111,10 @@ namespace LogicService.Objects
             int affectedRows = 0;
             string sql = "delete from Crawlable where ID = @ID;";
             affectedRows = DataStorage.FeedData.ExecuteWrite(sql, new Dictionary<string, object> { { "@ID", id } });
+
+            FileList.DBInsertList("Data", DataStorage.CrawlData.Database);
+            FileList.DBInsertTrace("Data", DataStorage.CrawlData.Database);
+
             return affectedRows;
         }
 

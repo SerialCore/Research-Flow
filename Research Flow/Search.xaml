@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
 
         <Grid >
             <Grid.RowDefinitions>
@@ -24,13 +24,17 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" Click="Open_SearchList" Width="48" Background="LightSkyBlue">
-                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE292;" />
-                </Button>
+                <AppBarButton Grid.Column="0" Icon="List" Click="Open_SearchList" ToolTipService.ToolTip="Search Engine" Width="38" Height="38"/>
                 <ComboBox Grid.Column="1" x:Name="searchlist" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
                 <AutoSuggestBox Grid.Column="2" x:Name="queryQuest" QueryIcon="Find"
                                     QuerySubmitted="Search_QuerySubmitted" VerticalAlignment="Center"/>
-                <Button Grid.Column="3" Content="Links" Click="Open_CrawlerPanel" Background="LightSkyBlue"/>
+                <StackPanel Grid.Column="3" Orientation="Horizontal">
+                    <AppBarButton Icon="Share" Click="ShareLink" ToolTipService.ToolTip="Share" Width="38" Height="38"/>
+                    <AppBarButton Icon="Account" Click="OpenBrowser" ToolTipService.ToolTip="Browser" Width="38" Height="38"/>
+                    <AppBarButton Icon="Previous" Click="PageBack" ToolTipService.ToolTip="Back" IsEnabled="{x:Bind webView.CanGoBack,Mode=OneWay}" Width="38" Height="38"/>
+                    <AppBarButton Icon="Next" Click="PageForward" ToolTipService.ToolTip="Forward" IsEnabled="{x:Bind webView.CanGoForward,Mode=OneWay}" Width="38" Height="38"/>
+                    <AppBarButton Icon="Refresh" Click="PageRefresh" ToolTipService.ToolTip="Refresh" Width="38" Height="38"/>
+                </StackPanel>
             </Grid>
 
             <SplitView Grid.Row="1" x:Name="crawlPane" PanePlacement="Right" OpenPaneLength="400" DisplayMode="Overlay">
@@ -122,14 +126,8 @@
                             DefaultLabelPosition="Right"
                             Background="Transparent"
                             OverflowButtonVisibility="Collapsed">
-                    <AppBarButton Label="Links" Icon="Find" Click="FirstCrawl_Click"/>
-                    <AppBarButton Label="Crawl" Icon="Favorite" Click="SubmitToCrawler"/>
-                    <AppBarSeparator/>
-                    <AppBarButton Label="Share" Icon="Share" Click="ShareLink"/>
-                    <AppBarButton Label="Browser" Icon="Account" Click="OpenBrowser"/>
-                    <AppBarButton Label="Back" Icon="Previous" Click="PageBack" IsEnabled="{x:Bind webView.CanGoBack,Mode=OneWay}"/>
-                    <AppBarButton Label="Forward" Icon="Next" Click="PageForward" IsEnabled="{x:Bind webView.CanGoForward,Mode=OneWay}"/>
-                    <AppBarButton Label="Refresh" Icon="Refresh" Click="PageRefresh"/>
+                    <AppBarButton Label="Crawl" Icon="Find" Click="FirstCrawl_Click"/>
+                    <AppBarButton Label="Archive" Icon="Favorite" Click="SubmitToCrawler"/>
                 </CommandBar>
             </Grid>
 

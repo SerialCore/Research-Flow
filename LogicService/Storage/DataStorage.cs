@@ -136,7 +136,7 @@ namespace LogicService.Storage
         #region Operations
 
         /// <summary>
-        /// will be recorded
+        /// writing process will be recorded by particular DB operation with DBPath
         /// </summary>
         /// <param name="obj"></param>
         public int ExecuteWrite(string sql, Dictionary<string, object> parameters = null)
@@ -170,7 +170,15 @@ namespace LogicService.Storage
                 command.Parameters.AddRange(SetParameters(parameters));
             }
 
-            return command.ExecuteReader();
+            try
+            {
+                return command.ExecuteReader();
+            }
+            catch (Exception ex)
+            {
+                ApplicationMessage.SendMessage("DatabaseException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+                return null;
+            }
         }
 
         public Array SetParameters(Dictionary<string, object> parameters)

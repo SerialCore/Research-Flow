@@ -219,7 +219,7 @@ namespace Research_Flow
 
         #region File Management
 
-        public ObservableCollection<string> namelist { get; set; } = new ObservableCollection<string>();
+        private ObservableCollection<string> namelist = new ObservableCollection<string>();
 
         private ThreadPoolTimer autoSaver;
 

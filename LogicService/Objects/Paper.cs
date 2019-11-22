@@ -18,9 +18,9 @@ namespace LogicService.Objects
 
         public string Abstract { get; set; }
 
-        public List<string> Authors { get; set; }
+        public string Authors { get; set; }
 
-        public HashSet<string> Tags { get; set; }
+        public string Tags { get; set; }
 
         #region Equals
 
@@ -61,18 +61,47 @@ namespace LogicService.Objects
 
         public static void DBInitialize()
         {
-            string sql = @"CREATE TABLE IF NOT EXISTS [Paper] (
-                    [ID] VARCHAR(50) NOT NULL PRIMARY KEY,
-                    [ParentID] VARCHAR(50),
-                    [Title] VARCHAR(100) NOT NULL,
-                    [Abstract] VARCHAR(1000),
-                    [Authors] VARCHAR(500)),
-                    [Tags] VARCHAR(500))";
+            string sql = @"create table if not exists [Paper] (
+                    [ID] varchar(50) not null primary key,
+                    [ParentID] varchar(50),
+                    [Title] varchar(100) not null,
+                    [Abstract] varchar(1000),
+                    [Authors] varchar(500)),
+                    [Tags] varchar(500))";
             DataStorage.PaperData.ExecuteWrite(sql);
+        }
+
+        public static List<Paper> DBSelectAll()
+        {
+            string sql = "select * from Paper;";
+            var reader = DataStorage.PaperData.ExecuteRead(sql);
+
+            List<Paper> papers = new List<Paper>();
+            if (reader != null)
+            {
+                while (reader.Read())
+                {
+                    papers.Add(new Paper
+                    {
+                        ID = reader.GetString(0),
+                        ParentID = reader.GetString(1),
+                        Title = reader.GetString(2),
+                        Abstract = reader.GetString(3),
+                        Authors = reader.GetString(4),
+                        Tags = reader.GetString(5)
+                    });
+                }
+            }
+            return papers;
         }
 
         #endregion
 
+    }
+
+    public class PdfFile
+    {
+        public string Name { get; set; }
     }
 
 }

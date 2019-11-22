@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid x:Name="FullPage" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid x:Name="FullPage" Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
 
         <NavigationView x:Name="NavView"
                         Background="{ThemeResource SystemAccentColorLight1}"
@@ -31,7 +31,7 @@
                         <FontIcon Glyph="&#xEB50;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Paper" Tag="Paper">
+                <NavigationViewItem Content="Paper Box" Tag="PaperBox">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE7BE;"/>
                     </NavigationViewItem.Icon>
@@ -66,22 +66,38 @@
                 <AutoSuggestBox x:Name="ASB" QueryIcon="Find"/>
             </NavigationView.AutoSuggestBox>
 
-            <NavigationView.Header>
-                <Grid >
-                    <TextBlock x:Name="appMessage" FontSize="18" VerticalAlignment="Center"/>
-                    <CommandBar HorizontalAlignment="Right" VerticalAlignment="Top" DefaultLabelPosition="Collapsed" 
-                                Background="Transparent" OverflowButtonVisibility="Collapsed">
-                        <AppBarButton Icon="FourBars" Click="AccountSync_Click" ToolTipService.ToolTip="Synchronize"/>
-                        <AppBarSeparator />
-                        <AppBarButton Icon="FullScreen" Click="FullScreen_Click" ToolTipService.ToolTip="FullScreen"/>
-                        <AppBarButton Icon="Placeholder" Tapped="Flyout_Tapped" ToolTipService.ToolTip="Background">
-                            <FlyoutBase.AttachedFlyout>
-                                <Flyout Closed="ColorPicker_Closed">
-                                    <ColorPicker x:Name="colorPicker" ColorChanged="ColorPicker_ColorChanged"/>
-                                </Flyout>
-                            </FlyoutBase.AttachedFlyout>
-                        </AppBarButton>
-                        <AppBarButton Icon="AttachCamera" Tapped="Flyout_Tapped" ToolTipService.ToolTip="ScreenShot">
+            <NavigationView.PaneHeader>
+                <TextBlock Text="  Research Flow" VerticalAlignment="Center"/>
+            </NavigationView.PaneHeader>
+
+            <NavigationView.PaneFooter>
+                <StackPanel>
+                    <ListViewItem Tapped="Flyout_Tapped">
+                        <StackPanel Orientation="Horizontal">
+                            <PersonPicture x:Name="accountPhoto" Height="20" Width="20"/>
+                            <TextBlock x:Name="accountName" Margin="16,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <FlyoutBase.AttachedFlyout>
+                            <Flyout>
+                                <Grid Width="270">
+                                    <Image Source="/Images/OneDrive_logo.png" VerticalAlignment="Top"/>
+                                    <Grid Margin="0,90,0,0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="1" x:Name="accountEmail" FontSize="16" HorizontalAlignment="Center"/>
+                                        <Button Grid.Row="2" x:Name="accountLogout" Content="Log out" Click="AccountLogout_Click" 
+                                            Width="250" Margin="10" HorizontalAlignment="Right" Background="Red"/>
+                                    </Grid>
+                                </Grid>
+                            </Flyout>
+                        </FlyoutBase.AttachedFlyout>
+                    </ListViewItem>
+                    <StackPanel Orientation="Horizontal">
+                        <AppBarButton Icon="AttachCamera" Tapped="Flyout_Tapped" ToolTipService.ToolTip="ScreenShot" Width="42" Height="42">
                             <FlyoutBase.AttachedFlyout>
                                 <MenuFlyout>
                                     <MenuFlyoutItem Text="Export" Click="ScreenShot_Export"/>
@@ -90,35 +106,17 @@
                                 </MenuFlyout>
                             </FlyoutBase.AttachedFlyout>
                         </AppBarButton>
-                    </CommandBar>
-                </Grid>
-            </NavigationView.Header>
-
-            <NavigationView.PaneFooter>
-                <ListViewItem Tapped="Flyout_Tapped">
-                    <StackPanel Orientation="Horizontal">
-                        <PersonPicture x:Name="accountPhoto" Height="20" Width="20"/>
-                        <TextBlock x:Name="accountName" Margin="16,0,0,0" VerticalAlignment="Center"/>
+                        <AppBarButton Icon="Refresh" Click="AccountSync_Click" ToolTipService.ToolTip="Synchronize" Width="42" Height="42"/>
+                        <AppBarButton Icon="FullScreen" Click="FullScreen_Click" ToolTipService.ToolTip="FullScreen" Width="42" Height="42"/>
+                        <AppBarButton Icon="Placeholder" Tapped="Flyout_Tapped" ToolTipService.ToolTip="Background" Width="42" Height="42">
+                            <FlyoutBase.AttachedFlyout>
+                                <Flyout Closed="ColorPicker_Closed">
+                                    <ColorPicker x:Name="colorPicker" ColorChanged="ColorPicker_ColorChanged"/>
+                                </Flyout>
+                            </FlyoutBase.AttachedFlyout>
+                        </AppBarButton>
                     </StackPanel>
-                    <FlyoutBase.AttachedFlyout>
-                        <Flyout>
-                            <Grid Width="270">
-                                <Image Source="/Images/OneDrive_logo.png" VerticalAlignment="Top"/>
-                                <Grid Margin="0,90,0,0">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Grid.Row="1" x:Name="accountEmail" FontSize="16" HorizontalAlignment="Center"/>
-                                    <Button Grid.Row="2" x:Name="accountLogout" Content="Log out" Click="AccountLogout_Click" 
-                                            Width="250" Margin="10" HorizontalAlignment="Right" Background="Red"/>
-                                </Grid>
-                            </Grid>
-                        </Flyout>
-                    </FlyoutBase.AttachedFlyout>
-                </ListViewItem>
+                </StackPanel>
             </NavigationView.PaneFooter>
 
             <Frame x:Name="ContentFrame" Navigated="NavView_Navigated">
@@ -130,6 +128,10 @@
             </Frame>
 
         </NavigationView>
+
+        <Grid CornerRadius="10" Height="32" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="48,0" Background="{ThemeResource SystemControlAccentAcrylicElementAccentMediumHighBrush}" Visibility="Collapsed">
+            <TextBlock x:Name="appMessage" Text="Research Flow" FontSize="18" VerticalAlignment="Center" Margin="5,0,5,0"/>
+        </Grid>
 
         <toolkit:InAppNotification x:Name="InAppNotification" 
                                     ShowDismissButton="True"

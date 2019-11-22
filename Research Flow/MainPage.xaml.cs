@@ -122,7 +122,7 @@ namespace Research_Flow
         {
             ("Overview", typeof(Overview)),
             ("TagTopic", typeof(TagTopic)),
-            ("Paper", typeof(Paper)),
+            ("PaperBox", typeof(PaperBox)),
             ("RSS", typeof(RSS)),
             ("Search", typeof(Search)),
             ("Crawler", typeof(Crawler)),

@@ -103,6 +103,7 @@ namespace Research_Flow
             FileList.DBInitializeList();
             Crawlable.DBInitialize();
             FeedItem.DBInitialize();
+            Paper.DBInitialize();
             // in future updates, some alter commands may be wrote here
             // DBUpdate();
         }
