@@ -57,7 +57,7 @@ namespace LogicService.Storage
                         {
                             try
                             {
-                                var local = await (await LocalStorage.GetFolderAsync(item.FilePosition)).GetFileAsync(item.FileName);
+                                var local = await (await LocalStorage.GetLocalSubFolderAsync(item.FilePosition)).GetFileAsync(item.FileName);
                                 var mirrorfolder = await OneDriveStorage.GetFolderAsync(item.FilePosition);
                                 await OneDriveStorage.CreateFileAsync(mirrorfolder, local);
                                 //
@@ -82,7 +82,7 @@ namespace LogicService.Storage
                                 if ((await mirrorfolder.GetFileAsync(item.FileName)).DateModified.Value > twin.DateModified)
                                 {
                                     await OneDriveStorage.DownloadFileAsync(mirrorfolder,
-                                        await LocalStorage.GetFolderAsync(item.FilePosition), item.FileName);
+                                        await LocalStorage.GetLocalSubFolderAsync(item.FilePosition), item.FileName);
                                     //
                                     //twin.DateModified = DateTime.Now;
                                     FileList.DBUpdateTrace(item.FilePosition, item.FileName);
@@ -103,7 +103,7 @@ namespace LogicService.Storage
                 {
                     var mirrorfolder = await OneDriveStorage.GetFolderAsync(item.FilePosition);
                     await OneDriveStorage.DownloadFileAsync(mirrorfolder,
-                        await LocalStorage.GetFolderAsync(item.FilePosition), item.FileName);
+                        await LocalStorage.GetLocalSubFolderAsync(item.FilePosition), item.FileName);
                     // 
                     //item.DateModified = DateTime.Now;
                     //traceAll.Add(item);
@@ -119,7 +119,7 @@ namespace LogicService.Storage
             {
                 try
                 {
-                    var localfolder = await LocalStorage.GetFolderAsync(item.FilePosition);
+                    var localfolder = await LocalStorage.GetLocalSubFolderAsync(item.FilePosition);
                     var local = await localfolder.GetFileAsync(item.FileName);
                     await local.DeleteAsync();
                     //

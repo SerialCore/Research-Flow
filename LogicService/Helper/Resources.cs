@@ -22,12 +22,13 @@ namespace LogicService.Helper
         /// </summary>
         public static string CrawlerData => "crawlable.db";
         public static string PaperData => "paper.db";
+        public static string FeedData => "feed.db";
 
         /// <summary>
         /// File List
         /// </summary>
-        public static string FileTrace => "filetrace";
-        public static string FileList => ApplicationSetting.AccountName + ".filelist";
+        public static string FileTrace => "filetrace.db";
+        public static string FileList => "filelist.db";
 
         /// <summary>
         /// Log File

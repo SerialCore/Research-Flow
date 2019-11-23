@@ -49,6 +49,7 @@ namespace Research_Flow
 
                 if (ApplicationInfo.IsFirstUse || !ApplicationSetting.ContainKey("Configured"))
                 {
+                    await ConfigurePath();
                     ConfigureDB();
                     await ConfigureFile();
                 }

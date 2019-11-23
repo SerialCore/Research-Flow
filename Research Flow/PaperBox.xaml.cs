@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using LogicService.Objects;
 using LogicService.Storage;
+using Windows.System;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -44,13 +45,21 @@ namespace Research_Flow
             {
                 pdfs.Add(new PdfFile { Name = file.DisplayName.Replace(".pdf", "") });
             }
-            pdflist.ItemsSource = pdfs;
+            pdftree.ItemsSource = pdfs;
         }
 
-        #region Paper Management
+        #region Pdf Management
 
         private ObservableCollection<PdfFile> pdfs = new ObservableCollection<PdfFile>();
 
+        private async void pdflist_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var item = e.ClickedItem as PdfFile;
+            var file = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(item.Name + ".pdf");
+            await Launcher.LaunchFileAsync(file);
+        }
+
         #endregion
+
     }
 }

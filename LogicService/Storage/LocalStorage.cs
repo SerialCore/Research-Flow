@@ -19,6 +19,11 @@ namespace LogicService.Storage
             return ApplicationData.Current.LocalFolder;
         }
 
+        public static StorageFolder GetLocalCacheFolder()
+        {
+            return ApplicationData.Current.LocalCacheFolder;
+        }
+
         public static StorageFolder GetRoamingFolder()
         {
             return ApplicationData.Current.RoamingFolder;
@@ -29,63 +34,63 @@ namespace LogicService.Storage
             return ApplicationData.Current.TemporaryFolder;
         }
 
-        public static StorageFolder GetCacheFolder()
+        public static async Task<StorageFolder> GetLocalSubFolderAsync(string folder)
         {
-            return ApplicationData.Current.LocalCacheFolder;
-        }
-
-        public async static Task<StorageFolder> GetUserFolderAsync()
-        {
-            return await GetLocalFolder().CreateFolderAsync(ApplicationSetting.AccountName, CreationCollisionOption.OpenIfExists);
-        }
-
-        public static async Task<StorageFolder> GetFolderAsync(string folder)
-        {
-            return await (await GetUserFolderAsync()).CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
+            return await GetLocalCacheFolder().CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
         }
 
         // for database and list
         public static async Task<StorageFolder> GetDataFolderAsync()
         {
-            return await (await GetUserFolderAsync()).CreateFolderAsync("Data", CreationCollisionOption.OpenIfExists);
+            return await GetLocalCacheFolder().CreateFolderAsync("Data", CreationCollisionOption.OpenIfExists);
         }
 
         public static string TryGetDataPath()
         {
-            return ApplicationData.Current.LocalFolder.Path + "\\" + ApplicationSetting.AccountName + "\\Data";
+            return ApplicationData.Current.LocalCacheFolder.Path + "\\Data";
         }
 
         // for general logs and filetrace
         public static async Task<StorageFolder> GetLogFolderAsync()
         {
-            return await (await GetUserFolderAsync()).CreateFolderAsync("Log", CreationCollisionOption.OpenIfExists);
+            return await GetLocalCacheFolder().CreateFolderAsync("Log", CreationCollisionOption.OpenIfExists);
         }
 
         public static string TryGetLogPath()
         {
-            return ApplicationData.Current.LocalFolder.Path + "\\" + ApplicationSetting.AccountName + "\\Log";
+            return ApplicationData.Current.LocalCacheFolder.Path + "\\Log";
         }
 
         // for drawable notes
         public static async Task<StorageFolder> GetNoteFolderAsync()
         {
-            return await (await GetUserFolderAsync()).CreateFolderAsync("Note", CreationCollisionOption.OpenIfExists);
+            return await GetLocalCacheFolder().CreateFolderAsync("Note", CreationCollisionOption.OpenIfExists);
+        }
+
+        public static async Task<StorageFolder> GetNoteSubFolderAsync(string folder)
+        {
+            return await (await GetNoteFolderAsync()).CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
         }
 
         public static string TryGetNotePath()
         {
-            return ApplicationData.Current.LocalFolder.Path + "\\" + ApplicationSetting.AccountName + "\\Note";
+            return ApplicationData.Current.LocalCacheFolder.Path + "\\Note";
         }
 
         // for paper downloaded
         public async static Task<StorageFolder> GetPaperFolderAsync()
         {
-            return await (await GetUserFolderAsync()).CreateFolderAsync("Paper", CreationCollisionOption.OpenIfExists);
+            return await GetLocalCacheFolder().CreateFolderAsync("Paper", CreationCollisionOption.OpenIfExists);
+        }
+
+        public static async Task<StorageFolder> GetPaperSubFolderAsync(string folder)
+        {
+            return await (await GetPaperFolderAsync()).CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
         }
 
         public static string TryGetPaperPath()
         {
-            return ApplicationData.Current.LocalFolder.Path + "\\" + ApplicationSetting.AccountName + "\\Paper";
+            return ApplicationData.Current.LocalCacheFolder.Path + "\\Paper";
         }
 
         #endregion

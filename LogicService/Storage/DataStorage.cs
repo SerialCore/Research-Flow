@@ -44,7 +44,7 @@ namespace LogicService.Storage
                     _dbpath = LocalStorage.TryGetLogPath() + "\\" + _dbname;
                     break;
                 case DataType.FileList:
-                    _dbname = ApplicationSetting.AccountName + ".filelist.db";
+                    _dbname = "filelist.db";
                     _dbpath = LocalStorage.GetRoamingFolder().Path + "\\" + _dbname;
                     break;
             }
@@ -142,36 +142,36 @@ namespace LogicService.Storage
         public int ExecuteWrite(string sql, Dictionary<string, object> parameters = null)
         {
             int affectedRows = 0;
-            SqliteCommand command = new SqliteCommand(sql, _conn);
-
-            if (parameters != null)
-            {
-                command.Parameters.AddRange(SetParameters(parameters));
-            }
-
             try
             {
+                SqliteCommand command = new SqliteCommand(sql, _conn);
+
+                if (parameters != null)
+                {
+                    command.Parameters.AddRange(SetParameters(parameters));
+                }
+
                 affectedRows = command.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
                 ApplicationMessage.SendMessage("DatabaseException: " + ex.Message, ApplicationMessage.MessageType.InApp);
             }
-            
+
             return affectedRows;
         }
 
         public SqliteDataReader ExecuteRead(string sql, Dictionary<string, object> parameters = null)
         {
-            SqliteCommand command = new SqliteCommand(sql, _conn);
-
-            if (parameters != null)
-            {
-                command.Parameters.AddRange(SetParameters(parameters));
-            }
-
             try
             {
+                SqliteCommand command = new SqliteCommand(sql, _conn);
+
+                if (parameters != null)
+                {
+                    command.Parameters.AddRange(SetParameters(parameters));
+                }
+
                 return command.ExecuteReader();
             }
             catch (Exception ex)

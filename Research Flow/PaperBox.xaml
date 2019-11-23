@@ -12,39 +12,39 @@
 
         <Grid >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="400"/>
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="0">
-                <ListView x:Name="pdflist" Margin="0,0,0,48">
-                    <ListView.ItemTemplate>
+            <SplitView Grid.Column="0" OpenPaneLength="400">
+                <SplitView.Pane>
+                    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                        <TextBlock Text="Detials" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                </SplitView.Pane>
+                <SplitView.Content>
+                    <Grid>
+                        
+                    </Grid>
+                </SplitView.Content>
+            </SplitView>
+
+            <Grid Grid.Column="1">
+                <TreeView x:Name="pdftree" Margin="0,0,0,48">
+                    <TreeView.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel >
+                            <StackPanel>
                                 <TextBlock Text="{Binding Name}"/>
                             </StackPanel>
                         </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    </TreeView.ItemTemplate>
+                </TreeView>
                 <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
                     <CommandBar.Content>
                         <TextBlock Text="Paper" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
                     </CommandBar.Content>
                 </CommandBar>
             </Grid>
-
-            <SplitView Grid.Column="1" PanePlacement="Right" OpenPaneLength="400">
-                <SplitView.Content>
-                    <Grid>
-
-                    </Grid>
-                </SplitView.Content>
-                <SplitView.Pane>
-                    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                        <TextBlock Text="Detials" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Grid>
-                </SplitView.Pane>
-            </SplitView>
             
         </Grid>
         
