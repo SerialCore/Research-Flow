@@ -71,7 +71,7 @@ namespace LogicService.Services
             LoadCookiesFromDisk();
         }
 
-        public WebClientService()
+        public WebClientService() // assign url here, or merge WebClientService and CrawlerService
         {
             requestHeaders = new WebHeaderCollection();
             responseHeaders = new WebHeaderCollection();

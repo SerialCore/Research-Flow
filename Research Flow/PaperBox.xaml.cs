@@ -40,23 +40,32 @@ namespace Research_Flow
         private async void InitializePaper()
         {
             pdfs.Clear();
-            var filelist = await(await LocalStorage.GetPaperFolderAsync()).GetFilesAsync();
+            var filelist = await (await LocalStorage.GetPaperFolderAsync()).GetFilesAsync();
             foreach (var file in filelist)
             {
-                pdfs.Add(new PdfFile { Name = file.DisplayName.Replace(".pdf", "") });
+                pdfs.Add(file.DisplayName.Replace(".pdf", ""));
             }
             pdftree.ItemsSource = pdfs;
         }
 
         #region Pdf Management
 
-        private ObservableCollection<PdfFile> pdfs = new ObservableCollection<PdfFile>();
+        private ObservableCollection<string> pdfs = new ObservableCollection<string>();
 
-        private async void pdflist_ItemClick(object sender, ItemClickEventArgs e)
+        private async void Pdftree_ItemInvoked(TreeView sender, TreeViewItemInvokedEventArgs args)
         {
-            var item = e.ClickedItem as PdfFile;
-            var file = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(item.Name + ".pdf");
+            var item = args.InvokedItem as string;
+            var file = await(await LocalStorage.GetPaperFolderAsync()).GetFileAsync(item + ".pdf");
             await Launcher.LaunchFileAsync(file);
+        }
+
+        /// <summary>
+        /// will be recorded
+        /// </summary>
+        private void ArchiveThisPaper()
+        {
+            // if user want to sync this paper between devices, they will have the right to make the choice
+            // choosing synchronization is equals to choosing registing on database
         }
 
         #endregion

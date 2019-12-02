@@ -99,9 +99,4 @@ namespace LogicService.Objects
 
     }
 
-    public class PdfFile
-    {
-        public string Name { get; set; }
-    }
-
 }

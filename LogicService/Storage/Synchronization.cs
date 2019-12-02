@@ -20,25 +20,15 @@ namespace LogicService.Storage
             // trace entry could only be deleted by sync,   but list entry only by general function
             // remove file, and remove local trace
             // download file, and update trace datetime
-            // the files in cloud may be deleted by user, not by app, so double check all the mirrors in try
+            // the files in cloud may be deleted by user, not by app, so double check all the mirrors
             // roaming info lists files that SHOULD exist in cloud and all the clients
             // the files in local may be deleted by user, if someone did this, it's not our fault
 
             // load file trace
             HashSet<FileList> traceAll = FileList.DBSelectAllTrace();
-            //StorageFile tracefile = await (await LocalStorage.GetLogAsync()).CreateFileAsync("filetrace",
-            //    CreationCollisionOption.OpenIfExists);
-            //traceAll = SerializeHelper.DeserializeJsonToObject<HashSet<FileList>>(await FileIO.ReadTextAsync(tracefile));
-            //if (traceAll == null)
-            //    traceAll = new HashSet<FileList>();
 
             // load file list
             HashSet<FileList> listAll = FileList.DBSelectAllList();
-            //StorageFile listfile = await LocalStorage.GetRoamingFolder().CreateFileAsync(ApplicationSetting.AccountName + ".filelist",
-            //    CreationCollisionOption.OpenIfExists);
-            //listAll = SerializeHelper.DeserializeJsonToObject<HashSet<FileList>>(await FileIO.ReadTextAsync(listfile));
-            //if (listAll == null)
-            //    listAll = new HashSet<FileList>();
 
             // generate temp
             //List<FileList> deleteTrace = new List<FileList>();
@@ -57,11 +47,10 @@ namespace LogicService.Storage
                         {
                             try
                             {
-                                var local = await (await LocalStorage.GetLocalSubFolderAsync(item.FilePosition)).GetFileAsync(item.FileName);
+                                var local = await (await LocalStorage.GetWhichFolderAsync(item.FilePosition)).GetFileAsync(item.FileName);
                                 var mirrorfolder = await OneDriveStorage.GetFolderAsync(item.FilePosition);
                                 await OneDriveStorage.CreateFileAsync(mirrorfolder, local);
                                 //
-                                //item.DateModified = DateTime.Now;
                                 FileList.DBUpdateList(item.FilePosition, item.FileName);
                             }
                             catch (ServiceException)
@@ -82,9 +71,8 @@ namespace LogicService.Storage
                                 if ((await mirrorfolder.GetFileAsync(item.FileName)).DateModified.Value > twin.DateModified)
                                 {
                                     await OneDriveStorage.DownloadFileAsync(mirrorfolder,
-                                        await LocalStorage.GetLocalSubFolderAsync(item.FilePosition), item.FileName);
+                                        await LocalStorage.GetWhichFolderAsync(item.FilePosition), item.FileName);
                                     //
-                                    //twin.DateModified = DateTime.Now;
                                     FileList.DBUpdateTrace(item.FilePosition, item.FileName);
                                 }
                             }
@@ -103,10 +91,8 @@ namespace LogicService.Storage
                 {
                     var mirrorfolder = await OneDriveStorage.GetFolderAsync(item.FilePosition);
                     await OneDriveStorage.DownloadFileAsync(mirrorfolder,
-                        await LocalStorage.GetLocalSubFolderAsync(item.FilePosition), item.FileName);
+                        await LocalStorage.GetWhichFolderAsync(item.FilePosition), item.FileName);
                     // 
-                    //item.DateModified = DateTime.Now;
-                    //traceAll.Add(item);
                     FileList.DBUpdateList(item.FilePosition, item.FileName);
                     FileList.DBInsertTrace(item.FilePosition, item.FileName);
                 }
@@ -119,7 +105,7 @@ namespace LogicService.Storage
             {
                 try
                 {
-                    var localfolder = await LocalStorage.GetLocalSubFolderAsync(item.FilePosition);
+                    var localfolder = await LocalStorage.GetWhichFolderAsync(item.FilePosition);
                     var local = await localfolder.GetFileAsync(item.FileName);
                     await local.DeleteAsync();
                     //
@@ -127,7 +113,6 @@ namespace LogicService.Storage
                     var mirror = await mirrorfolder.GetFileAsync(item.FileName);
                     await mirror.DeleteAsync();
                     // 
-                    //deleteTrace.Add(item);
                     FileList.DBDeleteTrace(item.FilePosition, item.FileName);
                 }
                 catch (FileNotFoundException)
@@ -139,68 +124,24 @@ namespace LogicService.Storage
 
                 }
             }
-
-            //foreach (var item in deleteTrace)
-            //{
-            //    traceAll.Remove(item);
-            //}
-
-            // save all
-            //await FileIO.WriteTextAsync(tracefile, SerializeHelper.SerializeToJson(traceAll));
-            //await FileIO.WriteTextAsync(listfile, SerializeHelper.SerializeToJson(listAll));
         }
 
         public async static Task DownloadAll()
         {
-            // create a new file, or replace the older trace by full-tagged one
-            //List<FileList> trace = new List<FileList>();
-            //List<FileList> list = new List<FileList>();
-
             foreach (var item in await (await OneDriveStorage.GetDataAsync()).GetFilesAsync(50))
             {
                 await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetDataAsync(),
                     await LocalStorage.GetDataFolderAsync(), item.Name);
-                //trace.Add(new FileList
-                //{
-                //    FileName = item.Name,
-                //    FilePosition = "Data",
-                //    DateModified = DateTime.Now,
-                //});
                 FileList.DBInsertTrace("Data", item.Name);
-                //list.Add(new FileList
-                //{
-                //    FileName = item.Name,
-                //    FilePosition = "Data",
-                //    DateModified = DateTime.Now,
-                //});
                 FileList.DBInsertList("Data", item.Name);
             }
             foreach (var item in await (await OneDriveStorage.GetNoteAsync()).GetFilesAsync(50))
             {
                 await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetNoteAsync(),
                     await LocalStorage.GetNoteFolderAsync(), item.Name);
-                //trace.Add(new FileList
-                //{
-                //    FileName = item.Name,
-                //    FilePosition = "Note",
-                //    DateModified = DateTime.Now,
-                //});
                 FileList.DBInsertTrace("Note", item.Name);
-                //list.Add(new FileList
-                //{
-                //    FileName = item.Name,
-                //    FilePosition = "Note",
-                //    DateModified = DateTime.Now,
-                //});
                 FileList.DBInsertList("Note", item.Name);
             }
-
-            //StorageFile tracefile = await (await LocalStorage.GetLogAsync()).CreateFileAsync("filetrace",
-            //    CreationCollisionOption.OpenIfExists);
-            //StorageFile listfile = await LocalStorage.GetRoamingFolder().CreateFileAsync(ApplicationSetting.AccountName + ".filelist",
-            //    CreationCollisionOption.OpenIfExists);
-            //await FileIO.WriteTextAsync(tracefile, SerializeHelper.SerializeToJson(trace));
-            //await FileIO.WriteTextAsync(listfile, SerializeHelper.SerializeToJson(list));
         }
 
     }

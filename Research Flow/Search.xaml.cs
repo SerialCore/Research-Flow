@@ -265,6 +265,15 @@ namespace Research_Flow
         private async void Link_list_ItemClick(object sender, ItemClickEventArgs e)
         {
             string link = (e.ClickedItem as Crawlable).Url;
+            string name = "";
+            // choose url name or page title to be file name, by user setting
+            string[] split = link.Split('/');
+            // or use regex ".*/(.*?)$"
+            if (string.IsNullOrEmpty(split[split.Length - 1]))
+                name = DateTime.Now.ToString("yyyyMMddhhmm") + ".pdf";
+            else
+                name = split[split.Length - 1] + ".pdf";
+
             // check if a downloadable link
             if (Regex.IsMatch(link, CrawlerService.LinkFilter["Url: HasPDF"]))
             {
@@ -272,7 +281,7 @@ namespace Research_Flow
                 downloadStatus.Text = "Processing";
                 WebClientService webClient = new WebClientService();
                 webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
-                webClient.DownloadFile(link, (await LocalStorage.GetPaperFolderAsync()).Path, DateTime.Now.ToString("yyyyMMddhhmmss") + ".pdf",
+                webClient.DownloadFile(link, (await LocalStorage.GetPaperFolderAsync()).Path, name,
                     () =>
                     {
                         webClient.DownloadProgressChanged -= WebClient_DownloadProgressChanged;

@@ -34,7 +34,7 @@ namespace LogicService.Storage
             return ApplicationData.Current.TemporaryFolder;
         }
 
-        public static async Task<StorageFolder> GetLocalSubFolderAsync(string folder)
+        public static async Task<StorageFolder> GetWhichFolderAsync(string folder)
         {
             return await GetLocalCacheFolder().CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
         }
@@ -72,11 +72,6 @@ namespace LogicService.Storage
             return await (await GetNoteFolderAsync()).CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
         }
 
-        public static string TryGetNotePath()
-        {
-            return ApplicationData.Current.LocalCacheFolder.Path + "\\Note";
-        }
-
         // for paper downloaded
         public async static Task<StorageFolder> GetPaperFolderAsync()
         {
@@ -86,11 +81,6 @@ namespace LogicService.Storage
         public static async Task<StorageFolder> GetPaperSubFolderAsync(string folder)
         {
             return await (await GetPaperFolderAsync()).CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
-        }
-
-        public static string TryGetPaperPath()
-        {
-            return ApplicationData.Current.LocalCacheFolder.Path + "\\Paper";
         }
 
         #endregion

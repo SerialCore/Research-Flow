@@ -253,6 +253,7 @@ namespace Research_Flow
 
         private void Topiclist_ItemClick(object sender, ItemClickEventArgs e)
         {
+            ClearTopicSetting();
             topicDelete.Visibility = Visibility.Visible;
             topicSetting.Visibility = Visibility.Visible;
 
@@ -269,6 +270,15 @@ namespace Research_Flow
         private void TextBlock_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
             
+        }
+
+        private void Taglist_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            // if topic is ready to be edited
+            if (topicSetting.Visibility == Visibility.Visible)
+            {
+                topicTitle.Text += '#' + (e.ClickedItem as string) + '#';
+            }
         }
     }
 

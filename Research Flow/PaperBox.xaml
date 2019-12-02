@@ -30,12 +30,12 @@
             </SplitView>
 
             <Grid Grid.Column="1">
-                <TreeView x:Name="pdftree" Margin="0,0,0,48">
+                <TreeView x:Name="pdftree" ItemInvoked="Pdftree_ItemInvoked" Margin="0,0,0,48">
                     <TreeView.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel>
-                                <TextBlock Text="{Binding Name}"/>
-                            </StackPanel>
+                            <TreeViewItem>
+                                <TextBlock Text="{Binding }"/>
+                            </TreeViewItem>
                         </DataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>

@@ -54,13 +54,20 @@
             <uap:Logo>Images\ResearchFlow_logo.jpg</uap:Logo>
           </uap:FileTypeAssociation>
         </uap:Extension>
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="pdf">
+            <uap:SupportedFileTypes>
+              <uap:FileType>.pdf</uap:FileType>
+            </uap:SupportedFileTypes>
+            <uap:Logo>Images\ResearchFlow_logo.jpg</uap:Logo>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
       </Extensions>
     </Application>
   </Applications>
   <Capabilities>
     <Capability Name="internetClient" />
     <uap:Capability Name="picturesLibrary" />
-    <uap:Capability Name="contacts" />
-    <DeviceCapability Name="location" />
+    <uap:Capability Name="documentsLibrary" />
   </Capabilities>
 </Package>
