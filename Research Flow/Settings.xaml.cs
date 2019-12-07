@@ -4,6 +4,7 @@ using Windows.System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using LogicService.Storage;
+using LogicService.Services;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -64,6 +65,23 @@ namespace Research_Flow
             var folder = await LocalStorage.GetLogFolderAsync();
             var file = await folder.GetFileAsync("SearchTask.log");
             await Launcher.LaunchFileAsync(file);
+        }
+
+        private async void AccountSync_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (GraphService.IsConnected && GraphService.IsNetworkAvailable)
+            {
+                var button = sender as Button;
+                button.IsEnabled = false;
+                waitSync.IsActive = true;
+
+                ApplicationMessage.SendMessage("Synchronizing", ApplicationMessage.MessageType.Banner);
+                await Synchronization.ScanFiles();
+                ApplicationMessage.SendMessage("Synchronized successfully", ApplicationMessage.MessageType.Banner);
+
+                waitSync.IsActive = false;
+                button.IsEnabled = true;
+            }
         }
     }
 

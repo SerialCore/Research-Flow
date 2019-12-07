@@ -71,7 +71,14 @@ namespace Research_Flow
 
                     ApplicationInfo.TrackAppUse(e);
 
-                    rootFrame.Navigate(typeof(Configure), e.Arguments);
+                    if (ApplicationSetting.ContainKey("AccountName") && ApplicationSetting.ContainKey("Configured"))
+                    {
+                        rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    }
+                    else
+                    {
+                        rootFrame.Navigate(typeof(Configure), e.Arguments);
+                    }
                 }
 
                 // Ensure the current window is active
@@ -93,7 +100,14 @@ namespace Research_Flow
                 }
                 if (rootFrame.Content == null)
                 {
-                    rootFrame.Navigate(typeof(Configure));
+                    if (ApplicationSetting.ContainKey("AccountName") && ApplicationSetting.ContainKey("Configured"))
+                    {
+                        rootFrame.Navigate(typeof(MainPage));
+                    }
+                    else
+                    {
+                        rootFrame.Navigate(typeof(Configure));
+                    }
                 }
                 Window.Current.Activate();
             }
@@ -115,7 +129,14 @@ namespace Research_Flow
                 if (rootFrame.Content == null)
                 {
                     rootFrame.BackStack.Clear();
-                    rootFrame.Navigate(typeof(Configure), indexFile);
+                    if (ApplicationSetting.ContainKey("AccountName") && ApplicationSetting.ContainKey("Configured"))
+                    {
+                        rootFrame.Navigate(typeof(MainPage), indexFile);
+                    }
+                    else
+                    {
+                        rootFrame.Navigate(typeof(Configure), indexFile);
+                    }
                 }
             }
             Window.Current.Activate();

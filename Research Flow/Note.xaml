@@ -31,9 +31,7 @@
                     </Grid>
                 </SplitView.Pane>
                 <SplitView.Content>
-                    <ScrollViewer VerticalScrollMode="Disabled" VerticalScrollBarVisibility="Disabled">
-                        <toolkit:InfiniteCanvas x:Name="canvas"/>
-                    </ScrollViewer>
+                    <toolkit:InfiniteCanvas x:Name="canvas"/>
                 </SplitView.Content>
             </SplitView>
 

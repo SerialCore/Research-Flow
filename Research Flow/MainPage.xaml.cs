@@ -84,33 +84,10 @@ namespace Research_Flow
             await ResearchTask.RegisterStorageTask();
         }
 
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             FileParameter = e.Parameter as StorageFile;
-
-            if (GraphService.IsConnected)
-            {
-                try
-                {
-                    string name = await GraphService.GetDisplayName();
-                    string email = await GraphService.GetPrincipalName();
-                    BitmapImage image = new BitmapImage();
-                    image.UriSource = new Uri("ms-appx:///Images/ResearchFlow_logo.jpg");
-                    accountName.Text = name;
-                    accountEmail.Text = email;
-                    accountPhoto.ProfilePicture = image;
-                }
-                catch (Exception ex)
-                {
-                    InAppNotification.Show(ex.Source + ": " + ex.Message);
-                }
-            }
-            else
-            {
-                accountName.Text = "Offline";
-                if (ApplicationSetting.ContainKey("AccountName")) // will be removed
-                    accountEmail.Text = ApplicationSetting.AccountName;
-            }
+            Login();
         }
 
         #region NavView
@@ -190,6 +167,26 @@ namespace Research_Flow
 
         #region Account
 
+        private async void Login()
+        {
+            if (await GraphService.OneDriveLogin())
+            {
+                string name = await GraphService.GetDisplayName();
+                string email = await GraphService.GetPrincipalName();
+                BitmapImage image = new BitmapImage();
+                image.UriSource = new Uri("ms-appx:///Images/ResearchFlow_logo.jpg");
+                accountName.Text = name;
+                accountEmail.Text = email;
+                accountPhoto.ProfilePicture = image;
+            }
+            else
+            {
+                accountName.Text = "Offline";
+                if (ApplicationSetting.ContainKey("AccountName"))
+                    accountEmail.Text = ApplicationSetting.AccountName;
+            }
+        }
+
         private void Logout()
         {
             GraphService.OneDriveLogout();
@@ -198,16 +195,6 @@ namespace Research_Flow
             accountLogout.Content = "restart this app";
             accountName.Text = "";
             accountEmail.Text = "";
-        }
-
-        private async void AccountSync_Click(object sender, RoutedEventArgs e)
-        {
-            if (GraphService.IsConnected && GraphService.IsNetworkAvailable)
-            {
-                ApplicationMessage.SendMessage("Synchronizing", ApplicationMessage.MessageType.Banner);
-                await Synchronization.ScanFiles();
-                ApplicationMessage.SendMessage("Synchronized successfully", ApplicationMessage.MessageType.Banner);
-            }
         }
 
         private async void AccountLogout_Click(object sender, RoutedEventArgs e)

@@ -13,14 +13,18 @@
             <PivotItem Header="Panel">
                 <ScrollViewer>
                     <StackPanel>
-                        <StackPanel >
-                            <TextBlock Text="Topic Reminding" FontSize="25"/>
-                            <TextBlock Text="Days before dealine"/>
-                        </StackPanel>
-                        <StackPanel >
-                            <TextBlock Text="File Saving" FontSize="25"/>
-                            <TextBlock Text="PDF file download location"/>
-                        </StackPanel>
+                        <TextBlock Text="File Saving" FontSize="25"/>
+                        <Button Click="AccountSync_Click">
+                            <Grid>
+                                <TextBlock Text="Synchronize"/>
+                                <ProgressRing x:Name="waitSync"/>
+                            </Grid>
+                        </Button>
+                        <TextBlock Text="PDF file download location"/>
+
+                        <TextBlock Text="Topic Reminding" FontSize="25"/>
+                        <TextBlock Text="Days before dealine"/>
+
                         <Button Content="Show Search Log" Click="Show_SearchLog"/>
                     </StackPanel>
                 </ScrollViewer>

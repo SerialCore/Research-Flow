@@ -106,7 +106,6 @@
                                 </MenuFlyout>
                             </FlyoutBase.AttachedFlyout>
                         </AppBarButton>
-                        <AppBarButton Icon="Refresh" Click="AccountSync_Click" ToolTipService.ToolTip="Synchronize" Width="42" Height="42"/>
                         <AppBarButton Icon="FullScreen" Click="FullScreen_Click" ToolTipService.ToolTip="FullScreen" Width="42" Height="42"/>
                         <AppBarButton Icon="Placeholder" Tapped="Flyout_Tapped" ToolTipService.ToolTip="Background" Width="42" Height="42">
                             <FlyoutBase.AttachedFlyout>
