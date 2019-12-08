@@ -1,16 +1,19 @@
 ﻿using LogicService.Application;
 using LogicService.Helper;
+using LogicService.Objects;
 using LogicService.Storage;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.System.Threading;
 using Windows.UI.Core;
+using Windows.UI.Input.Inking;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -32,23 +35,19 @@ namespace Research_Flow
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter != null)
             {
                 StorageFile file = e.Parameter as StorageFile;
                 try
                 {
-                    canvas.ImportFromJson(await FileIO.ReadTextAsync(file));
+                    ImportFromInk(file);
                 }
                 catch (Exception ex)
                 {
                     ApplicationMessage.SendMessage("NoteException: " + ex.Message, ApplicationMessage.MessageType.InApp);
                 }
-            }
-            else
-            {
-                LoadDefaultNote(null, null);
             }
             
             InitializeNote();
@@ -73,14 +72,99 @@ namespace Research_Flow
             notelist.ItemsSource = namelist;
         }
 
-        #region File Operation
+        #region Ink Operation
 
-        private async void LoadDefaultNote(object sender, RoutedEventArgs e)
+        private Stack<InkStroke> UndoStrokes = new Stack<InkStroke>();
+
+        private void UndoInk(object sender, RoutedEventArgs e)
         {
-            var defaultnote = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Resources/DefaultNote.txt"));
-            canvas.ImportFromJson(await FileIO.ReadTextAsync(defaultnote));
-            notefilename.Text = "";
+            IReadOnlyList<InkStroke> strokes = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
+            if (strokes.Count > 0)
+            {
+                strokes[strokes.Count - 1].Selected = true;
+                UndoStrokes.Push(strokes[strokes.Count - 1]); // 入栈
+                inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
+            }
         }
+
+        private void RedoInk(object sender, RoutedEventArgs e)
+        {
+            if (UndoStrokes.Count > 0)
+            {
+                var stroke = UndoStrokes.Pop();
+
+                // This will blow up sky high:
+                // InkCanvas.InkPresenter.StrokeContainer.AddStroke(stroke);
+
+                var strokeBuilder = new InkStrokeBuilder();
+                strokeBuilder.SetDefaultDrawingAttributes(stroke.DrawingAttributes);
+                System.Numerics.Matrix3x2 matr = stroke.PointTransform;
+                IReadOnlyList<InkPoint> inkPoints = stroke.GetInkPoints();
+                InkStroke stk = strokeBuilder.CreateStrokeFromInkPoints(inkPoints, matr);
+                inkCanvas.InkPresenter.StrokeContainer.AddStroke(stk);
+            }
+        }
+
+        private async void ImportFromInk(StorageFile file)
+        {
+            try
+            {
+                var stream = await file.OpenReadAsync();
+                await inkCanvas.InkPresenter.StrokeContainer.LoadAsync(stream);
+            }
+            catch (Exception ex)
+            {
+                ApplicationMessage.SendMessage("NoteException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+            }
+        }
+
+        private async void ExportAsInk(StorageFile file)
+        {
+            try
+            {
+                IRandomAccessStream stream = new InMemoryRandomAccessStream();
+                await inkCanvas.InkPresenter.StrokeContainer.SaveAsync(stream);
+                CachedFileManager.DeferUpdates(file);
+                var bt = await ConvertStreamtoByte(stream);
+                await FileIO.WriteBytesAsync(file, bt);
+                await CachedFileManager.CompleteUpdatesAsync(file);
+            }
+            catch (Exception ex)
+            {
+                ApplicationMessage.SendMessage("NoteException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+            }
+        }
+
+        private async Task<byte[]> ConvertStreamtoByte(IRandomAccessStream fileStream)
+        {
+            var reader = new DataReader(fileStream.GetInputStreamAt(0));
+            await reader.LoadAsync((uint)fileStream.Size);
+            byte[] pixels = new byte[fileStream.Size];
+            reader.ReadBytes(pixels);
+            return pixels;
+        }
+
+        private void ChooseInputDevice(object sender, RoutedEventArgs e)
+        {
+            var button = sender as AppBarButton;
+            if (button.Tag.Equals("pen"))
+            {
+                this.inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Mouse
+                | Windows.UI.Core.CoreInputDeviceTypes.Touch;
+                button.Tag = "touch";
+                button.Icon = new SymbolIcon((Symbol)0xEDC6);
+            }
+            else
+            {
+                this.inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Pen;
+                button.Tag = "pen";
+                button.Icon = new SymbolIcon((Symbol)0xED5F);
+            }
+        }
+
+        #endregion
+
+        #region File Operation
 
         private async void Import_Note(object sender, RoutedEventArgs e)
         {
@@ -89,56 +173,7 @@ namespace Research_Flow
             StorageFile file = await picker.PickSingleFileAsync();
             if (file != null)
             {
-                try
-                {
-                    canvas.ImportFromJson(await FileIO.ReadTextAsync(file));
-                }
-                catch (Exception ex)
-                {
-                    ApplicationMessage.SendMessage("NoteException: " + ex.Message, ApplicationMessage.MessageType.InApp);
-                }
-            }
-        }
-
-        private async void Upload_Image(object sender, RoutedEventArgs e)
-        {
-            StorageFile file = await LocalStorage.GetTemporaryFolder().CreateFileAsync("Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
-
-            if (file != null)
-            {
-                using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
-                {
-                    await canvas.SaveBitmapAsync(stream, BitmapFileFormat.Png);
-                }
-
-                try
-                {
-                    await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetPictureAsync(), file);
-                    ApplicationNotification.ShowTextToast("OneDrive", "Note Image Saved");
-                }
-                catch
-                {
-                    await file.CopyAsync(KnownFolders.PicturesLibrary, file.Name);
-                    ApplicationNotification.ShowTextToast("Pictures Library", "Note Image Saved");
-                }
-            }
-        }
-
-        private async void Export_Image(object sender, RoutedEventArgs e)
-        {
-            FileSavePicker picker = new FileSavePicker
-            {
-                SuggestedStartLocation = PickerLocationId.Desktop,
-                SuggestedFileName = "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png",
-            };
-            picker.FileTypeChoices.Add("Note", new string[] { ".png" });
-            StorageFile file = await picker.PickSaveFileAsync();
-            if (file != null)
-            {
-                using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
-                {
-                    await canvas.SaveBitmapAsync(stream, BitmapFileFormat.Png);
-                }
+                ImportFromInk(file);
             }
         }
 
@@ -153,47 +188,18 @@ namespace Research_Flow
             StorageFile file = await picker.PickSaveFileAsync();
             if (file != null)
             {
-                await FileIO.WriteTextAsync(file, canvas.ExportAsJson());
+                ExportAsInk(file);
             }
-        }
-
-        private void Share_Image(object sender, RoutedEventArgs e)
-        {
-            DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
-            dataTransferManager.DataRequested += ImageTransferManager_DataRequested;
-            DataTransferManager.ShowShareUI();
         }
 
         private void Share_Note(object sender, RoutedEventArgs e)
         {
             DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
-            dataTransferManager.DataRequested += JsonTransferManager_DataRequested;
+            dataTransferManager.DataRequested += InkTransferManager_DataRequested;
             DataTransferManager.ShowShareUI();
         }
 
-        private async void ImageTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
-        {
-            DataRequestDeferral deferral = args.Request.GetDeferral();
-
-            DataRequest request = args.Request;
-            request.Data.Properties.Title = "Research Flow Note";
-            request.Data.Properties.Description = "Share your research note";
-
-            StorageFile file = await LocalStorage.GetTemporaryFolder().CreateFileAsync("Note-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
-
-            using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
-            {
-                await canvas.SaveBitmapAsync(stream, BitmapFileFormat.Png);
-            }
-
-            RandomAccessStreamReference imageStreamRef = RandomAccessStreamReference.CreateFromFile(file);
-            request.Data.Properties.Thumbnail = imageStreamRef;
-            request.Data.SetBitmap(imageStreamRef);
-
-            deferral.Complete();
-        }
-
-        private async void JsonTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
+        private async void InkTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
         {
             DataRequestDeferral deferral = args.Request.GetDeferral();
 
@@ -205,7 +211,7 @@ namespace Research_Flow
 
             if (file != null)
             {
-                await FileIO.WriteTextAsync(file, canvas.ExportAsJson());
+                ExportAsInk(file);
             }
 
             var storage = new List<IStorageItem>();
@@ -218,7 +224,7 @@ namespace Research_Flow
         #endregion
 
         #region File Management
-
+         
         private ObservableCollection<string> namelist = new ObservableCollection<string>();
 
         private ThreadPoolTimer autoSaver;
@@ -233,7 +239,7 @@ namespace Research_Flow
         {
             var name = e.ClickedItem as string;
             var fileitem = await (await LocalStorage.GetNoteFolderAsync()).GetFileAsync(name + ".rfn");
-            canvas.ImportFromJson(await FileIO.ReadTextAsync(fileitem));
+            ImportFromInk(fileitem);
             notefilename.Text = name;
         }
 
@@ -261,15 +267,17 @@ namespace Research_Flow
             if (notefilename.Text.Equals(""))
             {
                 notename = "Note-" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                LocalStorage.GeneralWriteAsync(await LocalStorage.GetNoteFolderAsync(),
-                    notename + ".rfn", canvas.ExportAsJson());
             }
             else
             {
                 notename = notefilename.Text;
-                LocalStorage.GeneralWriteAsync(await LocalStorage.GetNoteFolderAsync(),
-                    notename + ".rfn", canvas.ExportAsJson());
             }
+            StorageFile file = await (await LocalStorage.GetNoteFolderAsync()).CreateFileAsync(notename + ".rfn", CreationCollisionOption.OpenIfExists);
+            ExportAsInk(file);
+            // record
+            // note and paper shall be recorded dependently from general write, and how to deal with subfolder?
+            FileList.DBInsertList((await LocalStorage.GetNoteFolderAsync()).Name, notename + ".rfn");
+            FileList.DBInsertTrace((await LocalStorage.GetNoteFolderAsync()).Name, notename + ".rfn");
 
             ApplicationMessage.SendMessage("Note saved", ApplicationMessage.MessageType.Banner);
             foreach (string item in namelist)
