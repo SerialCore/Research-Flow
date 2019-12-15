@@ -1,14 +1,58 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using System;
+using System.Threading.Tasks;
 using Windows.UI.Notifications;
 
 namespace LogicService.Application
 {
     public class ApplicationNotification
     {
+        #region Operation 
+
         public static void ShowTextToast(string title, string content)
         {
-            var toast = new ToastContent()
+            ToastNotificationManager.CreateToastNotifier().Show(new ToastNotification(GetTextToast(title, content).GetXml()));
+        }
+
+        public static void ScheduleAlarmToast(string id, string title, string content, DateTimeOffset dateTime)
+        {
+            var alarm = new ScheduledToastNotification(GetAlarmToast(title, content).GetXml(), dateTime);
+            alarm.Tag = id;
+            alarm.NotificationMirroring = NotificationMirroring.Allowed;
+            ToastNotificationManager.CreateToastNotifier().AddToSchedule(alarm);
+        }
+
+        public static async Task ScheduleRepeatAlarmToast(string id, string title, string content, DateTimeOffset dateTime, TimeSpan period, uint repeat)
+        {
+            await Task.Run(()=>
+            {
+                for (int i = 0; i < repeat; i++)
+                {
+                    var alarm = new ScheduledToastNotification(GetAlarmToast(title, content).GetXml(), dateTime + i * period);
+                    alarm.Tag = id;
+                    alarm.NotificationMirroring = NotificationMirroring.Allowed;
+                    ToastNotificationManager.CreateToastNotifier().AddToSchedule(alarm);
+                }
+            });
+        }
+
+        public static void CancelAlarmToast(string id)
+        {
+            var notifier = ToastNotificationManager.CreateToastNotifier();
+            foreach (var toast in notifier.GetScheduledToastNotifications())
+            {
+                if (toast.Tag.Equals(id))
+                    notifier.RemoveFromSchedule(toast);
+            }
+        }
+
+        #endregion
+
+        #region Toast
+
+        private static ToastContent GetTextToast(string title, string content)
+        {
+            return new ToastContent()
             {
                 Scenario = ToastScenario.Reminder,
 
@@ -42,13 +86,11 @@ namespace LogicService.Application
                     }
                 }
             };
-
-            ToastNotificationManager.CreateToastNotifier().Show(new ToastNotification(toast.GetXml()));
         }
 
-        public static void ScheduleAlarmToast(string id, string title, string content, DateTimeOffset dateTime)
+        private static ToastContent GetAlarmToast(string title, string content)
         {
-            var toast = new ToastContent()
+            return new ToastContent()
             {
                 Scenario = ToastScenario.Alarm,
 
@@ -116,21 +158,9 @@ namespace LogicService.Application
                 //    Src = new Uri("ms-appx:///Assets/NewMessage.mp3")
                 //}
             };
-
-            var alarm = new ScheduledToastNotification(toast.GetXml(), dateTime);
-            alarm.Tag = id;
-            ToastNotificationManager.CreateToastNotifier().AddToSchedule(alarm);
         }
 
-        public static void CancelAlarmToast(string id)
-        {
-            var notifier = ToastNotificationManager.CreateToastNotifier();
-            foreach (var toast in notifier.GetScheduledToastNotifications())
-            {
-                if (toast.Tag.Equals(id))
-                    notifier.RemoveFromSchedule(toast);
-            }
-        }
+        #endregion
 
     }
 }

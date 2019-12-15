@@ -83,16 +83,10 @@ namespace Research_Flow
 
         private HashSet<string> tags;
 
+        private string currentTag;
+
         private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
             => FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
-
-        /// <summary>
-        /// shall be removed
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Flyout_Opened(object sender, object e)
-            => tagEmbed.Focus(FocusState.Programmatic);
 
         private void LoadTagView()
         {
@@ -126,6 +120,35 @@ namespace Research_Flow
                 LoadTagView();
                 LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "taglist", tags);
             }
+        }
+
+        private async void DeleteTagManually(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(currentTag))
+            {
+                tags.Remove(currentTag);
+                LoadTagView();
+                ClearTagPanel();
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "taglist", tags);
+            }
+        }
+
+        private void Taglist_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            currentTag = e.ClickedItem as string;
+            if (topicSetting.Visibility == Visibility.Visible) // if topic is ready to be edited
+            {
+                topicTitle.Text += '#' + currentTag + '#';
+            }
+            else
+            {
+                tagPanelTitle.Text= '#' + currentTag + '#';
+            }
+        }
+
+        private void ClearTagPanel()
+        {
+            tagPanelTitle.Text = "#Tag#";
         }
 
         #endregion
@@ -183,7 +206,7 @@ namespace Research_Flow
             ClearTopicSetting();
         }
 
-        private void SubmitTopictoTask(Topic topic)
+        private async void SubmitTopictoTask(Topic topic)
         {
             // TimeSpan.Zero equals 12:00 AM
             if (topic.Deadline == DateTimeOffset.MinValue && topic.RemindTime == TimeSpan.Zero) // an idea
@@ -192,22 +215,28 @@ namespace Research_Flow
             }
             else if (topic.Deadline == DateTimeOffset.MinValue && topic.RemindTime != TimeSpan.Zero) // an alarm
             {
-                ;
+                ApplicationNotification.CancelAlarmToast(topic.ID);
+                DateTimeOffset dateTime = new DateTimeOffset(DateTimeOffset.Now.Year,DateTimeOffset.Now.Month,DateTimeOffset.Now.Day,
+                    topic.RemindTime.Hours, topic.RemindTime.Minutes, topic.RemindTime.Seconds, DateTimeOffset.Now.Offset);
+                if (DateTimeOffset.Now > dateTime)
+                    await ApplicationNotification.ScheduleRepeatAlarmToast(topic.ID, "Research Topic", topic.Title, dateTime.AddDays(1), TimeSpan.FromDays(1), 365);
+                else
+                    await ApplicationNotification.ScheduleRepeatAlarmToast(topic.ID, "Research Topic", topic.Title, dateTime, TimeSpan.FromDays(1), 365);
             }
             else if (topic.RemindTime == TimeSpan.Zero) // a deadline
             {
                 ApplicationNotification.CancelAlarmToast(topic.ID);
                 // make a setting about default time
-                DateTimeOffset date = new DateTimeOffset(topic.Deadline.Year, topic.Deadline.Month, topic.Deadline.Day,
+                DateTimeOffset dateTime = new DateTimeOffset(topic.Deadline.Year, topic.Deadline.Month, topic.Deadline.Day,
                     0, 0, 0, DateTimeOffset.Now.Offset);
-                ApplicationNotification.ScheduleAlarmToast(topic.ID, "Research Topic", topic.Title, date);
+                ApplicationNotification.ScheduleAlarmToast(topic.ID, "Research Topic", topic.Title, dateTime);
             }
             else // a deadline with alarm
             {
                 ApplicationNotification.CancelAlarmToast(topic.ID);
-                DateTimeOffset date = new DateTimeOffset(topic.Deadline.Year, topic.Deadline.Month, topic.Deadline.Day,
+                DateTimeOffset dateTime = new DateTimeOffset(topic.Deadline.Year, topic.Deadline.Month, topic.Deadline.Day,
                     topic.RemindTime.Hours, topic.RemindTime.Minutes, topic.RemindTime.Seconds, DateTimeOffset.Now.Offset);
-                ApplicationNotification.ScheduleAlarmToast(topic.ID, "Research Topic", topic.Title, date);
+                ApplicationNotification.ScheduleAlarmToast(topic.ID, "Research Topic", topic.Title, dateTime);
             }
         }
 
@@ -267,19 +296,6 @@ namespace Research_Flow
 
         #endregion
 
-        private void TextBlock_RightTapped(object sender, RightTappedRoutedEventArgs e)
-        {
-            
-        }
-
-        private void Taglist_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            // if topic is ready to be edited
-            if (topicSetting.Visibility == Visibility.Visible)
-            {
-                topicTitle.Text += '#' + (e.ClickedItem as string) + '#';
-            }
-        }
     }
 
 }

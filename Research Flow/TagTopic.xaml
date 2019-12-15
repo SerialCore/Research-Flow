@@ -13,7 +13,7 @@
         <Grid Margin="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="300"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" MinWidth="400"/>
                 <ColumnDefinition Width="400"/>
             </Grid.ColumnDefinitions>
 
@@ -30,7 +30,7 @@
                                 <GroupStyle HidesIfEmpty="False">
                                     <GroupStyle.HeaderTemplate>
                                         <DataTemplate>
-                                            <TextBlock RightTapped="TextBlock_RightTapped" Text="{Binding Key}" FontSize="25" Foreground="Red"/>
+                                            <TextBlock Text="{Binding Key}" FontSize="25" Foreground="Red"/>
                                         </DataTemplate>
                                     </GroupStyle.HeaderTemplate>
                                 </GroupStyle>
@@ -56,9 +56,9 @@
                     <AppBarButton Icon="Add" Label="Add" Tapped="Flyout_Tapped">
                         <FlyoutBase.AttachedFlyout>
                             <Flyout >
-                                <StackPanel >
-                                    <TextBox x:Name="tagEmbed" PlaceholderText="#Tag1##Tag2#" Width="300" TextWrapping="Wrap" AllowFocusOnInteraction="True"/>
-                                    <Button Content="Add" Click="AddTagManually" Height="32" Width="48" Background="LightBlue"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox x:Name="tagEmbed" PlaceholderText="#Tag1##Tag2#" Width="300" AllowFocusOnInteraction="True"/>
+                                    <AppBarButton Icon="Accept" Click="AddTagManually" Height="36" Width="36"/>
                                 </StackPanel>
                             </Flyout>
                         </FlyoutBase.AttachedFlyout>
@@ -67,7 +67,10 @@
             </Grid>
 
             <Grid Grid.Column="1">
-                
+                <StackPanel Margin="20">
+                    <TextBlock x:Name="tagPanelTitle" Text="#Tag#" FontSize="25"/>
+                    <AppBarButton Icon="Delete" Click="DeleteTagManually" Height="38" Width="38"/>
+                </StackPanel>
             </Grid>
 
             <Grid Grid.Column="2">
@@ -93,7 +96,7 @@
                 </ScrollViewer>
                 <Grid Grid.Row="1" x:Name="topicSetting" Visibility="Collapsed" Padding="10">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="150"/>
+                        <RowDefinition Height="200"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
@@ -119,12 +122,6 @@
                 </Grid>
             </Grid>
         </Grid>
-
-        <toolkit:InAppNotification x:Name="InAppNotification" 
-                                    ShowDismissButton="True"
-                                    AnimationDuration="00:00:00.1000000"
-                                    VerticalOffset="100"
-                                    HorizontalOffset="0"/>
 
     </Grid>
 

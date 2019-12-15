@@ -164,7 +164,7 @@ namespace Research_Flow
 
         #endregion
 
-        #region File Operation
+        #region File Operation (out App)
 
         private async void Import_Note(object sender, RoutedEventArgs e)
         {
@@ -223,8 +223,8 @@ namespace Research_Flow
 
         #endregion
 
-        #region File Management
-         
+        #region File Management (in App)
+
         private ObservableCollection<string> namelist = new ObservableCollection<string>();
 
         private ThreadPoolTimer autoSaver;
@@ -261,6 +261,11 @@ namespace Research_Flow
             autoSaver.Cancel();
         }
 
+        /// <summary>
+        /// will be recorded
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void Save_Note(object sender, RoutedEventArgs e)
         {
             string notename; // without extention
