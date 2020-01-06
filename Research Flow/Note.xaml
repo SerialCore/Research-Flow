@@ -28,20 +28,20 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBox Grid.Column="0" x:Name="notefilename" VerticalAlignment="Center" Margin="5,0"/>
-                <AppBarButton Grid.Column="1" Icon="Save" Click="Save_Note" Width="48" LabelPosition="Collapsed"/>
+                <AppBarButton Grid.Column="1" Icon="Save" Click="Save_Note" Height="40" Width="38" LabelPosition="Collapsed"/>
             </Grid>
 
             <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                <InkToolbar TargetInkCanvas="{x:Bind inkCanvas}"/>
                 <AppBarButton Click="ChooseInputDevice" Tag="pen" Height="40" Width="38">
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xED5F;" />
                 </AppBarButton>
-                <AppBarButton Icon="Undo" Click="UndoInk" Height="40" Width="38"/>
-                <AppBarButton Icon="Redo" Click="RedoInk" Height="40" Width="38"/>
+                <InkToolbar TargetInkCanvas="{x:Bind inkCanvas}"/>
             </StackPanel>
 
-            <CommandBar Grid.Row="0" Grid.Column="2" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                <AppBarButton Icon="Share" Label="Share" Tapped="Flyout_Tapped">
+            <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <AppBarButton Icon="Undo" Click="UndoInk" Height="40" Width="38"/>
+                <AppBarButton Icon="Redo" Click="RedoInk" Height="40" Width="38"/>
+                <AppBarButton Icon="Share" Tapped="Flyout_Tapped" Height="40" Width="38">
                     <FlyoutBase.AttachedFlyout>
                         <MenuFlyout>
                             <MenuFlyoutItem Text="Export Note" Click="Export_Note"/>
@@ -49,9 +49,9 @@
                         </MenuFlyout>
                     </FlyoutBase.AttachedFlyout>
                 </AppBarButton>
-                <AppBarButton Icon="OpenFile" Label="Import" Click="Import_Note"/>
-                <AppBarButton Icon="Import" Label="Document" Click="Open_Document"/>
-            </CommandBar>
+                <AppBarButton Icon="OpenFile" Click="Import_Note" Height="40" Width="38"/>
+                <AppBarButton Icon="Document" Click="Open_Document" Height="40" Width="38"/>
+            </StackPanel>
 
             <SplitView Grid.Row="1" Grid.ColumnSpan="3" x:Name="notepanel" OpenPaneLength="400" PanePlacement="Right" DisplayMode="Overlay">
                 <SplitView.Pane>

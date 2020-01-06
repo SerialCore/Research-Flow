@@ -1,6 +1,6 @@
 ﻿using LogicService.Application;
 using LogicService.Helper;
-using LogicService.Objects;
+using LogicService.Data;
 using Microsoft.Graph;
 using System;
 using System.Collections.Generic;

@@ -1,6 +1,6 @@
 ﻿using LogicService.Application;
 using LogicService.Helper;
-using LogicService.Objects;
+using LogicService.Data;
 using LogicService.Storage;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;

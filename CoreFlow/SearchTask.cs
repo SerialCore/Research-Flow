@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using LogicService.Helper;
 using Windows.ApplicationModel.Background;
-using LogicService.Objects;
+using LogicService.Data;
 using LogicService.Storage;
-using LogicService.Services;
+using LogicService.Service;
 
 namespace CoreFlow
 {

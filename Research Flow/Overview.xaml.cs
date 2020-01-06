@@ -1,4 +1,4 @@
-﻿using LogicService.Objects;
+﻿using LogicService.Data;
 using LogicService.Storage;
 using System;
 using System.Collections.Generic;

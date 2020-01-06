@@ -108,46 +108,47 @@
   <ItemGroup>
     <Compile Include="Application\ApplicationNotification.cs" />
     <Compile Include="Application\ApplicationSetting.cs" />
+    <Compile Include="Flow\TaskFlow.cs" />
     <Compile Include="Helper\NetHelper.cs" />
     <Compile Include="Helper\RegexHelper.cs" />
-    <Compile Include="Objects\MessageBot.cs" />
-    <Compile Include="Objects\Topic.cs" />
-    <Compile Include="Services\UrlOperator.cs" />
-    <Compile Include="Services\WebClientService.cs" />
-    <Compile Include="Objects\Crawlable.cs" />
-    <Compile Include="Objects\FeedItem.cs" />
-    <Compile Include="Objects\FileList.cs" />
-    <Compile Include="Objects\Paper.cs" />
+    <Compile Include="Data\MessageBot.cs" />
+    <Compile Include="Data\Topic.cs" />
+    <Compile Include="Service\UrlOperator.cs" />
+    <Compile Include="Service\WebClientService.cs" />
+    <Compile Include="Data\Crawlable.cs" />
+    <Compile Include="Data\FeedItem.cs" />
+    <Compile Include="Data\FileList.cs" />
+    <Compile Include="Data\Paper.cs" />
     <Compile Include="Helper\SerializeHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\HashEncode.cs" />
     <Compile Include="Security\TripleDES.cs" />
     <Compile Include="Application\ApplicationMessage.cs" />
-    <Compile Include="Services\CrawlerService.cs" />
-    <Compile Include="Services\GraphService.cs" />
+    <Compile Include="Service\CrawlerService.cs" />
+    <Compile Include="Service\GraphService.cs" />
     <Compile Include="Storage\DataStorage.cs" />
     <Compile Include="Storage\LocalStorage.cs" />
     <Compile Include="Storage\OneDriveStorage.cs" />
-    <Compile Include="Services\RssService.cs" />
+    <Compile Include="Service\RssService.cs" />
     <Compile Include="Application\ApplicationInfo.cs" />
     <Compile Include="Storage\Synchronization.cs" />
     <EmbeddedResource Include="Properties\LogicService.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite">
-      <Version>2.2.6</Version>
+      <Version>3.1.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.9</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Services">
-      <Version>5.1.1</Version>
+      <Version>6.0.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp">
-      <Version>5.1.1</Version>
+      <Version>6.0.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications">
-      <Version>5.1.1</Version>
+      <Version>6.0.0</Version>
     </PackageReference>
     <PackageReference Include="SharpZipLib">
       <Version>1.2.0</Version>

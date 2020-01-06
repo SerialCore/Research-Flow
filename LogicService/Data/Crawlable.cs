@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LogicService.Storage;
 
-namespace LogicService.Objects
+namespace LogicService.Data
 {
     public class Crawlable
     {

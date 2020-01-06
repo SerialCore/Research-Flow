@@ -36,14 +36,17 @@ namespace LogicService.Application
             });
         }
 
-        public static void CancelAlarmToast(string id)
+        public async static Task CancelAlarmToast(string id)
         {
-            var notifier = ToastNotificationManager.CreateToastNotifier();
-            foreach (var toast in notifier.GetScheduledToastNotifications())
+            await Task.Run(() =>
             {
-                if (toast.Tag.Equals(id))
-                    notifier.RemoveFromSchedule(toast);
-            }
+                var notifier = ToastNotificationManager.CreateToastNotifier();
+                foreach (var toast in notifier.GetScheduledToastNotifications())
+                {
+                    if (toast.Tag.Equals(id))
+                        notifier.RemoveFromSchedule(toast);
+                }
+            });
         }
 
         #endregion

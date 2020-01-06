@@ -1,6 +1,6 @@
 ﻿using LogicService.Application;
 using LogicService.Helper;
-using LogicService.Objects;
+using LogicService.Data;
 using LogicService.Security;
 using LogicService.Storage;
 using System;
@@ -181,6 +181,7 @@ namespace Research_Flow
 
                 if (currentTopic != null) // modify
                 {
+                    // cannot renew title after modified
                     int index = topics.IndexOf(currentTopic);
                     topics[index].Title = topic.Title;
                     topics[index].Deadline = topic.Deadline;
@@ -215,17 +216,17 @@ namespace Research_Flow
             }
             else if (topic.Deadline == DateTimeOffset.MinValue && topic.RemindTime != TimeSpan.Zero) // an alarm
             {
-                ApplicationNotification.CancelAlarmToast(topic.ID);
+                await ApplicationNotification.CancelAlarmToast(topic.ID);
                 DateTimeOffset dateTime = new DateTimeOffset(DateTimeOffset.Now.Year,DateTimeOffset.Now.Month,DateTimeOffset.Now.Day,
                     topic.RemindTime.Hours, topic.RemindTime.Minutes, topic.RemindTime.Seconds, DateTimeOffset.Now.Offset);
                 if (DateTimeOffset.Now > dateTime)
-                    await ApplicationNotification.ScheduleRepeatAlarmToast(topic.ID, "Research Topic", topic.Title, dateTime.AddDays(1), TimeSpan.FromDays(1), 365);
+                    await ApplicationNotification.ScheduleRepeatAlarmToast(topic.ID, "Research Topic", topic.Title, dateTime.AddDays(1), TimeSpan.FromDays(1), 150);
                 else
-                    await ApplicationNotification.ScheduleRepeatAlarmToast(topic.ID, "Research Topic", topic.Title, dateTime, TimeSpan.FromDays(1), 365);
+                    await ApplicationNotification.ScheduleRepeatAlarmToast(topic.ID, "Research Topic", topic.Title, dateTime, TimeSpan.FromDays(1), 150);
             }
             else if (topic.RemindTime == TimeSpan.Zero) // a deadline
             {
-                ApplicationNotification.CancelAlarmToast(topic.ID);
+                await ApplicationNotification.CancelAlarmToast(topic.ID);
                 // make a setting about default time
                 DateTimeOffset dateTime = new DateTimeOffset(topic.Deadline.Year, topic.Deadline.Month, topic.Deadline.Day,
                     0, 0, 0, DateTimeOffset.Now.Offset);
@@ -233,7 +234,7 @@ namespace Research_Flow
             }
             else // a deadline with alarm
             {
-                ApplicationNotification.CancelAlarmToast(topic.ID);
+                await ApplicationNotification.CancelAlarmToast(topic.ID);
                 DateTimeOffset dateTime = new DateTimeOffset(topic.Deadline.Year, topic.Deadline.Month, topic.Deadline.Day,
                     topic.RemindTime.Hours, topic.RemindTime.Minutes, topic.RemindTime.Seconds, DateTimeOffset.Now.Offset);
                 ApplicationNotification.ScheduleAlarmToast(topic.ID, "Research Topic", topic.Title, dateTime);
@@ -258,7 +259,7 @@ namespace Research_Flow
         private async void DeleteInvokedHandler(IUICommand command)
         {
             // cancel notification
-            ApplicationNotification.CancelAlarmToast(currentTopic.ID);
+            await ApplicationNotification.CancelAlarmToast(currentTopic.ID);
 
             topics.Remove(currentTopic);
             LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topiclist", topics);

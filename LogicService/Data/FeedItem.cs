@@ -8,7 +8,7 @@ using LogicService.Storage;
 using System.Xml;
 using Microsoft.Data.Sqlite;
 
-namespace LogicService.Objects
+namespace LogicService.Data
 {
     public class RSSSource
     {

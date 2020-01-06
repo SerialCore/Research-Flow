@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
-using LogicService.Objects;
+using LogicService.Data;
 using Windows.Web.Syndication;
 using LogicService.Security;
 
-namespace LogicService.Services
+namespace LogicService.Service
 {
     public class RssService
     {

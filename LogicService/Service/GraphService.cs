@@ -7,7 +7,7 @@ using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Windows.Storage.Streams;
 
-namespace LogicService.Services
+namespace LogicService.Service
 {
     public class GraphService
     {

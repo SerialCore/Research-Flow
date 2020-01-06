@@ -13,7 +13,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using LogicService.Objects;
+using LogicService.Data;
 using LogicService.Storage;
 using Windows.System;
 

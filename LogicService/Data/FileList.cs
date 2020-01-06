@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace LogicService.Objects
+namespace LogicService.Data
 {
     public class FileList
     {

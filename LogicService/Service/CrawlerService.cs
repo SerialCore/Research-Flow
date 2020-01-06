@@ -1,4 +1,4 @@
-﻿using LogicService.Objects;
+﻿using LogicService.Data;
 using LogicService.Security;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace LogicService.Services
+namespace LogicService.Service
 {
     public class CrawlerService
     {

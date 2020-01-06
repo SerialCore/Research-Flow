@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace LogicService.Objects
+namespace LogicService.Data
 {
     public class Topic
     {

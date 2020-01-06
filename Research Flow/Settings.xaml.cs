@@ -4,7 +4,7 @@ using Windows.System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using LogicService.Storage;
-using LogicService.Services;
+using LogicService.Service;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 

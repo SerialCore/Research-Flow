@@ -1,6 +1,6 @@
 ﻿using LogicService.Application;
-using LogicService.Objects;
-using LogicService.Services;
+using LogicService.Data;
+using LogicService.Service;
 using LogicService.Storage;
 using System;
 using System.Collections.Generic;

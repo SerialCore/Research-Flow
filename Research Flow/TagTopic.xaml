@@ -69,7 +69,11 @@
             <Grid Grid.Column="1">
                 <StackPanel Margin="20">
                     <TextBlock x:Name="tagPanelTitle" Text="#Tag#" FontSize="25"/>
-                    <AppBarButton Icon="Delete" Click="DeleteTagManually" Height="38" Width="38"/>
+                    <Line X1="0" X2="300" Y1="0" Y2="0" Stroke="Black" Margin="0,5"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <AppBarButton Icon="Delete" Click="DeleteTagManually" Height="38" Width="38"/>
+                        <AppBarButton Icon="Clear" Height="38" Width="38"/>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
 
