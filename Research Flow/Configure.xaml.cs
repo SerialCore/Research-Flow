@@ -65,8 +65,6 @@ namespace Research_Flow
             {
                 accountStatu.Text = "Please login again";
                 accountIcon.IsTapEnabled = true;
-                // then navigate or not, give an option
-                this.Frame.Navigate(typeof(MainPage), tempParameter);
             }
         }
 
