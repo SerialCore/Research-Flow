@@ -142,6 +142,7 @@ namespace Research_Flow
             }
             else
             {
+                tagpanel.IsPaneOpen = true;
                 tagPanelTitle.Text= '#' + currentTag + '#';
             }
         }
@@ -159,20 +160,13 @@ namespace Research_Flow
 
         private Topic currentTopic = null;
 
-        private void LoadTaskView()
-        {
-            
-        }
-
-        private void AddTopicSetting(object sender, TappedRoutedEventArgs e) => topicSetting.Visibility = Visibility.Visible;
+        private void AddTopicSetting(object sender, RoutedEventArgs e) => topicSetting.Visibility = Visibility.Visible;
 
         private async void SubmitTopic(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(topicTitle.Text))
             {
                 Topic topic = new Topic();
-                //
-                topic.ID = HashEncode.MakeMD5(DateTimeOffset.Now.ToString());
                 topic.Title = topicTitle.Text;
                 if (deadLine.Date != null)
                     topic.Deadline = deadLine.Date.Value;
@@ -181,16 +175,15 @@ namespace Research_Flow
 
                 if (currentTopic != null) // modify
                 {
-                    // cannot renew title after modified
                     int index = topics.IndexOf(currentTopic);
-                    topics[index].Title = topic.Title;
-                    topics[index].Deadline = topic.Deadline;
-                    topics[index].RemindTime = topic.RemindTime;
+                    topic.ID = topics[index].ID;
+                    topics.RemoveAt(index);
                 }
                 else // add new
                 {
-                    topics.Add(topic);
+                    topic.ID = HashEncode.MakeMD5(DateTimeOffset.Now.ToString());
                 }
+                topics.Insert(0, topic);
 
                 LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topiclist", topics);
 

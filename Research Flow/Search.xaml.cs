@@ -316,7 +316,7 @@ namespace Research_Flow
             downloadPanel.Visibility = Visibility.Collapsed;
         }
 
-        private void OpenDownloaded(object sender, RoutedEventArgs e)
+        private void CheckDownloaded(object sender, RoutedEventArgs e)
         {
 
         }

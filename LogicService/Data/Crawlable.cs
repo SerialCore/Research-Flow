@@ -70,11 +70,18 @@ namespace LogicService.Data
             DataStorage.CrawlData.ExecuteWrite(sql);
         }
 
-        public static int DBInsert()
+        public static int DBInsert(Crawlable crawlable)
         {
             int affectedRows = 0;
             string sql = @"insert into Crawlable(ID, ParentID, Text, Url)
                 values(@ID, @ParentID, @Text, @Url);";
+            affectedRows = DataStorage.CrawlData.ExecuteWrite(sql, new Dictionary<string, object>
+                {
+                    { "@ID", crawlable.ID },
+                    { "@ParentID", crawlable.ParentID },
+                    { "@Text", crawlable.Text },
+                    { "@Url", crawlable.Url },
+                });
 
             FileList.DBInsertList("Data", DataStorage.CrawlData.Database);
             FileList.DBInsertTrace("Data", DataStorage.CrawlData.Database);
@@ -101,11 +108,6 @@ namespace LogicService.Data
             return crawl;
         }
 
-        public static void DBUpdate()
-        {
-
-        }
-
         public static int DBDeleteByID(string id)
         {
             int affectedRows = 0;
@@ -116,6 +118,11 @@ namespace LogicService.Data
             FileList.DBInsertTrace("Data", DataStorage.CrawlData.Database);
 
             return affectedRows;
+        }
+
+        public static void DBUpdate()
+        {
+
         }
 
         #endregion

@@ -77,6 +77,15 @@ namespace Research_Flow
                 && await LocalStorage.GetPaperFolderAsync() != null;
         }
 
+        private void ConfigureDB()
+        {
+            FileList.DBInitializeTrace();
+            FileList.DBInitializeList();
+            Crawlable.DBInitialize();
+            FeedItem.DBInitialize();
+            Paper.DBInitialize();
+        }
+
         private async Task<bool> ConfigureFile()
         {
             configState.Text = "\nSyncing files with OneDrive...\n";
@@ -94,17 +103,6 @@ namespace Research_Flow
                 configState.Text += "\nPlease login again.\n";
                 return false;
             }
-        }
-
-        private void ConfigureDB()
-        {
-            FileList.DBInitializeTrace();
-            FileList.DBInitializeList();
-            Crawlable.DBInitialize();
-            FeedItem.DBInitialize();
-            Paper.DBInitialize();
-            // in future updates, some alter commands may be wrote here
-            // DBUpdate();
         }
 
     }

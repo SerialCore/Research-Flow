@@ -16,9 +16,9 @@ namespace LogicService.Data
 
         public string Title { get; set; }
 
-        public string Abstract { get; set; }
-
         public string Authors { get; set; }
+
+        public string Abstract { get; set; }
 
         public string Tags { get; set; }
 
@@ -65,8 +65,8 @@ namespace LogicService.Data
                     [ID] varchar(50) not null primary key,
                     [ParentID] varchar(50),
                     [Title] varchar(100) not null,
+                    [Authors] varchar(500),
                     [Abstract] varchar(1000),
-                    [Authors] varchar(500)),
                     [Tags] varchar(500))";
             DataStorage.PaperData.ExecuteWrite(sql);
         }
@@ -86,13 +86,15 @@ namespace LogicService.Data
                         ID = reader.GetString(0),
                         ParentID = reader.GetString(1),
                         Title = reader.GetString(2),
-                        Abstract = reader.GetString(3),
-                        Authors = reader.GetString(4),
-                        Tags = reader.GetString(5)
                     });
                 }
             }
             return papers;
+        }
+
+        public static void DBUpdate()
+        {
+
         }
 
         #endregion

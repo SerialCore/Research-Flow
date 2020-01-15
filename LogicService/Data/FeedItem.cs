@@ -23,8 +23,7 @@ namespace LogicService.Data
 
         public bool IsJournal { get; set; }
         
-        // not used
-        public bool IsNotificationOn { get; set; }
+        //public bool IsNotificationOn { get; set; }
 
         public DateTime LastUpdateTime { get; set; }
 
@@ -81,8 +80,6 @@ namespace LogicService.Data
 
         public string Summary { get; set; }
 
-        public string FullText { get; set; }
-
         public string Tags { get; set; }
 
         public string Nodes { get; set; }
@@ -133,7 +130,6 @@ namespace LogicService.Data
                     [Published] varchar(50) not null,
                     [Link] varchar(100) not null,
                     [Summary] varchar(500),
-                    [FullText] varchar(1000),
                     [Tags] varchar(500),
                     [Nodes] varchar(1000));";
             DataStorage.FeedData.ExecuteWrite(sql);
@@ -182,15 +178,10 @@ namespace LogicService.Data
                     Published = reader.GetString(3),
                     Link = reader.GetString(4),
                     Summary = reader.GetString(5),
-                    Nodes = reader.GetString(8)
+                    Nodes = reader.GetString(7)
                 });
             }
             return feeds;
-        }
-
-        public static void DBUpdate()
-        {
-
         }
 
         public static int DBDeleteByPID(string pid)
@@ -203,6 +194,11 @@ namespace LogicService.Data
             FileList.DBInsertTrace("Data", DataStorage.FeedData.Database);
 
             return affectedRows;
+        }
+
+        public static void DBUpdate()
+        {
+
         }
 
         #endregion

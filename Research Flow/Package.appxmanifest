@@ -62,6 +62,11 @@
             <uap:Logo>Images\ResearchFlow_logo.jpg</uap:Logo>
           </uap:FileTypeAssociation>
         </uap:Extension>
+        <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.TopicTask">
+          <BackgroundTasks>
+            <Task Type="timer"/>
+          </BackgroundTasks>
+        </Extension>
       </Extensions>
     </Application>
   </Applications>

@@ -62,10 +62,6 @@
                 </NavigationViewItem>
             </NavigationView.MenuItems>
 
-            <NavigationView.AutoSuggestBox>
-                <AutoSuggestBox x:Name="ASB" QueryIcon="Find"/>
-            </NavigationView.AutoSuggestBox>
-
             <NavigationView.PaneHeader>
                 <TextBlock Text="  Research Flow" VerticalAlignment="Center"/>
             </NavigationView.PaneHeader>
@@ -127,10 +123,6 @@
             </Frame>
 
         </NavigationView>
-
-        <Grid CornerRadius="10" Height="32" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="48,0" Background="{ThemeResource SystemControlAccentAcrylicElementAccentMediumHighBrush}" Visibility="Collapsed">
-            <TextBlock x:Name="appMessage" Text="Research Flow" FontSize="18" VerticalAlignment="Center" Margin="5,0,5,0"/>
-        </Grid>
 
         <toolkit:InAppNotification x:Name="InAppNotification" 
                                     ShowDismissButton="True"

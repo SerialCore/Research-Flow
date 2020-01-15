@@ -212,7 +212,10 @@ namespace Research_Flow
             {
                 feedItem_list.ItemsSource = FeedItem.DBSelectUIByPID(source.ID);
             }
-            catch { }
+            catch (Exception exception)
+            {
+                ApplicationMessage.SendMessage("RssException: " + exception, ApplicationMessage.MessageType.InApp);
+            }
         }
 
         private void SearchFeed(RSSSource source)

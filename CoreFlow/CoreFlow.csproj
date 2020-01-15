@@ -110,6 +110,7 @@
     <Compile Include="SearchTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StorageTask.cs" />
+    <Compile Include="TopicTask.cs" />
     <Compile Include="VoiceCommandService.cs" />
   </ItemGroup>
   <ItemGroup>

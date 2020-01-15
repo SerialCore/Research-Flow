@@ -75,9 +75,9 @@ namespace Research_Flow
                 button.IsEnabled = false;
                 waitSync.IsActive = true;
 
-                ApplicationMessage.SendMessage("Synchronizing", ApplicationMessage.MessageType.Banner);
+                ApplicationMessage.SendMessage("Synchronizing", ApplicationMessage.MessageType.Chat);
                 await Synchronization.ScanFiles();
-                ApplicationMessage.SendMessage("Synchronized successfully", ApplicationMessage.MessageType.Banner);
+                ApplicationMessage.SendMessage("Synchronized successfully", ApplicationMessage.MessageType.Chat);
 
                 waitSync.IsActive = false;
                 button.IsEnabled = true;

@@ -1,4 +1,5 @@
-﻿using LogicService.Data;
+﻿using LogicService.Application;
+using LogicService.Data;
 using LogicService.Storage;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.System;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -32,6 +34,16 @@ namespace Research_Flow
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
             InitializeMessage();
+            ApplicationMessage.MessageReached += AppMessage_MessageReached;
+        }
+
+        private async void AppMessage_MessageReached(string message, ApplicationMessage.MessageType type)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                if (type == ApplicationMessage.MessageType.Chat)
+                    messages.Add(new MessageBot { Comment = message, IsSelf = false, Published = DateTimeOffset.Now });
+            });
         }
 
         private async void InitializeMessage()

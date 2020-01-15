@@ -46,12 +46,6 @@
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
                         <AutoSuggestBox Grid.Row="0" x:Name="linkFilter" QueryIcon="Filter" QuerySubmitted="LinkFilter_QuerySubmitted" TextChanged="LinkFilter_TextChanged" Padding="4"/>
-                        <Grid Grid.Row="2" x:Name="downloadPanel" Height="80" Visibility="Collapsed">
-                            <ProgressBar x:Name="downloadBar" Margin="30,15" VerticalAlignment="Top"/>
-                            <TextBlock x:Name="downloadStatus" Text="Text" FontSize="15" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="30,0,0,20"/>
-                            <Button Click="OpenDownloaded" Content="Open it" Height="32" Width="100" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,140,15" Background="LightBlue"/>
-                            <Button Click="CloseDownloadPanel" Content="Got it" Height="32" Width="100" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,30,15" Background="LightSkyBlue"/>
-                        </Grid>
                         <ListView Grid.Row="1" x:Name="link_list" IsItemClickEnabled="True" ItemClick="Link_list_ItemClick">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
@@ -63,6 +57,12 @@
                             </ListView.ItemTemplate>
                         </ListView>
                         <ProgressRing Grid.Row="1" x:Name="craWaiting" IsActive="False" Height="100" Width="100"/>
+                        <Grid Grid.Row="2" x:Name="downloadPanel" Height="80" Visibility="Collapsed">
+                            <ProgressBar x:Name="downloadBar" Margin="30,15" VerticalAlignment="Top"/>
+                            <TextBlock x:Name="downloadStatus" Text="Text" FontSize="15" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="30,0,0,20"/>
+                            <Button Click="CheckDownloaded" Content="Check out" Height="32" Width="100" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,140,15" Background="LightBlue"/>
+                            <Button Click="CloseDownloadPanel" Content="Got it" Height="32" Width="100" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,30,15" Background="LightSkyBlue"/>
+                        </Grid>
                     </Grid>
                 </SplitView.Pane>
                 <SplitView.Content>

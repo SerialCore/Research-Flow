@@ -13,8 +13,7 @@
         <Grid Margin="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="300"/>
-                <ColumnDefinition Width="*" MinWidth="400"/>
-                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
@@ -67,38 +66,23 @@
             </Grid>
 
             <Grid Grid.Column="1">
-                <StackPanel Margin="20">
-                    <TextBlock x:Name="tagPanelTitle" Text="#Tag#" FontSize="25"/>
-                    <Line X1="0" X2="300" Y1="0" Y2="0" Stroke="Black" Margin="0,5"/>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <AppBarButton Icon="Delete" Click="DeleteTagManually" Height="38" Width="38"/>
-                        <AppBarButton Icon="Clear" Height="38" Width="38"/>
-                    </StackPanel>
-                </StackPanel>
-            </Grid>
-
-            <Grid Grid.Column="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-                <ScrollViewer Grid.Row="0">
-                    <StackPanel >
-                        <ListView Tapped="AddTopicSetting" SelectionMode="None">
-                            <TextBlock Text="+" Margin="180,0,0,0"/>
-                        </ListView>
-                        <ListView x:Name="topiclist" IsItemClickEnabled="True" ItemClick="Topiclist_ItemClick">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid >
-                                        <TextBlock Text="{Binding Title}" MaxLines="1"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </StackPanel>
-                </ScrollViewer>
-                <Grid Grid.Row="1" x:Name="topicSetting" Visibility="Collapsed" Padding="10">
+                <GridView x:Name="topiclist" IsItemClickEnabled="True" ItemClick="Topiclist_ItemClick" Margin="5,5,5,53">
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Height="250" Width="250" Padding="10" Background="LightGoldenrodYellow">
+                                <TextBlock Text="{Binding Title}" TextWrapping="Wrap"/>
+                            </Grid>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+                <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                    <CommandBar.Content>
+                        <TextBlock Text="Topics" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
+                    </CommandBar.Content>
+                    <AppBarButton Icon="Add" Label="Add" Click="AddTopicSetting"/>
+                </CommandBar>
+                <Grid x:Name="topicSetting" Visibility="Collapsed" VerticalAlignment="Center" HorizontalAlignment="Center"
+                      Width="400" Padding="10" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="200"/>
                         <RowDefinition Height="auto"/>
@@ -126,6 +110,20 @@
                 </Grid>
             </Grid>
         </Grid>
+
+        <SplitView x:Name="tagpanel" Grid.Column="1" OpenPaneLength="400" PanePlacement="Right">
+            <SplitView.Pane>
+                <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <StackPanel Margin="20">
+                        <TextBlock x:Name="tagPanelTitle" Text="#Tag#" FontSize="25"/>
+                        <Line X1="0" X2="300" Y1="0" Y2="0" Stroke="Black" Margin="0,5"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <AppBarButton Icon="Delete" Click="DeleteTagManually" Height="38" Width="38"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </SplitView.Pane>
+        </SplitView>
 
     </Grid>
 

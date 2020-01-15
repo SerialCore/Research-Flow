@@ -43,23 +43,22 @@ namespace Research_Flow
             this.InitializeComponent();
 
             ConfigureUI();
-            ConfigureTask();
             ApplicationMessage.MessageReached += AppMessage_MessageReached;
         }
 
         private async void AppMessage_MessageReached(string message, ApplicationMessage.MessageType type)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
              {
-                 switch (type)
+                 switch(type)
                  {
-                     case ApplicationMessage.MessageType.Banner:
-                         appMessage.Text = message;
-                         await Task.Delay(3000);
-                         appMessage.Text = "";
+                     case ApplicationMessage.MessageType.Chat:
                          break;
                      case ApplicationMessage.MessageType.InApp:
                          InAppNotification.Show(message);
+                         break;
+                     case ApplicationMessage.MessageType.Toast:
+                         ApplicationNotification.ShowTextToast("Notification", message);
                          break;
                  }
              });
@@ -84,9 +83,16 @@ namespace Research_Flow
             await ResearchTask.RegisterStorageTask();
         }
 
+        private void ConfigureUpdate()
+        {
+
+        }
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             FileParameter = e.Parameter as StorageFile;
+            ConfigureUpdate();
+            ConfigureTask();
             Login();
         }
 

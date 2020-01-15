@@ -17,7 +17,7 @@ namespace LogicService.Application
             /// <summary>
             /// Information
             /// </summary>
-            Banner,
+            Chat,
             /// <summary>
             /// Exception
             /// </summary>
