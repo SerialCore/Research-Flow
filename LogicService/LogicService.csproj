@@ -108,6 +108,8 @@
   <ItemGroup>
     <Compile Include="Application\ApplicationNotification.cs" />
     <Compile Include="Application\ApplicationSetting.cs" />
+    <Compile Include="Flow\DataFlow.cs" />
+    <Compile Include="Flow\Flow.cs" />
     <Compile Include="Flow\TaskFlow.cs" />
     <Compile Include="Helper\NetHelper.cs" />
     <Compile Include="Helper\RegexHelper.cs" />

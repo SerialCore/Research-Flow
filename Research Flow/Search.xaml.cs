@@ -295,7 +295,11 @@ namespace Research_Flow
                     });
             }
             else
-                webView.Source = new Uri(link);
+                try
+                {
+                    webView.Source = new Uri(link);
+                }
+                catch { }
         }
 
         private async void WebClient_DownloadProgressChanged(object sender, DownloadEventArgs e)
@@ -316,7 +320,7 @@ namespace Research_Flow
             downloadPanel.Visibility = Visibility.Collapsed;
         }
 
-        private void CheckDownloaded(object sender, RoutedEventArgs e)
+        private void AddDataFlow(object sender, RoutedEventArgs e)
         {
 
         }

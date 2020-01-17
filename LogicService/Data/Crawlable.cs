@@ -89,7 +89,26 @@ namespace LogicService.Data
             return affectedRows;
         }
 
-        public static List<Crawlable> DBSelectUIByPID(string pid)
+        public static List<Crawlable> DBSelectByPID(string pid)
+        {
+            string sql = "select * from Crawlable where ParentID = @ParentID;";
+            var reader = DataStorage.CrawlData.ExecuteRead(sql, new Dictionary<string, object> { { "@ParentID", pid } });
+
+            List<Crawlable> crawl = new List<Crawlable>();
+            while (reader.Read())
+            {
+                crawl.Add(new Crawlable
+                {
+                    ID = reader.GetString(0),
+                    ParentID = reader.GetString(1), // if null
+                    Text = reader.GetString(2),
+                    Url = reader.GetString(3)
+                });
+            }
+            return crawl;
+        }
+
+        public static List<Crawlable> DBSelectByTag(string pid)
         {
             string sql = "select * from Crawlable where ParentID = @ParentID;";
             var reader = DataStorage.CrawlData.ExecuteRead(sql, new Dictionary<string, object> { { "@ParentID", pid } });

@@ -10,14 +10,14 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <Grid Margin="10">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="300"/>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
-                <SemanticZoom Margin="0,0,0,48">
+                <SemanticZoom Margin="0,0,0,40">
                     <SemanticZoom.ZoomedInView>
                         <ListView x:Name="taglist" ScrollViewer.IsHorizontalScrollChainingEnabled="False" IsItemClickEnabled="True" ItemClick="Taglist_ItemClick">
                             <ListView.ItemTemplate>
@@ -66,7 +66,7 @@
             </Grid>
 
             <Grid Grid.Column="1">
-                <GridView x:Name="topiclist" IsItemClickEnabled="True" ItemClick="Topiclist_ItemClick" Margin="5,5,5,53">
+                <GridView x:Name="topiclist" IsItemClickEnabled="True" ItemClick="Topiclist_ItemClick" Margin="5,5,5,40">
                     <GridView.ItemTemplate>
                         <DataTemplate>
                             <Grid Height="250" Width="250" Padding="10" Background="LightGoldenrodYellow">
@@ -115,11 +115,19 @@
             <SplitView.Pane>
                 <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                     <StackPanel Margin="20">
-                        <TextBlock x:Name="tagPanelTitle" Text="#Tag#" FontSize="25"/>
+                        <TextBlock x:Name="tagPanelTitle" FontSize="25"/>
                         <Line X1="0" X2="300" Y1="0" Y2="0" Stroke="Black" Margin="0,5"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                             <AppBarButton Icon="Delete" Click="DeleteTagManually" Height="38" Width="38"/>
                         </StackPanel>
+                        <TextBlock Text="Topic" FontSize="20"/>
+                        <Line X1="0" X2="250" Y1="0" Y2="0" Stroke="Black" Margin="0,5"/>
+                        <TextBlock Text="Feed" FontSize="20"/>
+                        <Line X1="0" X2="250" Y1="0" Y2="0" Stroke="Black" Margin="0,5"/>
+                        <TextBlock Text="Crawl" FontSize="20"/>
+                        <Line X1="0" X2="250" Y1="0" Y2="0" Stroke="Black" Margin="0,5"/>
+                        <TextBlock Text="Paper" FontSize="20"/>
+                        <Line X1="0" X2="250" Y1="0" Y2="0" Stroke="Black" Margin="0,5"/>
                     </StackPanel>
                 </Grid>
             </SplitView.Pane>

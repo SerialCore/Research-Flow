@@ -92,6 +92,28 @@ namespace LogicService.Data
             return papers;
         }
 
+        public static List<Paper> DBSelectByTag()
+        {
+            string sql = "select * from Paper;";
+            var reader = DataStorage.PaperData.ExecuteRead(sql);
+
+
+            List<Paper> papers = new List<Paper>();
+            if (reader != null)
+            {
+                while (reader.Read())
+                {
+                    papers.Add(new Paper
+                    {
+                        ID = reader.GetString(0),
+                        ParentID = reader.GetString(1),
+                        Title = reader.GetString(2),
+                    });
+                }
+            }
+            return papers;
+        }
+
         public static void DBUpdate()
         {
 

@@ -10,7 +10,7 @@
 
     <Grid>
 
-        <Grid Margin="10">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="300"/>
                 <ColumnDefinition />
@@ -67,6 +67,7 @@
                     <AppBarButton Icon="Download" Label="GetFeed" Click="RSS_SourceRefresh"/>
                 </CommandBar>
             </Grid>
+            
             <Grid Grid.Column="1">
                 <ListView x:Name="feedItem_list" IsItemClickEnabled="True" ItemClick="Feed_ItemClick">
                     <ListView.ItemTemplate>
@@ -82,6 +83,7 @@
                 </ListView>
                 <ProgressRing x:Name="waiting_feed" Height="100" Width="100"/>
             </Grid>
+            
             <SplitView Grid.Column="1" Grid.ColumnSpan="2" x:Name="feedItem_detail" OpenPaneLength="400" DisplayMode="Overlay" PanePlacement="Right">
                 <SplitView.Pane>
                     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -93,6 +95,7 @@
                                 <TextBlock x:Name="feedTitle" FontSize="20" Style="{ThemeResource TitleTextBlockStyle}"/>
                                 <StackPanel Orientation="Horizontal">
                                     <Button x:Name="feedBrowse" Click="Browse_Feed" Content="Browse this feed" Background="LightBlue" Margin="0,0,5,0"/>
+                                    <Button Content="Add to DataFlow" Background="LightBlue" Margin="0,0,5,0"/>
                                 </StackPanel>
                                 <TextBlock x:Name="feedPublished" FontSize="16" Style="{ThemeResource SubtitleTextBlockStyle}"/>
                                 <TextBlock x:Name="feedSummary" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>

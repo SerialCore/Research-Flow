@@ -16,21 +16,42 @@
                 <ColumnDefinition Width="400"/>
             </Grid.ColumnDefinitions>
 
-            <SplitView Grid.Column="0" OpenPaneLength="400">
+            <SplitView x:Name="pdfpanel" Grid.Column="0" OpenPaneLength="400">
                 <SplitView.Pane>
                     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                        <TextBlock Text="Detials" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="pdfname" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Grid>
                 </SplitView.Pane>
                 <SplitView.Content>
                     <Grid>
-                        
+                        <FlipView x:Name="pdfPages" SelectionChanged="PdfPages_SelectionChanged"  Margin="0,0,0,40">
+                            <FlipView.ItemTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding }"/>
+                                </DataTemplate>
+                            </FlipView.ItemTemplate>
+                        </FlipView>
+                        <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                            <CommandBar.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Preview" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
+                                    <TextBox x:Name="pageindex" Text="i" InputScope="Number" KeyDown="PageIndex_KeyDown" Margin="12,4,0,0"/>
+                                    <TextBlock Margin="6,10,0,0">
+                                        <Run Text="/"/>
+                                        <Run x:Name="pagecount" Text="N"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </CommandBar.Content>
+                            <AppBarSeparator />
+                            <AppBarButton Icon="OpenFile" Label="OpenWith" Click="Pdf_Launch"/>
+                            <AppBarButton Icon="Comment" Label="Details" Click="Pdf_Detail"/>
+                        </CommandBar>
                     </Grid>
                 </SplitView.Content>
             </SplitView>
 
             <Grid Grid.Column="1">
-                <TreeView x:Name="pdftree" ItemInvoked="Pdftree_ItemInvoked" Margin="0,0,0,48">
+                <TreeView x:Name="pdftree" ItemInvoked="Pdftree_ItemInvoked" Margin="0,0,0,40">
                     <TreeView.ItemTemplate>
                         <DataTemplate>
                             <TreeViewItem>

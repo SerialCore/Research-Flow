@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace LogicService.Flow
 {
-    public class DataFlow
+    public class DataFlow<T, V> : Flow<T, V>
     {
+
     }
 }

@@ -25,5 +25,22 @@ namespace LogicService.Helper
         /// </summary>
         public static string MatchLink => @"<link\shref\s*=""(?<url>[^""]*).*?>(?<text>[^<]*)</link>";
 
+        /// <summary>
+        /// Group: tag
+        /// </summary>
+        public static string MatchTag => @"#(?<tag>[^#]+)#";
+
+        public static Dictionary<string, string> LinkFilter = new Dictionary<string, string>()
+        {
+            { "Text: NotEmpty", @"\S" },
+            { "Text: Has=", "" },
+            { "Text: HasPDF", "pdf" },
+            { "Url: Has=", "" },
+            { "Url: HasDoi", "doi" },
+            { "Url: HasAbs", "abs" },
+            { "Url: HasPDF", @"(.pdf\z)|(/pdf/)" },
+            { "Url: Insite", "" }, // for tag only, not truely dictionary
+        };
+
     }
 }

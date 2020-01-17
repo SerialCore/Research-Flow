@@ -8,6 +8,7 @@ using Windows.ApplicationModel.Background;
 using LogicService.Data;
 using LogicService.Storage;
 using LogicService.Service;
+using LogicService.Application;
 
 namespace CoreFlow
 {
@@ -26,30 +27,38 @@ namespace CoreFlow
 
         private async void SearchRSS()
         {
-            List<RSSSource> FeedSources = await LocalStorage.ReadJsonAsync<List<RSSSource>>(
-                    await LocalStorage.GetDataFolderAsync(), "rsslist");
-
-            foreach (RSSSource source in FeedSources)
+            try
             {
-                RssService.GetRssItems(
-                    source.Uri,
-                    async (items) =>
-                    {
-                        List<FeedItem> feeds = items as List<FeedItem>;
-                        FeedItem.DBInsert(feeds);
-                        source.LastUpdateTime = DateTime.Now;
-                        LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rsslist", FeedSources);
+                List<RSSSource> FeedSources = await LocalStorage.ReadJsonAsync<List<RSSSource>>(
+                        await LocalStorage.GetDataFolderAsync(), "rsslist");
+
+                foreach (RSSSource source in FeedSources)
+                {
+                    RssService.GetRssItems(
+                        source.Uri,
+                        async (items) =>
+                        {
+                            List<FeedItem> feeds = items as List<FeedItem>;
+                            FeedItem.DBInsert(feeds);
+                            source.LastUpdateTime = DateTime.Now;
+                            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rsslist", FeedSources);
 
                         // inform user
                         LocalStorage.GeneralLogAsync<RssService>("SearchTask.log",
-                            "just updated your rss feed-" + source.Name);
-                    },
-                    (exception) =>
-                    {
+                                "just updated your rss feed-" + source.Name);
+                        },
+                        (exception) =>
+                        {
                         // save to log
                         LocalStorage.GeneralLogAsync<RssService>("SearchTask.log",
-                            exception + "-" + source.Name);
-                    }, null);
+                                exception + "-" + source.Name);
+                        }, null);
+                }
+            }
+            catch (Exception exception)
+            {
+                ApplicationNotification.ShowTextToast("SearchTask", "");
+                LocalStorage.GeneralLogAsync<RssService>("SearchTask.log", exception.Message);
             }
         }
 

@@ -162,10 +162,32 @@ namespace LogicService.Data
             return affectedRows;
         }
 
-        public static List<FeedItem> DBSelectUIByPID(string pid)
+        public static List<FeedItem> DBSelectByPID(string pid)
         {
             string sql = "select * from Feed where ParentID = @ParentID;";
             var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@ParentID", pid } });
+
+            List<FeedItem> feeds = new List<FeedItem>();
+            while (reader.Read())
+            {
+                feeds.Add(new FeedItem
+                {
+                    ID = reader.GetString(0),
+                    ParentID = reader.GetString(1),
+                    Title = reader.GetString(2),
+                    Published = reader.GetString(3),
+                    Link = reader.GetString(4),
+                    Summary = reader.GetString(5),
+                    Nodes = reader.GetString(7)
+                });
+            }
+            return feeds;
+        }
+
+        public static List<FeedItem> DBSelectByTag()
+        {
+            string sql = "select * from Feed where ParentID = @ParentID;";
+            var reader = DataStorage.FeedData.ExecuteRead(sql);
 
             List<FeedItem> feeds = new List<FeedItem>();
             while (reader.Read())

@@ -25,7 +25,6 @@ namespace Research_Flow
         /// </summary>
         public App()
         {
-            //AppCenter.Start("5314ea3e-424f-4841-8399-7e8252fef7af", new Type[] { typeof(Push), typeof(Analytics), typeof(Crashes) });
             try
             {
                 UWPnode.Handler.Start();

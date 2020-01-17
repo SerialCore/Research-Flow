@@ -60,11 +60,34 @@ namespace Research_Flow
         private async void Give_Rate(object sender, Windows.UI.Xaml.RoutedEventArgs e)
             => await ApplicationInfo.ShowRatingReviewDialog();
 
+        #region Settings
+
         private async void Show_SearchLog(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            var folder = await LocalStorage.GetLogFolderAsync();
-            var file = await folder.GetFileAsync("SearchTask.log");
-            await Launcher.LaunchFileAsync(file);
+            try
+            {
+                var folder = await LocalStorage.GetLogFolderAsync();
+                var file = await folder.GetFileAsync("SearchTask.log");
+                await Launcher.LaunchFileAsync(file);
+            }
+            catch (Exception exception)
+            {
+                ApplicationMessage.SendMessage("SettingException: " + exception, ApplicationMessage.MessageType.InApp);
+            }
+        }
+
+        private async void Show_StorageLog(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            try
+            {
+                var folder = await LocalStorage.GetLogFolderAsync();
+                var file = await folder.GetFileAsync("StorageTask.log");
+                await Launcher.LaunchFileAsync(file);
+            }
+            catch (Exception exception)
+            {
+                ApplicationMessage.SendMessage("SettingException: " + exception, ApplicationMessage.MessageType.InApp);
+            }
         }
 
         private async void AccountSync_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -83,6 +106,8 @@ namespace Research_Flow
                 button.IsEnabled = true;
             }
         }
+
+        #endregion
     }
 
 }

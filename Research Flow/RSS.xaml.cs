@@ -210,7 +210,7 @@ namespace Research_Flow
         {
             try
             {
-                feedItem_list.ItemsSource = FeedItem.DBSelectUIByPID(source.ID);
+                feedItem_list.ItemsSource = FeedItem.DBSelectByPID(source.ID);
             }
             catch (Exception exception)
             {

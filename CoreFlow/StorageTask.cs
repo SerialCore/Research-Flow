@@ -1,4 +1,5 @@
-﻿using LogicService.Service;
+﻿using LogicService.Application;
+using LogicService.Service;
 using LogicService.Storage;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ namespace CoreFlow
 
         private async void StorageSync()
         {
+            ApplicationNotification.ShowTextToast("SearchTask", "");
             await GraphService.OneDriveLogin();
             if (GraphService.IsConnected && GraphService.IsNetworkAvailable)
             {

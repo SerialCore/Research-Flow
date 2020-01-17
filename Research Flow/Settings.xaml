@@ -25,7 +25,10 @@
                         <TextBlock Text="Topic Reminding" FontSize="25"/>
                         <TextBlock Text="Days before dealine"/>
 
-                        <Button Content="Show Search Log" Click="Show_SearchLog"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Show Search Task Log" Click="Show_SearchLog" Margin="0,0,2,0"/>
+                            <Button Content="Show Storage Task Log" Click="Show_SearchLog" Margin="2,0,0,0"/>
+                        </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem>

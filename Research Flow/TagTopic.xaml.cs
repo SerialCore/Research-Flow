@@ -50,7 +50,7 @@ namespace Research_Flow
                 // for new user, remember to load default feed from file, not the follows
                 tags = new HashSet<string>()
                 {
-                    "AnOS", "QCD", "QED", "Pedal Motion", "DNA", "AI", "Bond", "Computer", "Hydrogen", "Halogen", "OS"
+                    "AnOS", "QCD", "QED", "Pedal Motion", "DNA", "AI", "Bond", "Hydrogen", "Halogen", "OS"
                 };
                 LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "taglist", tags);
             }
@@ -82,8 +82,6 @@ namespace Research_Flow
         #region Tag Management
 
         private HashSet<string> tags;
-
-        private string currentTag;
 
         private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
             => FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
@@ -124,9 +122,9 @@ namespace Research_Flow
 
         private async void DeleteTagManually(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(currentTag))
+            if (!string.IsNullOrEmpty(tagPanelTitle.Text))
             {
-                tags.Remove(currentTag);
+                tags.Remove(tagPanelTitle.Text);
                 LoadTagView();
                 ClearTagPanel();
                 LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "taglist", tags);
@@ -135,21 +133,26 @@ namespace Research_Flow
 
         private void Taglist_ItemClick(object sender, ItemClickEventArgs e)
         {
-            currentTag = e.ClickedItem as string;
+            string tag = e.ClickedItem as string;
             if (topicSetting.Visibility == Visibility.Visible) // if topic is ready to be edited
             {
-                topicTitle.Text += '#' + currentTag + '#';
+                topicTitle.Text += '#' + tag + '#';
             }
             else
             {
                 tagpanel.IsPaneOpen = true;
-                tagPanelTitle.Text= '#' + currentTag + '#';
+                FillTagPanel(tag);
             }
+        }
+
+        private void FillTagPanel(string tag)
+        {
+            tagPanelTitle.Text = tag;
         }
 
         private void ClearTagPanel()
         {
-            tagPanelTitle.Text = "#Tag#";
+            tagPanelTitle.Text = "";
         }
 
         #endregion

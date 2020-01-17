@@ -34,9 +34,14 @@ namespace LogicService.Storage
             return ApplicationData.Current.TemporaryFolder;
         }
 
-        public static async Task<StorageFolder> GetWhichFolderAsync(string folder)
+        public static async Task<StorageFolder> GetCacheSubFolderAsync(string folder)
         {
             return await GetLocalCacheFolder().CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
+        }
+
+        public static async Task<StorageFolder> GetTemporarySubFolderAsync(string folder)
+        {
+            return await GetTemporaryFolder().CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
         }
 
         // for database and list

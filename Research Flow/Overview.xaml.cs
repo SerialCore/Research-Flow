@@ -39,10 +39,13 @@ namespace Research_Flow
 
         private async void AppMessage_MessageReached(string message, ApplicationMessage.MessageType type)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
                 if (type == ApplicationMessage.MessageType.Chat)
+                {
                     messages.Add(new MessageBot { Comment = message, IsSelf = false, Published = DateTimeOffset.Now });
+                    LocalStorage.WriteJson(await LocalStorage.GetLogFolderAsync(), "messagelist", messages);
+                }
             });
         }
 
@@ -61,7 +64,7 @@ namespace Research_Flow
                     new MessageBot { Comment = "Hello", IsSelf = false },
                     new MessageBot { Comment = "for new user, remember to load default feed from file, not the follows", IsSelf = true },
                 };
-                //LocalStorage.WriteJson(await LocalStorage.GetLogAsync(), "messagelist", messages);
+                LocalStorage.WriteJson(await LocalStorage.GetLogFolderAsync(), "messagelist", messages);
             }
             finally
             {

@@ -336,12 +336,12 @@ namespace Research_Flow
                 try
                 {
                     await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetPictureAsync(), file);
-                    ApplicationNotification.ShowTextToast("OneDrive", "Screen Shot Saved");
+                    ApplicationMessage.SendMessage("Screenshot Saved to OneDrive", ApplicationMessage.MessageType.Toast);
                 }
                 catch
                 {
                     await file.CopyAsync(KnownFolders.PicturesLibrary, file.Name);
-                    ApplicationNotification.ShowTextToast("Pictures Library", "Screen Shot Saved");
+                    ApplicationMessage.SendMessage("Screenshot Saved to Pictures Library", ApplicationMessage.MessageType.Toast);
                 }
             }
         }
