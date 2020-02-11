@@ -1,8 +1,6 @@
 ﻿using LogicService.Application;
-using LogicService.Helper;
 using LogicService.Data;
 using LogicService.Storage;
-using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LogicService.Application
+﻿namespace LogicService.Application
 {
     /// <summary>
     /// Instance of customized event handle

@@ -1,12 +1,9 @@
-﻿using LogicService.Application;
-using LogicService.Helper;
-using LogicService.Data;
+﻿using LogicService.Data;
 using Microsoft.Graph;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Windows.Storage;
 
 namespace LogicService.Storage
 {

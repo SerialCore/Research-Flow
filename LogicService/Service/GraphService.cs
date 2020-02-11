@@ -5,7 +5,6 @@ using Microsoft.Toolkit.Services.Services.MicrosoftGraph;
 using System;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
-using Windows.Storage.Streams;
 
 namespace LogicService.Service
 {

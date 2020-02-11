@@ -1,11 +1,11 @@
-﻿using System;
+﻿using LogicService.Data;
+using LogicService.Security;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
-using LogicService.Data;
 using Windows.Web.Syndication;
-using LogicService.Security;
 
 namespace LogicService.Service
 {

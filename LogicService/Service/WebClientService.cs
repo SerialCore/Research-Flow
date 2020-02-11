@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace LogicService.Service
-{  
+{
     public class UploadEventArgs : EventArgs
     {
         private int bytesSent;

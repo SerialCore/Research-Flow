@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Web.Syndication;
-using LogicService.Storage;
-using System.Xml;
+﻿using LogicService.Storage;
 using Microsoft.Data.Sqlite;
+using System;
+using System.Collections.Generic;
+using System.Xml;
 
 namespace LogicService.Data
 {

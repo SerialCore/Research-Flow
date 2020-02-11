@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Windows.ApplicationModel.Background;
-using LogicService.Data;
-using LogicService.Storage;
+﻿using LogicService.Data;
 using LogicService.Service;
+using LogicService.Storage;
+using System;
+using System.Collections.Generic;
+using Windows.ApplicationModel.Background;
 
 namespace CoreFlow
 {

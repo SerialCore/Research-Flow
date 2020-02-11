@@ -1,9 +1,7 @@
 ﻿using ICSharpCode.SharpZipLib.Zip;
-using LogicService.Application;
-using LogicService.Helper;
 using LogicService.Data;
+using LogicService.Helper;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.Storage;
 

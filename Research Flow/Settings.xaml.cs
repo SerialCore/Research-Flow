@@ -1,14 +1,12 @@
 ﻿using LogicService.Application;
 using LogicService.Data;
+using LogicService.Service;
+using LogicService.Storage;
 using System;
 using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using LogicService.Storage;
-using LogicService.Service;
-using Windows.UI.Core;
-using System.Threading.Tasks;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 

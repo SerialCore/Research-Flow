@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LogicService.Security;
-using LogicService.Service;
-using LogicService.Storage;
+﻿using LogicService.Storage;
 using Microsoft.Data.Sqlite;
+using System;
+using System.Collections.Generic;
 
 namespace LogicService.Data
 {
