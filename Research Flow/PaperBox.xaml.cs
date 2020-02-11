@@ -21,6 +21,7 @@ using Windows.Storage;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.Storage.Streams;
 using LogicService.Application;
+using Windows.ApplicationModel.DataTransfer;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -57,11 +58,24 @@ namespace Research_Flow
 
         private ObservableCollection<string> pdfs = new ObservableCollection<string>();
 
-        private void Pdftree_ItemInvoked(TreeView sender, TreeViewItemInvokedEventArgs args)
+        private void Pdf_List(object sender, RoutedEventArgs e) => pdfpanel.IsPaneOpen = !pdfpanel.IsPaneOpen;
+
+        private void Pdftree_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var item = args.InvokedItem as string;
-            pdfname.Text = item + ".pdf";
-            PdfPreview(pdfname.Text);
+            var filename = e.ClickedItem as string + ".pdf";
+            pdfname.Text = filename;
+
+            // there is only one paper in list or nothing
+            foreach (Paper paper in Paper.DBSelectByFile(filename))
+            {
+                paperid.Text = paper.ID;
+                papertitle.Text = paper.Title;
+                paperauthor.Text = paper.Authors;
+                paperlink.Content = paper.Link;
+                paperlink.NavigateUri = new Uri(paper.Link);
+                papernote.Text = paper.Note;
+                papertags.Text = paper.Tags;
+            }
         }
 
         #endregion
@@ -72,11 +86,14 @@ namespace Research_Flow
 
         PdfDocument pdfDocument = null;
 
-        private async void PdfPreview(string filename)
+        private async void Pdf_Preview(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrEmpty(pdfname.Text))
+                return;
+
             try
             {
-                StorageFile file = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(filename);
+                StorageFile file = await(await LocalStorage.GetPaperFolderAsync()).GetFileAsync(pdfname.Text);
                 pdfDocument = await PdfDocument.LoadFromFileAsync(file);
             }
             catch (Exception exception)
@@ -86,7 +103,7 @@ namespace Research_Flow
 
             if (pdfDocument != null)
             {
-                uint pageCount = pdfDocument.PageCount > 20 ? 20 : pdfDocument.PageCount;
+                uint pageCount = pdfDocument.PageCount > 10 ? 10 : pdfDocument.PageCount;
                 pagecount.Text = pageCount.ToString();
                 pageindex.Text = "1";
 
@@ -110,19 +127,11 @@ namespace Research_Flow
             }
         }
 
-        private void PageIndex_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            if (e.Key == VirtualKey.Enter)
-                pdfPages.SelectedIndex = Convert.ToInt32(pageindex.Text) - 1;
-        }
-
-        private void PdfPages_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            pageindex.Text = (pdfPages.SelectedIndex + 1).ToString();
-        }
-
         private async void Pdf_Launch(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrEmpty(pdfname.Text))
+                return;
+
             try
             {
                 StorageFile file = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(pdfname.Text);
@@ -134,11 +143,44 @@ namespace Research_Flow
             }
         }
 
+        private void Pdf_Share(object sender, RoutedEventArgs e)
+        {
+            DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
+            dataTransferManager.DataRequested += FileTransferManager_DataRequested;
+            DataTransferManager.ShowShareUI();
+        }
+
+        private async void FileTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
+        {
+            DataRequestDeferral deferral = args.Request.GetDeferral();
+
+            DataRequest request = args.Request;
+            request.Data.Properties.Title = "Pdf File";
+            request.Data.Properties.Description = "Share the paper you found";
+
+            StorageFile file = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(pdfname.Text);
+
+            var storage = new List<IStorageItem>();
+            storage.Add(file);
+            request.Data.SetStorageItems(storage);
+
+            deferral.Complete();
+        }
+
+        private void PageIndex_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.Enter)
+                pdfPages.SelectedIndex = Convert.ToInt32(pageindex.Text) - 1;
+        }
+
+        private void PdfPages_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            pageindex.Text = (pdfPages.SelectedIndex + 1).ToString();
+        }
+
         #endregion
 
         #region Paper Management
-
-        private void Pdf_Detail(object sender, RoutedEventArgs e) => pdfpanel.IsPaneOpen = !pdfpanel.IsPaneOpen;
 
         /// <summary>
         /// will be recorded

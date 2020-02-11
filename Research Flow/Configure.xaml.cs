@@ -5,6 +5,7 @@ using LogicService.Storage;
 using System;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
@@ -42,6 +43,7 @@ namespace Research_Flow
                 string email = await GraphService.GetPrincipalName();
                 BitmapImage image = new BitmapImage();
                 image.UriSource = new Uri("ms-appx:///Images/ResearchFlow_logo.jpg");
+                accountName.Text = name;
                 accountStatu.Text = email;
                 accountIcon.ProfilePicture = image;
 
@@ -54,7 +56,6 @@ namespace Research_Flow
                     await ConfigureFile();
                 }
 
-                // make sure there will be an user folder and user data
                 if (ApplicationSetting.ContainKey("AccountName") && ApplicationSetting.ContainKey("Configured"))
                 {
                     await Task.Delay(500);
@@ -71,7 +72,6 @@ namespace Research_Flow
         private async Task<bool> ConfigurePath()
         {
             return await LocalStorage.GetDataFolderAsync() != null
-                && await LocalStorage.GetDataFolderAsync() != null
                 && await LocalStorage.GetLogFolderAsync() != null
                 && await LocalStorage.GetNoteFolderAsync() != null
                 && await LocalStorage.GetPaperFolderAsync() != null;
@@ -91,20 +91,32 @@ namespace Research_Flow
             configState.Text = "\nSyncing files with OneDrive...\n";
             try
             {
+                syncStatu.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                Synchronization.SyncProgressChanged += Synchronization_SyncProgressChanged;
                 await Synchronization.DownloadAll();
+                Synchronization.SyncProgressChanged -= Synchronization_SyncProgressChanged;
                 configState.Text += "\nSync successfully.\n";
                 ApplicationSetting.Configured = "true";
                 return true;
             }
             catch (Exception ex)
             {
-                // load default files
+                Synchronization.SyncProgressChanged -= Synchronization_SyncProgressChanged;
                 configState.Text += "\nCan't make it, since " + ex.Message + "\n";
                 configState.Text += "\nPlease login again.\n";
                 return false;
             }
         }
 
+        private async void Synchronization_SyncProgressChanged(object sender, SyncEventArgs e)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                syncStatu.Maximum = e.TotalCount;
+                syncStatu.Value = e.SyncedCount;
+                syncCount.Text = e.SyncedCount + "/" + e.TotalCount;
+            });
+        }
     }
 
 }

@@ -39,6 +39,18 @@ namespace LogicService.Application
             }
         }
 
+        public static string IsDeveloper
+        {
+            get
+            {
+                return ApplicationData.Current.LocalSettings.Values["IsDeveloper"] as string;
+            }
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values["IsDeveloper"] = value;
+            }
+        }
+
         public static object HeaderColorA
         {
             get

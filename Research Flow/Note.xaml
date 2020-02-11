@@ -56,14 +56,19 @@
             <SplitView Grid.Row="1" Grid.ColumnSpan="3" x:Name="notepanel" OpenPaneLength="400" PanePlacement="Right" DisplayMode="Overlay">
                 <SplitView.Pane>
                     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                        <ListView x:Name="notelist" IsItemClickEnabled="True" ItemClick="Notelist_ItemClick">
+                        <ListView x:Name="notelist" IsItemClickEnabled="True" ItemClick="Notelist_ItemClick" Margin="0,0,0,40">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding}"/>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                        <AppBarButton Icon="Delete" LabelPosition="Collapsed" Click="Delete_Note" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+                        <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                            <CommandBar.Content>
+                                <TextBlock Text="Notes" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
+                            </CommandBar.Content>
+                            <AppBarButton Icon="Delete" Label="Delete" Click="Delete_Note"/>
+                        </CommandBar>
                     </Grid>
                 </SplitView.Pane>
                 <SplitView.Content>

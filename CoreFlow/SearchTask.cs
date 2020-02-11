@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using LogicService.Helper;
 using Windows.ApplicationModel.Background;
 using LogicService.Data;
 using LogicService.Storage;
 using LogicService.Service;
-using LogicService.Application;
 
 namespace CoreFlow
 {
@@ -19,7 +16,6 @@ namespace CoreFlow
         {
             var deferral = taskInstance.GetDeferral();
 
-            // pick random number for task choosing
             SearchRSS();
 
             deferral.Complete();
@@ -43,21 +39,20 @@ namespace CoreFlow
                             source.LastUpdateTime = DateTime.Now;
                             LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rsslist", FeedSources);
 
-                        // inform user
-                        LocalStorage.GeneralLogAsync<RssService>("SearchTask.log",
-                                "just updated your rss feed-" + source.Name);
+                            // inform user
+                            LocalStorage.GeneralLogAsync<RssService>("SearchTask.log",
+                                    "just updated your rss feed-" + source.Name);
                         },
                         (exception) =>
                         {
-                        // save to log
-                        LocalStorage.GeneralLogAsync<RssService>("SearchTask.log",
-                                exception + "-" + source.Name);
+                            // save to log
+                            LocalStorage.GeneralLogAsync<RssService>("SearchTask.log",
+                                    exception + "-" + source.Name);
                         }, null);
                 }
             }
             catch (Exception exception)
             {
-                ApplicationNotification.ShowTextToast("SearchTask", "");
                 LocalStorage.GeneralLogAsync<RssService>("SearchTask.log", exception.Message);
             }
         }

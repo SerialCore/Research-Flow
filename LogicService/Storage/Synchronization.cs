@@ -10,8 +10,28 @@ using Windows.Storage;
 
 namespace LogicService.Storage
 {
+    public class SyncEventArgs : EventArgs
+    {
+        private int syncedCount;
+        private int totalCount;
+
+        public int SyncedCount
+        {
+            get { return syncedCount; }
+            set { syncedCount = value; }
+        }
+
+        public int TotalCount
+        {
+            get { return totalCount; }
+            set { totalCount = value; }
+        }
+    }
+
     public class Synchronization
     {
+        public static event EventHandler<SyncEventArgs> SyncProgressChanged;
+
         public async static Task ScanFiles()
         {
             // some rules:
@@ -103,21 +123,25 @@ namespace LogicService.Storage
             }
             foreach (var item in trace) // delete file
             {
-                try
+                try // down way & delete local file
                 {
                     var localfolder = await LocalStorage.GetCacheSubFolderAsync(item.FilePosition);
                     var local = await localfolder.GetFileAsync(item.FileName);
                     await local.DeleteAsync();
-                    //
-                    var mirrorfolder = await OneDriveStorage.GetFolderAsync(item.FilePosition);
-                    var mirror = await mirrorfolder.GetFileAsync(item.FileName);
-                    await mirror.DeleteAsync();
-                    // 
+
                     FileList.DBDeleteTrace(item.FilePosition, item.FileName);
                 }
                 catch (FileNotFoundException)
                 {
 
+                }
+                try // up way & delete remote file
+                {
+                    var mirrorfolder = await OneDriveStorage.GetFolderAsync(item.FilePosition);
+                    var mirror = await mirrorfolder.GetFileAsync(item.FileName);
+                    await mirror.DeleteAsync();
+
+                    FileList.DBDeleteTrace(item.FilePosition, item.FileName);
                 }
                 catch (ServiceException)
                 {
@@ -128,19 +152,41 @@ namespace LogicService.Storage
 
         public async static Task DownloadAll()
         {
-            foreach (var item in await (await OneDriveStorage.GetDataAsync()).GetFilesAsync(50))
+            SyncEventArgs args = new SyncEventArgs();
+            var datas = await (await OneDriveStorage.GetDataAsync()).GetFilesAsync(100);
+            var notes = await (await OneDriveStorage.GetNoteAsync()).GetFilesAsync(100);
+            var papers = await (await OneDriveStorage.GetPaperAsync()).GetFilesAsync(100);
+
+            args.SyncedCount = 0;
+            args.TotalCount = datas.Count + notes.Count + papers.Count;
+            SyncProgressChanged(typeof(Synchronization), args);
+
+            foreach (var item in datas)
             {
                 await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetDataAsync(),
                     await LocalStorage.GetDataFolderAsync(), item.Name);
                 FileList.DBInsertTrace("Data", item.Name);
                 FileList.DBInsertList("Data", item.Name);
+                args.SyncedCount++;
+                SyncProgressChanged(typeof(Synchronization), args);
             }
-            foreach (var item in await (await OneDriveStorage.GetNoteAsync()).GetFilesAsync(50))
+            foreach (var item in notes)
             {
                 await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetNoteAsync(),
                     await LocalStorage.GetNoteFolderAsync(), item.Name);
                 FileList.DBInsertTrace("Note", item.Name);
                 FileList.DBInsertList("Note", item.Name);
+                args.SyncedCount++;
+                SyncProgressChanged(typeof(Synchronization), args);
+            }
+            foreach (var item in papers)
+            {
+                await OneDriveStorage.DownloadFileAsync(await OneDriveStorage.GetPaperAsync(),
+                    await LocalStorage.GetPaperFolderAsync(), item.Name);
+                FileList.DBInsertTrace("Paper", item.Name);
+                FileList.DBInsertList("Paper", item.Name);
+                args.SyncedCount++;
+                SyncProgressChanged(typeof(Synchronization), args);
             }
         }
 

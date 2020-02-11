@@ -34,17 +34,17 @@ namespace Research_Flow
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
             InitializeMessage();
-            ApplicationMessage.MessageReached += AppMessage_MessageReached;
+            InitializeFlow();
+            ApplicationMessage.MessageReceived += AppMessage_MessageReceived;
         }
 
-        private async void AppMessage_MessageReached(string message, ApplicationMessage.MessageType type)
+        private async void AppMessage_MessageReceived(string message, ApplicationMessage.MessageType type)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 if (type == ApplicationMessage.MessageType.Chat)
                 {
-                    messages.Add(new MessageBot { Comment = message, IsSelf = false, Published = DateTimeOffset.Now });
-                    LocalStorage.WriteJson(await LocalStorage.GetLogFolderAsync(), "messagelist", messages);
+                    IdentifyMessage(new ChatBlock { Comment = message, IsSelf = false, Published = DateTimeOffset.Now });
                 }
             });
         }
@@ -53,25 +53,60 @@ namespace Research_Flow
         {
             try
             {
-                messages = await LocalStorage.ReadJsonAsync<ObservableCollection<MessageBot>>(
-                    await LocalStorage.GetLogFolderAsync(), "messagelist");
+                chatlist = await LocalStorage.ReadJsonAsync<ObservableCollection<ChatBlock>>(
+                    await LocalStorage.GetDataFolderAsync(), "chatlist");
             }
             catch
             {
                 // for new user, remember to load default feed from file, not the follows
-                messages = new ObservableCollection<MessageBot>()
+                chatlist = new ObservableCollection<ChatBlock>()
                 {
-                    new MessageBot { Comment = "Hello", IsSelf = false },
-                    new MessageBot { Comment = "for new user, remember to load default feed from file, not the follows", IsSelf = true },
+                    new ChatBlock { Comment = "Hello", IsSelf = false },
+                    new ChatBlock { Comment = "for new user, remember to load default feed from file, not the follows", IsSelf = true },
                 };
-                LocalStorage.WriteJson(await LocalStorage.GetLogFolderAsync(), "messagelist", messages);
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "chatlist", chatlist);
             }
             finally
             {
-                messagelist.ItemsSource = messages;
+                chatview.ItemsSource = chatlist;
             }
         }
 
-        public ObservableCollection<MessageBot> messages { get; set; }
+        private void InitializeFlow()
+        {
+
+        }
+
+        #region Message Process
+
+        public ObservableCollection<ChatBlock> chatlist { get; set; }
+
+        private void chatview_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            chatscroll.ChangeView(null, double.MaxValue, null, true);
+        }
+
+        private async void IdentifyMessage(ChatBlock chat)
+        {
+            if (chat.Comment.Equals("0x01"))
+                ApplicationSetting.IsDeveloper = "true";
+            if (chat.Comment.Equals("0x02"))
+                ApplicationSetting.RemoveKey("IsDeveloper");
+            chatlist.Add(chat);
+
+            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "chatlist", chatlist);
+        }
+
+        private void Submit_Chat(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(chatbox.Text))
+            {
+                IdentifyMessage(new ChatBlock { Comment = chatbox.Text, IsSelf = true, Published = DateTimeOffset.Now });
+                chatbox.Text = "";
+            }
+        }
+
+        #endregion
+
     }
 }

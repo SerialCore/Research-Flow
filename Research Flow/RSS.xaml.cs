@@ -183,17 +183,24 @@ namespace Research_Flow
 
         #region RSS Feed
 
+        private FeedItem selectedFeed = null;
+
         private void Feed_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var item = e.ClickedItem as FeedItem;
+            var feed = e.ClickedItem as FeedItem;
+            selectedFeed = feed;
             this.feedItem_detail.IsPaneOpen = true;
-            feedTitle.Text = item.Title + "\n";
-            feedPublished.Text = item.Published;
-            feedBrowse.Tag = item.Link;
-            feedSummary.Text = item.Summary + "\n";
+
+            feedTitle.Text = feed.Title + "\n";
+            feedPublished.Text = feed.Published;
+            feedSummary.Text = feed.Summary + "\n";
+            if (!feed.Tags.Equals("Null"))
+            {
+                feedTags.Text = feed.Tags;
+            }
 
             StringBuilder builder = new StringBuilder();
-            foreach (XmlElement pair in FeedItem.GetNodes(item.Nodes))
+            foreach (XmlElement pair in FeedItem.GetNodes(feed.Nodes))
             {
                 builder.AppendLine(pair.Name + " : " + pair.InnerText);
             }
@@ -201,7 +208,20 @@ namespace Research_Flow
         }
 
         private void Browse_Feed(object sender, RoutedEventArgs e)
-            => this.Frame.Navigate(typeof(Search), feedBrowse.Tag);
+            => this.Frame.Navigate(typeof(Search), selectedFeed.Link);
+
+        private void Favorite_Feed(object sender, RoutedEventArgs e)
+        {
+            Crawlable.AddtoFavorite(new Crawlable()
+            {
+                ID = HashEncode.MakeMD5(selectedFeed.Link),
+                ParentID = "Null",
+                Text = selectedFeed.Title,
+                Url = selectedFeed.Link,
+                Content = selectedFeed.Summary,
+                Tags = selectedFeed.Tags,
+            });
+        }
 
         private void Close_FeedDetail(object sender, RoutedEventArgs e)
             => feedItem_detail.IsPaneOpen = false;

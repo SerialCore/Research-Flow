@@ -43,10 +43,10 @@ namespace Research_Flow
             this.InitializeComponent();
 
             ConfigureUI();
-            ApplicationMessage.MessageReached += AppMessage_MessageReached;
+            ApplicationMessage.MessageReceived += AppMessage_MessageReceived;
         }
 
-        private async void AppMessage_MessageReached(string message, ApplicationMessage.MessageType type)
+        private async void AppMessage_MessageReceived(string message, ApplicationMessage.MessageType type)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
              {
@@ -77,15 +77,15 @@ namespace Research_Flow
             }
         }
 
-        private async void ConfigureTask()
-        {
-            await ResearchTask.RegisterSearchTask();
-            await ResearchTask.RegisterStorageTask();
-        }
-
         private void ConfigureUpdate()
         {
 
+        }
+
+        private async void ConfigureTask()
+        {
+            await ApplicationTask.RegisterSearchTask();
+            await ApplicationTask.RegisterStorageTask();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -184,6 +184,12 @@ namespace Research_Flow
                 accountName.Text = name;
                 accountEmail.Text = email;
                 accountPhoto.ProfilePicture = image;
+
+                //try
+                //{
+                //    await Synchronization.ScanFiles();
+                //}
+                //catch { }
             }
             else
             {
@@ -383,7 +389,7 @@ namespace Research_Flow
 
     }
 
-    public class ResearchTask
+    public class ApplicationTask
     {
 
         /*
@@ -393,20 +399,25 @@ namespace Research_Flow
         public static async Task<BackgroundTaskRegistration> RegisterSearchTask()
         {
             return await RegisterBackgroundTask(typeof(CoreFlow.SearchTask),
-                "SearchTask", new SystemTrigger(SystemTriggerType.UserAway, false),
+                "SearchTask", new TimeTrigger(60, false),
                 new SystemCondition(SystemConditionType.InternetAvailable));
         }
 
         public static async Task<BackgroundTaskRegistration> RegisterStorageTask()
         {
             return await RegisterBackgroundTask(typeof(CoreFlow.StorageTask),
-                "StorageTask", new SystemTrigger(SystemTriggerType.InternetAvailable, false),
+                "StorageTask", new TimeTrigger(120, false),
                 new SystemCondition(SystemConditionType.InternetAvailable));
+        }
+
+        public static IReadOnlyDictionary<Guid, IBackgroundTaskRegistration> ListBackgroundTask()
+        {
+            return BackgroundTaskRegistration.AllTasks;
         }
 
         public static bool ContainBackgroundTask(string taskName)
         {
-            foreach (var cur in BackgroundTaskRegistration.AllTasks)
+            foreach (var cur in ListBackgroundTask())
             {
                 if (cur.Value.Name == taskName)
                 {
@@ -418,7 +429,7 @@ namespace Research_Flow
 
         public static void CancelBackgroundTask(string taskName)
         {
-            foreach (var cur in BackgroundTaskRegistration.AllTasks)
+            foreach (var cur in ListBackgroundTask())
             {
                 if (cur.Value.Name == taskName)
                 {
@@ -437,13 +448,7 @@ namespace Research_Flow
                 return null;
             }
 
-            foreach (var cur in BackgroundTaskRegistration.AllTasks)
-            {
-                if (cur.Value.Name == taskName)
-                {
-                    cur.Value.Unregister(true);
-                }
-            }
+            CancelBackgroundTask(taskName); // always cancel?
 
             var builder = new BackgroundTaskBuilder
             {

@@ -113,9 +113,9 @@
     <Compile Include="Flow\TaskFlow.cs" />
     <Compile Include="Helper\NetHelper.cs" />
     <Compile Include="Helper\RegexHelper.cs" />
-    <Compile Include="Data\MessageBot.cs" />
+    <Compile Include="Data\ChatBlock.cs" />
     <Compile Include="Data\Topic.cs" />
-    <Compile Include="Service\UrlOperator.cs" />
+    <Compile Include="Helper\UrlHelper.cs" />
     <Compile Include="Service\WebClientService.cs" />
     <Compile Include="Data\Crawlable.cs" />
     <Compile Include="Data\FeedItem.cs" />

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.UI.Notifications;
 
@@ -45,6 +46,23 @@ namespace LogicService.Application
                 {
                     if (toast.Tag.Equals(id))
                         notifier.RemoveFromSchedule(toast);
+                }
+            });
+        }
+
+        public static IReadOnlyList<ScheduledToastNotification> ListAlarmToast()
+        {
+            return ToastNotificationManager.CreateToastNotifier().GetScheduledToastNotifications();
+        }
+
+        public async static Task CancelAllToast()
+        {
+            await Task.Run(() =>
+            {
+                var notifier = ToastNotificationManager.CreateToastNotifier();
+                foreach (var toast in notifier.GetScheduledToastNotifications())
+                {
+                    notifier.RemoveFromSchedule(toast);
                 }
             });
         }

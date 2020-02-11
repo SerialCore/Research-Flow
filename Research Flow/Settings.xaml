@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Research_Flow"
+    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -10,7 +11,7 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <Pivot Margin="20,0,20,10">
-            <PivotItem Header="Panel">
+            <PivotItem Header="Setting">
                 <ScrollViewer>
                     <StackPanel>
                         <TextBlock Text="File Saving" FontSize="25"/>
@@ -20,18 +21,12 @@
                                 <ProgressRing x:Name="waitSync"/>
                             </Grid>
                         </Button>
-                        <TextBlock Text="PDF file download location"/>
-
                         <TextBlock Text="Topic Reminding" FontSize="25"/>
                         <TextBlock Text="Days before dealine"/>
-
-                        <StackPanel Orientation="Horizontal">
-                            <Button Content="Show Search Task Log" Click="Show_SearchLog" Margin="0,0,2,0"/>
-                            <Button Content="Show Storage Task Log" Click="Show_SearchLog" Margin="2,0,0,0"/>
-                        </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem>
+            
             <PivotItem Header="Inform">
                 <ScrollViewer>
                     <Grid >
@@ -100,6 +95,76 @@
                         </ScrollViewer>
                     </Grid>
                 </ScrollViewer>
+            </PivotItem>
+
+            <PivotItem x:Name="developerPanel" Header="Developer" Visibility="Collapsed">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="0,0,0.5,0.5">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Show SearchTask Log" Click="Show_SearchLog" Margin="0,0,2,2"/>
+                            <Button Content="Show StorageTask Log" Click="Show_StorageLog" Margin="2,0,0,2"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Show rsslist" Click="Show_RSSList" Margin="0,2,2,0"/>
+                            <Button Content="Show topiclist" Click="Show_TopicList" Margin="2,2,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <Grid Grid.Row="0" Grid.Column="1" BorderBrush="Black" BorderThickness="0.5,0,0.5,0.5">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                            <Button Content="List All Task" Click="Show_BackgroundTask"/>
+                        </StackPanel>
+                        <ListView x:Name="tasklist" Margin="0,32,0,0">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Padding="5">
+                                        <TextBlock Text="{Binding Value.TaskId}"/>
+                                        <TextBlock Text="{Binding Value.Name}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                    <Grid Grid.Row="0" Grid.Column="2" BorderBrush="Black" BorderThickness="0.5,0,0,0.5">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                            <Button Content="List All Toast" Click="Show_AlarmToast" Margin="0,0,2,0"/>
+                            <Button Content="Cancel All Toast" Click="Cancel_AlarmToast" Margin="2,0,0,0"/>
+                        </StackPanel>
+                        <ListView x:Name="toastlist" Margin="0,32,0,0">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Padding="5">
+                                        <TextBlock Text="{Binding Tag}"/>
+                                        <TextBlock Text="{Binding DeliveryTime}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                    <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="0,0.5,0,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                            <ComboBox x:Name="databaselist" Margin="0,0,2,0">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="Feed" IsSelected="True"/>
+                                    <ComboBoxItem Content="Crawl"/>
+                                    <ComboBoxItem Content="Paper"/>
+                                    <ComboBoxItem Content="FileTrace"/>
+                                    <ComboBoxItem Content="FileList"/>
+                                </ComboBox.Items>
+                            </ComboBox>
+                            <Button Content="Show Database" Click="Show_Database" Margin="2,0,0,0"/>
+                        </StackPanel>
+                        <toolkit:DataGrid x:Name="dataviewer" Margin="0,32,0,0" MaxColumnWidth="300"/>
+                    </Grid>
+                </Grid>
             </PivotItem>
         </Pivot>
     </Grid>

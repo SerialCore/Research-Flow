@@ -16,11 +16,29 @@
                 <ColumnDefinition Width="400"/>
             </Grid.ColumnDefinitions>
 
-            <SplitView x:Name="pdfpanel" Grid.Column="0" OpenPaneLength="400">
+            <SplitView Grid.Column="0" x:Name="pdfpanel" OpenPaneLength="300">
                 <SplitView.Pane>
-                    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                        <TextBlock x:Name="pdfname" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Grid>
+                    <Pivot Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                        <PivotItem Header="Downloaded">
+                            <Grid>
+                                <ListView x:Name="pdftree" IsItemClickEnabled="True" ItemClick="Pdftree_ItemClick" Margin="0,0,0,40">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding }"/>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                                <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                                    <CommandBar.Content>
+                                        <TextBlock Text="Papers" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
+                                    </CommandBar.Content>
+                                </CommandBar>
+                            </Grid>
+                        </PivotItem>
+                        <PivotItem Header="All Paper">
+                            
+                        </PivotItem>
+                    </Pivot>
                 </SplitView.Pane>
                 <SplitView.Content>
                     <Grid>
@@ -42,31 +60,27 @@
                                     </TextBlock>
                                 </StackPanel>
                             </CommandBar.Content>
-                            <AppBarSeparator />
+                            <AppBarButton Icon="Share" Label="Share" Click="Pdf_Share"/>
                             <AppBarButton Icon="OpenFile" Label="OpenWith" Click="Pdf_Launch"/>
-                            <AppBarButton Icon="Comment" Label="Details" Click="Pdf_Detail"/>
+                            <AppBarButton Icon="Preview" Label="Preview" Click="Pdf_Preview"/>
+                            <AppBarSeparator />
+                            <AppBarButton Icon="Document" Label="Papers" Click="Pdf_List"/>
                         </CommandBar>
                     </Grid>
                 </SplitView.Content>
             </SplitView>
 
-            <Grid Grid.Column="1">
-                <TreeView x:Name="pdftree" ItemInvoked="Pdftree_ItemInvoked" Margin="0,0,0,40">
-                    <TreeView.ItemTemplate>
-                        <DataTemplate>
-                            <TreeViewItem>
-                                <TextBlock Text="{Binding }"/>
-                            </TreeViewItem>
-                        </DataTemplate>
-                    </TreeView.ItemTemplate>
-                </TreeView>
-                <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                    <CommandBar.Content>
-                        <TextBlock Text="Paper" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
-                    </CommandBar.Content>
-                </CommandBar>
+            <Grid Grid.Column="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                <StackPanel Margin="10">
+                    <TextBlock x:Name="papertitle" Text="Title" FontSize="20"/>
+                    <TextBlock x:Name="paperid" Text="ID"/>
+                    <HyperlinkButton x:Name="paperlink" Content="Link"/>
+                    <TextBlock x:Name="paperauthor" Text="Authors"/>
+                    <TextBox x:Name="pdfname" Header="Paper File" Margin="0,20,0,0"/>
+                    <TextBox x:Name="papernote" Header="Paper Note" PlaceholderText="what to learn and reason to refer" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
+                    <TextBox x:Name="papertags" Header="Paper Tags" PlaceholderText="#Tag1##Tag2#" AcceptsReturn="True" TextWrapping="Wrap" Height="100"/>
+                </StackPanel>
             </Grid>
-            
         </Grid>
         
     </Grid>

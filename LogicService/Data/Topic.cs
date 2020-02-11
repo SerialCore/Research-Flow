@@ -55,7 +55,7 @@ namespace LogicService.Data
 
         #region Tag Helper
 
-        public static HashSet<string> TagPicker(string content)
+        public static HashSet<string> TagPick(string content)
         {
             HashSet<string> tags = new HashSet<string>();
 
@@ -81,15 +81,14 @@ namespace LogicService.Data
             return embed.ToString();
         }
 
+        public static HashSet<string> TagGenerator()
+        {
+            HashSet<string> tags = new HashSet<string>();
+
+            return tags;
+        }
+
         #endregion
 
-    }
-
-    /// <summary>
-    /// just for database modeling
-    /// </summary>
-    public class TagBase
-    {
-        public string Tag { get; set; }
     }
 }

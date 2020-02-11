@@ -8,8 +8,10 @@ using Windows.UI.Xaml.Controls;
 
 namespace LogicService.Data
 {
-    public class MessageBot
+    public class ChatBlock
     {
+        public static Dictionary<string, string> UserCall = new Dictionary<string, string>();
+
         public string Comment { get; set; }
 
         public DateTimeOffset Published { get; set; }
@@ -17,21 +19,21 @@ namespace LogicService.Data
         public bool IsSelf { get; set; }
     }
 
-    public class MessageItemDataTemplateSelector : DataTemplateSelector
+    public class ChatDataTemplateSelector : DataTemplateSelector
     {
-        public DataTemplate SelfMessageDataTemplate { get; set; }
+        public DataTemplate SelfChatDataTemplate { get; set; }
 
-        public DataTemplate MessageDataTemplate { get; set; }
+        public DataTemplate ChatDataTemplate { get; set; }
 
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {
-            var message = item as MessageBot;
-            if (message == null)
+            var chat = item as ChatBlock;
+            if (chat == null)
             {
-                return this.SelfMessageDataTemplate;
+                return this.SelfChatDataTemplate;
             }
 
-            return message.IsSelf ? this.SelfMessageDataTemplate : this.MessageDataTemplate;
+            return chat.IsSelf ? this.SelfChatDataTemplate : this.ChatDataTemplate;
         }
     }
 }

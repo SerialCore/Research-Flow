@@ -25,9 +25,13 @@ namespace LogicService.Service
 
             try
             {
-                bool signed = await OneDriveService.Instance.LoginAsync();
-                if (signed) User = OneDriveService.Instance.Provider.User;
-                return signed;
+                if (await OneDriveService.Instance.LoginAsync())
+                {
+                    User = OneDriveService.Instance.Provider.User;
+                    return true;
+                }
+                else
+                    return false;
             }
             catch
             {
@@ -67,12 +71,29 @@ namespace LogicService.Service
 
         public async static Task<string> GetDisplayName()
         {
-            return (await User.GetProfileAsync()).GivenName;
+            try
+            {
+                return (await User.GetProfileAsync()).DisplayName;
+            }
+            catch
+            {
+                return "No Name";
+            }
         }
 
         public async static Task<string> GetPrincipalName()
         {
-            return (await User.GetProfileAsync()).UserPrincipalName;
+            try
+            {
+                return (await User.GetProfileAsync()).UserPrincipalName;
+            }
+            catch
+            {
+                if (ApplicationSetting.ContainKey("AccountName"))
+                    return ApplicationSetting.AccountName;
+                else
+                    return "No Email";
+            }
         }
 
     }

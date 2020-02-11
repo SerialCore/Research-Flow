@@ -12,22 +12,56 @@
 
         <Grid >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300"/>
-                <ColumnDefinition />
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="400"/>
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="1">
-                <TextBlock x:Name="msg" Text="Flow | Pool" Style="{ThemeResource SubtitleTextBlockStyle}" Margin="12,0,0,0"/>
-                <SplitView PanePlacement="Right" OpenPaneLength="400" DisplayMode="Overlay">
-                    <SplitView.Pane>
-                        <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+            <Grid Grid.Column="0">
+                <GridView x:Name="topiclist" IsItemClickEnabled="True" ItemClick="Topiclist_ItemClick" Margin="5,5,5,40">
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Height="250" Width="250" Padding="10" Background="LightGoldenrodYellow">
+                                <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Margin="0,0,0,40"/>
+                                <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Left">
+                                    <TextBlock Text="{Binding Deadline}" Foreground="{ThemeResource SystemAccentColorDark1}"/>
+                                    <TextBlock Text="{Binding RemindTime}" Foreground="{ThemeResource SystemAccentColorDark1}"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+                <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                    <CommandBar.Content>
+                        <TextBlock Text="Pool" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
+                    </CommandBar.Content>
+                    <AppBarButton Icon="Setting" Label="Setting" Click="OpenCrawPanel_Click"/>
+                </CommandBar>
+            </Grid>
 
-                        </Grid>
-                    </SplitView.Pane>
-                    <SplitView.Content>
-                        <Grid />
-                    </SplitView.Content>
-                </SplitView>
+            <SplitView x:Name="crawpanel" Grid.Column="0">
+                <SplitView.Pane>
+                    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                        
+                    </Grid>
+                </SplitView.Pane>
+            </SplitView>
+
+            <Grid Grid.Column="1">
+                <ListView x:Name="favoritelist" IsItemClickEnabled="True" Margin="0,0,0,40">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Text}" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>
+                                <HyperlinkButton Content="{Binding Url}" NavigateUri="{Binding Url}" FontSize="16"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                    <CommandBar.Content>
+                        <TextBlock Text="Favorites" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
+                    </CommandBar.Content>
+                </CommandBar>
             </Grid>
         </Grid>
 

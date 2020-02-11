@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="16496zhwx.ResearchFlow" Publisher="CN=73D1BF38-7322-4954-A5E9-541DD3BC2D66" Version="3.27.72.0" />
+  <Identity Name="16496zhwx.ResearchFlow" Publisher="CN=73D1BF38-7322-4954-A5E9-541DD3BC2D66" Version="3.29.81.0" />
   <mp:PhoneIdentity PhoneProductId="62ae4750-3164-46cb-8d74-0be3154c153e" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Research Flow</DisplayName>
-    <PublisherDisplayName>Free Serial Studio</PublisherDisplayName>
+    <PublisherDisplayName>Serial Core Studio</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
@@ -29,15 +29,13 @@
       <Extensions>
         <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.SearchTask">
           <BackgroundTasks>
+            <uap:Task Type="mediaProcessing"/>
             <Task Type="general"/>
           </BackgroundTasks>
         </Extension>
-        <uap:Extension Category="windows.protocol">
-          <uap:Protocol Name="blamderrobot" />
-        </uap:Extension>
         <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.StorageTask">
           <BackgroundTasks>
-            <Task Type="general"/>
+            <Task Type="timer"/>
           </BackgroundTasks>
         </Extension>
         <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.VoiceCommandService">
@@ -73,6 +71,5 @@
   <Capabilities>
     <Capability Name="internetClient" />
     <uap:Capability Name="picturesLibrary" />
-    <uap:Capability Name="documentsLibrary" />
   </Capabilities>
 </Package>

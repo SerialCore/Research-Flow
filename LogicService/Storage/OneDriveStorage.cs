@@ -68,6 +68,18 @@ namespace LogicService.Storage
             }
         }
 
+        public static async Task<OneDriveStorageFolder> GetPaperAsync()
+        {
+            try
+            {
+                return await RetrieveSubFolderAsync(await GetAppFolderAsync(), "Paper");
+            }
+            catch
+            {
+                return await CreateFolderAsync(await GetAppFolderAsync(), "Paper");
+            }
+        }
+
         public static async Task<OneDriveStorageFolder> CreateFolderAsync(OneDriveStorageFolder folder, string foldername)
         {
             return await folder.StorageFolderPlatformService.CreateFolderAsync(foldername, CreationCollisionOption.OpenIfExists);

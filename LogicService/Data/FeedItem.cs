@@ -140,8 +140,8 @@ namespace LogicService.Data
             DBDeleteByPID(feeds[0].ParentID);
 
             int affectedRows = 0;
-            string sql = @"insert into Feed(ID, ParentID, Title, Published, Link, Summary, Nodes)
-                values(@ID, @ParentID, @Title, @Published, @Link, @Summary, @Nodes);";
+            string sql = @"insert into Feed(ID, ParentID, Title, Published, Link, Summary, Tags, Nodes)
+                values(@ID, @ParentID, @Title, @Published, @Link, @Summary, @Tags, @Nodes);";
             foreach (FeedItem feed in feeds)
             {
                 affectedRows += DataStorage.FeedData.ExecuteWrite(sql, new Dictionary<string, object>
@@ -152,6 +152,7 @@ namespace LogicService.Data
                     { "@Published", feed.Published },
                     { "@Link", feed.Link },
                     { "@Summary", feed.Summary },
+                    { "@Tags", feed.Tags },
                     { "@Nodes", feed.Nodes },
                 });
             }
@@ -162,33 +163,29 @@ namespace LogicService.Data
             return affectedRows;
         }
 
+        public static List<FeedItem> DBSelectByLimit(int limit)
+        {
+            string sql = "select * from Feed limit @Limit;";
+            var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@Limit", limit } });
+            return DBReader(reader);
+        }
+
         public static List<FeedItem> DBSelectByPID(string pid)
         {
             string sql = "select * from Feed where ParentID = @ParentID;";
             var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@ParentID", pid } });
-
-            List<FeedItem> feeds = new List<FeedItem>();
-            while (reader.Read())
-            {
-                feeds.Add(new FeedItem
-                {
-                    ID = reader.GetString(0),
-                    ParentID = reader.GetString(1),
-                    Title = reader.GetString(2),
-                    Published = reader.GetString(3),
-                    Link = reader.GetString(4),
-                    Summary = reader.GetString(5),
-                    Nodes = reader.GetString(7)
-                });
-            }
-            return feeds;
+            return DBReader(reader);
         }
 
-        public static List<FeedItem> DBSelectByTag()
+        public static List<FeedItem> DBSelectByTag(string tag)
         {
-            string sql = "select * from Feed where ParentID = @ParentID;";
-            var reader = DataStorage.FeedData.ExecuteRead(sql);
+            string sql = "select * from Feed where Tags like @Tags;";
+            var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@Tags", '%' + tag + '%' } });
+            return DBReader(reader);
+        }
 
+        private static List<FeedItem> DBReader(SqliteDataReader reader)
+        {
             List<FeedItem> feeds = new List<FeedItem>();
             while (reader.Read())
             {
@@ -200,6 +197,7 @@ namespace LogicService.Data
                     Published = reader.GetString(3),
                     Link = reader.GetString(4),
                     Summary = reader.GetString(5),
+                    Tags = reader.GetString(6),
                     Nodes = reader.GetString(7)
                 });
             }
@@ -232,6 +230,36 @@ namespace LogicService.Data
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(xml);
             return doc.DocumentElement.ChildNodes;
+        }
+        
+        public static string GetDoi(string xml)
+        {
+            foreach (XmlNode node in GetNodes(xml))
+            {
+                if (node.Name.Equals("doi"))
+                    return node.Value;
+            }
+            return "";
+        }
+
+        public static string GetAuthor(string xml)
+        {
+            foreach (XmlNode node in GetNodes(xml))
+            {
+                if (node.Name.Equals("author"))
+                    return node.Value;
+            }
+            return "";
+        }
+
+        public static string GetCategory(string xml)
+        {
+            foreach (XmlNode node in GetNodes(xml))
+            {
+                if (node.Name.Equals("category"))
+                    return node.Value;
+            }
+            return "";
         }
 
         #endregion

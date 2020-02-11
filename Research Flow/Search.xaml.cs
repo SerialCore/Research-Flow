@@ -1,5 +1,6 @@
 ﻿using LogicService.Application;
 using LogicService.Data;
+using LogicService.Security;
 using LogicService.Service;
 using LogicService.Storage;
 using System;
@@ -40,6 +41,7 @@ namespace Research_Flow
                 if (!string.IsNullOrEmpty(link))
                 {
                     webView.Source = new Uri(link);
+                    FirstCrawl(link);
                 }
             }
         }
@@ -331,6 +333,20 @@ namespace Research_Flow
 
         private CrawlerService currentCrawled = null;
 
+        private void Favorite_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentCrawled != null)
+                Crawlable.AddtoFavorite(new Crawlable()
+                {
+                    ID = HashEncode.MakeMD5(currentCrawled.Url),
+                    ParentID = "Null",
+                    Text = currentCrawled.Title,
+                    Url = currentCrawled.Url,
+                    Content = currentCrawled.Content,
+                    Tags = "Null"
+                });
+        }
+
         private void FirstCrawl_Click(object sender, RoutedEventArgs e)
         {
             if (webView.Source != null)
@@ -341,7 +357,7 @@ namespace Research_Flow
         {
             crawlPane.IsPaneOpen = true;
             if (currentCrawled != null)
-                if (currentCrawled.URL.Equals(urlstring))
+                if (currentCrawled.Url.Equals(urlstring)) // in case of gb2312
                     return;
             craWaiting.IsActive = true;
 
@@ -359,8 +375,9 @@ namespace Research_Flow
                 {
                     await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
-                        ApplicationMessage.SendMessage("SearchException: " + exception, ApplicationMessage.MessageType.InApp);
+                        currentCrawled = null;
                         craWaiting.IsActive = false;
+                        ApplicationMessage.SendMessage("SearchException: " + exception, ApplicationMessage.MessageType.InApp);
                     });
                 });
         }
@@ -401,5 +418,6 @@ namespace Research_Flow
         }
 
         #endregion
+
     }
 }

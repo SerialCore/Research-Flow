@@ -24,9 +24,7 @@ namespace CoreFlow
 
         private async void StorageSync()
         {
-            ApplicationNotification.ShowTextToast("SearchTask", "");
-            await GraphService.OneDriveLogin();
-            if (GraphService.IsConnected && GraphService.IsNetworkAvailable)
+            if (await GraphService.OneDriveLogin())
             {
                 await Synchronization.ScanFiles();
                 LocalStorage.GeneralLogAsync<Synchronization>("StorageTask.log",
@@ -34,13 +32,9 @@ namespace CoreFlow
             }
         }
 
-        /// <summary>
-        /// Clean unnecessary data
-        /// </summary>
         private void StorageClean()
         {
             // clean database
-
         }
 
     }

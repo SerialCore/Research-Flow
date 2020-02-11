@@ -1,8 +1,4 @@
 ﻿using LogicService.Application;
-//using Microsoft.AppCenter;
-//using Microsoft.AppCenter.Analytics;
-//using Microsoft.AppCenter.Crashes;
-//using Microsoft.AppCenter.Push;
 using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;

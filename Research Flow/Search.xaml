@@ -67,7 +67,7 @@
                 </SplitView.Pane>
                 <SplitView.Content>
                     <Grid>
-                        <TextBlock Text="Search | First Crawl" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Browser | Search | First Crawl" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <WebView x:Name="webView" NavigationStarting="WebView_NavigationStarting" ManipulationCompleted="WebView_ManipulationCompleted"
                                  FrameNavigationCompleted="WebView_FrameNavigationCompleted" NavigationCompleted="WebView_NavigationCompleted"/>
                     </Grid>
@@ -126,8 +126,10 @@
                             DefaultLabelPosition="Right"
                             Background="Transparent"
                             OverflowButtonVisibility="Collapsed">
+                    <AppBarButton Label="Archive" Icon="MoveToFolder" Click="SubmitToCrawler"/>
+                    <AppBarButton Label="Favorite" Icon="Favorite" Click="Favorite_Click"/>
+                    <AppBarSeparator/>
                     <AppBarButton Label="Crawl" Icon="Find" Click="FirstCrawl_Click"/>
-                    <AppBarButton Label="Archive" Icon="Favorite" Click="SubmitToCrawler"/>
                 </CommandBar>
             </Grid>
 

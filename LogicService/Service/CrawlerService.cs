@@ -41,7 +41,7 @@ namespace LogicService.Service
         /// <summary>
         /// Url
         /// </summary>
-        public string URL
+        public string Url
         {
             get
             {
@@ -177,6 +177,8 @@ namespace LogicService.Service
                                 ParentID = HashEncode.MakeMD5(_url),
                                 Text = text,
                                 Url = url,
+                                Content = "Null",
+                                Tags = "Null"
                             });
                         }
                         catch (Exception ex) { Console.WriteLine(ex.Message); };
