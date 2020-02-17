@@ -13,6 +13,7 @@ using Windows.System.Threading;
 using Windows.UI.Core;
 using Windows.UI.Input.Inking;
 using Windows.UI.Popups;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -160,6 +161,22 @@ namespace Research_Flow
             }
         }
 
+        private void FullScreen_Click(object sender, RoutedEventArgs e)
+        {
+            AppBarButton button = sender as AppBarButton;
+            ApplicationView view = ApplicationView.GetForCurrentView();
+            if (view.IsFullScreenMode)
+            {
+                view.ExitFullScreenMode();
+                button.Icon = new SymbolIcon(Symbol.FullScreen);
+            }
+            else
+            {
+                view.TryEnterFullScreenMode();
+                button.Icon = new SymbolIcon(Symbol.BackToWindow);
+            }
+        }
+
         #endregion
 
         #region File Operation (out App)
@@ -293,7 +310,7 @@ namespace Research_Flow
 
         private async void Delete_Note(object sender, RoutedEventArgs e)
         {
-            var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.", "Operation confirming");
+            var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.");
             messageDialog.Commands.Add(new UICommand(
                 "True",
                 new UICommandInvokedHandler(this.DeleteInvokedHandler)));

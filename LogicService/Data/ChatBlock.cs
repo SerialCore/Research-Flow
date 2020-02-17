@@ -7,7 +7,16 @@ namespace LogicService.Data
 {
     public class ChatBlock
     {
-        public static Dictionary<string, string> UserCall = new Dictionary<string, string>();
+        /// <summary>
+        /// service for IdentifyMessage(ChatBlock chat)
+        /// </summary>
+        public static Dictionary<string, string> UserCall = new Dictionary<string, string>()
+        {
+            { "None", @"\S" },
+            { "Alarm()", "Alarm" },
+            { "Search()", "Search" },
+            { "Remind()", "Remind" },
+        };
 
         public string Comment { get; set; }
 

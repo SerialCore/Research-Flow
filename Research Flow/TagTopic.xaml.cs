@@ -39,16 +39,15 @@ namespace Research_Flow
             try
             {
                 tags = await LocalStorage.ReadJsonAsync<HashSet<string>>(
-                    await LocalStorage.GetDataFolderAsync(), "taglist");
+                    await LocalStorage.GetDataFolderAsync(), "tag.list");
             }
             catch
             {
-                // for new user, remember to load default feed from file, not the follows
                 tags = new HashSet<string>()
                 {
                     "AnOS", "QCD", "QED", "Pedal Motion", "DNA", "AI", "Bond", "Hydrogen", "Halogen", "OS"
                 };
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "taglist", tags);
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
             }
             finally
             {
@@ -61,13 +60,13 @@ namespace Research_Flow
             try
             {
                 topics = await LocalStorage.ReadJsonAsync<ObservableCollection<Topic>>(
-                    await LocalStorage.GetDataFolderAsync(), "topiclist");
+                    await LocalStorage.GetDataFolderAsync(), "topic.list");
             }
             catch
             {
                 // for new user, remember to load default feed from file, not the follows
                 topics = new ObservableCollection<Topic>();
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topiclist", topics);
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topic.list", topics);
             }
             finally
             {
@@ -115,7 +114,7 @@ namespace Research_Flow
             {
                 tags.UnionWith(Topic.TagPick(tagEmbed.Text));
                 LoadTagView();
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "taglist", tags);
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
             }
         }
 
@@ -126,7 +125,7 @@ namespace Research_Flow
                 tags.Remove(tagPanelTitle.Text);
                 LoadTagView();
                 ClearTagPanel();
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "taglist", tags);
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
             }
         }
 
@@ -174,7 +173,7 @@ namespace Research_Flow
                     break;
                 case 1:
                     if (feedTags.ItemsSource == null && !string.IsNullOrEmpty(tagPanelTitle.Text))
-                        feedTags.ItemsSource = FeedItem.DBSelectByTag(tagPanelTitle.Text);
+                        feedTags.ItemsSource = Feed.DBSelectByTag(tagPanelTitle.Text);
                     break;
                 case 2:
                     if (crawlTags.ItemsSource == null && !string.IsNullOrEmpty(tagPanelTitle.Text))
@@ -220,14 +219,14 @@ namespace Research_Flow
                 }
                 topics.Insert(0, topic);
 
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topiclist", topics);
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topic.list", topics);
 
                 // double check tags then add them
                 int count = tags.Count;
                 tags.UnionWith(Topic.TagPick(topicTitle.Text));
                 if (count != tags.Count)
                     LoadTagView();
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "taglist", tags);
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
 
                 // register a task
                 SubmitTopictoTask(topic);
@@ -288,7 +287,7 @@ namespace Research_Flow
         {
             string topicID = currentTopic.ID;
             topics.Remove(currentTopic);
-            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topiclist", topics);
+            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topic.list", topics);
             ClearTopicSetting();
 
             // cancel notification

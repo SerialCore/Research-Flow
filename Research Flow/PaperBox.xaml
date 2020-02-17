@@ -77,7 +77,7 @@
                     <HyperlinkButton x:Name="paperlink" Content="Link"/>
                     <TextBlock x:Name="paperauthor" Text="Authors"/>
                     <TextBox x:Name="pdfname" Header="Paper File" Margin="0,20,0,0"/>
-                    <TextBox x:Name="papernote" Header="Paper Note" PlaceholderText="what to learn and reason to refer" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
+                    <TextBox x:Name="papernote" Header="Paper Note" PlaceholderText="reason to refer" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
                     <TextBox x:Name="papertags" Header="Paper Tags" PlaceholderText="#Tag1##Tag2#" AcceptsReturn="True" TextWrapping="Wrap" Height="100"/>
                 </StackPanel>
             </Grid>

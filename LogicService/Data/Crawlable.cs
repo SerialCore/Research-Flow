@@ -107,6 +107,13 @@ namespace LogicService.Data
             return DBReader(reader);
         }
 
+        public static List<Crawlable> DBSelectByText(string text)
+        {
+            string sql = "select * from Crawlable where Text = @Text;";
+            var reader = DataStorage.CrawlData.ExecuteRead(sql, new Dictionary<string, object> { { "@Text", text } });
+            return DBReader(reader);
+        }
+
         public static List<Crawlable> DBSelectByTag(string tag)
         {
             string sql = "select * from Crawlable where Tags like @Tags;";
@@ -155,12 +162,18 @@ namespace LogicService.Data
 
         public async static void AddtoFavorite(Crawlable crawlable)
         {
-            var favorites = await LocalStorage.ReadJsonAsync<List<Crawlable>>(await LocalStorage.GetDataFolderAsync(), "favoritelist");
+            var favorites = await LocalStorage.ReadJsonAsync<List<Crawlable>>(await LocalStorage.GetDataFolderAsync(), "favorite.list");
             favorites.Add(crawlable);
-            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "favoritelist", favorites);
+            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "favorite.list", favorites);
 
             DBInsert(new List<Crawlable>() { crawlable });
         }
+
+        #endregion
+
+        #region Task
+
+
 
         #endregion
 

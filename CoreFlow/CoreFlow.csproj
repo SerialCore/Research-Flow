@@ -107,9 +107,8 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="SearchTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StorageTask.cs" />
+    <Compile Include="TagTask.cs" />
     <Compile Include="TopicTask.cs" />
     <Compile Include="VoiceCommandService.cs" />
   </ItemGroup>

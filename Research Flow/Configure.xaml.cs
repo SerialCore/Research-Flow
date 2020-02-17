@@ -81,7 +81,7 @@ namespace Research_Flow
             FileList.DBInitializeTrace();
             FileList.DBInitializeList();
             Crawlable.DBInitialize();
-            FeedItem.DBInitialize();
+            Feed.DBInitialize();
             Paper.DBInitialize();
         }
 

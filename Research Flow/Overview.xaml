@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Research_Flow"
     xmlns:data="using:LogicService.Data"
+    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -11,59 +12,40 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <Grid >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="400"/>
-            </Grid.ColumnDefinitions>
-
-            <Grid Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="100"/>
-                    <RowDefinition Height="32"/>
-                </Grid.RowDefinitions>
-                <Image Source="ms-appx:///Images/ResearchFlow_logo.jpg"/>
-                
-                <ScrollViewer x:Name="chatscroll" Grid.Row="0">
-                    <ListView x:Name="chatview" SelectionMode="None" SizeChanged="chatview_SizeChanged">
-                        <ListView.Resources>
-                            <DataTemplate x:Key="ChatDataTemplate">
-                                <StackPanel HorizontalAlignment="Left" Margin="0,5,0,10">
-                                    <Grid Grid.Row="0" CornerRadius="4" Background="{ThemeResource SystemAccentColorDark1}" Padding="10">
-                                        <TextBlock Text="{Binding Comment}" Foreground="White" IsTextSelectionEnabled="True" TextWrapping="Wrap" MaxWidth="300"/>
-                                    </Grid>
-                                    <TextBlock Grid.Row="1" Text="{Binding Published}" Foreground="{ThemeResource SystemAccentColorDark1}"/>
-                                </StackPanel>
-                            </DataTemplate>
-
-                            <DataTemplate x:Key="SelfChatDataTemplate">
-                                <StackPanel HorizontalAlignment="Right" Margin="0,5,0,10">
-                                    <Grid Grid.Row="0" CornerRadius="4" Background="{ThemeResource SystemAccentColorLight1}" Padding="10">
-                                        <TextBlock Text="{Binding Comment}" Foreground="White" IsTextSelectionEnabled="True" TextWrapping="Wrap" MaxWidth="300" HorizontalAlignment="Right"/>
-                                    </Grid>
-                                    <TextBlock Grid.Row="1" Text="{Binding Published}" Foreground="{ThemeResource SystemAccentColorLight1}" HorizontalAlignment="Right"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.Resources>
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                <!--<Setter Property="Margin" Value="10"/>-->
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                        <ListView.ItemTemplateSelector>
-                            <data:ChatDataTemplateSelector
-                            ChatDataTemplate="{StaticResource ChatDataTemplate}"
-                            SelfChatDataTemplate="{StaticResource SelfChatDataTemplate}"/>
-                        </ListView.ItemTemplateSelector>
-                    </ListView>
-                </ScrollViewer>
-
-                <TextBox x:Name="chatbox" Grid.Row="1" AcceptsReturn="True" TextWrapping="Wrap"/>
-                <ComboBox Grid.Row="2" HorizontalAlignment="Stretch" Margin="0,0,100,0"/>
-                <Button Grid.Row="2" Content="Sumbit" Click="Submit_Chat" Width="100" HorizontalAlignment="Right" Background="LightSkyBlue"/>
-            </Grid>
-
+            <StackPanel Margin="10">
+                <GridView Header="Task" FontSize="20" IsItemClickEnabled="True">
+                    <GridView.Items>
+                        <Grid Height="150" Width="150" Padding="10" Background="LightGoldenrodYellow">
+                            <TextBlock Text="FeedTask"/>
+                        </Grid>
+                        <Grid Height="150" Width="150" Padding="10" Background="LightGoldenrodYellow">
+                            <TextBlock Text="SearchTask"/>
+                        </Grid>
+                        <Grid Height="150" Width="150" Padding="10" Background="LightGoldenrodYellow">
+                            <TextBlock Text="CrawlTask"/>
+                        </Grid>
+                    </GridView.Items>
+                </GridView>
+                <GridView Header="Flow" FontSize="20" IsItemClickEnabled="True">
+                    <GridView.Items>
+                        <Grid Height="150" Width="150" Padding="10" Background="LightGoldenrodYellow">
+                            <TextBlock Text="Feed->Crawl"/>
+                        </Grid>
+                        <Grid Height="150" Width="150" Padding="10" Background="LightGoldenrodYellow">
+                            <TextBlock Text="Feed->Paper"/>
+                        </Grid>
+                        <Grid Height="150" Width="150" Padding="10" Background="LightGoldenrodYellow">
+                            <TextBlock Text="Search->Crawl"/>
+                        </Grid>
+                        <Grid Height="150" Width="150" Padding="10" Background="LightGoldenrodYellow">
+                            <TextBlock Text="Search->Paper"/>
+                        </Grid>
+                        <Grid Height="150" Width="150" Padding="10" Background="LightGoldenrodYellow">
+                            <TextBlock Text="Crawl->Crawl"/>
+                        </Grid>
+                    </GridView.Items>
+                </GridView>
+            </StackPanel>
         </Grid>
 
     </Grid>

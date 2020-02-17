@@ -22,9 +22,9 @@ namespace Research_Flow
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class Search : Page
+    public sealed partial class SearchEngine : Page
     {
-        public Search()
+        public SearchEngine()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
@@ -50,17 +50,17 @@ namespace Research_Flow
             try
             {
                 SearchSources = await LocalStorage.ReadJsonAsync<Dictionary<string, string>>(
-                    await LocalStorage.GetDataFolderAsync(), "searchlist");
+                    await LocalStorage.GetDataFolderAsync(), "search.list");
             }
             catch
             {
                 // for new user, remember to load default feed from file, not the follows
                 SearchSources = new Dictionary<string, string>()
                 {
-                    { "ACS", "https://pubs.acs.org/action/doSearch?AllField=QUERY"},
-                    { "arXiv All", "https://arxiv.org/search/?query=QUERY&searchtype=all"},
+                    { "ACS", "https://pubs.acs.org/action/doSearch?AllField=QUERY" },
+                    { "arXiv All", "https://arxiv.org/search/?query=QUERY&searchtype=all" },
                 };
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "searchlist", SearchSources);
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "search.list", SearchSources);
             }
             finally
             {
@@ -83,6 +83,7 @@ namespace Research_Flow
         {
             string link = SearchSources.GetValueOrDefault(searchlist.SelectedItem as string).Replace("QUEST", queryQuest.Text);
             webView.Source = new Uri(link);
+            FirstCrawl(link);
         }
 
         private void Open_SearchList(object sender, RoutedEventArgs e)
@@ -134,14 +135,14 @@ namespace Research_Flow
             searchlist.SelectedIndex = 0;
             source_list.ItemsSource = null;
             source_list.ItemsSource = SearchSources;
-            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "searchlist", SearchSources);
+            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "search.list", SearchSources);
 
             ClearSettings();
         }
 
         private async void Delete_SearchSetting(object sender, RoutedEventArgs e)
         {
-            var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.", "Operation confirming");
+            var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.");
             messageDialog.Commands.Add(new UICommand(
                 "True",
                 new UICommandInvokedHandler(this.DeleteInvokedHandler)));
@@ -163,7 +164,7 @@ namespace Research_Flow
             searchlist.SelectedIndex = 0;
             source_list.ItemsSource = null;
             source_list.ItemsSource = SearchSources;
-            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "searchlist", SearchSources);
+            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "search.list", SearchSources);
 
             ClearSettings();
         }
@@ -214,6 +215,7 @@ namespace Research_Flow
                 string uri = siteUrl.Text;
                 uri = uri.StartsWith("http") ? uri : "http://" + uri;
                 webView.Source = new Uri(uri);
+                FirstCrawl(uri);
             }
             catch { }
         }

@@ -24,7 +24,7 @@ namespace LogicService.Service
         private static Dictionary<string, CookieContainer> webcookies = new Dictionary<string, CookieContainer>();
 
         /// <summary>
-        /// Resources of links filter
+        /// Resources of links filter, service for GetSpecialLinksByUrl() or GetSpecialLinksByText()
         /// </summary>
         public static Dictionary<string, string> LinkFilter = new Dictionary<string, string>()
         {

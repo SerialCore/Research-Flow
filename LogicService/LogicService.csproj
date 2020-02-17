@@ -108,17 +108,14 @@
   <ItemGroup>
     <Compile Include="Application\ApplicationNotification.cs" />
     <Compile Include="Application\ApplicationSetting.cs" />
-    <Compile Include="Flow\DataFlow.cs" />
-    <Compile Include="Flow\Flow.cs" />
-    <Compile Include="Flow\TaskFlow.cs" />
+    <Compile Include="Data\Flow.cs" />
     <Compile Include="Helper\NetHelper.cs" />
-    <Compile Include="Helper\RegexHelper.cs" />
     <Compile Include="Data\ChatBlock.cs" />
     <Compile Include="Data\Topic.cs" />
     <Compile Include="Helper\UrlHelper.cs" />
     <Compile Include="Service\WebClientService.cs" />
     <Compile Include="Data\Crawlable.cs" />
-    <Compile Include="Data\FeedItem.cs" />
+    <Compile Include="Data\Feed.cs" />
     <Compile Include="Data\FileList.cs" />
     <Compile Include="Data\Paper.cs" />
     <Compile Include="Helper\SerializeHelper.cs" />
@@ -138,7 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite">
-      <Version>3.1.0</Version>
+      <Version>3.1.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.9</Version>

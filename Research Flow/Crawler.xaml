@@ -17,7 +17,7 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
-                <GridView IsItemClickEnabled="True" ItemClick="Topiclist_ItemClick" Margin="5,5,5,40">
+                <GridView IsItemClickEnabled="True" Margin="5,5,5,40">
                     <GridView.ItemTemplate>
                         <DataTemplate>
                             <Grid Height="250" Width="250" Padding="10" Background="LightGoldenrodYellow">

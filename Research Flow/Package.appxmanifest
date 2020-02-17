@@ -27,17 +27,6 @@
         </uap:InitialRotationPreference>
       </uap:VisualElements>
       <Extensions>
-        <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.SearchTask">
-          <BackgroundTasks>
-            <uap:Task Type="mediaProcessing"/>
-            <Task Type="general"/>
-          </BackgroundTasks>
-        </Extension>
-        <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.StorageTask">
-          <BackgroundTasks>
-            <Task Type="timer"/>
-          </BackgroundTasks>
-        </Extension>
         <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.VoiceCommandService">
           <BackgroundTasks>
             <Task Type="timer" />
@@ -52,19 +41,18 @@
             <uap:Logo>Images\ResearchFlow_logo.jpg</uap:Logo>
           </uap:FileTypeAssociation>
         </uap:Extension>
-        <uap:Extension Category="windows.fileTypeAssociation">
-          <uap:FileTypeAssociation Name="pdf">
-            <uap:SupportedFileTypes>
-              <uap:FileType>.pdf</uap:FileType>
-            </uap:SupportedFileTypes>
-            <uap:Logo>Images\ResearchFlow_logo.jpg</uap:Logo>
-          </uap:FileTypeAssociation>
-        </uap:Extension>
         <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.TopicTask">
           <BackgroundTasks>
             <Task Type="timer"/>
           </BackgroundTasks>
         </Extension>
+        <Extension Category="windows.backgroundTasks" EntryPoint="CoreFlow.TagTask">
+          <BackgroundTasks>
+            <Task Type="timer"/>
+          </BackgroundTasks>
+        </Extension>
+        <uap:Extension Category="windows.search"/>
+        <uap:Extension Category="windows.personalAssistantLaunch"/>
       </Extensions>
     </Application>
   </Applications>

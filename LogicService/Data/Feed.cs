@@ -1,12 +1,14 @@
-﻿using LogicService.Storage;
+﻿using LogicService.Service;
+using LogicService.Storage;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace LogicService.Data
 {
-    public class RSSSource
+    public class FeedSource
     {
 
         public string ID { get; set; }
@@ -18,7 +20,7 @@ namespace LogicService.Data
         public double Star { get; set; }
 
         public bool IsJournal { get; set; }
-        
+
         //public bool IsNotificationOn { get; set; }
 
         public DateTime LastUpdateTime { get; set; }
@@ -33,21 +35,21 @@ namespace LogicService.Data
             if (this.GetType() != obj.GetType())
                 return false;
 
-            var one = (RSSSource)obj;
+            var one = (FeedSource)obj;
             if (this.ID == one.ID)
                 return true;
             else
                 return false;
         }
 
-        public static bool operator ==(RSSSource leftHandSide, RSSSource rightHandSide)
+        public static bool operator ==(FeedSource leftHandSide, FeedSource rightHandSide)
         {
             if (ReferenceEquals(leftHandSide, null))
                 return ReferenceEquals(rightHandSide, null);
             return (leftHandSide.Equals(rightHandSide));
         }
 
-        public static bool operator !=(RSSSource leftHandSide, RSSSource rightHandSide)
+        public static bool operator !=(FeedSource leftHandSide, FeedSource rightHandSide)
         {
             return !(leftHandSide == rightHandSide);
         }
@@ -61,7 +63,7 @@ namespace LogicService.Data
 
     }
 
-    public class FeedItem
+    public class Feed
     {
 
         public string ID { get; set; }
@@ -89,21 +91,21 @@ namespace LogicService.Data
             if (this.GetType() != obj.GetType())
                 return false;
 
-            var one = (FeedItem)obj;
+            var one = (Feed)obj;
             if (this.ID == one.ID)
                 return true;
             else
                 return false;
         }
 
-        public static bool operator ==(FeedItem leftHandSide, FeedItem rightHandSide)
+        public static bool operator ==(Feed leftHandSide, Feed rightHandSide)
         {
             if (ReferenceEquals(leftHandSide, null))
                 return ReferenceEquals(rightHandSide, null);
             return (leftHandSide.Equals(rightHandSide));
         }
 
-        public static bool operator !=(FeedItem leftHandSide, FeedItem rightHandSide)
+        public static bool operator !=(Feed leftHandSide, Feed rightHandSide)
         {
             return !(leftHandSide == rightHandSide);
         }
@@ -131,14 +133,14 @@ namespace LogicService.Data
             DataStorage.FeedData.ExecuteWrite(sql);
         }
 
-        public static int DBInsert(List<FeedItem> feeds)
+        public static int DBInsert(List<Feed> feeds)
         {
             DBDeleteByPID(feeds[0].ParentID);
 
             int affectedRows = 0;
             string sql = @"insert into Feed(ID, ParentID, Title, Published, Link, Summary, Tags, Nodes)
                 values(@ID, @ParentID, @Title, @Published, @Link, @Summary, @Tags, @Nodes);";
-            foreach (FeedItem feed in feeds)
+            foreach (Feed feed in feeds)
             {
                 affectedRows += DataStorage.FeedData.ExecuteWrite(sql, new Dictionary<string, object>
                 {
@@ -159,33 +161,33 @@ namespace LogicService.Data
             return affectedRows;
         }
 
-        public static List<FeedItem> DBSelectByLimit(int limit)
+        public static List<Feed> DBSelectByLimit(int limit)
         {
             string sql = "select * from Feed limit @Limit;";
             var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@Limit", limit } });
             return DBReader(reader);
         }
 
-        public static List<FeedItem> DBSelectByPID(string pid)
+        public static List<Feed> DBSelectByPID(string pid)
         {
             string sql = "select * from Feed where ParentID = @ParentID;";
             var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@ParentID", pid } });
             return DBReader(reader);
         }
 
-        public static List<FeedItem> DBSelectByTag(string tag)
+        public static List<Feed> DBSelectByTag(string tag)
         {
             string sql = "select * from Feed where Tags like @Tags;";
             var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@Tags", '%' + tag + '%' } });
             return DBReader(reader);
         }
 
-        private static List<FeedItem> DBReader(SqliteDataReader reader)
+        private static List<Feed> DBReader(SqliteDataReader reader)
         {
-            List<FeedItem> feeds = new List<FeedItem>();
+            List<Feed> feeds = new List<Feed>();
             while (reader.Read())
             {
-                feeds.Add(new FeedItem
+                feeds.Add(new Feed
                 {
                     ID = reader.GetString(0),
                     ParentID = reader.GetString(1),
@@ -227,7 +229,7 @@ namespace LogicService.Data
             doc.LoadXml(xml);
             return doc.DocumentElement.ChildNodes;
         }
-        
+
         public static string GetDoi(string xml)
         {
             foreach (XmlNode node in GetNodes(xml))
@@ -260,6 +262,49 @@ namespace LogicService.Data
 
         #endregion
 
-    }
+        #region Task
 
+        public static void TaskRun()
+        {
+            // thread security
+            List<FeedSource> FeedSources = Task.Run(async () =>
+            {
+                return await LocalStorage.ReadJsonAsync<List<FeedSource>>(await LocalStorage.GetDataFolderAsync(), "rss.list");
+            }).Result;
+
+            foreach (FeedSource source in FeedSources)
+            {
+                RssService.GetRssItems(
+                    source.Uri,
+                    (items) =>
+                    {
+                        List<Feed> feeds = items as List<Feed>;
+                        DBInsert(feeds);
+                        source.LastUpdateTime = DateTime.Now;
+                        Task.Run(async () =>
+                        {
+                            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rss.list", FeedSources);
+                        });
+
+                        Task.Run(() =>
+                        {
+                            LocalStorage.GeneralLogAsync<Feed>("FeedTask.log",
+                                "feed updated-" + source.Name);
+                        });
+
+                    },
+                    (exception) =>
+                    {
+                        Task.Run(() =>
+                        {
+                            LocalStorage.GeneralLogAsync<RssService>("FeedTask.log",
+                                exception + "-" + source.Name);
+                        });
+                    }, null);
+            }
+        }
+
+        #endregion
+
+    }
 }

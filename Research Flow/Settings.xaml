@@ -27,7 +27,7 @@
                 </ScrollViewer>
             </PivotItem>
             
-            <PivotItem Header="Inform">
+            <PivotItem Header="Information">
                 <ScrollViewer>
                     <Grid >
                         <Grid.RowDefinitions>
@@ -72,16 +72,12 @@
                         <TextBlock Grid.Row="0" Grid.Column="1" Margin="10">
                             <Run Text="Library References" FontWeight="Bold"/><LineBreak/><LineBreak/>
                             <Run Text="DotNetZip"/><LineBreak/>
-                            <Run Text="LiveCharts.Uwp"/><LineBreak/>
-                            <Run Text="Microsoft.AppCenter"/><LineBreak/>
                             <Run Text="Microsoft.Data.Sqlite"/><LineBreak/>
                             <Run Text="Microsoft.Toolkit.Uwp"/><LineBreak/>
-                            <Run Text="Microsoft.UI.Xaml"/><LineBreak/>
                         </TextBlock>
                         <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
                             <TextBlock Text="Supporting Links" FontWeight="Bold"/>
                             <HyperlinkButton Content="Research Flow" NavigateUri="https://blamder.github.io/Research-Flow/"/>
-                            <HyperlinkButton Content="Blamder's BiliBili content" NavigateUri="https://space.bilibili.com/62426742/#/"/>
                             <HyperlinkButton Content="Know about SystemInformation" NavigateUri="https://docs.microsoft.com/en-us/windows/uwpcommunitytoolkit/helpers/systeminformation"/>
                             <HyperlinkButton Content="Feedback->zwx.atomx@outlook.com" NavigateUri="mailto:zwx.atomx@outlook.com"/>
                             <Button Content="Review" Click="Give_Rate" Width="80" Background="LightSkyBlue"/>
@@ -110,12 +106,12 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="0,0,0.5,0.5">
                         <StackPanel Orientation="Horizontal">
-                            <Button Content="Show SearchTask Log" Click="Show_SearchLog" Margin="0,0,2,2"/>
-                            <Button Content="Show StorageTask Log" Click="Show_StorageLog" Margin="2,0,0,2"/>
+                            <Button Content="FeedTask.log" Click="Show_FeedTaskLog" Margin="0,0,2,2"/>
+                            <Button Content="StorageTask.log" Margin="2,0,0,2"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Button Content="Show rsslist" Click="Show_RSSList" Margin="0,2,2,0"/>
-                            <Button Content="Show topiclist" Click="Show_TopicList" Margin="2,2,0,0"/>
+                            <Button Content="rss.list" Click="Show_RSSList" Margin="0,2,2,0"/>
+                            <Button Content="topic.list" Click="Show_TopicList" Margin="2,2,0,0"/>
                         </StackPanel>
                     </StackPanel>
                     <Grid Grid.Row="0" Grid.Column="1" BorderBrush="Black" BorderThickness="0.5,0,0.5,0.5">

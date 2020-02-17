@@ -12,12 +12,12 @@ namespace LogicService.Service
     public class RssService
     {
 
-        public static void GetRssItems(string rssFeed, Action<IEnumerable<FeedItem>> onGetRssItemsCompleted = null, Action<string> onError = null, Action onFinally = null)
+        public static void GetRssItems(string rssFeed, Action<IEnumerable<Feed>> onGetRssItemsCompleted = null, Action<string> onError = null, Action onFinally = null)
         {
             var request = HttpWebRequest.Create(rssFeed);
             request.Method = "GET";
 
-            request.BeginGetResponse((result) => // cannot run here in backgroundtask
+            request.BeginGetResponse((result) => // stop here in backgroundtask
             {
                 try
                 {
@@ -29,12 +29,12 @@ namespace LogicService.Service
                         {
                             string content = reader.ReadToEnd();
                             string parentID = HashEncode.MakeMD5(rssFeed);
-                            List<FeedItem> rssItems = new List<FeedItem>();
+                            List<Feed> rssItems = new List<Feed>();
                             SyndicationFeed feeds = new SyndicationFeed();
                             feeds.Load(content);
                             foreach (SyndicationItem f in feeds.Items)
                             {
-                                rssItems.Add(new FeedItem
+                                rssItems.Add(new Feed
                                 {
                                     ID = HashEncode.MakeMD5(f.Links[0].Uri.AbsoluteUri),
                                     ParentID = parentID,

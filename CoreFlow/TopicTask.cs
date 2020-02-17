@@ -1,4 +1,5 @@
-﻿using Windows.ApplicationModel.Background;
+﻿using LogicService.Application;
+using Windows.ApplicationModel.Background;
 
 namespace CoreFlow
 {
@@ -9,7 +10,11 @@ namespace CoreFlow
         {
             var deferral = taskInstance.GetDeferral();
 
-
+            //List<RSSSource> FeedSources = Task.Run(async () =>
+            //{
+            //    return await LocalStorage.ReadJsonAsync<List<RSSSource>>(await LocalStorage.GetDataFolderAsync(), "rss.list");
+            //}).Result;
+            ApplicationNotification.ShowTextToast("TopicTask", "");
 
             deferral.Complete();
         }

@@ -36,40 +36,39 @@ namespace Research_Flow
         {
             try
             {
-                FeedSources = await LocalStorage.ReadJsonAsync<ObservableCollection<RSSSource>>(
-                    await LocalStorage.GetDataFolderAsync(), "rsslist");
+                FeedSources = await LocalStorage.ReadJsonAsync<ObservableCollection<FeedSource>>(
+                    await LocalStorage.GetDataFolderAsync(), "rss.list");
             }
             catch
             {
-                // for new user, remember to load default feed from file, not the follows
-                FeedSources = new ObservableCollection<RSSSource>()
+                FeedSources = new ObservableCollection<FeedSource>()
                 {
-                    new RSSSource{ ID = HashEncode.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd"),
+                    new FeedSource{ ID = HashEncode.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd"),
                         Name = "Hydrogen Bond in ACS", Uri = "https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd", Star = 5, IsJournal = true },
-                    new RSSSource{ ID = HashEncode.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd"),
+                    new FeedSource{ ID = HashEncode.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd"),
                         Name = "Pedal Motion in ACS", Uri = "https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd", Star = 5, IsJournal = true },
-                    new RSSSource{ ID = HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prl.xml"),
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prl.xml"),
                         Name = "Physical Review Letters", Uri = "http://feeds.aps.org/rss/recent/prl.xml", Star = 5, IsJournal = true },
-                    new RSSSource{ ID = HashEncode.MakeMD5("http://www.sciencenet.cn/xml/paper.aspx?di=7"),
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://www.sciencenet.cn/xml/paper.aspx?di=7"),
                         Name = "科学网-数理科学", Uri = "http://www.sciencenet.cn/xml/paper.aspx?di=7", Star = 5, IsJournal = false}
                 };
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rsslist", FeedSources);
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rss.list", FeedSources);
             }
             finally
             {
                 feedSource_list.ItemsSource = FeedSources;
                 feedSource_list.SelectedIndex = 0;
-                shownRSS = feedSource_list.SelectedItem as RSSSource;
+                shownRSS = feedSource_list.SelectedItem as FeedSource;
                 LoadFeed(shownRSS);
             }
         }
 
         #region RSS Source
 
-        public ObservableCollection<RSSSource> FeedSources { get; set; }
+        public ObservableCollection<FeedSource> FeedSources { get; set; }
 
-        private RSSSource modifiedRSS = null; // Used for item modification, not clicked item.
-        private RSSSource shownRSS = null; // always un-null
+        private FeedSource modifiedRSS = null; // Used for item modification, not clicked item.
+        private FeedSource shownRSS = null; // always un-null
 
         private void Add_Source(object sender, TappedRoutedEventArgs e) => source_panel.Visibility = Visibility.Visible;
 
@@ -97,7 +96,7 @@ namespace Research_Flow
         {
             if (!string.IsNullOrEmpty(rssUrl.Text))
             {
-                RSSSource source = new RSSSource
+                FeedSource source = new FeedSource
                 {
                     ID = HashEncode.MakeMD5(rssUrl.Text),
                     Name = rssName.Text,
@@ -113,7 +112,7 @@ namespace Research_Flow
                 }
                 else
                 {
-                    foreach (RSSSource item in FeedSources)
+                    foreach (FeedSource item in FeedSources)
                     {
                         if (item == source) // require the Equals method
                         {
@@ -124,14 +123,14 @@ namespace Research_Flow
                     }
                     FeedSources.Add(source);
                 }
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rsslist", FeedSources);
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rss.list", FeedSources);
             }
             ClearSettings();
         }
 
         private async void Delete_RSSSetting(object sender, RoutedEventArgs e)
         {
-            var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.", "Operation confirming");
+            var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.");
             messageDialog.Commands.Add(new UICommand(
                 "True",
                 new UICommandInvokedHandler(this.DeleteInvokedHandler)));
@@ -147,9 +146,9 @@ namespace Research_Flow
         private async void DeleteInvokedHandler(IUICommand command)
         {
             FeedSources.Remove(modifiedRSS);
-            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rsslist", FeedSources);
+            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rss.list", FeedSources);
             // check
-            FeedItem.DBDeleteByPID(modifiedRSS.ID);
+            Feed.DBDeleteByPID(modifiedRSS.ID);
             ClearSettings();
         }
 
@@ -172,7 +171,7 @@ namespace Research_Flow
 
         private void RSS_SourceClick(object sender, ItemClickEventArgs e)
         {
-            shownRSS = e.ClickedItem as RSSSource;
+            shownRSS = e.ClickedItem as FeedSource;
             LoadFeed(shownRSS);
         }
 
@@ -183,11 +182,11 @@ namespace Research_Flow
 
         #region RSS Feed
 
-        private FeedItem selectedFeed = null;
+        private Feed selectedFeed = null;
 
         private void Feed_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var feed = e.ClickedItem as FeedItem;
+            var feed = e.ClickedItem as Feed;
             selectedFeed = feed;
             this.feedItem_detail.IsPaneOpen = true;
 
@@ -200,7 +199,7 @@ namespace Research_Flow
             }
 
             StringBuilder builder = new StringBuilder();
-            foreach (XmlElement pair in FeedItem.GetNodes(feed.Nodes))
+            foreach (XmlElement pair in Feed.GetNodes(feed.Nodes))
             {
                 builder.AppendLine(pair.Name + " : " + pair.InnerText);
             }
@@ -208,7 +207,7 @@ namespace Research_Flow
         }
 
         private void Browse_Feed(object sender, RoutedEventArgs e)
-            => this.Frame.Navigate(typeof(Search), selectedFeed.Link);
+            => this.Frame.Navigate(typeof(SearchEngine), selectedFeed.Link);
 
         private void Favorite_Feed(object sender, RoutedEventArgs e)
         {
@@ -226,11 +225,11 @@ namespace Research_Flow
         private void Close_FeedDetail(object sender, RoutedEventArgs e)
             => feedItem_detail.IsPaneOpen = false;
 
-        private void LoadFeed(RSSSource source)
+        private void LoadFeed(FeedSource source)
         {
             try
             {
-                feedItem_list.ItemsSource = FeedItem.DBSelectByPID(source.ID);
+                feedItem_list.ItemsSource = Feed.DBSelectByPID(source.ID);
             }
             catch (Exception exception)
             {
@@ -238,7 +237,7 @@ namespace Research_Flow
             }
         }
 
-        private void SearchFeed(RSSSource source)
+        private void SearchFeed(FeedSource source)
         {
             int selectedFeedIndex = FeedSources.IndexOf(source); // now you can modify source while fetching feed
 
@@ -247,15 +246,15 @@ namespace Research_Flow
                 source.Uri,
                 async (items) =>
                 {
-                    List<FeedItem> feeds = items as List<FeedItem>;
+                    List<Feed> feeds = items as List<Feed>;
                     await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
                         feedItem_list.ItemsSource = feeds;
                         waiting_feed.IsActive = false;
                     });
-                    FeedItem.DBInsert(feeds);
+                    Feed.DBInsert(feeds);
                     FeedSources[selectedFeedIndex].LastUpdateTime = DateTime.Now;
-                    LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rsslist", FeedSources);
+                    LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rss.list", FeedSources);
                 },
                 async (exception) =>
                 {

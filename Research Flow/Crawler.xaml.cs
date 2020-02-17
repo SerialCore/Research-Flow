@@ -52,11 +52,11 @@ namespace Research_Flow
             try
             {
                 favorites = await LocalStorage.ReadJsonAsync<List<Crawlable>>(
-                    await LocalStorage.GetDataFolderAsync(), "favoritelist");
+                    await LocalStorage.GetDataFolderAsync(), "favorite.list");
             }
             catch
             {
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "favoritelist", favorites);
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "favorite.list", favorites);
             }
             finally
             {

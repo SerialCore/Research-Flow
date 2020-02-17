@@ -27,11 +27,12 @@
                     <ColumnDefinition />
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" x:Name="notefilename" VerticalAlignment="Center" Margin="5,0"/>
+                <TextBox Grid.Column="0" x:Name="notefilename" PlaceholderText="Note Name" VerticalAlignment="Center" Margin="5,0"/>
                 <AppBarButton Grid.Column="1" Icon="Save" Click="Save_Note" Height="40" Width="38" LabelPosition="Collapsed"/>
             </Grid>
 
             <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <AppBarButton Icon="FullScreen" Click="FullScreen_Click" Height="40" Width="38"/>
                 <AppBarButton Click="ChooseInputDevice" Tag="pen" Height="40" Width="38">
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xED5F;" />
                 </AppBarButton>

@@ -89,26 +89,12 @@ namespace Research_Flow
 
         #region Developer
 
-        private async void Show_SearchLog(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void Show_FeedTaskLog(object sender, RoutedEventArgs e)
         {
             try
             {
                 var folder = await LocalStorage.GetLogFolderAsync();
-                var file = await folder.GetFileAsync("SearchTask.log");
-                await Launcher.LaunchFileAsync(file);
-            }
-            catch (Exception exception)
-            {
-                ApplicationMessage.SendMessage("SettingException: " + exception, ApplicationMessage.MessageType.InApp);
-            }
-        }
-
-        private async void Show_StorageLog(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            try
-            {
-                var folder = await LocalStorage.GetLogFolderAsync();
-                var file = await folder.GetFileAsync("StorageTask.log");
+                var file = await folder.GetFileAsync("FeedTask.log");
                 await Launcher.LaunchFileAsync(file);
             }
             catch (Exception exception)
@@ -166,7 +152,7 @@ namespace Research_Flow
             switch (databaselist.SelectedIndex)
             {
                 case 0:
-                    dataviewer.ItemsSource = FeedItem.DBSelectByLimit(100);
+                    dataviewer.ItemsSource = Feed.DBSelectByLimit(100);
                     break;
                 case 1:
                     dataviewer.ItemsSource = Crawlable.DBSelectByLimit(100);

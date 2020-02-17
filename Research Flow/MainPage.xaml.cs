@@ -1,8 +1,10 @@
 ﻿using LogicService.Application;
+using LogicService.Data;
 using LogicService.Service;
 using LogicService.Storage;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
@@ -17,7 +19,6 @@ using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Popups;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -45,6 +46,16 @@ namespace Research_Flow
             ApplicationMessage.MessageReceived += AppMessage_MessageReceived;
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            FileParameter = e.Parameter as StorageFile;
+            InitializeChat();
+            InitializeTask();
+            ConfigureUpdate();
+            ConfigureTask();
+            Login();
+        }
+
         private async void AppMessage_MessageReceived(string message, ApplicationMessage.MessageType type)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -52,12 +63,14 @@ namespace Research_Flow
                  switch(type)
                  {
                      case ApplicationMessage.MessageType.Chat:
+                         ChatBlade.IsOpen = true;
+                         IdentifyChat(new ChatBlock { Comment = message, IsSelf = false, Published = DateTimeOffset.Now });
                          break;
                      case ApplicationMessage.MessageType.InApp:
                          InAppNotification.Show(message);
                          break;
                      case ApplicationMessage.MessageType.Toast:
-                         ApplicationNotification.ShowTextToast("Notification", message);
+                         ApplicationNotification.ShowTextToast("Research Flow", message);
                          break;
                  }
              });
@@ -83,16 +96,36 @@ namespace Research_Flow
 
         private async void ConfigureTask()
         {
-            await ApplicationTask.RegisterSearchTask();
-            await ApplicationTask.RegisterStorageTask();
+            await ApplicationTask.RegisterTopicTask();
+            await ApplicationTask.RegisterTagTask();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        private async void InitializeChat()
         {
-            FileParameter = e.Parameter as StorageFile;
-            ConfigureUpdate();
-            ConfigureTask();
-            Login();
+            try
+            {
+                chatlist = await LocalStorage.ReadJsonAsync<ObservableCollection<ChatBlock>>(
+                    await LocalStorage.GetDataFolderAsync(), "chat.list");
+            }
+            catch
+            {
+                chatlist = new ObservableCollection<ChatBlock>()
+                {
+                    new ChatBlock { Comment = "Hello", IsSelf = false },
+                };
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "chat.list", chatlist);
+            }
+            finally
+            {
+                chatview.ItemsSource = chatlist;
+                chattype.ItemsSource = ChatBlock.UserCall.Keys;
+                chattype.SelectedIndex = 0;
+            }
+        }
+
+        private void InitializeTask()
+        {
+            Feed.TaskRun();
         }
 
         #region NavView
@@ -106,7 +139,7 @@ namespace Research_Flow
             ("TagTopic", typeof(TagTopic)),
             ("PaperBox", typeof(PaperBox)),
             ("RSS", typeof(RSS)),
-            ("Search", typeof(Search)),
+            ("Search", typeof(SearchEngine)),
             ("Crawler", typeof(Crawler)),
             ("Note", typeof(Note)),
         };
@@ -180,9 +213,11 @@ namespace Research_Flow
                 string email = await GraphService.GetPrincipalName();
                 BitmapImage image = new BitmapImage();
                 image.UriSource = new Uri("ms-appx:///Images/ResearchFlow_logo.jpg");
-                accountName.Text = name;
+                accountName1.Text = name;
+                accountName2.Text = name;
                 accountEmail.Text = email;
-                accountPhoto.ProfilePicture = image;
+                accountPhoto1.ProfilePicture = image;
+                accountPhoto2.ProfilePicture = image;
 
                 //try
                 //{
@@ -192,7 +227,8 @@ namespace Research_Flow
             }
             else
             {
-                accountName.Text = "Offline";
+                accountName1.Text = "Offline";
+                accountName2.Text = "Offline";
                 if (ApplicationSetting.ContainKey("AccountName"))
                     accountEmail.Text = ApplicationSetting.AccountName;
             }
@@ -204,32 +240,32 @@ namespace Research_Flow
             
             ContentFrame.IsEnabled = false;
             accountLogout.Content = "restart this app";
-            accountName.Text = "";
+            accountName1.Text = "";
+            accountName2.Text = "";
             accountEmail.Text = "";
         }
 
         private async void AccountLogout_Click(object sender, RoutedEventArgs e)
         {
-            var messageDialog = new MessageDialog("Are you sure to log out?", "Operation confirming");
-            messageDialog.Commands.Add(new UICommand(
-                "True",
-                new UICommandInvokedHandler(this.DeleteInvokedHandler)));
-            messageDialog.Commands.Add(new UICommand(
-                "Joke",
-                new UICommandInvokedHandler(this.CancelInvokedHandler)));
-
-            messageDialog.DefaultCommandIndex = 0;
-            messageDialog.CancelCommandIndex = 1;
-            await messageDialog.ShowAsync();
-        }
-
-        private async void DeleteInvokedHandler(IUICommand command)
-        {
             if (ApplicationSetting.ContainKey("AccountName"))
-                Logout();
+            {
+                var messageDialog = new MessageDialog("Are you sure to log out?");
+                messageDialog.Commands.Add(new UICommand(
+                    "True",
+                    new UICommandInvokedHandler(this.DeleteInvokedHandler)));
+                messageDialog.Commands.Add(new UICommand(
+                    "Joke",
+                    new UICommandInvokedHandler(this.CancelInvokedHandler)));
+
+                messageDialog.DefaultCommandIndex = 0;
+                messageDialog.CancelCommandIndex = 1;
+                await messageDialog.ShowAsync();
+            }
             else
                 await CoreApplication.RequestRestartAsync(string.Empty);
         }
+
+        private void DeleteInvokedHandler(IUICommand command) => Logout();
 
         private void CancelInvokedHandler(IUICommand command) { }
 
@@ -241,6 +277,17 @@ namespace Research_Flow
 
         private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
             => FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+
+        private void Open_FlowBlade(object sender, RoutedEventArgs e)
+            => FlowBlade.IsOpen = true;
+
+        private void Open_ChatBlade(object sender, RoutedEventArgs e)
+            => ChatBlade.IsOpen = true;
+
+        private void CrawlSearch_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            //Crawlable.DBSelectByText(crawlsearch.Text);
+        }
 
         private async void ScreenShot_Export(object sender, RoutedEventArgs e)
         {
@@ -351,22 +398,6 @@ namespace Research_Flow
             }
         }
 
-        private void FullScreen_Click(object sender, RoutedEventArgs e)
-        {
-            AppBarButton button = sender as AppBarButton;
-            ApplicationView view = ApplicationView.GetForCurrentView();
-            if (view.IsFullScreenMode)
-            {
-                view.ExitFullScreenMode();
-                button.Icon = new SymbolIcon(Symbol.FullScreen);
-            }
-            else
-            {
-                view.TryEnterFullScreenMode();
-                button.Icon = new SymbolIcon(Symbol.BackToWindow);
-            }
-        }
-
         private void ColorPicker_ColorChanged(ColorPicker sender, ColorChangedEventArgs args)
         {
             NavView.Background = new SolidColorBrush(args.NewColor);
@@ -386,28 +417,66 @@ namespace Research_Flow
 
         #endregion
 
+        #region Chat
+
+        private ObservableCollection<ChatBlock> chatlist = new ObservableCollection<ChatBlock>();
+
+        private void ChatView_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            chatscroll.ChangeView(null, double.MaxValue, null, true);
+        }
+
+        private void ChatType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!(chattype.SelectedItem as string).Equals("None"))
+                chatbox.Text = chattype.SelectedItem as string;
+            else
+                chatbox.Text = "";
+        }
+
+        private async void IdentifyChat(ChatBlock chat)
+        {
+            if (chat.Comment.Equals("0x01"))
+                ApplicationSetting.IsDeveloper = "true";
+            if (chat.Comment.Equals("0x02"))
+                ApplicationSetting.RemoveKey("IsDeveloper");
+            chatlist.Add(chat);
+            // chat->topic request type
+            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "chat.list", chatlist);
+        }
+
+        private void SubmitChat(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(chatbox.Text))
+            {
+                IdentifyChat(new ChatBlock { Comment = chatbox.Text, IsSelf = true, Published = DateTimeOffset.Now });
+                chatbox.Text = "";
+            }
+        }
+
+        #endregion
+
     }
 
     public class ApplicationTask
     {
-
-        /*
-         * UserPresent and UserAway are both mostly frequent
-         */
-
-        public static async Task<BackgroundTaskRegistration> RegisterSearchTask()
+        public static async Task<BackgroundTaskRegistration> RegisterTopicTask()
         {
-            return await RegisterBackgroundTask(typeof(CoreFlow.SearchTask),
-                "SearchTask", new TimeTrigger(60, false),
-                new SystemCondition(SystemConditionType.InternetAvailable));
+            return await RegisterBackgroundTask(typeof(CoreFlow.TopicTask),
+                "TopicTask", new TimeTrigger(45, false));
         }
 
-        public static async Task<BackgroundTaskRegistration> RegisterStorageTask()
+        public static async Task<BackgroundTaskRegistration> RegisterTagTask()
         {
-            return await RegisterBackgroundTask(typeof(CoreFlow.StorageTask),
-                "StorageTask", new TimeTrigger(120, false),
-                new SystemCondition(SystemConditionType.InternetAvailable));
+            return await RegisterBackgroundTask(typeof(CoreFlow.TagTask),
+                "TagTask", new TimeTrigger(30, false));
         }
+
+        //public static async Task<BackgroundTaskRegistration> RegisterNewTask()
+        //{
+        //    return await RegisterBackgroundTask(typeof(CoreFlow.NewTask),
+        //        "NewTask", new TimeTrigger(20, false));
+        //}
 
         public static IReadOnlyDictionary<Guid, IBackgroundTaskRegistration> ListBackgroundTask()
         {
