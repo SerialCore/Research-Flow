@@ -71,6 +71,9 @@ namespace Research_Flow
             notelist.ItemsSource = namelist;
         }
 
+        private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+            => FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
+
         #region Ink Operation
 
         private Stack<InkStroke> UndoStrokes = new Stack<InkStroke>();
@@ -247,9 +250,6 @@ namespace Research_Flow
         private void Open_Document(object sender, RoutedEventArgs e)
             => notepanel.IsPaneOpen = !notepanel.IsPaneOpen;
 
-        private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-            => FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
-
         private async void Notelist_ItemClick(object sender, ItemClickEventArgs e)
         {
             var name = e.ClickedItem as string;
@@ -299,7 +299,7 @@ namespace Research_Flow
             FileList.DBInsertList((await LocalStorage.GetNoteFolderAsync()).Name, notename + ".rfn");
             FileList.DBInsertTrace((await LocalStorage.GetNoteFolderAsync()).Name, notename + ".rfn");
 
-            ApplicationMessage.SendMessage("Note saved", ApplicationMessage.MessageType.Chat);
+            ApplicationMessage.SendMessage("Note "+ notename + " saved", ApplicationMessage.MessageType.Chat);
             foreach (string item in namelist)
             {
                 if (item.Equals(notename))
@@ -311,12 +311,8 @@ namespace Research_Flow
         private async void Delete_Note(object sender, RoutedEventArgs e)
         {
             var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.");
-            messageDialog.Commands.Add(new UICommand(
-                "True",
-                new UICommandInvokedHandler(this.DeleteInvokedHandler)));
-            messageDialog.Commands.Add(new UICommand(
-                "Joke",
-                new UICommandInvokedHandler(this.CancelInvokedHandler)));
+            messageDialog.Commands.Add(new UICommand("True", new UICommandInvokedHandler(this.DeleteInvokedHandler)));
+            messageDialog.Commands.Add(new UICommand("Joke", new UICommandInvokedHandler(this.CancelInvokedHandler)));
 
             messageDialog.DefaultCommandIndex = 0;
             messageDialog.CancelCommandIndex = 1;

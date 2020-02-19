@@ -52,15 +52,12 @@
                     <CommandBar.Content>
                         <TextBlock Text="Tags" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
                     </CommandBar.Content>
-                    <AppBarButton Icon="Add" Label="Add" Tapped="Flyout_Tapped">
-                        <FlyoutBase.AttachedFlyout>
+                    <AppBarButton Icon="Add" Label="Add">
+                        <AppBarButton.Flyout>
                             <Flyout >
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBox x:Name="tagEmbed" PlaceholderText="#Tag1##Tag2#" Width="300" AllowFocusOnInteraction="True"/>
-                                    <AppBarButton Icon="Accept" Click="AddTagManually" Height="36" Width="36"/>
-                                </StackPanel>
+                                <AutoSuggestBox x:Name="tagEmbed" QueryIcon="Add" PlaceholderText="#Tag1##Tag2#" QuerySubmitted="AddTagManually" AllowFocusOnInteraction="True" Width="300"/>
                             </Flyout>
-                        </FlyoutBase.AttachedFlyout>
+                        </AppBarButton.Flyout>
                     </AppBarButton>
                     <AppBarButton Icon="Comment" Label="Detail" Click="ShowTagPanel_Click"/>
                 </CommandBar>

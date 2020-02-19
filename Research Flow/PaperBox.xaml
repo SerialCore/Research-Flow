@@ -71,15 +71,19 @@
             </SplitView>
 
             <Grid Grid.Column="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                <StackPanel Margin="10">
-                    <TextBlock x:Name="papertitle" Text="Title" FontSize="20"/>
-                    <TextBlock x:Name="paperid" Text="ID"/>
+                <StackPanel Margin="10,10,10,40">
+                    <TextBox x:Name="papertitle" Header="Title"/>
+                    <TextBox x:Name="paperid" Header="DOI | ID"/>
+                    <TextBox x:Name="pdfname" Header="Paper File" PlaceholderText="***.pdf"/>
                     <HyperlinkButton x:Name="paperlink" Content="Link"/>
-                    <TextBlock x:Name="paperauthor" Text="Authors"/>
-                    <TextBox x:Name="pdfname" Header="Paper File" Margin="0,20,0,0"/>
+                    <TextBox x:Name="paperauthor" Header="Authors" PlaceholderText="Author1, Author2, Author3"/>
                     <TextBox x:Name="papernote" Header="Paper Note" PlaceholderText="reason to refer" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
                     <TextBox x:Name="papertags" Header="Paper Tags" PlaceholderText="#Tag1##Tag2#" AcceptsReturn="True" TextWrapping="Wrap" Height="100"/>
                 </StackPanel>
+                <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                    <AppBarButton Icon="Save" Label="Save" Click="SavePaper"/>
+                    <AppBarButton Icon="Delete" Label="Delete" Click="DeletePaper"/>
+                </CommandBar>
             </Grid>
         </Grid>
         

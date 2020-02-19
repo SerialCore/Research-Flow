@@ -14,15 +14,16 @@
             <PivotItem Header="Setting">
                 <ScrollViewer>
                     <StackPanel>
-                        <TextBlock Text="File Saving" FontSize="25"/>
+                        <TextBlock Text="User Data" FontSize="20"/>
+                        <TextBlock Text="Please do not modify data in File Explore unless you are ready to clear this account. User data should have been hidden from all of you."/>
                         <Button Click="AccountSync_Click">
                             <Grid>
-                                <TextBlock Text="Synchronize"/>
+                                <TextBlock Text="Synchronize with OneDrive"/>
                                 <ProgressRing x:Name="waitSync"/>
                             </Grid>
                         </Button>
-                        <TextBlock Text="Topic Reminding" FontSize="25"/>
-                        <TextBlock Text="Days before dealine"/>
+
+                        <TextBlock Text="Notification" FontSize="20"/>
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem>

@@ -16,49 +16,54 @@
                 <ColumnDefinition Width="400"/>
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="0">
-                <GridView IsItemClickEnabled="True" Margin="5,5,5,40">
-                    <GridView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Height="250" Width="250" Padding="10" Background="LightGoldenrodYellow">
-                            </Grid>
-                        </DataTemplate>
-                    </GridView.ItemTemplate>
-                </GridView>
-                <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                    <CommandBar.Content>
-                        <TextBlock Text="Pool" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
-                    </CommandBar.Content>
-                    <AppBarButton Icon="Add" Label="Add"/>
-                    <AppBarSeparator/>
-                    <AppBarButton Icon="Setting" Label="Setting" Click="OpenCrawPanel_Click"/>
-                </CommandBar>
-            </Grid>
-
             <SplitView x:Name="crawpanel" Grid.Column="0">
                 <SplitView.Pane>
                     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                        
+                        <ListView x:Name="favoritelist" ItemClick="FavoriteList_ItemClick" IsItemClickEnabled="True" Margin="0,0,0,40">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Padding="5">
+                                        <TextBlock Text="{Binding Text}" MaxLines="2" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>
+                                        <TextBlock Text="{Binding Url}" MaxLines="2" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}" Foreground="{ThemeResource SystemAccentColor}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                            <CommandBar.Content>
+                                <TextBlock Text="Favorites" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
+                            </CommandBar.Content>
+                        </CommandBar>
                     </Grid>
                 </SplitView.Pane>
+                <SplitView.Content>
+                    <Grid>
+                        <AutoSuggestBox QueryIcon="Find" HorizontalAlignment="Stretch"/>
+                        <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                            <CommandBar.Content>
+                                <TextBlock Text="Pool" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
+                            </CommandBar.Content>
+                            <AppBarButton Icon="Favorite" Label="Favorites" Click="OpenFavorites_Click"/>
+                        </CommandBar>
+                    </Grid>
+                </SplitView.Content>
             </SplitView>
 
             <Grid Grid.Column="1">
-                <ListView x:Name="favoritelist" IsItemClickEnabled="True" Margin="0,0,0,40">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <TextBlock Text="{Binding Text}" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>
-                                <HyperlinkButton Content="{Binding Url}" NavigateUri="{Binding Url}" FontSize="16"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                    <CommandBar.Content>
-                        <TextBlock Text="Favorites" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
-                    </CommandBar.Content>
-                </CommandBar>
+                <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <StackPanel Margin="10,10,10,40">
+                        <TextBox x:Name="crawltext" Header="Text"/>
+                        <HyperlinkButton x:Name="crawlurl" Content="Link"/>
+                        <TextBox x:Name="crawlcontent" Header="Crawler Content" PlaceholderText="page content | summary" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
+                        <TextBox x:Name="crawltags" Header="Crawler Tags" PlaceholderText="#Tag1##Tag2#" AcceptsReturn="True" TextWrapping="Wrap" Height="100"/>
+                        <AutoSuggestBox x:Name="linkFilter" Header="Select Filters" QueryIcon="Filter"/>
+                        <TextBox x:Name="crawlfilters" Header="Crawler Filters" PlaceholderText="Filter1&#x000A;Filter2" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
+                    </StackPanel>
+                    <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                        <AppBarButton Icon="Save" Label="Save" Click="SaveCrawlable"/>
+                        <AppBarButton Icon="Delete" Label="Delete" Click="DeleteCrawlable"/>
+                    </CommandBar>
+                </Grid>
             </Grid>
         </Grid>
 

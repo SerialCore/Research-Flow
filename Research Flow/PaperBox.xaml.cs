@@ -9,6 +9,7 @@ using Windows.Data.Pdf;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.System;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -32,6 +33,20 @@ namespace Research_Flow
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            if (e.Parameter != null)
+            {
+                Feed feed = e.Parameter as Feed;
+                if (feed != null)
+                {
+                    paperid.Text = Feed.GetDoi(feed.Nodes);
+                    papertitle.Text = feed.Title;
+                    paperauthor.Text = Feed.GetAuthor(feed.Nodes);
+                    paperlink.Content = feed.Link;
+                    paperlink.NavigateUri = new Uri(feed.Link);
+                    papertags.Text = feed.Tags;
+                }
+            }
+
             InitializePaper();
         }
 
@@ -174,14 +189,68 @@ namespace Research_Flow
 
         #region Paper Management
 
-        /// <summary>
-        /// will be recorded
-        /// </summary>
-        private void ArchiveThisPaper()
+        private Paper currentpaper = null;
+
+        private void SavePaper(object sender, RoutedEventArgs e)
         {
-            // if user want to sync this paper between devices, they will have the right to make the choice
-            // choosing synchronization is equals to choosing registing on database
+            if (string.IsNullOrEmpty(paperid.Text) || string.IsNullOrEmpty(papertitle.Text))
+            {
+                ApplicationMessage.SendMessage("PaperWarning: There must be Title and ID", ApplicationMessage.MessageType.InApp);
+                return;
+            }
+
+            if (Paper.DBSelectByID(paperid.Text).Count == 0)
+                Paper.DBInsert(new List<Paper>()
+                {
+                    new Paper
+                    {
+                        ID = paperid.Text,
+                        ParentID = "Null",
+                        Title = papertitle.Text,
+                        FileName = string.IsNullOrEmpty(pdfname.Text)? "Null" : pdfname.Text,
+                        Link = string.IsNullOrEmpty(paperlink.Content as string)? "Null" : (paperlink.Content as string),
+                        Authors = string.IsNullOrEmpty(paperauthor.Text)? "Null" : paperauthor.Text,
+                        Note = string.IsNullOrEmpty(papernote.Text)? "Null" : papernote.Text,
+                        Tags = string.IsNullOrEmpty(papertags.Text)? "Null" : papertags.Text,
+                    }
+                });
         }
+
+        private async void DeletePaper(object sender, RoutedEventArgs e)
+        {
+            var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.", "Operation confirming");
+            messageDialog.Commands.Add(new UICommand("True", new UICommandInvokedHandler(this.DeleteInvokedHandler)));
+            messageDialog.Commands.Add(new UICommand("Joke", new UICommandInvokedHandler(this.CancelInvokedHandler)));
+
+            messageDialog.DefaultCommandIndex = 0;
+            messageDialog.CancelCommandIndex = 1;
+            await messageDialog.ShowAsync();
+        }
+
+        private async void DeleteInvokedHandler(IUICommand command)
+        {
+            if (currentpaper != null) // paper
+            {
+                Paper.DBDeleteByID(currentpaper.ID);
+                //papers.Remove(currentpaper);
+                currentpaper = null;
+            }
+            if (!string.IsNullOrEmpty(pdfname.Text)) // file
+            {
+                // whether to record?
+                //LocalStorage.GeneralDeleteAsync(await LocalStorage.GetPaperFolderAsync(), pdfname.Text);
+                await (await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(pdfname.Text)).DeleteAsync();
+            }
+
+            paperid.Text = "";
+            papertitle.Text = "";
+            paperauthor.Text = "";
+            paperlink.Content = "Link";
+            paperlink.NavigateUri = null;
+            papertags.Text = "";
+        }
+
+        private void CancelInvokedHandler(IUICommand command) { }
 
         #endregion
 

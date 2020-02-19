@@ -9,10 +9,22 @@ namespace CoreFlow
         {
             var deferral = taskInstance.GetDeferral();
 
-            ApplicationNotification.ShowTextToast("TagTask", "");
+            //ApplicationNotification.ShowTextToast("TagTask", "");
 
             deferral.Complete();
         }
 
+        private void FetchFeedTag()
+        {
+            //category to tags
+            //title to tags
+            //summary to tags
+        }
+
+        private void FetchCrawlableTag()
+        {
+            //text to tags
+            //content to tags
+        }
     }
 }

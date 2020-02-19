@@ -7,8 +7,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
-using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Graphics.Display;
@@ -50,9 +48,7 @@ namespace Research_Flow
         {
             FileParameter = e.Parameter as StorageFile;
             InitializeChat();
-            InitializeTask();
             ConfigureUpdate();
-            ConfigureTask();
             Login();
         }
 
@@ -94,12 +90,6 @@ namespace Research_Flow
 
         }
 
-        private async void ConfigureTask()
-        {
-            await ApplicationTask.RegisterTopicTask();
-            await ApplicationTask.RegisterTagTask();
-        }
-
         private async void InitializeChat()
         {
             try
@@ -121,11 +111,6 @@ namespace Research_Flow
                 chattype.ItemsSource = ChatBlock.UserCall.Keys;
                 chattype.SelectedIndex = 0;
             }
-        }
-
-        private void InitializeTask()
-        {
-            Feed.TaskRun();
         }
 
         #region NavView
@@ -219,11 +204,11 @@ namespace Research_Flow
                 accountPhoto1.ProfilePicture = image;
                 accountPhoto2.ProfilePicture = image;
 
-                //try
-                //{
-                //    await Synchronization.ScanFiles();
-                //}
-                //catch { }
+                try
+                {
+                    await Synchronization.ScanFiles();
+                }
+                catch { }
             }
             else
             {
@@ -276,7 +261,7 @@ namespace Research_Flow
         private bool IsHeaderColorChanged = false;
 
         private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-            => FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+            => FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
 
         private void Open_FlowBlade(object sender, RoutedEventArgs e)
             => FlowBlade.IsOpen = true;
@@ -285,9 +270,7 @@ namespace Research_Flow
             => ChatBlade.IsOpen = true;
 
         private void CrawlSearch_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-        {
-            //Crawlable.DBSelectByText(crawlsearch.Text);
-        }
+            => ContentFrame.Navigate(typeof(Crawler), crawlsearch.Text);
 
         private async void ScreenShot_Export(object sender, RoutedEventArgs e)
         {
@@ -457,84 +440,4 @@ namespace Research_Flow
         #endregion
 
     }
-
-    public class ApplicationTask
-    {
-        public static async Task<BackgroundTaskRegistration> RegisterTopicTask()
-        {
-            return await RegisterBackgroundTask(typeof(CoreFlow.TopicTask),
-                "TopicTask", new TimeTrigger(45, false));
-        }
-
-        public static async Task<BackgroundTaskRegistration> RegisterTagTask()
-        {
-            return await RegisterBackgroundTask(typeof(CoreFlow.TagTask),
-                "TagTask", new TimeTrigger(30, false));
-        }
-
-        //public static async Task<BackgroundTaskRegistration> RegisterNewTask()
-        //{
-        //    return await RegisterBackgroundTask(typeof(CoreFlow.NewTask),
-        //        "NewTask", new TimeTrigger(20, false));
-        //}
-
-        public static IReadOnlyDictionary<Guid, IBackgroundTaskRegistration> ListBackgroundTask()
-        {
-            return BackgroundTaskRegistration.AllTasks;
-        }
-
-        public static bool ContainBackgroundTask(string taskName)
-        {
-            foreach (var cur in ListBackgroundTask())
-            {
-                if (cur.Value.Name == taskName)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public static void CancelBackgroundTask(string taskName)
-        {
-            foreach (var cur in ListBackgroundTask())
-            {
-                if (cur.Value.Name == taskName)
-                {
-                    cur.Value.Unregister(true);
-                }
-            }
-        }
-
-        private static async Task<BackgroundTaskRegistration> RegisterBackgroundTask(Type taskEntryPoint,
-            string taskName, IBackgroundTrigger trigger, IBackgroundCondition condition = null)
-        {
-            var status = await BackgroundExecutionManager.RequestAccessAsync();
-            if (status == BackgroundAccessStatus.Unspecified || status == BackgroundAccessStatus.DeniedByUser
-                || status == BackgroundAccessStatus.DeniedByUser)
-            {
-                return null;
-            }
-
-            CancelBackgroundTask(taskName); // always cancel?
-
-            var builder = new BackgroundTaskBuilder
-            {
-                Name = taskName,
-                TaskEntryPoint = taskEntryPoint.FullName
-            };
-
-            builder.SetTrigger(trigger);
-
-            if (condition != null)
-            {
-                builder.AddCondition(condition);
-            }
-
-            BackgroundTaskRegistration task = builder.Register();
-            return task;
-        }
-
-    }
-
 }

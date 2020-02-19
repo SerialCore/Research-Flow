@@ -116,7 +116,7 @@ namespace Research_Flow
                     {
                         if (item == source) // require the Equals method
                         {
-                            ApplicationMessage.SendMessage("RssException: There has been the same url.", ApplicationMessage.MessageType.InApp);
+                            ApplicationMessage.SendMessage("RssWarning: There has been the same url.", ApplicationMessage.MessageType.InApp);
                             ClearSettings();
                             return;
                         }
@@ -131,12 +131,8 @@ namespace Research_Flow
         private async void Delete_RSSSetting(object sender, RoutedEventArgs e)
         {
             var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.");
-            messageDialog.Commands.Add(new UICommand(
-                "True",
-                new UICommandInvokedHandler(this.DeleteInvokedHandler)));
-            messageDialog.Commands.Add(new UICommand(
-                "Joke",
-                new UICommandInvokedHandler(this.CancelInvokedHandler)));
+            messageDialog.Commands.Add(new UICommand("True", new UICommandInvokedHandler(this.DeleteInvokedHandler)));
+            messageDialog.Commands.Add(new UICommand("Joke", new UICommandInvokedHandler(this.CancelInvokedHandler)));
 
             messageDialog.DefaultCommandIndex = 0;
             messageDialog.CancelCommandIndex = 1;
@@ -193,10 +189,6 @@ namespace Research_Flow
             feedTitle.Text = feed.Title + "\n";
             feedPublished.Text = feed.Published;
             feedSummary.Text = feed.Summary + "\n";
-            if (!feed.Tags.Equals("Null"))
-            {
-                feedTags.Text = feed.Tags;
-            }
 
             StringBuilder builder = new StringBuilder();
             foreach (XmlElement pair in Feed.GetNodes(feed.Nodes))
@@ -209,6 +201,10 @@ namespace Research_Flow
         private void Browse_Feed(object sender, RoutedEventArgs e)
             => this.Frame.Navigate(typeof(SearchEngine), selectedFeed.Link);
 
+
+        private void Flow_Feed(object sender, RoutedEventArgs e)
+            => this.Frame.Navigate(typeof(PaperBox), selectedFeed);
+
         private void Favorite_Feed(object sender, RoutedEventArgs e)
         {
             Crawlable.AddtoFavorite(new Crawlable()
@@ -219,6 +215,7 @@ namespace Research_Flow
                 Url = selectedFeed.Link,
                 Content = selectedFeed.Summary,
                 Tags = selectedFeed.Tags,
+                Filters = "Null",
             });
         }
 

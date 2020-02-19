@@ -1,4 +1,6 @@
-﻿namespace LogicService.Data
+﻿using System;
+
+namespace LogicService.Data
 {
     public class Flow<U, V>
     {
@@ -27,13 +29,16 @@
         {
             this.ou = u;
             this.ov = v;
-            Flow<U, V> a = u as Flow<U, V>;
-            this.length = a.Length + 1;
         }
 
-        public Flow<Flow<U, V>, T> Append<T>(T t)
+        public Flow<Flow<U, V>, T> AppendRight<T>(T t)
         {
             return new Flow<Flow<U, V>, T>(this, t);
+        }
+
+        public Flow<T, Flow<U, V>> AppendLeft<T>(T t)
+        {
+            return new Flow<T, Flow<U, V>>(t, this);
         }
     }
 
@@ -42,7 +47,7 @@
         public void demo()
         {
             Flow<string, int> flow = new Flow<string, int>("1", 1);
-            flow.Append<double>(1.1);
+            flow.AppendRight<double>(1.1);
         }
     }
 }

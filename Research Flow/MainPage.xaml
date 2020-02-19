@@ -62,7 +62,7 @@
             </NavigationView.MenuItems>
 
             <NavigationView.PaneHeader>
-                <TextBlock Text="  Research Flow" VerticalAlignment="Center"/>
+                <TextBlock Text="  Research Flow (beta test)" VerticalAlignment="Center"/>
             </NavigationView.PaneHeader>
 
             <NavigationView.PaneFooter>
@@ -102,7 +102,7 @@
                                 </MenuFlyout>
                             </FlyoutBase.AttachedFlyout>
                         </AppBarButton>
-                        <AppBarButton Icon="SwitchApps" Click="Open_FlowBlade" ToolTipService.ToolTip="Flow" Width="42" Height="42"/>
+                        <!--<AppBarButton Icon="SwitchApps" Click="Open_FlowBlade" ToolTipService.ToolTip="Flow" Width="42" Height="42"/>-->
                         <AppBarButton Icon="Message" Click="Open_ChatBlade" ToolTipService.ToolTip="Chat" Width="42" Height="42"/>
                         <AppBarButton Icon="Placeholder" Tapped="Flyout_Tapped" ToolTipService.ToolTip="Background" Width="42" Height="42">
                             <FlyoutBase.AttachedFlyout>

@@ -14,7 +14,7 @@ namespace CoreFlow
             //{
             //    return await LocalStorage.ReadJsonAsync<List<RSSSource>>(await LocalStorage.GetDataFolderAsync(), "rss.list");
             //}).Result;
-            ApplicationNotification.ShowTextToast("TopicTask", "");
+            //ApplicationNotification.ShowTextToast("TopicTask", "");
 
             deferral.Complete();
         }

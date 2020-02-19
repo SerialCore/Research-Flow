@@ -74,10 +74,51 @@ namespace LogicService.Data
             DataStorage.PaperData.ExecuteWrite(sql);
         }
 
+        public static int DBInsert(List<Paper> paperlist)
+        {
+            int affectedRows = 0;
+            string sql = @"insert into Paper(ID, ParentID, Title, FileName, Link, Authors, Note, Tags)
+                values(@ID, @ParentID, @Title, @FileName, @Link, @Authors, @Note, @Tags);";
+
+            foreach (Paper paper in paperlist)
+            {
+                affectedRows = DataStorage.PaperData.ExecuteWrite(sql, new Dictionary<string, object>
+                {
+                    { "@ID", paper.ID },
+                    { "@ParentID", paper.ParentID },
+                    { "@Title", paper.Title },
+                    { "@FileName", paper.FileName },
+                    { "@Link", paper.Link },
+                    { "@Authors", paper.Authors },
+                    { "@Note", paper.Note },
+                    { "@Tags", paper.Tags },
+                });
+            }
+
+            FileList.DBInsertList("Data", DataStorage.PaperData.Database);
+            FileList.DBInsertTrace("Data", DataStorage.PaperData.Database);
+
+            return affectedRows;
+        }
+
         public static List<Paper> DBSelectByLimit(int limit)
         {
             string sql = "select * from Paper limit @Limit;";
             var reader = DataStorage.PaperData.ExecuteRead(sql, new Dictionary<string, object> { { "@Limit", limit } });
+            return DBReader(reader);
+        }
+
+        public static List<Paper> DBSelectByID(string id)
+        {
+            string sql = "select * from Paper where ID = @ID;";
+            var reader = DataStorage.PaperData.ExecuteRead(sql, new Dictionary<string, object> { { "@ID", id } });
+            return DBReader(reader);
+        }
+
+        public static List<Paper> DBSelectByPID(string pid)
+        {
+            string sql = "select * from Paper where ParentID = @ParentID;";
+            var reader = DataStorage.PaperData.ExecuteRead(sql, new Dictionary<string, object> { { "@ParentID", pid } });
             return DBReader(reader);
         }
 
@@ -118,16 +159,19 @@ namespace LogicService.Data
             return papers;
         }
 
-        public static void DBUpdate()
+        public static int DBDeleteByID(string id)
         {
+            int affectedRows = 0;
+            string sql = "delete from Paper where ID = @ID;";
+            affectedRows = DataStorage.PaperData.ExecuteWrite(sql, new Dictionary<string, object> { { "@ID", id } });
 
+            FileList.DBInsertList("Data", DataStorage.PaperData.Database);
+            FileList.DBInsertTrace("Data", DataStorage.PaperData.Database);
+
+            return affectedRows;
         }
 
-        #endregion
-
-        #region Helper
-
-        public static void ReceiveFlow()
+        public static void DBUpdate()
         {
 
         }

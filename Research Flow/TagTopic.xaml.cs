@@ -78,9 +78,6 @@ namespace Research_Flow
 
         private HashSet<string> tags;
 
-        private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-            => FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
-
         private void ShowTagPanel_Click(object sender, RoutedEventArgs e)
             => tagpanel.IsPaneOpen = !tagpanel.IsPaneOpen;
 
@@ -108,7 +105,7 @@ namespace Research_Flow
             tagKlist.ItemsSource = collectionVS.View.CollectionGroups;
         }
 
-        private async void AddTagManually(object sender, RoutedEventArgs e)
+        private async void AddTagManually(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             if (!string.IsNullOrEmpty(tagEmbed.Text))
             {
@@ -271,12 +268,8 @@ namespace Research_Flow
         private async void DeleteTopic(object sender, RoutedEventArgs e)
         {
             var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.", "Operation confirming");
-            messageDialog.Commands.Add(new UICommand(
-                "True",
-                new UICommandInvokedHandler(this.DeleteInvokedHandler)));
-            messageDialog.Commands.Add(new UICommand(
-                "Joke",
-                new UICommandInvokedHandler(this.CancelInvokedHandler)));
+            messageDialog.Commands.Add(new UICommand("True", new UICommandInvokedHandler(this.DeleteInvokedHandler)));
+            messageDialog.Commands.Add(new UICommand("Joke", new UICommandInvokedHandler(this.CancelInvokedHandler)));
 
             messageDialog.DefaultCommandIndex = 0;
             messageDialog.CancelCommandIndex = 1;

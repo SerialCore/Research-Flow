@@ -235,7 +235,7 @@ namespace LogicService.Data
             foreach (XmlNode node in GetNodes(xml))
             {
                 if (node.Name.Equals("doi"))
-                    return node.Value;
+                    return node.InnerText;
             }
             return "";
         }
@@ -245,7 +245,7 @@ namespace LogicService.Data
             foreach (XmlNode node in GetNodes(xml))
             {
                 if (node.Name.Equals("author"))
-                    return node.Value;
+                    return node.InnerText;
             }
             return "";
         }
@@ -255,7 +255,7 @@ namespace LogicService.Data
             foreach (XmlNode node in GetNodes(xml))
             {
                 if (node.Name.Equals("category"))
-                    return node.Value;
+                    return node.InnerText;
             }
             return "";
         }

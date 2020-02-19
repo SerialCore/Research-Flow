@@ -67,13 +67,12 @@ namespace Research_Flow
                 searchlist.ItemsSource = SearchSources.Keys;
                 searchlist.SelectedIndex = 0;
                 source_list.ItemsSource = SearchSources;
-                linkFilter.ItemsSource = CrawlerService.LinkFilter.Keys;
-                linkFilter.Text = "Text: NotEmpty";
+                linkFilter1.ItemsSource = Crawlable.LinkType.Keys;
+                linkFilter2.ItemsSource = Crawlable.LinkType.Keys;
+                linkFilter1.Text = "Text: NotEmpty";
+                linkFilter2.Text = "Text: NotEmpty";
             }
         }
-
-        private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-            => FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
 
         #region Search Engine
 
@@ -143,12 +142,8 @@ namespace Research_Flow
         private async void Delete_SearchSetting(object sender, RoutedEventArgs e)
         {
             var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.");
-            messageDialog.Commands.Add(new UICommand(
-                "True",
-                new UICommandInvokedHandler(this.DeleteInvokedHandler)));
-            messageDialog.Commands.Add(new UICommand(
-                "Joke",
-                new UICommandInvokedHandler(this.CancelInvokedHandler)));
+            messageDialog.Commands.Add(new UICommand("True", new UICommandInvokedHandler(this.DeleteInvokedHandler)));
+            messageDialog.Commands.Add(new UICommand("Joke", new UICommandInvokedHandler(this.CancelInvokedHandler)));
 
             messageDialog.DefaultCommandIndex = 0;
             messageDialog.CancelCommandIndex = 1;
@@ -278,7 +273,7 @@ namespace Research_Flow
                 name = split[split.Length - 1] + ".pdf";
 
             // check if a downloadable link
-            if (Regex.IsMatch(link, CrawlerService.LinkFilter["Url: HasPDF"]))
+            if (Regex.IsMatch(link, Crawlable.LinkType["Url: HasPDF"]))
             {
                 downloadPanel.Visibility = Visibility.Visible;
                 downloadStatus.Text = "Processing";
@@ -323,11 +318,6 @@ namespace Research_Flow
             downloadPanel.Visibility = Visibility.Collapsed;
         }
 
-        private void AddDataFlow(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         #endregion
 
         #region Fisrt Crawl
@@ -344,7 +334,8 @@ namespace Research_Flow
                     Text = currentCrawled.Title,
                     Url = currentCrawled.Url,
                     Content = currentCrawled.Content,
-                    Tags = "Null"
+                    Tags = "Null",
+                    Filters = "Null"
                 });
         }
 
@@ -387,36 +378,22 @@ namespace Research_Flow
             => LinkFilter_QuerySubmitted(null, null);
 
         private void LinkFilter_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-        {
-            if (currentCrawled == null)
-                return;
+            => link_list.ItemsSource = Crawlable.LinkFilter(currentCrawled, linkFilter1.Text);
 
-            Regex regex = new Regex(@"(?<header>^(Text|Url):\s(\w+$|\w+=))(?<param>\w*$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
-            Match match = regex.Match(linkFilter.Text);
-            if (match.Success && currentCrawled != null)
-            {
-                string header = match.Groups["header"].Value;
-                string param = match.Groups["param"].Value;
-                if (header.StartsWith("Text"))
-                {
-                    if (header.Equals("Url: Insite"))
-                        link_list.ItemsSource = currentCrawled.InsiteLinks;
-                    else
-                        link_list.ItemsSource = currentCrawled.GetSpecialLinksByText(CrawlerService.LinkFilter.GetValueOrDefault(header) + param);
-                }
-                if (header.StartsWith("Url"))
-                {
-                    link_list.ItemsSource = currentCrawled.GetSpecialLinksByUrl(CrawlerService.LinkFilter.GetValueOrDefault(header) + param);
-                }
-            }
-            else if (string.IsNullOrEmpty(linkFilter.Text))
-                link_list.ItemsSource = currentCrawled.Links;
-        }
+        //private void LinkFilter2_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        //    => crawlfilters.Text += linkFilter2.Text + "\t\n";
 
         private void SubmitToCrawler(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(Crawler), currentCrawled);
-        }
+            => this.Frame.Navigate(typeof(Crawler), new Crawlable()
+            {
+                ID = HashEncode.MakeMD5(currentCrawled.Url),
+                ParentID = "Null",
+                Text = currentCrawled.Title,
+                Url = currentCrawled.Url,
+                Content = currentCrawled.Content,
+                Tags = "Null",
+                Filters = crawlfilters.Text,
+            });
 
         #endregion
 

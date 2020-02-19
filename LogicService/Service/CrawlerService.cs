@@ -24,21 +24,6 @@ namespace LogicService.Service
         private static Dictionary<string, CookieContainer> webcookies = new Dictionary<string, CookieContainer>();
 
         /// <summary>
-        /// Resources of links filter, service for GetSpecialLinksByUrl() or GetSpecialLinksByText()
-        /// </summary>
-        public static Dictionary<string, string> LinkFilter = new Dictionary<string, string>()
-        {
-            { "Text: NotEmpty", @"\S" },
-            { "Text: Has=", "" },
-            { "Text: HasPDF", "pdf" },
-            { "Url: Has=", "" },
-            { "Url: HasDoi", "doi" },
-            { "Url: HasAbs", "abs" },
-            { "Url: HasPDF", @"(.pdf\z)|(/pdf/)" },
-            { "Url: Insite", "" }, // for tag only, not truely dictionary
-        };
-
-        /// <summary>
         /// Url
         /// </summary>
         public string Url
@@ -178,7 +163,8 @@ namespace LogicService.Service
                                 Text = text,
                                 Url = url,
                                 Content = "Null",
-                                Tags = "Null"
+                                Tags = "Null",
+                                Filters = "Null",
                             });
                         }
                         catch (Exception ex) { Console.WriteLine(ex.Message); };
