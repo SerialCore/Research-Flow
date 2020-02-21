@@ -29,6 +29,7 @@
                 <AutoSuggestBox Grid.Column="2" x:Name="queryQuest" QueryIcon="Find"
                                     QuerySubmitted="Search_QuerySubmitted" VerticalAlignment="Center"/>
                 <StackPanel Grid.Column="3" Orientation="Horizontal">
+                    <AppBarButton Icon="Tag" Click="AddToTagTopic" ToolTipService.ToolTip="AddTotag" Width="38" Height="38"/>
                     <AppBarButton Icon="Share" Click="ShareLink" ToolTipService.ToolTip="Share" Width="38" Height="38"/>
                     <AppBarButton Icon="Account" Click="OpenBrowser" ToolTipService.ToolTip="Browser" Width="38" Height="38"/>
                     <AppBarButton Icon="Previous" Click="PageBack" ToolTipService.ToolTip="Back" IsEnabled="{x:Bind webView.CanGoBack,Mode=OneWay}" Width="38" Height="38"/>

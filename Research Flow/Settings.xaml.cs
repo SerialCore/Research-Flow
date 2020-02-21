@@ -27,9 +27,9 @@ namespace Research_Flow
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (ApplicationSetting.ContainKey("IsDeveloper"))
-                developerPanel.Visibility = Visibility.Visible;
+                developerPanel.IsEnabled = true;
             else
-                developerPanel.Visibility = Visibility.Collapsed;
+                developerPanel.IsEnabled = false;
 
             DisplaySystemInfo();
         }

@@ -210,7 +210,7 @@ namespace LogicService.Data
             affectedRows += DataStorage.FileList.ExecuteWrite(sql, new Dictionary<string, object>
             {
                 { "@FilePosition", position },
-                { "@FileName", position },
+                { "@FileName", name },
                 { "@DateModified", DateTime.Now.ToString() }
             });
             return affectedRows;

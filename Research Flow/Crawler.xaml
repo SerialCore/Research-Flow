@@ -38,12 +38,52 @@
                 </SplitView.Pane>
                 <SplitView.Content>
                     <Grid>
-                        <AutoSuggestBox QueryIcon="Find" HorizontalAlignment="Stretch"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="150"/>
+                            </Grid.ColumnDefinitions>
+                            <AutoSuggestBox Grid.Column="0" x:Name="crawlsearch" QueryIcon="Find" QuerySubmitted="CrawlSearch_QuerySubmitted" HorizontalAlignment="Stretch"/>
+                            <ComboBox Grid.Column="1" x:Name="searchtype" HorizontalAlignment="Stretch">
+                                <ComboBoxItem Content="Search Text"/>
+                                <ComboBoxItem Content="Search Content"/>
+                                <ComboBoxItem Content="List the First 100"/>
+                            </ComboBox>
+                        </Grid>
+                        <Grid Margin="0,35,0,40">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <ListView Grid.Column="0" x:Name="databaselist" Header="Database" IsItemClickEnabled="True" ItemClick="DatabaseList_ItemClick" Margin="5">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Padding="5">
+                                            <TextBlock Text="{Binding Text}" MaxLines="2" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>
+                                            <TextBlock Text="{Binding Url}" MaxLines="2" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}" Foreground="{ThemeResource SystemAccentColor}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                            <ListView Grid.Column="1" x:Name="servicelist" Header="CrawlerService" IsItemClickEnabled="True" ItemClick="ServiceList_ItemClick" Margin="5">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Padding="5">
+                                            <TextBlock Text="{Binding Text}" MaxLines="2" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>
+                                            <TextBlock Text="{Binding Url}" MaxLines="2" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}" Foreground="{ThemeResource SystemAccentColor}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                            <ProgressRing Grid.Column="1" x:Name="craWaiting" Height="100" Width="100"/>
+                        </Grid>
                         <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
                             <CommandBar.Content>
                                 <TextBlock Text="Pool" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
                             </CommandBar.Content>
-                            <AppBarButton Icon="Favorite" Label="Favorites" Click="OpenFavorites_Click"/>
+                            <AppBarButton Icon="Save" Label="SaveCrawlerLinks" Click="SaveLinks_Click"/>
+                            <AppBarSeparator/>
+                            <AppBarButton Icon="List" Label="Favorites" Click="OpenFavorites_Click"/>
                         </CommandBar>
                     </Grid>
                 </SplitView.Content>
@@ -60,6 +100,7 @@
                         <TextBox x:Name="crawlfilters" Header="Crawler Filters" PlaceholderText="Filter1&#x000A;Filter2" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
                     </StackPanel>
                     <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                        <AppBarButton Icon="Find" Label="CrawlNow" Click="CrawlCrawlable"/>
                         <AppBarButton Icon="Save" Label="Save" Click="SaveCrawlable"/>
                         <AppBarButton Icon="Delete" Label="Delete" Click="DeleteCrawlable"/>
                     </CommandBar>

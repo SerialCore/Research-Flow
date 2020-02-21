@@ -35,9 +35,9 @@ namespace Research_Flow
         {
             if (e.Parameter != null)
             {
-                Feed feed = e.Parameter as Feed;
-                if (feed != null)
+                if (e.Parameter.GetType().Equals(typeof(Feed)))
                 {
+                    Feed feed = e.Parameter as Feed;
                     paperid.Text = Feed.GetDoi(feed.Nodes);
                     papertitle.Text = feed.Title;
                     paperauthor.Text = Feed.GetAuthor(feed.Nodes);

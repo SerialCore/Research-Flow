@@ -36,11 +36,14 @@ namespace Research_Flow
         {
             if (e.Parameter != null) // to solve the BUG: always show old site when NavigatedTo
             {
-                string link = e.Parameter as string;
-                if (!string.IsNullOrEmpty(link))
+                if (e.Parameter.GetType().Equals(typeof(string)))
                 {
-                    webView.Source = new Uri(link);
-                    FirstCrawl(link);
+                    string link = e.Parameter as string;
+                    if (!string.IsNullOrEmpty(link))
+                    {
+                        webView.Source = new Uri(link);
+                        FirstCrawl(link);
+                    }
                 }
             }
         }
@@ -234,6 +237,21 @@ namespace Research_Flow
                 await Launcher.LaunchUriAsync(webView.Source);
         }
 
+        private async void AddToTagTopic(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(queryQuest.Text))
+            {
+                var tags = await LocalStorage.ReadJsonAsync<HashSet<string>>(
+                    await LocalStorage.GetDataFolderAsync(), "tag.list");
+                tags.UnionWith(new List<string> { queryQuest.Text , "Search"});
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
+                var topics = await LocalStorage.ReadJsonAsync<List<Topic>>(
+                    await LocalStorage.GetDataFolderAsync(), "topic.list");
+                topics.Add(new Topic { ID = HashEncode.MakeMD5(DateTimeOffset.Now.ToString()), Title = "#Search##" + queryQuest.Text + '#' });
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topic.list", topics);
+            }
+        }
+
         private void ShareLink(object sender, RoutedEventArgs e)
         {
             DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
@@ -384,16 +402,10 @@ namespace Research_Flow
         //    => crawlfilters.Text += linkFilter2.Text + "\t\n";
 
         private void SubmitToCrawler(object sender, RoutedEventArgs e)
-            => this.Frame.Navigate(typeof(Crawler), new Crawlable()
-            {
-                ID = HashEncode.MakeMD5(currentCrawled.Url),
-                ParentID = "Null",
-                Text = currentCrawled.Title,
-                Url = currentCrawled.Url,
-                Content = currentCrawled.Content,
-                Tags = "Null",
-                Filters = crawlfilters.Text,
-            });
+        {
+            currentCrawled.LinkFilters = crawlfilters.Text;
+            this.Frame.Navigate(typeof(Crawler), currentCrawled);
+        }
 
         #endregion
 

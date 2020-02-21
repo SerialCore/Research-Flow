@@ -135,7 +135,7 @@ namespace LogicService.Storage
         /// writing process will be recorded by particular DB operation with DBPath
         /// </summary>
         /// <param name="obj"></param>
-        public int ExecuteWrite(string sql, Dictionary<string, object> parameters = null)
+        public int ExecuteWrite(string sql, Dictionary<string, object> parameters = null, bool ifnotify = true)
         {
             int affectedRows = 0;
             try
@@ -151,13 +151,14 @@ namespace LogicService.Storage
             }
             catch (Exception ex)
             {
-                ApplicationMessage.SendMessage("DatabaseException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+                if (ifnotify)
+                    ApplicationMessage.SendMessage("DatabaseException: " + ex.Message, ApplicationMessage.MessageType.InApp);
             }
 
             return affectedRows;
         }
 
-        public SqliteDataReader ExecuteRead(string sql, Dictionary<string, object> parameters = null)
+        public SqliteDataReader ExecuteRead(string sql, Dictionary<string, object> parameters = null, bool ifnotify = true)
         {
             try
             {
@@ -172,7 +173,8 @@ namespace LogicService.Storage
             }
             catch (Exception ex)
             {
-                ApplicationMessage.SendMessage("DatabaseException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+                if (ifnotify)
+                    ApplicationMessage.SendMessage("DatabaseException: " + ex.Message, ApplicationMessage.MessageType.InApp);
                 return null;
             }
         }

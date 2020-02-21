@@ -38,14 +38,17 @@ namespace Research_Flow
         {
             if (e.Parameter != null)
             {
-                StorageFile file = e.Parameter as StorageFile;
-                try
+                if (e.Parameter.GetType().Equals(typeof(StorageFile)))
                 {
-                    ImportFromInk(file);
-                }
-                catch (Exception ex)
-                {
-                    ApplicationMessage.SendMessage("NoteException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+                    StorageFile file = e.Parameter as StorageFile;
+                    try
+                    {
+                        ImportFromInk(file);
+                    }
+                    catch (Exception ex)
+                    {
+                        ApplicationMessage.SendMessage("NoteException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+                    }
                 }
             }
             

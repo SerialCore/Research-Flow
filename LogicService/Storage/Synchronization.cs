@@ -60,7 +60,7 @@ namespace LogicService.Storage
                 {
                     if (item.Equals(twin))
                     {
-                        if (twin.DateModified > item.DateModified)
+                        if (twin.DateModified > item.DateModified) // set an interval
                         {
                             try
                             {

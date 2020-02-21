@@ -104,7 +104,7 @@ namespace LogicService.Data
                     { "@Content", crawlable.Content },
                     { "@Tags", crawlable.Tags },
                     { "@Filters", crawlable.Filters },
-                });
+                }, false);
             }
 
             FileList.DBInsertList("Data", DataStorage.CrawlData.Database);
@@ -136,8 +136,15 @@ namespace LogicService.Data
 
         public static List<Crawlable> DBSelectByText(string text)
         {
-            string sql = "select * from Crawlable where Text = @Text;";
-            var reader = DataStorage.CrawlData.ExecuteRead(sql, new Dictionary<string, object> { { "@Text", text } });
+            string sql = "select * from Crawlable where Text like @Text;";
+            var reader = DataStorage.CrawlData.ExecuteRead(sql, new Dictionary<string, object> { { "@Text", '%' + text + '%' } });
+            return DBReader(reader);
+        }
+
+        public static List<Crawlable> DBSelectByContent(string content)
+        {
+            string sql = "select * from Crawlable where Content like @Content;";
+            var reader = DataStorage.CrawlData.ExecuteRead(sql, new Dictionary<string, object> { { "@Content", '%' + content + '%' } });
             return DBReader(reader);
         }
 

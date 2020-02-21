@@ -22,8 +22,6 @@
                                 <ProgressRing x:Name="waitSync"/>
                             </Grid>
                         </Button>
-
-                        <TextBlock Text="Notification" FontSize="20"/>
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem>
@@ -85,16 +83,21 @@
                         </StackPanel>
                         <ScrollViewer Grid.Row="0" Grid.Column="2" Grid.RowSpan="2">
                             <StackPanel>
-                                <TextBlock Text="Background Task" FontSize="20" VerticalAlignment="Center" Margin="0,10"/>
-                                <TextBlock Text="Application Capabilities" FontSize="20" VerticalAlignment="Center" Margin="0,10"/>
                                 <TextBlock Text="Privacy Policy" FontSize="20" VerticalAlignment="Center" Margin="0,10"/>
+                                <TextBlock TextWrapping="Wrap">
+                                    <Run >
+                                        Please note that this app would never utilize any user data for malignant purpose. 
+                                        The major data contained in this app should be user settings, rss feeds, website links, papers and Microsoft account. 
+                                        Some data will be found explicitly in OneDrive folder with user’s confirmation and synchronization.
+                                    </Run>
+                                </TextBlock>
                             </StackPanel>
                         </ScrollViewer>
                     </Grid>
                 </ScrollViewer>
             </PivotItem>
 
-            <PivotItem x:Name="developerPanel" Header="Developer" Visibility="Collapsed">
+            <PivotItem x:Name="developerPanel" Header="Developer" IsEnabled="False">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition />

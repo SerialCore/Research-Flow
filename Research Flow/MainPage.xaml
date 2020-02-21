@@ -20,11 +20,11 @@
                         BackRequested="NavView_BackRequested">
 
             <NavigationView.MenuItems>
-                <NavigationViewItem Content="Overview" Tag="Overview">
+                <!--<NavigationViewItem Content="Overview" Tag="Overview">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEB68;"/>
                     </NavigationViewItem.Icon>
-                </NavigationViewItem>
+                </NavigationViewItem>-->
                 <NavigationViewItem Content="Tag + Topic" Tag="TagTopic">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEB50;"/>

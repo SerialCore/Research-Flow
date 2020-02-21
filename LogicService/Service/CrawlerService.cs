@@ -21,6 +21,7 @@ namespace LogicService.Service
         private string m_content;
         private bool m_good;
         private int m_pagesize;
+        private string m_linkfilter;
         private static Dictionary<string, CookieContainer> webcookies = new Dictionary<string, CookieContainer>();
 
         /// <summary>
@@ -28,10 +29,7 @@ namespace LogicService.Service
         /// </summary>
         public string Url
         {
-            get
-            {
-                return m_url.AbsoluteUri;
-            }
+            get { return m_url.AbsoluteUri; }
         }
 
         /// <summary>
@@ -57,14 +55,7 @@ namespace LogicService.Service
         /// </summary>
         public string Html
         {
-            get
-            {
-                if (m_html == null)
-                {
-                    m_html = "";
-                }
-                return m_html;
-            }
+            get { return m_html == null ? "" : m_html; }
         }
 
         /// <summary>
@@ -72,11 +63,7 @@ namespace LogicService.Service
         /// </summary>
         public List<Crawlable> Links
         {
-            get
-            {
-                if (m_links.Count == 0) GetLinks();
-                return m_links;
-            }
+            get { return m_links.Count == 0 ? GetLinks() : m_links; }
         }
 
         /// <summary>
@@ -84,11 +71,7 @@ namespace LogicService.Service
         /// </summary>
         public string Content
         {
-            get
-            {
-                if (m_content == "") GetContent(Int16.MaxValue);
-                return m_content;
-            }
+            get { return m_content == "" ? GetContent(Int16.MaxValue) : m_content; }
         }
 
         /// <summary>
@@ -96,10 +79,7 @@ namespace LogicService.Service
         /// </summary>
         public int PageSize
         {
-            get
-            {
-                return m_pagesize;
-            }
+            get { return m_pagesize; }
         }
 
         /// <summary>
@@ -107,10 +87,7 @@ namespace LogicService.Service
         /// </summary>
         public List<Crawlable> InsiteLinks
         {
-            get
-            {
-                return GetSpecialLinksByUrl("^http(s://|://)" + m_url.Host, Int16.MaxValue);
-            }
+            get { return GetSpecialLinksByUrl("^http(s://|://)" + m_url.Host, Int16.MaxValue); }
         }
 
         /// <summary>
@@ -118,10 +95,7 @@ namespace LogicService.Service
         /// </summary>
         public bool IsGood
         {
-            get
-            {
-                return m_good;
-            }
+            get { return m_good; }
         }
 
         /// <summary>
@@ -129,10 +103,13 @@ namespace LogicService.Service
         /// </summary>
         public string Host
         {
-            get
-            {
-                return m_url.Host;
-            }
+            get { return m_url.Host; }
+        }
+
+        public string LinkFilters
+        {
+            get { return m_linkfilter == null ? "" : m_linkfilter; }
+            set { m_linkfilter = value; }
         }
 
         private List<Crawlable> GetLinks()

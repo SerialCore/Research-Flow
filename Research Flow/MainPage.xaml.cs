@@ -47,9 +47,11 @@ namespace Research_Flow
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             FileParameter = e.Parameter as StorageFile;
+            Login();
             InitializeChat();
             ConfigureUpdate();
-            Login();
+            ForegroundTask();
+            BackgroundTask();
         }
 
         private async void AppMessage_MessageReceived(string message, ApplicationMessage.MessageType type)
@@ -113,6 +115,21 @@ namespace Research_Flow
             }
         }
 
+        private void ForegroundTask()
+        {
+            try // if the first time to use app which has no user data
+            {
+                Feed.TaskRun();
+            }
+            catch { }
+        }
+
+        private async void BackgroundTask()
+        {
+            await ApplicationTask.RegisterTopicTask();
+            await ApplicationTask.RegisterTagTask();
+        }
+
         #region NavView
 
         private StorageFile FileParameter;
@@ -144,7 +161,7 @@ namespace Research_Flow
             {
                 NavView.SelectedItem = NavView.MenuItems
                     .OfType<NavigationViewItem>()
-                    .First(n => n.Tag.Equals("Overview"));
+                    .First(n => n.Tag.Equals("TagTopic"));
             }
         }
 
