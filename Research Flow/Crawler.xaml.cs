@@ -172,8 +172,9 @@ namespace Research_Flow
             }
 
             string id = HashEncode.MakeMD5(crawlurl.Content as string);
-            if (Crawlable.DBSelectByID(id).Count == 0)
-                Crawlable.DBInsert(new List<Crawlable>()
+            if (Crawlable.DBSelectByID(id).Count != 0)
+                Crawlable.DBDeleteByID(id); // modify or delete?
+            Crawlable.DBInsert(new List<Crawlable>()
                 {
                     new Crawlable
                     {

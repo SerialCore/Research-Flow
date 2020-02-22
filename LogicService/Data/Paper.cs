@@ -101,6 +101,11 @@ namespace LogicService.Data
             return affectedRows;
         }
 
+        public static void DBUpdate()
+        {
+
+        }
+
         public static List<Paper> DBSelectByLimit(int limit)
         {
             string sql = "select * from Paper limit @Limit;";
@@ -169,11 +174,6 @@ namespace LogicService.Data
             FileList.DBInsertTrace("Data", DataStorage.PaperData.Database);
 
             return affectedRows;
-        }
-
-        public static void DBUpdate()
-        {
-
         }
 
         #endregion

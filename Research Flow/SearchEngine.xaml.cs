@@ -403,8 +403,11 @@ namespace Research_Flow
 
         private void SubmitToCrawler(object sender, RoutedEventArgs e)
         {
-            currentCrawled.LinkFilters = crawlfilters.Text;
-            this.Frame.Navigate(typeof(Crawler), currentCrawled);
+            if (currentCrawled != null)
+            {
+                currentCrawled.LinkFilters = crawlfilters.Text;
+                this.Frame.Navigate(typeof(Crawler), currentCrawled);
+            }
         }
 
         #endregion

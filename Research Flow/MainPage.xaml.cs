@@ -220,12 +220,6 @@ namespace Research_Flow
                 accountEmail.Text = email;
                 accountPhoto1.ProfilePicture = image;
                 accountPhoto2.ProfilePicture = image;
-
-                try
-                {
-                    await Synchronization.ScanFiles();
-                }
-                catch { }
             }
             else
             {

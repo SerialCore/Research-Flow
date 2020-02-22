@@ -4,6 +4,7 @@ using LogicService.Service;
 using LogicService.Storage;
 using System;
 using Windows.System;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -77,12 +78,27 @@ namespace Research_Flow
                 var button = sender as Button;
                 button.IsEnabled = false;
                 waitSync.IsActive = true;
+                syncStatu.Visibility = Visibility.Visible;
 
+                Synchronization.SyncProgressChanged += Synchronization_SyncProgressChanged;
                 await Synchronization.ScanFiles();
+                Synchronization.SyncProgressChanged -= Synchronization_SyncProgressChanged;
 
+                syncCount.Text = "";
+                syncStatu.Visibility = Visibility.Collapsed;
                 waitSync.IsActive = false;
                 button.IsEnabled = true;
             }
+        }
+
+        private async void Synchronization_SyncProgressChanged(object sender, SyncEventArgs e)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                syncStatu.Maximum = e.TotalCount;
+                syncStatu.Value = e.SyncedCount;
+                syncCount.Text = e.SyncedCount + "/" + e.TotalCount;
+            });
         }
 
         #endregion

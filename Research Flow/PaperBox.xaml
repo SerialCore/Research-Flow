@@ -64,6 +64,8 @@
                             <AppBarButton Icon="OpenFile" Label="OpenWith" Click="Pdf_Launch"/>
                             <AppBarButton Icon="Preview" Label="Preview" Click="Pdf_Preview"/>
                             <AppBarSeparator />
+                            <AppBarButton Icon="SaveLocal" Label="Export" Click="Pdf_Export"/>
+                            <AppBarButton Icon="Import" Label="Import" Click="Pdf_Import"/>
                             <AppBarButton Icon="Document" Label="Papers" Click="Pdf_List"/>
                         </CommandBar>
                     </Grid>
@@ -73,8 +75,8 @@
             <Grid Grid.Column="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                 <StackPanel Margin="10,10,10,40">
                     <TextBox x:Name="papertitle" Header="Title"/>
-                    <TextBox x:Name="paperid" Header="DOI | ID"/>
-                    <TextBox x:Name="pdfname" Header="Paper File" PlaceholderText="***.pdf"/>
+                    <TextBox x:Name="paperid" Header="ID - DOI"/>
+                    <TextBox x:Name="pdfname" Header="Paper File"/>
                     <HyperlinkButton x:Name="paperlink" Content="Link"/>
                     <TextBox x:Name="paperauthor" Header="Authors" PlaceholderText="Author1, Author2, Author3"/>
                     <TextBox x:Name="papernote" Header="Paper Note" PlaceholderText="reason to refer" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>

@@ -113,6 +113,11 @@ namespace LogicService.Data
             return affectedRows;
         }
 
+        public static void DBUpdate()
+        {
+
+        }
+
         public static List<Crawlable> DBSelectByLimit(int limit)
         {
             string sql = "select * from Crawlable limit @Limit;";
@@ -184,11 +189,6 @@ namespace LogicService.Data
             FileList.DBInsertTrace("Data", DataStorage.CrawlData.Database);
 
             return affectedRows;
-        }
-
-        public static void DBUpdate()
-        {
-
         }
 
         #endregion

@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Data.Pdf;
 using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.System;
 using Windows.UI.Popups;
@@ -63,6 +64,8 @@ namespace Research_Flow
 
         #region File Management
 
+        private string currentfile = null; // the original name, must be faithfull // pdfname.Text can be new
+
         private ObservableCollection<string> pdfs = new ObservableCollection<string>();
 
         private void Pdf_List(object sender, RoutedEventArgs e) => pdfpanel.IsPaneOpen = !pdfpanel.IsPaneOpen;
@@ -70,6 +73,7 @@ namespace Research_Flow
         private void Pdftree_ItemClick(object sender, ItemClickEventArgs e)
         {
             var filename = e.ClickedItem as string + ".pdf";
+            currentfile = filename;
             pdfname.Text = filename;
 
             // there is only one paper in list or nothing
@@ -93,14 +97,49 @@ namespace Research_Flow
 
         PdfDocument pdfDocument = null;
 
-        private async void Pdf_Preview(object sender, RoutedEventArgs e)
+        private async void Pdf_Import(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(pdfname.Text))
+            FileOpenPicker picker = new FileOpenPicker();
+            picker.FileTypeFilter.Add(".pdf");
+            var files = await picker.PickMultipleFilesAsync();
+            if (files != null)
+            {
+                foreach (var file in files)
+                {
+                    await file.CopyAsync(await LocalStorage.GetPaperFolderAsync());
+                    pdfs.Add(file.DisplayName.Replace(".pdf", ""));
+                }
+            }
+        }
+
+        private async void Pdf_Export(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(currentfile))
                 return;
 
             try
             {
-                StorageFile file = await(await LocalStorage.GetPaperFolderAsync()).GetFileAsync(pdfname.Text);
+                var file = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(currentfile);
+                FolderPicker picker = new FolderPicker();
+                picker.FileTypeFilter.Add(".pdf");
+                StorageFolder folder = await picker.PickSingleFolderAsync();
+                if (folder != null)
+                    await file.CopyAsync(folder);
+            }
+            catch (Exception ex)
+            {
+                ApplicationMessage.SendMessage("PdfException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+            }
+        }
+
+        private async void Pdf_Preview(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(currentfile))
+                return;
+
+            try
+            {
+                StorageFile file = await(await LocalStorage.GetPaperFolderAsync()).GetFileAsync(currentfile);
                 pdfDocument = await PdfDocument.LoadFromFileAsync(file);
             }
             catch (Exception exception)
@@ -136,12 +175,12 @@ namespace Research_Flow
 
         private async void Pdf_Launch(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(pdfname.Text))
+            if (string.IsNullOrEmpty(currentfile))
                 return;
 
             try
             {
-                StorageFile file = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(pdfname.Text);
+                StorageFile file = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(currentfile);
                 await Launcher.LaunchFileAsync(file);
             }
             catch (Exception exception)
@@ -152,6 +191,9 @@ namespace Research_Flow
 
         private void Pdf_Share(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrEmpty(currentfile))
+                return;
+
             DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
             dataTransferManager.DataRequested += FileTransferManager_DataRequested;
             DataTransferManager.ShowShareUI();
@@ -165,11 +207,18 @@ namespace Research_Flow
             request.Data.Properties.Title = "Pdf File";
             request.Data.Properties.Description = "Share the paper you found";
 
-            StorageFile file = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(pdfname.Text);
+            try
+            {
+                StorageFile file = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(currentfile);
 
-            var storage = new List<IStorageItem>();
-            storage.Add(file);
-            request.Data.SetStorageItems(storage);
+                var storage = new List<IStorageItem>();
+                storage.Add(file);
+                request.Data.SetStorageItems(storage);
+            }
+            catch (Exception ex)
+            {
+                ApplicationMessage.SendMessage("PdfException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+            }
 
             deferral.Complete();
         }
@@ -191,7 +240,7 @@ namespace Research_Flow
 
         private Paper currentpaper = null;
 
-        private void SavePaper(object sender, RoutedEventArgs e)
+        private async void SavePaper(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(paperid.Text) || string.IsNullOrEmpty(papertitle.Text))
             {
@@ -199,8 +248,22 @@ namespace Research_Flow
                 return;
             }
 
-            if (Paper.DBSelectByID(paperid.Text).Count == 0)
-                Paper.DBInsert(new List<Paper>()
+            if (!currentfile.Equals(pdfname.Text))// rename the file
+            {
+                try
+                {
+                    var file = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(currentfile);
+                    await file.RenameAsync(pdfname.Text);
+                }
+                catch (Exception ex)
+                {
+                    ApplicationMessage.SendMessage("PdfException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+                }
+            }
+
+            if (Paper.DBSelectByID(paperid.Text).Count != 0)
+                Paper.DBDeleteByID(paperid.Text); // modify or delete?
+            Paper.DBInsert(new List<Paper>()
                 {
                     new Paper
                     {
@@ -218,6 +281,9 @@ namespace Research_Flow
 
         private async void DeletePaper(object sender, RoutedEventArgs e)
         {
+            if (currentpaper == null || string.IsNullOrEmpty(currentfile))
+                return;
+
             var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.", "Operation confirming");
             messageDialog.Commands.Add(new UICommand("True", new UICommandInvokedHandler(this.DeleteInvokedHandler)));
             messageDialog.Commands.Add(new UICommand("Joke", new UICommandInvokedHandler(this.CancelInvokedHandler)));
@@ -235,11 +301,20 @@ namespace Research_Flow
                 //papers.Remove(currentpaper);
                 currentpaper = null;
             }
-            if (!string.IsNullOrEmpty(pdfname.Text)) // file
+            if (!string.IsNullOrEmpty(currentfile)) // file // before the name is modified
             {
-                // whether to record?
+                // whether to record? if don't record, currentfile can be unfaithfull, and one must use try{}
                 //LocalStorage.GeneralDeleteAsync(await LocalStorage.GetPaperFolderAsync(), pdfname.Text);
-                await (await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(pdfname.Text)).DeleteAsync();
+                try
+                {
+                    await (await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(currentfile)).DeleteAsync();
+                    currentfile = "";
+                    pdfname.Text = "";
+                }
+                catch (Exception ex)
+                {
+                    ApplicationMessage.SendMessage("PdfException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+                }
             }
 
             paperid.Text = "";

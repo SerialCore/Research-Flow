@@ -107,7 +107,7 @@
                         <AppBarButton Icon="Placeholder" Tapped="Flyout_Tapped" ToolTipService.ToolTip="Background" Width="42" Height="42">
                             <FlyoutBase.AttachedFlyout>
                                 <Flyout Closed="ColorPicker_Closed">
-                                    <ColorPicker x:Name="colorPicker" ColorChanged="ColorPicker_ColorChanged"/>
+                                    <ColorPicker x:Name="colorPicker" ColorChanged="ColorPicker_ColorChanged" AllowFocusOnInteraction="True"/>
                                 </Flyout>
                             </FlyoutBase.AttachedFlyout>
                         </AppBarButton>

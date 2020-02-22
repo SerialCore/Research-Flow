@@ -161,6 +161,11 @@ namespace LogicService.Data
             return affectedRows;
         }
 
+        public static void DBUpdate()
+        {
+
+        }
+
         public static List<Feed> DBSelectByLimit(int limit)
         {
             string sql = "select * from Feed limit @Limit;";
@@ -212,11 +217,6 @@ namespace LogicService.Data
             FileList.DBInsertTrace("Data", DataStorage.FeedData.Database);
 
             return affectedRows;
-        }
-
-        public static void DBUpdate()
-        {
-
         }
 
         #endregion

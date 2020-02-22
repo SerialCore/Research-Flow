@@ -54,6 +54,11 @@ namespace LogicService.Storage
             list.ExceptWith(traceAll);
             trace.ExceptWith(listAll);
 
+            SyncEventArgs args = new SyncEventArgs();
+            args.SyncedCount = 0;
+            args.TotalCount = traceAll.Count > listAll.Count ? traceAll.Count : listAll.Count;
+            SyncProgressChanged(typeof(Synchronization), args);
+
             foreach (var item in listAll) // both & modify
             {
                 foreach (var twin in traceAll)
@@ -67,8 +72,10 @@ namespace LogicService.Storage
                                 var local = await (await LocalStorage.GetCacheSubFolderAsync(item.FilePosition)).GetFileAsync(item.FileName);
                                 var mirrorfolder = await OneDriveStorage.GetFolderAsync(item.FilePosition);
                                 await OneDriveStorage.CreateFileAsync(mirrorfolder, local);
-                                //
                                 FileList.DBUpdateList(item.FilePosition, item.FileName);
+
+                                args.SyncedCount++;
+                                SyncProgressChanged(typeof(Synchronization), args);
                             }
                             catch (ServiceException)
                             {
@@ -89,8 +96,10 @@ namespace LogicService.Storage
                                 {
                                     await OneDriveStorage.DownloadFileAsync(mirrorfolder,
                                         await LocalStorage.GetCacheSubFolderAsync(item.FilePosition), item.FileName);
-                                    //
                                     FileList.DBUpdateTrace(item.FilePosition, item.FileName);
+
+                                    args.SyncedCount++;
+                                    SyncProgressChanged(typeof(Synchronization), args);
                                 }
                             }
                             catch (ServiceException)
@@ -109,9 +118,11 @@ namespace LogicService.Storage
                     var mirrorfolder = await OneDriveStorage.GetFolderAsync(item.FilePosition);
                     await OneDriveStorage.DownloadFileAsync(mirrorfolder,
                         await LocalStorage.GetCacheSubFolderAsync(item.FilePosition), item.FileName);
-                    // 
                     FileList.DBUpdateList(item.FilePosition, item.FileName);
                     FileList.DBInsertTrace(item.FilePosition, item.FileName);
+
+                    args.SyncedCount++;
+                    SyncProgressChanged(typeof(Synchronization), args);
                 }
                 catch (ServiceException)
                 {
@@ -125,8 +136,10 @@ namespace LogicService.Storage
                     var localfolder = await LocalStorage.GetCacheSubFolderAsync(item.FilePosition);
                     var local = await localfolder.GetFileAsync(item.FileName);
                     await local.DeleteAsync();
-
                     FileList.DBDeleteTrace(item.FilePosition, item.FileName);
+
+                    args.SyncedCount++;
+                    SyncProgressChanged(typeof(Synchronization), args);
                 }
                 catch (FileNotFoundException)
                 {
@@ -137,8 +150,10 @@ namespace LogicService.Storage
                     var mirrorfolder = await OneDriveStorage.GetFolderAsync(item.FilePosition);
                     var mirror = await mirrorfolder.GetFileAsync(item.FileName);
                     await mirror.DeleteAsync();
-
                     FileList.DBDeleteTrace(item.FilePosition, item.FileName);
+
+                    args.SyncedCount++;
+                    SyncProgressChanged(typeof(Synchronization), args);
                 }
                 catch (ServiceException)
                 {
