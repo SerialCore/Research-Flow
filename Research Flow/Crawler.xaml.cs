@@ -40,6 +40,8 @@ namespace Research_Flow
                 }
                 else if (e.Parameter.GetType().Equals(typeof(CrawlerService)))
                 {
+                    CleanCrawlPanel();
+
                     CrawlerService service = e.Parameter as CrawlerService;
                     crawltext.Text = service.Title;
                     crawlurl.Content = service.Url;
@@ -87,10 +89,12 @@ namespace Research_Flow
 
         private List<Crawlable> favorites = new List<Crawlable>();
 
-        private void OpenFavorites_Click(object sender, RoutedEventArgs e) => crawpanel.IsPaneOpen = true;
+        private void OpenFavorites_Click(object sender, RoutedEventArgs e) => favoritepanel.IsPaneOpen = true;
 
         private void FavoriteList_ItemClick(object sender, ItemClickEventArgs e)
         {
+            CleanCrawlPanel();
+
             Crawlable crawlable = e.ClickedItem as Crawlable;
             currentCrawlable = crawlable;
             crawltext.Text = crawlable.Text;
@@ -99,8 +103,6 @@ namespace Research_Flow
             crawlcontent.Text = crawlable.Content;
             crawltags.Text = crawlable.Tags;
             crawlfilters.Text = crawlable.Filters;
-
-            crawpanel.IsPaneOpen = true;
         }
 
         #endregion
@@ -114,21 +116,21 @@ namespace Research_Flow
         private List<Crawlable> fromdatabase = new List<Crawlable>();
         private List<Crawlable> fromservice = new List<Crawlable>();
 
+        private void CleanCrawlPanel()
+        {
+            crawltext.Text = "";
+            crawlurl.Content = "Link";
+            crawlurl.NavigateUri = null;
+            crawlcontent.Text = "";
+            crawltags.Text = "";
+            crawlfilters.Text = "";
+        }
+
         private void CrawlSearch_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            if (searchtype.SelectedIndex == 0) // search by text
+            if (searchtype.SelectedIndex == 0) // search by text | Content
             {
-                fromdatabase = Crawlable.DBSelectByText(crawlsearch.Text);
-                databaselist.ItemsSource = fromdatabase;
-            }
-            else if (searchtype.SelectedIndex == 1) // search by content
-            {
-                fromdatabase = Crawlable.DBSelectByContent(crawlsearch.Text);
-                databaselist.ItemsSource = fromdatabase;
-            }
-            else // select the first 100 items
-            {
-                fromdatabase = Crawlable.DBSelectByLimit(100);
+                fromdatabase = Crawlable.DBSelectByTextContent(crawlsearch.Text);
                 databaselist.ItemsSource = fromdatabase;
             }
         }
@@ -210,18 +212,15 @@ namespace Research_Flow
             currentCrawlable = null;
             LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "favorite.list", favorites);
 
-            crawltext.Text = "";
-            crawlurl.Content = "Link";
-            crawlurl.NavigateUri = null;
-            crawlcontent.Text = "";
-            crawltags.Text = "";
-            crawlfilters.Text = "";
+            CleanCrawlPanel();
         }
 
         private void CancelInvokedHandler(IUICommand command) { }
 
         private void DatabaseList_ItemClick(object sender, ItemClickEventArgs e)
         {
+            CleanCrawlPanel();
+
             currentCrawlable = e.ClickedItem as Crawlable;
             crawltext.Text = currentCrawlable.Text;
             crawlurl.Content = currentCrawlable.Url;
@@ -233,6 +232,8 @@ namespace Research_Flow
 
         private void ServiceList_ItemClick(object sender, ItemClickEventArgs e)
         {
+            CleanCrawlPanel();
+
             var item = e.ClickedItem as Crawlable;
             crawltext.Text = item.Text;
             crawlurl.Content = item.Url;
@@ -240,6 +241,12 @@ namespace Research_Flow
             crawlcontent.Text = item.Content;
             crawltags.Text = item.Tags;
             crawlfilters.Text = item.Filters;
+        }
+
+        private void ShowDatabase_Click(object sender, RoutedEventArgs e)
+        {
+            fromdatabase = Crawlable.DBSelectByLimit(100);
+            databaselist.ItemsSource = fromdatabase;
         }
 
         private void SaveLinks_Click(object sender, RoutedEventArgs e)

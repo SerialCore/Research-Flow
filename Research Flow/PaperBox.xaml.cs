@@ -72,6 +72,8 @@ namespace Research_Flow
 
         private void Pdftree_ItemClick(object sender, ItemClickEventArgs e)
         {
+            CleanPaperPanel();
+
             var filename = e.ClickedItem as string + ".pdf";
             currentfile = filename;
             pdfname.Text = filename;
@@ -83,7 +85,7 @@ namespace Research_Flow
                 papertitle.Text = paper.Title;
                 paperauthor.Text = paper.Authors;
                 paperlink.Content = paper.Link;
-                paperlink.NavigateUri = new Uri(paper.Link);
+                paperlink.NavigateUri = paper.Link.Equals("Null") ? null : new Uri(paper.Link);
                 papernote.Text = paper.Note;
                 papertags.Text = paper.Tags;
             }
@@ -114,7 +116,7 @@ namespace Research_Flow
 
         private async void Pdf_Export(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(currentfile))
+            if (string.IsNullOrEmpty(currentfile) || currentfile.Equals("Null"))
                 return;
 
             try
@@ -134,7 +136,7 @@ namespace Research_Flow
 
         private async void Pdf_Preview(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(currentfile))
+            if (string.IsNullOrEmpty(currentfile) || currentfile.Equals("Null"))
                 return;
 
             try
@@ -175,7 +177,7 @@ namespace Research_Flow
 
         private async void Pdf_Launch(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(currentfile))
+            if (string.IsNullOrEmpty(currentfile) || currentfile.Equals("Null"))
                 return;
 
             try
@@ -191,7 +193,7 @@ namespace Research_Flow
 
         private void Pdf_Share(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(currentfile))
+            if (string.IsNullOrEmpty(currentfile) || currentfile.Equals("Null"))
                 return;
 
             DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
@@ -240,6 +242,17 @@ namespace Research_Flow
 
         private Paper currentpaper = null;
 
+        private void CleanPaperPanel()
+        {
+            paperid.Text = "";
+            papertitle.Text = "";
+            paperauthor.Text = "";
+            paperlink.Content = "Link";
+            paperlink.NavigateUri = null;
+            papernote.Text = "";
+            papertags.Text = "";
+        }
+
         private async void SavePaper(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(paperid.Text) || string.IsNullOrEmpty(papertitle.Text))
@@ -271,7 +284,7 @@ namespace Research_Flow
                         ParentID = "Null",
                         Title = papertitle.Text,
                         FileName = string.IsNullOrEmpty(pdfname.Text)? "Null" : pdfname.Text,
-                        Link = string.IsNullOrEmpty(paperlink.Content as string)? "Null" : (paperlink.Content as string),
+                        Link = paperlink.NavigateUri==null? "Null" : paperlink.NavigateUri.ToString(),
                         Authors = string.IsNullOrEmpty(paperauthor.Text)? "Null" : paperauthor.Text,
                         Note = string.IsNullOrEmpty(papernote.Text)? "Null" : papernote.Text,
                         Tags = string.IsNullOrEmpty(papertags.Text)? "Null" : papertags.Text,
@@ -281,7 +294,7 @@ namespace Research_Flow
 
         private async void DeletePaper(object sender, RoutedEventArgs e)
         {
-            if (currentpaper == null || string.IsNullOrEmpty(currentfile))
+            if (currentpaper == null || string.IsNullOrEmpty(currentfile) || currentfile.Equals("Null"))
                 return;
 
             var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.", "Operation confirming");
@@ -301,7 +314,7 @@ namespace Research_Flow
                 //papers.Remove(currentpaper);
                 currentpaper = null;
             }
-            if (!string.IsNullOrEmpty(currentfile)) // file // before the name is modified
+            if (!string.IsNullOrEmpty(currentfile) && !currentfile.Equals("Null")) // file // before the name is modified
             {
                 // whether to record? if don't record, currentfile can be unfaithfull, and one must use try{}
                 //LocalStorage.GeneralDeleteAsync(await LocalStorage.GetPaperFolderAsync(), pdfname.Text);
@@ -317,12 +330,7 @@ namespace Research_Flow
                 }
             }
 
-            paperid.Text = "";
-            papertitle.Text = "";
-            paperauthor.Text = "";
-            paperlink.Content = "Link";
-            paperlink.NavigateUri = null;
-            papertags.Text = "";
+            CleanPaperPanel();
         }
 
         private void CancelInvokedHandler(IUICommand command) { }

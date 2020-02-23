@@ -16,7 +16,7 @@
                 <ColumnDefinition Width="400"/>
             </Grid.ColumnDefinitions>
 
-            <SplitView x:Name="crawpanel" Grid.Column="0">
+            <SplitView x:Name="favoritepanel" Grid.Column="0">
                 <SplitView.Pane>
                     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                         <ListView x:Name="favoritelist" ItemClick="FavoriteList_ItemClick" IsItemClickEnabled="True" Margin="0,0,0,40">
@@ -41,16 +41,14 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
-                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="200"/>
                             </Grid.ColumnDefinitions>
                             <AutoSuggestBox Grid.Column="0" x:Name="crawlsearch" QueryIcon="Find" QuerySubmitted="CrawlSearch_QuerySubmitted" HorizontalAlignment="Stretch"/>
                             <ComboBox Grid.Column="1" x:Name="searchtype" HorizontalAlignment="Stretch">
-                                <ComboBoxItem Content="Search Text"/>
-                                <ComboBoxItem Content="Search Content"/>
-                                <ComboBoxItem Content="List the First 100"/>
+                                <ComboBoxItem Content="Search Text | Content"/>
                             </ComboBox>
                         </Grid>
-                        <Grid Margin="0,35,0,40">
+                        <Grid Margin="0,35,0,40"> <!--use BladeView to show different list-->
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
                                 <ColumnDefinition />
@@ -81,6 +79,8 @@
                             <CommandBar.Content>
                                 <TextBlock Text="Pool" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
                             </CommandBar.Content>
+                            <AppBarButton Icon="List" Label="ShowDatabase" Click="ShowDatabase_Click"/>
+                            <AppBarSeparator/>
                             <AppBarButton Icon="Save" Label="SaveCrawlerLinks" Click="SaveLinks_Click"/>
                             <AppBarSeparator/>
                             <AppBarButton Icon="List" Label="Favorites" Click="OpenFavorites_Click"/>

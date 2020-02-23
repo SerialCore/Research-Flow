@@ -59,12 +59,6 @@ namespace Research_Flow
                 "TagTask", new TimeTrigger(30, false));
         }
 
-        //public static async Task<BackgroundTaskRegistration> RegisterNewTask()
-        //{
-        //    return await RegisterBackgroundTask(typeof(CoreFlow.NewTask),
-        //        "NewTask", new TimeTrigger(20, false));
-        //}
-
         public static IReadOnlyDictionary<Guid, IBackgroundTaskRegistration> ListBackgroundTask()
         {
             return BackgroundTaskRegistration.AllTasks;
