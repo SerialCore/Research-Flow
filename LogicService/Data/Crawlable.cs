@@ -79,7 +79,7 @@ namespace LogicService.Data
             string sql = @"create table if not exists [Crawlable] (
                     [ID] varchar(50) not null primary key,
                     [ParentID] varchar(50),
-                    [Text] varchar(50),
+                    [Text] varchar(50) not null,
                     [Url] varchar(100) not null,
                     [Content] varchar(1000),
                     [Tags] varchar(500),

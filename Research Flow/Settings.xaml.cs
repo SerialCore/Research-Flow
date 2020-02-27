@@ -27,11 +27,6 @@ namespace Research_Flow
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (ApplicationSetting.ContainKey("IsDeveloper"))
-                developerPanel.IsEnabled = true;
-            else
-                developerPanel.IsEnabled = false;
-
             DisplaySystemInfo();
         }
 
@@ -40,6 +35,8 @@ namespace Research_Flow
             applicationName.Text = ApplicationInfo.ApplicationName;
 
             applicationVersion.Text = ApplicationInfo.ApplicationVersion;
+
+            firstVersion.Text = ApplicationInfo.FirstVersionInstalled;
 
             cultureInfo.Text = ApplicationInfo.Culture.DisplayName;
 
@@ -73,7 +70,7 @@ namespace Research_Flow
 
         private async void AccountSync_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            if (GraphService.IsConnected && GraphService.IsNetworkAvailable)
+            if (GraphService.IsConnected && ApplicationInfo.IsNetworkAvailable)
             {
                 var button = sender as Button;
                 button.IsEnabled = false;

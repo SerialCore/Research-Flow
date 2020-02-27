@@ -47,6 +47,8 @@
                             <Run x:Name="applicationName"/><LineBreak/><LineBreak/>
                             <Run Text="Application version:   " FontWeight="Bold"/>
                             <Run x:Name="applicationVersion"/><LineBreak/><LineBreak/>
+                            <Run Text="First installed version:   " FontWeight="Bold"/>
+                            <Run x:Name="firstVersion"/><LineBreak/><LineBreak/>
                             <Run Text="Culture info:   " FontWeight="Bold"/>
                             <Run x:Name="cultureInfo"/><LineBreak/><LineBreak/>
                             <Run Text="Operating system version:   " FontWeight="Bold"/>
@@ -95,7 +97,7 @@
                 </ScrollViewer>
             </PivotItem>
 
-            <PivotItem x:Name="developerPanel" Header="Developer" IsEnabled="False">
+            <PivotItem x:Name="developerPanel" Header="Developer">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition />

@@ -132,17 +132,32 @@
                         </PivotItem>
                         <PivotItem Header="Feed">
                             <ListView x:Name="feedTags">
-
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Title}" MaxLines="2" Padding="5"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
                             </ListView>
                         </PivotItem>
                         <PivotItem Header="Crawl">
                             <ListView x:Name="crawlTags">
-
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Padding="5">
+                                            <TextBlock Text="{Binding Text}" MaxLines="2"/>
+                                            <TextBlock Text="{Binding Url}" MaxLines="2" Foreground="{ThemeResource SystemAccentColor}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
                             </ListView>
                         </PivotItem>
                         <PivotItem Header="Paper">
                             <ListView x:Name="paperTags">
-
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Title}" MaxLines="2" Padding="5"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
                             </ListView>
                         </PivotItem>
                     </Pivot>

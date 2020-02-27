@@ -60,11 +60,17 @@
                                     </TextBlock>
                                 </StackPanel>
                             </CommandBar.Content>
-                            <AppBarButton Icon="Share" Label="Share" Click="Pdf_Share"/>
-                            <AppBarButton Icon="OpenFile" Label="OpenWith" Click="Pdf_Launch"/>
+                            <AppBarButton Icon="OpenFile" Label="Open" Click="Pdf_Launch"/>
                             <AppBarButton Icon="Preview" Label="Preview" Click="Pdf_Preview"/>
                             <AppBarSeparator />
-                            <AppBarButton Icon="SaveLocal" Label="Export" Click="Pdf_Export"/>
+                            <AppBarButton Icon="Share" Label="Export">
+                                <AppBarButton.Flyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="Share" Click="Pdf_Share"/>
+                                        <MenuFlyoutItem Text="SaveAs" Click="Pdf_Export"/>
+                                    </MenuFlyout>
+                                </AppBarButton.Flyout>
+                            </AppBarButton>
                             <AppBarButton Icon="Import" Label="Import" Click="Pdf_Import"/>
                             <AppBarButton Icon="Document" Label="Papers" Click="Pdf_List"/>
                         </CommandBar>

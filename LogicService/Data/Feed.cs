@@ -288,17 +288,14 @@ namespace LogicService.Data
 
                         Task.Run(() =>
                         {
-                            LocalStorage.GeneralLogAsync<Feed>("FeedTask.log",
-                                "feed updated-" + source.Name);
+                            LocalStorage.GeneralLogAsync<Feed>("FeedTask.log", "feed updated-" + source.Name);
                         });
-
                     },
                     (exception) =>
                     {
                         Task.Run(() =>
                         {
-                            LocalStorage.GeneralLogAsync<RssService>("FeedTask.log",
-                                exception + "-" + source.Name);
+                            LocalStorage.GeneralLogAsync<Feed>("FeedTask.log", exception + "-" + source.Name);
                         });
                     }, null);
             }

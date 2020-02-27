@@ -48,8 +48,8 @@ namespace Research_Flow
         {
             FileParameter = e.Parameter as StorageFile;
             Login();
-            InitializeChat();
             ConfigureUpdate();
+            InitializeChat();
             ForegroundTask();
             BackgroundTask();
         }
@@ -89,7 +89,11 @@ namespace Research_Flow
 
         private void ConfigureUpdate()
         {
-
+            if (ApplicationInfo.ApplicationVersion.Equals("3.34.92") && !ApplicationInfo.FirstVersionInstalled.Equals("3.34.92")) // update confirmed
+            {
+                if (ApplicationSetting.ContainKey("IsDeveloper"))
+                    ApplicationSetting.RemoveKey("IsDeveloper");
+            }
         }
 
         private async void InitializeChat()
@@ -119,7 +123,8 @@ namespace Research_Flow
         {
             try // if the first time to use app which has no user data
             {
-                Feed.TaskRun();
+                if (ApplicationInfo.IsNetworkAvailable)
+                    Feed.TaskRun();
             }
             catch { }
         }
@@ -430,10 +435,6 @@ namespace Research_Flow
 
         private async void IdentifyChat(ChatBlock chat)
         {
-            if (chat.Comment.Equals("0x01"))
-                ApplicationSetting.IsDeveloper = "true";
-            if (chat.Comment.Equals("0x02"))
-                ApplicationSetting.RemoveKey("IsDeveloper");
             chatlist.Add(chat);
             // chat->topic request type
             LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "chat.list", chatlist);

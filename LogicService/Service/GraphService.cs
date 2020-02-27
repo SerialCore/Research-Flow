@@ -3,7 +3,6 @@ using Microsoft.Toolkit.Services.MicrosoftGraph;
 using Microsoft.Toolkit.Services.OneDrive;
 using Microsoft.Toolkit.Services.Services.MicrosoftGraph;
 using System;
-using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 
 namespace LogicService.Service
@@ -14,8 +13,6 @@ namespace LogicService.Service
         private static MicrosoftGraphUserService User = null;
 
         public static bool IsConnected => OneDriveService.Instance.Provider.IsAuthenticated;
-
-        public static bool IsNetworkAvailable => NetworkInterface.GetIsNetworkAvailable();
 
         public async static Task<bool> OneDriveLogin()
         {

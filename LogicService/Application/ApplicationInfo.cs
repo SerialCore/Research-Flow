@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Globalization;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.Services.Store;
@@ -71,6 +72,8 @@ namespace LogicService.Application
             }
             return false;
         }
+
+        public static bool IsNetworkAvailable => NetworkInterface.GetIsNetworkAvailable();
 
     }
 }

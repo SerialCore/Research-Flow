@@ -45,8 +45,8 @@
                 <AppBarButton Icon="Share" Tapped="Flyout_Tapped" Height="40" Width="38">
                     <FlyoutBase.AttachedFlyout>
                         <MenuFlyout>
-                            <MenuFlyoutItem Text="Export Note" Click="Export_Note"/>
-                            <MenuFlyoutItem Text="Share to People" Click="Share_Note"/>
+                            <MenuFlyoutItem Text="Share" Click="Share_Note"/>
+                            <MenuFlyoutItem Text="SaveAs" Click="Export_Note"/>
                         </MenuFlyout>
                     </FlyoutBase.AttachedFlyout>
                 </AppBarButton>
