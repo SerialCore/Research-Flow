@@ -2,6 +2,8 @@
 using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.DataTransfer;
+using Windows.ApplicationModel.DataTransfer.ShareTarget;
 using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Xaml;
@@ -110,8 +112,8 @@ namespace Research_Flow
 
         protected override void OnFileActivated(FileActivatedEventArgs args)
         {
-            StorageFile indexFile = args.Files[0] as StorageFile;
-            if (indexFile != null)
+            StorageFile file = args.Files[0] as StorageFile;
+            if (file != null)
             {
                 Frame rootFrame = Window.Current.Content as Frame;
                 ConfigureUI();
@@ -126,11 +128,41 @@ namespace Research_Flow
                     rootFrame.BackStack.Clear();
                     if (ApplicationSetting.ContainKey("AccountName") && ApplicationSetting.ContainKey("Configured"))
                     {
-                        rootFrame.Navigate(typeof(MainPage), indexFile);
+                        rootFrame.Navigate(typeof(MainPage), file);
                     }
                     else
                     {
-                        rootFrame.Navigate(typeof(Configure), indexFile);
+                        rootFrame.Navigate(typeof(Configure), file);
+                    }
+                }
+            }
+            Window.Current.Activate();
+        }
+
+        protected override async void OnShareTargetActivated(ShareTargetActivatedEventArgs args)
+        {
+            ShareOperation shareOperation = args.ShareOperation;
+            if (shareOperation.Data.Contains(StandardDataFormats.WebLink))
+            {
+                Uri link = await shareOperation.Data.GetWebLinkAsync();
+                Frame rootFrame = Window.Current.Content as Frame;
+                ConfigureUI();
+                if (rootFrame == null)
+                {
+                    rootFrame = new Frame();
+                    rootFrame.NavigationFailed += OnNavigationFailed;
+                    Window.Current.Content = rootFrame;
+                }
+                if (rootFrame.Content == null)
+                {
+                    rootFrame.BackStack.Clear();
+                    if (ApplicationSetting.ContainKey("AccountName") && ApplicationSetting.ContainKey("Configured"))
+                    {
+                        rootFrame.Navigate(typeof(MainPage), link);
+                    }
+                    else
+                    {
+                        rootFrame.Navigate(typeof(Configure), link);
                     }
                 }
             }

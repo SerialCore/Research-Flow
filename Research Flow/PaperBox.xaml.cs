@@ -88,6 +88,8 @@ namespace Research_Flow
                 paperlink.NavigateUri = paper.Link.Equals("Null") ? null : new Uri(paper.Link);
                 papernote.Text = paper.Note;
                 papertags.Text = paper.Tags;
+
+                currentpaper = paper;
             }
         }
 
@@ -261,12 +263,18 @@ namespace Research_Flow
                 return;
             }
 
-            if (!currentfile.Equals(pdfname.Text))// rename the file
+            if (!currentfile.Equals(pdfname.Text)) // rename the file
             {
                 try
                 {
                     var file = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(currentfile);
                     await file.RenameAsync(pdfname.Text);
+                    bool exist = false;
+                    foreach (string name in pdfs)
+                        if (name.Contains(currentfile))
+                            exist = true;
+                    if (!exist)
+                        pdfs.Add(currentfile.Replace(".pdf", ""));
                 }
                 catch (Exception ex)
                 {
@@ -294,7 +302,7 @@ namespace Research_Flow
 
         private async void DeletePaper(object sender, RoutedEventArgs e)
         {
-            if (currentpaper == null || string.IsNullOrEmpty(currentfile) || currentfile.Equals("Null"))
+            if (currentpaper == null && (string.IsNullOrEmpty(currentfile) || currentfile.Equals("Null")))
                 return;
 
             var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.", "Operation confirming");
@@ -321,6 +329,7 @@ namespace Research_Flow
                 try
                 {
                     await (await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(currentfile)).DeleteAsync();
+                    pdfs.Remove(currentfile.Replace(".pdf", ""));
                     currentfile = "";
                     pdfname.Text = "";
                 }

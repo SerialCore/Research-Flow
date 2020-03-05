@@ -46,7 +46,7 @@ namespace Research_Flow
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            FileParameter = e.Parameter as StorageFile;
+            NavParameter = e.Parameter;
             Login();
             ConfigureUpdate();
             InitializeChat();
@@ -137,7 +137,7 @@ namespace Research_Flow
 
         #region NavView
 
-        private StorageFile FileParameter;
+        private object NavParameter;
 
         // use of anonymous class
         private readonly List<(string Tag, Type Page)> _pages = new List<(string Tag, Type Page)>
@@ -155,11 +155,26 @@ namespace Research_Flow
         {
             // you can also add items in code behind
             //NavView.MenuItems.Add(new NavigationViewItemSeparator());
-            if (FileParameter != null)
+            if (NavParameter != null)
             {
-                if (FileParameter.FileType.Equals(".rfn"))
+                if (NavParameter.GetType().Equals(typeof(StorageFile)))
                 {
-                    ContentFrame.Navigate(typeof(Note), FileParameter);
+                    StorageFile parameter = NavParameter as StorageFile;
+                    if (parameter.FileType.Equals(".rfn"))
+                    {
+                        ContentFrame.Navigate(typeof(Note), parameter);
+                    }
+                }
+                else if (NavParameter.GetType().Equals(typeof(Uri)))
+                {
+                    Uri parameter = NavParameter as Uri;
+                    ContentFrame.Navigate(typeof(SearchEngine), parameter.ToString());
+                }
+                else
+                {
+                    NavView.SelectedItem = NavView.MenuItems
+                        .OfType<NavigationViewItem>()
+                        .First(n => n.Tag.Equals("TagTopic"));
                 }
             }
             else

@@ -38,7 +38,7 @@
                 </StackPanel>
             </Grid>
 
-            <SplitView Grid.Row="1" x:Name="crawlPane" PanePlacement="Right" OpenPaneLength="400" DisplayMode="Overlay">
+            <SplitView Grid.Row="1" x:Name="crawlPane" PanePlacement="Right" OpenPaneLength="400" DisplayMode="Inline">
                 <SplitView.Pane>
                     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                         <Grid.RowDefinitions>
@@ -61,7 +61,7 @@
                         <Grid Grid.Row="2" x:Name="downloadPanel" Height="80" Visibility="Collapsed">
                             <ProgressBar x:Name="downloadBar" Margin="30,15" VerticalAlignment="Top"/>
                             <TextBlock x:Name="downloadStatus" Text="Text" FontSize="15" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="30,0,0,20"/>
-                            <Button Click="CloseDownloadPanel" Content="Got it" Height="32" Width="100" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,30,15" Background="LightSkyBlue"/>
+                            <Button x:Name="downloadClose" Click="CloseDownloadPanel" Content="Got it" Height="32" Width="100" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,30,15" Background="LightSkyBlue"/>
                         </Grid>
                     </Grid>
                 </SplitView.Pane>

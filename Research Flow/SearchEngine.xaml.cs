@@ -281,31 +281,35 @@ namespace Research_Flow
         private async void Link_list_ItemClick(object sender, ItemClickEventArgs e)
         {
             string link = (e.ClickedItem as Crawlable).Url;
-            string name = "";
-            // choose url name or page title to be file name, by user setting
-            string[] split = link.Split('/');
-            // or use regex ".*/(.*?)$"
-            if (string.IsNullOrEmpty(split[split.Length - 1]))
-                name = DateTime.Now.ToString("yyyyMMddhhmm") + ".pdf";
-            else
-                name = split[split.Length - 1] + ".pdf";
 
             // check if a downloadable link
             if (Regex.IsMatch(link, Crawlable.LinkType["Url: HasPDF"]))
             {
-                downloadPanel.Visibility = Visibility.Visible;
+                string name = "";
+                // choose url name or page title to be file name, by user setting
+                string[] split = link.Split('/');
+                // or use regex ".*/(.*?)$"
+                if (string.IsNullOrEmpty(split[split.Length - 1]))
+                    name = DateTime.Now.ToString("yyyyMMddhhmm") + ".pdf";
+                else
+                    name = split[split.Length - 1].Replace(".pdf", "") + ".pdf"; // in case of *.pdf.pdf
+
+                downloadClose.IsEnabled = false;
                 downloadStatus.Text = "Processing";
+                downloadPanel.Visibility = Visibility.Visible;
                 WebClientService webClient = new WebClientService();
                 webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
                 webClient.DownloadFile(link, (await LocalStorage.GetPaperFolderAsync()).Path, name,
                     () =>
                     {
                         webClient.DownloadProgressChanged -= WebClient_DownloadProgressChanged;
+                        downloadClose.IsEnabled = true;
                     },
                     async (exception) =>
                     {
                         await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                         {
+                            downloadClose.IsEnabled = true;
                             ApplicationMessage.SendMessage("RssException: " + exception, ApplicationMessage.MessageType.InApp);
                         });
                     });
@@ -359,6 +363,11 @@ namespace Research_Flow
 
         private void FirstCrawl_Click(object sender, RoutedEventArgs e)
         {
+            if (crawlPane.IsPaneOpen)
+            {
+                crawlPane.IsPaneOpen = false;
+                return;
+            }
             if (webView.Source != null)
                 FirstCrawl(webView.Source.ToString());
         }

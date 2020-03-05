@@ -35,7 +35,7 @@
                                 </CommandBar>
                             </Grid>
                         </PivotItem>
-                        <PivotItem Header="All Paper">
+                        <PivotItem Header="Database">
                             
                         </PivotItem>
                     </Pivot>

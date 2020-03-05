@@ -5,6 +5,7 @@ using LogicService.Service;
 using LogicService.Storage;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -63,7 +64,7 @@ namespace Research_Flow
         {
             try
             {
-                favorites = await LocalStorage.ReadJsonAsync<List<Crawlable>>(
+                favorites = await LocalStorage.ReadJsonAsync<ObservableCollection<Crawlable>>(
                     await LocalStorage.GetDataFolderAsync(), "favorite.list");
             }
             catch
@@ -87,7 +88,7 @@ namespace Research_Flow
 
         #region Favorite
 
-        private List<Crawlable> favorites = new List<Crawlable>();
+        private ObservableCollection<Crawlable> favorites = new ObservableCollection<Crawlable>();
 
         private void OpenFavorites_Click(object sender, RoutedEventArgs e) => favoritepanel.IsPaneOpen = true;
 

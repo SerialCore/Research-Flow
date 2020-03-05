@@ -293,7 +293,7 @@ namespace Research_Flow
             }
             else
             {
-                notename = notefilename.Text;
+                notename = notefilename.Text.Replace(".rfn", ""); // in case of *.rfn.rfn
             }
             StorageFile file = await (await LocalStorage.GetNoteFolderAsync()).CreateFileAsync(notename + ".rfn", CreationCollisionOption.OpenIfExists);
             ExportAsInk(file);

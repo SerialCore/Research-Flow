@@ -116,6 +116,7 @@ namespace LogicService.Service
         {
             if (m_links.Count == 0)
             {
+                string pid = HashEncode.MakeMD5(_url);
                 Regex[] regex = new Regex[2];
                 regex[0] = new Regex(@"<a\shref\s*=""(?<url>[^""]*).*?>(?<text>[^<]*)</a>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
                 regex[1] = new Regex(@"<link\shref\s*=""(?<url>[^""]*).*?>(?<text>[^<]*)</link>", RegexOptions.IgnoreCase);
@@ -136,7 +137,7 @@ namespace LogicService.Service
                             m_links.Add(new Crawlable
                             {
                                 ID = HashEncode.MakeMD5(url),
-                                ParentID = HashEncode.MakeMD5(_url),
+                                ParentID = pid,
                                 Text = text,
                                 Url = url,
                                 Content = "Null",
