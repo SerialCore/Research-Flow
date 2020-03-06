@@ -87,12 +87,29 @@ namespace Research_Flow
             }
         }
 
-        private void ConfigureUpdate()
+        private async void ConfigureUpdate()
         {
-            if (ApplicationInfo.ApplicationVersion.Equals("3.34.92") && !ApplicationInfo.FirstVersionInstalled.Equals("3.34.92")) // update confirmed
+            if (ApplicationInfo.ApplicationVersion.Equals("3.36.95.0") && !ApplicationInfo.FirstVersionInstalled.Equals("3.36.95.0") // app is updated
+                /*&& !ApplicationSetting.Updated.Equals("3.36.95.0")*/) // app content isn't updated
             {
-                if (ApplicationSetting.ContainKey("IsDeveloper"))
-                    ApplicationSetting.RemoveKey("IsDeveloper");
+                if (!ApplicationSetting.ContainKey("Updated"))
+                {
+                    ApplicationSetting.Updated = "3.36.95.0";
+                    // remove Null in Paper and Crawlable
+                    Paper.DBUpdateApp();
+                    Crawlable.DBUpdateApp();
+                    // remove Null in favorite
+                    try
+                    {
+                        string json = await LocalStorage.GeneralReadAsync(await LocalStorage.GetDataFolderAsync(), "favorite.list");
+                        LocalStorage.GeneralWriteAsync(await LocalStorage.GetDataFolderAsync(), "favorite.list", json.Replace("Null", ""));
+                    }
+                    catch { } 
+                }
+                else if (!ApplicationSetting.Updated.Equals("3.36.95.0"))
+                {
+                    ;
+                }
             }
         }
 

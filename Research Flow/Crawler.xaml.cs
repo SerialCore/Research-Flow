@@ -182,12 +182,12 @@ namespace Research_Flow
                     new Crawlable
                     {
                         ID = id,
-                        ParentID = "Null",
+                        ParentID = "",
                         Text = crawltext.Text,
                         Url = crawlurl.Content as string,
-                        Content = string.IsNullOrEmpty(crawlcontent.Text)? "Null" : crawlcontent.Text,
-                        Tags = string.IsNullOrEmpty(crawltags.Text)? "Null" : crawltags.Text,
-                        Filters = string.IsNullOrEmpty(crawlfilters.Text)? "Null" : crawlfilters.Text,
+                        Content = crawlcontent.Text,
+                        Tags = crawltags.Text,
+                        Filters = crawlfilters.Text,
                     }
                 });
         }

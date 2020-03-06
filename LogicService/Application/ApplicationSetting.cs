@@ -34,6 +34,18 @@ namespace LogicService.Application
             }
         }
 
+        public static string Updated
+        {
+            get
+            {
+                return ApplicationData.Current.LocalSettings.Values["Updated"] as string;
+            }
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values["Updated"] = value;
+            }
+        }
+
         public static object HeaderColorA
         {
             get
@@ -88,6 +100,17 @@ namespace LogicService.Application
         public static bool ContainKey(string key)
         {
             return ApplicationData.Current.LocalSettings.Values.ContainsKey(key) ? true : false;
+        }
+
+        public static bool EqualKey(string key, object value)
+        {
+            if (!ContainKey(key))
+                return false;
+            
+            if (ApplicationData.Current.LocalSettings.Values[key] == value)
+                return true;
+            else
+                return false;
         }
 
     }

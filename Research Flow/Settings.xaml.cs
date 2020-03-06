@@ -81,8 +81,8 @@ namespace Research_Flow
                 await Synchronization.ScanFiles();
                 Synchronization.SyncProgressChanged -= Synchronization_SyncProgressChanged;
 
-                syncCount.Text = "";
                 syncStatu.Visibility = Visibility.Collapsed;
+                syncCount.Text = "";
                 waitSync.IsActive = false;
                 button.IsEnabled = true;
             }

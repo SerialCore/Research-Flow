@@ -95,6 +95,8 @@ namespace LogicService.Data
 
             foreach (Crawlable crawlable in crawlablelist)
             {
+                if (string.IsNullOrEmpty(crawlable.Text) || string.IsNullOrEmpty(crawlable.Url))
+                    continue;
                 affectedRows = DataStorage.CrawlData.ExecuteWrite(sql, new Dictionary<string, object>
                 {
                     { "@ID", crawlable.ID },
@@ -182,6 +184,24 @@ namespace LogicService.Data
             FileList.DBInsertTrace("Data", DataStorage.CrawlData.Database);
 
             return affectedRows;
+        }
+
+        public static void DBUpdateApp()
+        {
+            string sql1 = "update Crawlable set ParentID = @Empty where ParentID = @Null;";
+            DataStorage.CrawlData.ExecuteWrite(sql1, new Dictionary<string, object> { { "@Null", "Null" }, { "@Empty", "" } });
+
+            string sql2 = "update Crawlable set Content = @Empty where Content = @Null;";
+            DataStorage.CrawlData.ExecuteWrite(sql2, new Dictionary<string, object> { { "@Null", "Null" }, { "@Empty", "" } });
+            
+            string sql3 = "update Crawlable set Tags = @Empty where Tags = @Null;";
+            DataStorage.CrawlData.ExecuteWrite(sql3, new Dictionary<string, object> { { "@Null", "Null" }, { "@Empty", "" } });
+
+            string sql4 = "update Crawlable set Filters = @Empty where Filters = @Null;";
+            DataStorage.CrawlData.ExecuteWrite(sql4, new Dictionary<string, object> { { "@Null", "Null" }, { "@Empty", "" } });
+
+            string sql5 = "delete from Crawlable where Text = @Empty or Url = @Empty;";
+            DataStorage.CrawlData.ExecuteWrite(sql5, new Dictionary<string, object> { { "@Empty", "" } });
         }
 
         #endregion

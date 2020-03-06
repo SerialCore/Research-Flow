@@ -210,12 +210,12 @@ namespace Research_Flow
             Crawlable.AddtoFavorite(new Crawlable()
             {
                 ID = HashEncode.MakeMD5(selectedFeed.Link),
-                ParentID = "Null",
+                ParentID = "",
                 Text = selectedFeed.Title,
                 Url = selectedFeed.Link,
                 Content = selectedFeed.Summary,
                 Tags = selectedFeed.Tags,
-                Filters = "Null",
+                Filters = "",
             });
         }
 

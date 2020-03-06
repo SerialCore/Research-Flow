@@ -65,7 +65,7 @@ namespace LogicService.Data
             string sql = @"create table if not exists [Paper] (
                     [ID] varchar(50) not null primary key,
                     [ParentID] varchar(50),
-                    [Title] varchar(100),
+                    [Title] varchar(100) not null,
                     [FileName] varchar(100),
                     [Link] varchar(100),
                     [Authors] varchar(100),
@@ -174,6 +174,21 @@ namespace LogicService.Data
             FileList.DBInsertTrace("Data", DataStorage.PaperData.Database);
 
             return affectedRows;
+        }
+
+        public static void DBUpdateApp()
+        {
+            string sql1 = "update Paper set ParentID = @Empty where ParentID = @Null;";
+            DataStorage.PaperData.ExecuteWrite(sql1, new Dictionary<string, object> { { "@Null", "Null" }, { "@Empty", "" } });
+
+            string sql2 = "update Paper set Link = @Empty where Link = @Null;";
+            DataStorage.PaperData.ExecuteWrite(sql2, new Dictionary<string, object> { { "@Null", "Null" }, { "@Empty", "" } });
+
+            string sql3 = "update Paper set Note = @Empty where Note = @Null;";
+            DataStorage.PaperData.ExecuteWrite(sql3, new Dictionary<string, object> { { "@Null", "Null" }, { "@Empty", "" } });
+
+            string sql4 = "update Paper set Tags = @Empty where Tags = @Null;";
+            DataStorage.PaperData.ExecuteWrite(sql4, new Dictionary<string, object> { { "@Null", "Null" }, { "@Empty", "" } });
         }
 
         #endregion

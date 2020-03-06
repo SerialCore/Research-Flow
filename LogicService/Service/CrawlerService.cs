@@ -140,9 +140,9 @@ namespace LogicService.Service
                                 ParentID = pid,
                                 Text = text,
                                 Url = url,
-                                Content = "Null",
-                                Tags = "Null",
-                                Filters = "Null",
+                                Content = "",
+                                Tags = "",
+                                Filters = "",
                             });
                         }
                         catch (Exception ex) { Console.WriteLine(ex.Message); };

@@ -85,7 +85,7 @@ namespace Research_Flow
                 papertitle.Text = paper.Title;
                 paperauthor.Text = paper.Authors;
                 paperlink.Content = paper.Link;
-                paperlink.NavigateUri = paper.Link.Equals("Null") ? null : new Uri(paper.Link);
+                paperlink.NavigateUri = string.IsNullOrEmpty(paper.Link) ? null : new Uri(paper.Link);
                 papernote.Text = paper.Note;
                 papertags.Text = paper.Tags;
 
@@ -118,7 +118,7 @@ namespace Research_Flow
 
         private async void Pdf_Export(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(currentfile) || currentfile.Equals("Null"))
+            if (string.IsNullOrEmpty(currentfile))
                 return;
 
             try
@@ -138,7 +138,7 @@ namespace Research_Flow
 
         private async void Pdf_Preview(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(currentfile) || currentfile.Equals("Null"))
+            if (string.IsNullOrEmpty(currentfile))
                 return;
 
             try
@@ -179,7 +179,7 @@ namespace Research_Flow
 
         private async void Pdf_Launch(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(currentfile) || currentfile.Equals("Null"))
+            if (string.IsNullOrEmpty(currentfile))
                 return;
 
             try
@@ -195,7 +195,7 @@ namespace Research_Flow
 
         private void Pdf_Share(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(currentfile) || currentfile.Equals("Null"))
+            if (string.IsNullOrEmpty(currentfile))
                 return;
 
             DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
@@ -289,20 +289,20 @@ namespace Research_Flow
                     new Paper
                     {
                         ID = paperid.Text,
-                        ParentID = "Null",
+                        ParentID = "",
                         Title = papertitle.Text,
-                        FileName = string.IsNullOrEmpty(pdfname.Text)? "Null" : pdfname.Text,
-                        Link = paperlink.NavigateUri==null? "Null" : paperlink.NavigateUri.ToString(),
-                        Authors = string.IsNullOrEmpty(paperauthor.Text)? "Null" : paperauthor.Text,
-                        Note = string.IsNullOrEmpty(papernote.Text)? "Null" : papernote.Text,
-                        Tags = string.IsNullOrEmpty(papertags.Text)? "Null" : papertags.Text,
+                        FileName = pdfname.Text,
+                        Link = paperlink.NavigateUri == null ? "" : paperlink.NavigateUri.ToString(),
+                        Authors = paperauthor.Text,
+                        Note = papernote.Text,
+                        Tags = papertags.Text,
                     }
                 });
         }
 
         private async void DeletePaper(object sender, RoutedEventArgs e)
         {
-            if (currentpaper == null && (string.IsNullOrEmpty(currentfile) || currentfile.Equals("Null")))
+            if (currentpaper == null && string.IsNullOrEmpty(currentfile))
                 return;
 
             var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.", "Operation confirming");
@@ -319,10 +319,10 @@ namespace Research_Flow
             if (currentpaper != null) // paper
             {
                 Paper.DBDeleteByID(currentpaper.ID);
-                //papers.Remove(currentpaper);
+                //papers.Remove(currentpaper); // modify list from database
                 currentpaper = null;
             }
-            if (!string.IsNullOrEmpty(currentfile) && !currentfile.Equals("Null")) // file // before the name is modified
+            if (!string.IsNullOrEmpty(currentfile)) // file // before the name is modified
             {
                 // whether to record? if don't record, currentfile can be unfaithfull, and one must use try{}
                 //LocalStorage.GeneralDeleteAsync(await LocalStorage.GetPaperFolderAsync(), pdfname.Text);

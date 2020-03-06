@@ -96,6 +96,7 @@ namespace Research_Flow
                 Synchronization.SyncProgressChanged -= Synchronization_SyncProgressChanged;
                 configState.Text += "\nSync successfully.\n";
                 ApplicationSetting.Configured = "true";
+                ApplicationSetting.Updated = ApplicationInfo.ApplicationVersion;
                 return true;
             }
             catch (Exception ex)

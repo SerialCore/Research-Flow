@@ -352,12 +352,12 @@ namespace Research_Flow
                 Crawlable.AddtoFavorite(new Crawlable()
                 {
                     ID = HashEncode.MakeMD5(currentCrawled.Url),
-                    ParentID = "Null",
+                    ParentID = "",
                     Text = currentCrawled.Title,
                     Url = currentCrawled.Url,
                     Content = currentCrawled.Content,
-                    Tags = "Null",
-                    Filters = "Null"
+                    Tags = "",
+                    Filters = ""
                 });
         }
 

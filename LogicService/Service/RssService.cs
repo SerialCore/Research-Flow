@@ -42,7 +42,7 @@ namespace LogicService.Service
                                     Published = f.PublishedDate.ToString(),
                                     Link = f.Links[0].Uri.AbsoluteUri,
                                     Summary = WebUtility.HtmlDecode(Regex.Replace(f.Summary.Text, "<[^>]+?>", "")),
-                                    Tags = "Null",
+                                    Tags = "",
                                     Nodes = f.GetXmlDocument(SyndicationFormat.Rss20).GetXml(),
                                 });
                             }
