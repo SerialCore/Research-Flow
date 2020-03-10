@@ -25,8 +25,6 @@ namespace Research_Flow
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-
-            InitializeCrawl();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -36,27 +34,33 @@ namespace Research_Flow
                 if (e.Parameter.GetType().Equals(typeof(string)))
                 {
                     string search = e.Parameter as string;
-                    crawlsearch.Text = search;
-                    CrawlSearch_QuerySubmitted(null, null);
+                    if (!crawlsearch.Text.Equals(search))
+                    {
+                        crawlsearch.Text = search;
+                        CrawlSearch_QuerySubmitted(null, null);
+                    }
                 }
                 else if (e.Parameter.GetType().Equals(typeof(CrawlerService)))
                 {
                     CleanCrawlPanel();
-
                     CrawlerService service = e.Parameter as CrawlerService;
-                    crawltext.Text = service.Title;
-                    crawlurl.Content = service.Url;
-                    crawlurl.NavigateUri = new Uri(service.Url);
-                    crawlcontent.Text = service.Content;
-                    crawltags.Text = "";
-                    crawlfilters.Text = service.LinkFilters;
+                    if (!crawltext.Text.Equals(service.Title))
+                    {
+                        crawltext.Text = service.Title;
+                        crawlurl.Content = service.Url;
+                        crawlurl.NavigateUri = new Uri(service.Url);
+                        crawlcontent.Text = service.Content;
+                        crawltags.Text = "";
+                        crawlfilters.Text = service.LinkFilters;
 
-                    // filter this
-                    fromservice = service.Links;
-                    servicelist.ItemsSource = fromservice;
+                        // filter this
+                        fromservice = service.Links;
+                        servicelist.ItemsSource = fromservice;
+                    }
                 }
             }
 
+            InitializeCrawl();
             InitializeFavorite();
         }
 
@@ -88,6 +92,8 @@ namespace Research_Flow
 
         #region Favorite
 
+        private Crawlable currentFavor = null;
+
         private ObservableCollection<Crawlable> favorites = new ObservableCollection<Crawlable>();
 
         private void OpenFavorites_Click(object sender, RoutedEventArgs e) => favoritepanel.IsPaneOpen = true;
@@ -104,6 +110,7 @@ namespace Research_Flow
             crawlcontent.Text = crawlable.Content;
             crawltags.Text = crawlable.Tags;
             crawlfilters.Text = crawlable.Filters;
+            currentFavor = crawlable;
         }
 
         #endregion
@@ -190,6 +197,30 @@ namespace Research_Flow
                         Filters = crawlfilters.Text,
                     }
                 });
+            if (!string.IsNullOrEmpty(crawltags.Text))
+                Topic.SaveTag(crawltags.Text);
+        }
+
+        private async void SaveFavorite(object sender, RoutedEventArgs e)
+        {
+            if (currentFavor != null) // favorite is selected
+            {
+                if (!currentFavor.Equals(crawltext.Text)) // rename the favorite
+                    favorites.Remove(currentFavor);
+                currentFavor = new Crawlable
+                {
+                    ID = HashEncode.MakeMD5(crawlurl.Content as string),
+                    ParentID = "",
+                    Text = crawltext.Text,
+                    Url = crawlurl.Content as string,
+                    Content = crawlcontent.Text,
+                    Tags = crawltags.Text,
+                    Filters = crawlfilters.Text,
+                };
+                favorites.Add(currentFavor);
+                favoritepanel.IsPaneOpen = true;
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "favorite.list", favorites);
+            }
         }
 
         private async void DeleteCrawlable(object sender, RoutedEventArgs e)

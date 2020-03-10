@@ -41,13 +41,17 @@ namespace Research_Flow
                 if (e.Parameter.GetType().Equals(typeof(StorageFile)))
                 {
                     StorageFile file = e.Parameter as StorageFile;
-                    try
+                    if (!notefilename.Text.Equals(file.DisplayName))
                     {
-                        ImportFromInk(file);
-                    }
-                    catch (Exception ex)
-                    {
-                        ApplicationMessage.SendMessage("NoteException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+                        try
+                        {
+                            ImportFromInk(file);
+                            notefilename.Text = file.DisplayName;
+                        }
+                        catch (Exception ex)
+                        {
+                            ApplicationMessage.SendMessage("NoteException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+                        }
                     }
                 }
             }

@@ -91,15 +91,17 @@ namespace LogicService.Data
             }
         }
 
-        public static int DBUpdateTrace(string position, string name)
+        public static int DBUpdateTrace(string position, string name, string newname = null, string newposition = null)
         {
             int affectedRows = 0;
-            string sql = @"update FileTrace set DateModified = @DateModified where
-                FilePosition = @FilePosition and FileName = @FileName";
+            string sql = @"update FileTrace set FilePosition = @NewPosition, FileName = @NewName, DateModified = @DateModified
+                where FilePosition = @FilePosition and FileName = @FileName";
             affectedRows += DataStorage.FileTrace.ExecuteWrite(sql, new Dictionary<string, object>
             {
                 { "@FilePosition", position },
                 { "@FileName", name },
+                { "@NewPosition", newposition == null ? position : newposition },
+                { "@NewName", newname == null ? name : newname },
                 { "@DateModified", DateTime.Now.ToString() }
             });
             return affectedRows;
@@ -202,15 +204,17 @@ namespace LogicService.Data
             }
         }
 
-        public static int DBUpdateList(string position, string name)
+        public static int DBUpdateList(string position, string name, string newposition = null, string newname = null)
         {
             int affectedRows = 0;
-            string sql = @"update FileList set DateModified = @DateModified where
-                FilePosition = @FilePosition and FileName = @FileName";
+            string sql = @"update FileList set FilePosition = @NewPosition, FileName = @NewName, DateModified = @DateModified 
+                where FilePosition = @FilePosition and FileName = @FileName";
             affectedRows += DataStorage.FileList.ExecuteWrite(sql, new Dictionary<string, object>
             {
                 { "@FilePosition", position },
                 { "@FileName", name },
+                { "@NewPosition", newposition == null ? position : newposition },
+                { "@NewName", newname == null ? name : newname },
                 { "@DateModified", DateTime.Now.ToString() }
             });
             return affectedRows;

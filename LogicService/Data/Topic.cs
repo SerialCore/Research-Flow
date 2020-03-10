@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LogicService.Storage;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -52,6 +53,18 @@ namespace LogicService.Data
         #endregion
 
         #region Tag Helper
+
+        public async static void SaveTag(string content)
+        {
+            try
+            {
+                HashSet<string> tags = await LocalStorage.ReadJsonAsync<HashSet<string>>(
+                    await LocalStorage.GetDataFolderAsync(), "tag.list");
+                tags.UnionWith(TagPick(content));
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
+            }
+            catch { }
+        }
 
         public static HashSet<string> TagPick(string content)
         {

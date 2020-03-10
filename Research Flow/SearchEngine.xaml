@@ -128,7 +128,7 @@
                                 <StackPanel Width="300">
                                     <AutoSuggestBox x:Name="linkFilter2" Header="Select Filters" QueryIcon="Filter" AllowFocusOnInteraction="True"/>
                                     <TextBox x:Name="crawlfilters" Header="Crawl Filters" PlaceholderText="Filter1&#x000A;Filter2&#x000A;(user requirements, can be blank here)"
-                                             AllowFocusOnInteraction="True" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
+                                             IsSpellCheckEnabled="False" AllowFocusOnInteraction="True" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
                                     <Button Content="Submit to Crawler" Click="SubmitToCrawler" HorizontalAlignment="Stretch"/>
                                 </StackPanel>
                             </Flyout>

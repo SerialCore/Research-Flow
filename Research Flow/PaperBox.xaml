@@ -20,23 +20,22 @@
                 <SplitView.Pane>
                     <Pivot Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                         <PivotItem Header="Downloaded">
-                            <Grid>
-                                <ListView x:Name="pdftree" IsItemClickEnabled="True" ItemClick="Pdftree_ItemClick" Margin="0,0,0,40">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding }"/>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                                <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                                    <CommandBar.Content>
-                                        <TextBlock Text="Papers" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
-                                    </CommandBar.Content>
-                                </CommandBar>
-                            </Grid>
+                            <ListView x:Name="pdftree" IsItemClickEnabled="True" ItemClick="Pdftree_ItemClick" Margin="0,0,0,40">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding }"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </PivotItem>
                         <PivotItem Header="Database">
-                            
+                            <ListView x:Name="paperlist" IsItemClickEnabled="True" ItemClick="PaperList_ItemClick" Margin="0,0,0,40">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Title}"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </PivotItem>
                     </Pivot>
                 </SplitView.Pane>
@@ -80,16 +79,23 @@
 
             <Grid Grid.Column="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                 <StackPanel Margin="10,10,10,40">
-                    <TextBox x:Name="papertitle" Header="Title"/>
-                    <TextBox x:Name="paperid" Header="ID - DOI"/>
-                    <TextBox x:Name="pdfname" Header="Paper File"/>
+                    <TextBox x:Name="papertitle" Header="Title" IsSpellCheckEnabled="False"/>
+                    <TextBox x:Name="paperid" Header="ID - DOI" IsSpellCheckEnabled="False"/>
+                    <TextBox x:Name="pdfname" Header="Paper File" IsSpellCheckEnabled="False"/>
                     <HyperlinkButton x:Name="paperlink" Content="Link"/>
-                    <TextBox x:Name="paperauthor" Header="Authors" PlaceholderText="Author1, Author2, Author3"/>
-                    <TextBox x:Name="papernote" Header="Paper Note" PlaceholderText="reason to refer" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
-                    <TextBox x:Name="papertags" Header="Paper Tags" PlaceholderText="#Tag1##Tag2#" AcceptsReturn="True" TextWrapping="Wrap" Height="100"/>
+                    <TextBox x:Name="paperauthor" Header="Authors" PlaceholderText="Author1, Author2, Author3" IsSpellCheckEnabled="False"/>
+                    <TextBox x:Name="papernote" Header="Paper Note" PlaceholderText="reason to refer" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
+                    <TextBox x:Name="papertags" Header="Paper Tags" PlaceholderText="#Tag1##Tag2#" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="100"/>
                 </StackPanel>
                 <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                    <AppBarButton Icon="Save" Label="Save" Click="SavePaper"/>
+                    <AppBarButton Icon="Save" Label="Save">
+                        <AppBarButton.Flyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Text="Rename Pdf" Click="SavePdfFile"/>
+                                <MenuFlyoutItem Text="To Database" Click="SavePaper"/>
+                            </MenuFlyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
                     <AppBarButton Icon="Delete" Label="Delete" Click="DeletePaper"/>
                 </CommandBar>
             </Grid>

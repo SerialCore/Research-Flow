@@ -34,15 +34,23 @@ namespace Research_Flow
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (e.Parameter != null) // to solve the BUG: always show old site when NavigatedTo
+            if (e.Parameter != null)
             {
                 if (e.Parameter.GetType().Equals(typeof(string)))
                 {
                     string link = e.Parameter as string;
-                    if (!string.IsNullOrEmpty(link))
+                    if (webView.Source == null)
                     {
                         webView.Source = new Uri(link);
                         FirstCrawl(link);
+                    }
+                    else
+                    {
+                        if (!webView.Source.ToString().Equals(link)) // to solve the BUG: always re-pass parameter when GoBack
+                        {
+                            webView.Source = new Uri(link);
+                            FirstCrawl(link);
+                        }
                     }
                 }
             }
@@ -300,10 +308,13 @@ namespace Research_Flow
                 WebClientService webClient = new WebClientService();
                 webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
                 webClient.DownloadFile(link, (await LocalStorage.GetPaperFolderAsync()).Path, name,
-                    () =>
+                    async () =>
                     {
                         webClient.DownloadProgressChanged -= WebClient_DownloadProgressChanged;
-                        downloadClose.IsEnabled = true;
+                        await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        {
+                            downloadClose.IsEnabled = true;
+                        });
                     },
                     async (exception) =>
                     {

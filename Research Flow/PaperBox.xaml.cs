@@ -39,27 +39,37 @@ namespace Research_Flow
                 if (e.Parameter.GetType().Equals(typeof(Feed)))
                 {
                     Feed feed = e.Parameter as Feed;
-                    paperid.Text = Feed.GetDoi(feed.Nodes);
-                    papertitle.Text = feed.Title;
-                    paperauthor.Text = Feed.GetAuthor(feed.Nodes);
-                    paperlink.Content = feed.Link;
-                    paperlink.NavigateUri = new Uri(feed.Link);
-                    papertags.Text = feed.Tags;
+                    if (!papertitle.Text.Equals(feed.Title))
+                    {
+                        paperid.Text = Feed.GetDoi(feed.Nodes);
+                        papertitle.Text = feed.Title;
+                        paperauthor.Text = Feed.GetAuthor(feed.Nodes);
+                        paperlink.Content = feed.Link;
+                        paperlink.NavigateUri = new Uri(feed.Link);
+                        papertags.Text = feed.Tags;
+                    }
                 }
             }
 
             InitializePaper();
+            InitializePdf();
         }
 
-        private async void InitializePaper()
+        private async void InitializePdf()
         {
             pdfs.Clear();
             var filelist = await (await LocalStorage.GetPaperFolderAsync()).GetFilesAsync();
             foreach (var file in filelist)
             {
-                pdfs.Add(file.DisplayName.Replace(".pdf", ""));
+                pdfs.Add(file.Name);
             }
             pdftree.ItemsSource = pdfs;
+        }
+
+        private void InitializePaper()
+        {
+            papers = Paper.DBSelectByLimit(100);
+            paperlist.ItemsSource = papers;
         }
 
         #region File Management
@@ -74,7 +84,7 @@ namespace Research_Flow
         {
             CleanPaperPanel();
 
-            var filename = e.ClickedItem as string + ".pdf";
+            var filename = e.ClickedItem as string;
             currentfile = filename;
             pdfname.Text = filename;
 
@@ -91,6 +101,21 @@ namespace Research_Flow
 
                 currentpaper = paper;
             }
+        }
+
+        private void PaperList_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            CleanPaperPanel();
+
+            currentpaper = e.ClickedItem as Paper;
+            paperid.Text = currentpaper.ID;
+            papertitle.Text = currentpaper.Title;
+            pdfname.Text = currentpaper.FileName;
+            paperauthor.Text = currentpaper.Authors;
+            paperlink.Content = currentpaper.Link;
+            paperlink.NavigateUri = string.IsNullOrEmpty(currentpaper.Link) ? null : new Uri(currentpaper.Link);
+            papernote.Text = currentpaper.Note;
+            papertags.Text = currentpaper.Tags;
         }
 
         #endregion
@@ -111,7 +136,7 @@ namespace Research_Flow
                 foreach (var file in files)
                 {
                     await file.CopyAsync(await LocalStorage.GetPaperFolderAsync());
-                    pdfs.Add(file.DisplayName.Replace(".pdf", ""));
+                    pdfs.Add(file.Name);
                 }
             }
         }
@@ -244,6 +269,8 @@ namespace Research_Flow
 
         private Paper currentpaper = null;
 
+        private List<Paper> papers = new List<Paper>();
+
         private void CleanPaperPanel()
         {
             paperid.Text = "";
@@ -255,31 +282,12 @@ namespace Research_Flow
             papertags.Text = "";
         }
 
-        private async void SavePaper(object sender, RoutedEventArgs e)
+        private void SavePaper(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(paperid.Text) || string.IsNullOrEmpty(papertitle.Text))
             {
                 ApplicationMessage.SendMessage("PaperWarning: There must be Title and ID", ApplicationMessage.MessageType.InApp);
                 return;
-            }
-
-            if (!currentfile.Equals(pdfname.Text)) // rename the file
-            {
-                try
-                {
-                    var file = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(currentfile);
-                    await file.RenameAsync(pdfname.Text);
-                    bool exist = false;
-                    foreach (string name in pdfs)
-                        if (name.Contains(currentfile))
-                            exist = true;
-                    if (!exist)
-                        pdfs.Add(currentfile.Replace(".pdf", ""));
-                }
-                catch (Exception ex)
-                {
-                    ApplicationMessage.SendMessage("PdfException: " + ex.Message, ApplicationMessage.MessageType.InApp);
-                }
             }
 
             if (Paper.DBSelectByID(paperid.Text).Count != 0)
@@ -298,6 +306,30 @@ namespace Research_Flow
                         Tags = papertags.Text,
                     }
                 });
+            if (!string.IsNullOrEmpty(papertags.Text))
+                Topic.SaveTag(papertags.Text);
+        }
+
+        private async void SavePdfFile(object sender, RoutedEventArgs e)
+        {
+            if (currentfile != null) // file is selected
+            {
+                if (!currentfile.Equals(pdfname.Text)) // rename the file
+                {
+                    try
+                    {
+                        var file = await(await LocalStorage.GetPaperFolderAsync()).GetFileAsync(currentfile);
+                        await file.RenameAsync(pdfname.Text); // whether to record
+                        pdfs.Remove(currentfile);
+                        pdfs.Add(pdfname.Text);
+                        pdfpanel.IsPaneOpen = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        ApplicationMessage.SendMessage("PdfException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+                    }
+                }
+            }
         }
 
         private async void DeletePaper(object sender, RoutedEventArgs e)
@@ -329,7 +361,7 @@ namespace Research_Flow
                 try
                 {
                     await (await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(currentfile)).DeleteAsync();
-                    pdfs.Remove(currentfile.Replace(".pdf", ""));
+                    pdfs.Remove(currentfile);
                     currentfile = "";
                     pdfname.Text = "";
                 }

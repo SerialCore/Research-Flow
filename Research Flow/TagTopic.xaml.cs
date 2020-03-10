@@ -241,7 +241,7 @@ namespace Research_Flow
             else if (topic.Deadline == DateTimeOffset.MinValue && topic.RemindTime != TimeSpan.Zero) // an alarm
             {
                 await ApplicationNotification.CancelAlarmToast(topic.ID);
-                DateTimeOffset dateTime = new DateTimeOffset(DateTimeOffset.Now.Year,DateTimeOffset.Now.Month,DateTimeOffset.Now.Day,
+                DateTimeOffset dateTime = new DateTimeOffset(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, DateTimeOffset.Now.Day,
                     topic.RemindTime.Hours, topic.RemindTime.Minutes, topic.RemindTime.Seconds, DateTimeOffset.Now.Offset);
                 if (DateTimeOffset.Now > dateTime)
                     await ApplicationNotification.ScheduleRepeatAlarmToast(topic.ID, "Research Topic", topic.Title, dateTime.AddDays(1), TimeSpan.FromDays(1), 30);
@@ -258,10 +258,17 @@ namespace Research_Flow
             }
             else // a deadline with alarm
             {
-                await ApplicationNotification.CancelAlarmToast(topic.ID);
-                DateTimeOffset dateTime = new DateTimeOffset(topic.Deadline.Year, topic.Deadline.Month, topic.Deadline.Day,
-                    topic.RemindTime.Hours, topic.RemindTime.Minutes, topic.RemindTime.Seconds, DateTimeOffset.Now.Offset);
-                ApplicationNotification.ScheduleAlarmToast(topic.ID, "Research Topic", topic.Title, dateTime);
+                try
+                {
+                    await ApplicationNotification.CancelAlarmToast(topic.ID);
+                    DateTimeOffset dateTime = new DateTimeOffset(topic.Deadline.Year, topic.Deadline.Month, topic.Deadline.Day,
+                        topic.RemindTime.Hours, topic.RemindTime.Minutes, topic.RemindTime.Seconds, DateTimeOffset.Now.Offset);
+                    ApplicationNotification.ScheduleAlarmToast(topic.ID, "Research Topic", topic.Title, dateTime);
+                }
+                catch (ArgumentException)
+                {
+                    ApplicationMessage.SendMessage("TopicWarning: Research Flow does not offer Time-Machine", ApplicationMessage.MessageType.InApp);
+                }
             }
         }
 
