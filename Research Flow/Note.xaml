@@ -32,7 +32,6 @@
             </Grid>
 
             <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                <AppBarButton Icon="FullScreen" Click="FullScreen_Click" Height="40" Width="38"/>
                 <AppBarButton Click="ChooseInputDevice" Tag="pen" Height="40" Width="38">
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xED5F;" />
                 </AppBarButton>

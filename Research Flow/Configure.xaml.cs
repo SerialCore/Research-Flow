@@ -26,10 +26,12 @@ namespace Research_Flow
 
         private object tempParameter;
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             tempParameter = e.Parameter;
-            Login_Tapped(null, null);
+            await ConfigurePath();
+            ConfigureDB();
+            ApplicationSetting.Updated = ApplicationInfo.ApplicationVersion;
         }
 
         private async void Login_Tapped(object sender, TappedRoutedEventArgs e)
@@ -48,18 +50,8 @@ namespace Research_Flow
 
                 ApplicationSetting.AccountName = email;
 
-                if (ApplicationInfo.IsFirstUse || !ApplicationSetting.ContainKey("Configured"))
-                {
-                    await ConfigurePath();
-                    ConfigureDB();
-                    await ConfigureFile();
-                }
-
-                if (ApplicationSetting.ContainKey("AccountName") && ApplicationSetting.ContainKey("Configured"))
-                {
-                    await Task.Delay(500);
+                if (await ConfigureFile())
                     this.Frame.Navigate(typeof(MainPage), tempParameter);
-                }
             }
             else
             {
@@ -68,12 +60,13 @@ namespace Research_Flow
             }
         }
 
-        private async Task<bool> ConfigurePath()
+        private async Task ConfigurePath()
         {
-            return await LocalStorage.GetDataFolderAsync() != null
-                && await LocalStorage.GetLogFolderAsync() != null
-                && await LocalStorage.GetNoteFolderAsync() != null
-                && await LocalStorage.GetPaperFolderAsync() != null;
+            await LocalStorage.GetDataFolderAsync();
+            await LocalStorage.GetLogFolderAsync();
+            await LocalStorage.GetNoteFolderAsync();
+            await LocalStorage.GetPaperFolderAsync();
+            configState.Text += "\nAll of the folders are prepared.\n";
         }
 
         private void ConfigureDB()
@@ -83,11 +76,12 @@ namespace Research_Flow
             Crawlable.DBInitialize();
             Feed.DBInitialize();
             Paper.DBInitialize();
+            configState.Text += "\nAll of the databases are initialized.\n";
         }
 
         private async Task<bool> ConfigureFile()
         {
-            configState.Text = "\nSyncing files with OneDrive...\n";
+            configState.Text += "\nSyncing files with OneDrive...\n";
             try
             {
                 syncStatu.Visibility = Windows.UI.Xaml.Visibility.Visible;
@@ -95,15 +89,14 @@ namespace Research_Flow
                 await Synchronization.DownloadAll();
                 Synchronization.SyncProgressChanged -= Synchronization_SyncProgressChanged;
                 configState.Text += "\nSync successfully.\n";
-                ApplicationSetting.Configured = "true";
-                ApplicationSetting.Updated = ApplicationInfo.ApplicationVersion;
+                ApplicationSetting.Configured = "true";         
                 return true;
             }
             catch (Exception ex)
             {
                 Synchronization.SyncProgressChanged -= Synchronization_SyncProgressChanged;
                 configState.Text += "\nCan't make it, since " + ex.Message + "\n";
-                configState.Text += "\nPlease login again.\n";
+                configState.Text += "\nPlease sync again.\n";
                 return false;
             }
         }
@@ -116,6 +109,11 @@ namespace Research_Flow
                 syncStatu.Value = e.SyncedCount;
                 syncCount.Text = e.SyncedCount + "/" + e.TotalCount;
             });
+        }
+
+        private void SkipAccount(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(MainPage), tempParameter);
         }
     }
 

@@ -87,7 +87,10 @@
                                     <PersonPicture Grid.Row="0" Grid.RowSpan="2" x:Name="accountPhoto2" Height="40" Width="40" Margin="5"/>
                                     <TextBlock Grid.Row="0" Grid.Column="1" x:Name="accountName2" FontWeight="Bold" FontSize="14" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
                                     <TextBlock Grid.Row="1" Grid.Column="1" x:Name="accountEmail" VerticalAlignment="Top" Margin="5,0,0,0"/>
-                                    <HyperlinkButton Grid.Row="2" Grid.ColumnSpan="2" x:Name="accountLogout" Content="Log out" Click="AccountLogout_Click"/>
+                                    <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal">
+                                        <HyperlinkButton Content="Login" Click="AccountLogin_Click" Margin="5,0,10,0"/>
+                                        <HyperlinkButton Content="Logout" Click="AccountLogout_Click"/>
+                                    </StackPanel>
                                 </Grid>
                             </Flyout>
                         </FlyoutBase.AttachedFlyout>
@@ -104,13 +107,7 @@
                         </AppBarButton>
                         <!--<AppBarButton Icon="SwitchApps" Click="Open_FlowBlade" ToolTipService.ToolTip="Flow" Width="42" Height="42"/>-->
                         <AppBarButton Icon="Message" Click="Open_ChatBlade" ToolTipService.ToolTip="Chat" Width="42" Height="42"/>
-                        <AppBarButton Icon="Placeholder" Tapped="Flyout_Tapped" ToolTipService.ToolTip="Background" Width="42" Height="42">
-                            <FlyoutBase.AttachedFlyout>
-                                <Flyout Closed="ColorPicker_Closed">
-                                    <ColorPicker x:Name="colorPicker" ColorChanged="ColorPicker_ColorChanged" AllowFocusOnInteraction="True"/>
-                                </Flyout>
-                            </FlyoutBase.AttachedFlyout>
-                        </AppBarButton>
+                        <AppBarButton Icon="FullScreen" Click="FullScreen_Click" ToolTipService.ToolTip="FullScreen" Height="42" Width="42"/>
                     </StackPanel>
                 </StackPanel>
             </NavigationView.PaneFooter>

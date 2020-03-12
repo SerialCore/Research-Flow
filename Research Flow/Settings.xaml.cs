@@ -68,13 +68,33 @@ namespace Research_Flow
 
         #region Settings
 
+        private async void AccountDownload_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (GraphService.IsConnected && ApplicationInfo.IsNetworkAvailable)
+            {
+                var button = sender as Button;
+                button.IsEnabled = false;
+                waitSync1.IsActive = true;
+                syncStatu.Visibility = Visibility.Visible;
+
+                Synchronization.SyncProgressChanged += Synchronization_SyncProgressChanged;
+                await Synchronization.DownloadAll();
+                Synchronization.SyncProgressChanged -= Synchronization_SyncProgressChanged;
+
+                syncStatu.Visibility = Visibility.Collapsed;
+                waitSync1.IsActive = false;
+                button.IsEnabled = true;
+                syncCount.Text = "";
+            }
+        }
+
         private async void AccountSync_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             if (GraphService.IsConnected && ApplicationInfo.IsNetworkAvailable)
             {
                 var button = sender as Button;
                 button.IsEnabled = false;
-                waitSync.IsActive = true;
+                waitSync2.IsActive = true;
                 syncStatu.Visibility = Visibility.Visible;
 
                 Synchronization.SyncProgressChanged += Synchronization_SyncProgressChanged;
@@ -82,9 +102,9 @@ namespace Research_Flow
                 Synchronization.SyncProgressChanged -= Synchronization_SyncProgressChanged;
 
                 syncStatu.Visibility = Visibility.Collapsed;
-                syncCount.Text = "";
-                waitSync.IsActive = false;
+                waitSync2.IsActive = false;
                 button.IsEnabled = true;
+                syncCount.Text = "";
             }
         }
 

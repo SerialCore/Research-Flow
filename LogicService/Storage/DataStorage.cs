@@ -1,4 +1,5 @@
 ﻿using LogicService.Application;
+using LogicService.Data;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
@@ -149,7 +150,7 @@ namespace LogicService.Storage
 
                 affectedRows = command.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch (SqliteException ex)
             {
                 if (ifnotify)
                     ApplicationMessage.SendMessage("DatabaseException: " + ex.Message, ApplicationMessage.MessageType.InApp);
@@ -171,7 +172,7 @@ namespace LogicService.Storage
 
                 return command.ExecuteReader();
             }
-            catch (Exception ex)
+            catch (SqliteException ex)
             {
                 if (ifnotify)
                     ApplicationMessage.SendMessage("DatabaseException: " + ex.Message, ApplicationMessage.MessageType.InApp);

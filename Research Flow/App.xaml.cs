@@ -23,12 +23,6 @@ namespace Research_Flow
         /// </summary>
         public App()
         {
-            try
-            {
-                UWPnode.Handler.Start();
-            }
-            catch { }
-
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
@@ -68,13 +62,13 @@ namespace Research_Flow
 
                     ApplicationInfo.TrackAppUse(e);
 
-                    if (ApplicationSetting.ContainKey("AccountName") && ApplicationSetting.ContainKey("Configured"))
+                    if (ApplicationInfo.IsFirstUse)
                     {
-                        rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                        rootFrame.Navigate(typeof(Configure), e.Arguments);
                     }
                     else
                     {
-                        rootFrame.Navigate(typeof(Configure), e.Arguments);
+                        rootFrame.Navigate(typeof(MainPage), e.Arguments);
                     }
                 }
 
@@ -97,13 +91,13 @@ namespace Research_Flow
                 }
                 if (rootFrame.Content == null)
                 {
-                    if (ApplicationSetting.ContainKey("AccountName") && ApplicationSetting.ContainKey("Configured"))
+                    if (ApplicationInfo.IsFirstUse)
                     {
-                        rootFrame.Navigate(typeof(MainPage));
+                        rootFrame.Navigate(typeof(Configure));
                     }
                     else
                     {
-                        rootFrame.Navigate(typeof(Configure));
+                        rootFrame.Navigate(typeof(MainPage));
                     }
                 }
                 Window.Current.Activate();
@@ -126,13 +120,13 @@ namespace Research_Flow
                 if (rootFrame.Content == null)
                 {
                     rootFrame.BackStack.Clear();
-                    if (ApplicationSetting.ContainKey("AccountName") && ApplicationSetting.ContainKey("Configured"))
+                    if (ApplicationInfo.IsFirstUse)
                     {
-                        rootFrame.Navigate(typeof(MainPage), file);
+                        rootFrame.Navigate(typeof(Configure), file);
                     }
                     else
                     {
-                        rootFrame.Navigate(typeof(Configure), file);
+                        rootFrame.Navigate(typeof(MainPage), file);
                     }
                 }
             }
@@ -156,13 +150,13 @@ namespace Research_Flow
                 if (rootFrame.Content == null)
                 {
                     rootFrame.BackStack.Clear();
-                    if (ApplicationSetting.ContainKey("AccountName") && ApplicationSetting.ContainKey("Configured"))
+                    if (ApplicationInfo.IsFirstUse)
                     {
-                        rootFrame.Navigate(typeof(MainPage), link);
+                        rootFrame.Navigate(typeof(Configure), link);
                     }
                     else
                     {
-                        rootFrame.Navigate(typeof(Configure), link);
+                        rootFrame.Navigate(typeof(MainPage), link);
                     }
                 }
             }

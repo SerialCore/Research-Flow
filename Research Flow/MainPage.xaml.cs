@@ -17,6 +17,7 @@ using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Popups;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -40,17 +41,17 @@ namespace Research_Flow
         {
             this.InitializeComponent();
 
-            ConfigureUI();
             ApplicationMessage.MessageReceived += AppMessage_MessageReceived;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             NavParameter = e.Parameter;
-            Login();
+            if (ApplicationSetting.ContainKey("AccountName"))
+                Login();
             ConfigureUpdate();
             InitializeChat();
-            ForegroundTask();
+            //ForegroundTask();
             BackgroundTask();
         }
 
@@ -58,7 +59,7 @@ namespace Research_Flow
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
              {
-                 switch(type)
+                 switch (type)
                  {
                      case ApplicationMessage.MessageType.Chat:
                          ChatBlade.IsOpen = true;
@@ -72,19 +73,6 @@ namespace Research_Flow
                          break;
                  }
              });
-        }
-        
-        private void ConfigureUI()
-        {
-            if (ApplicationSetting.ContainKey("HeaderColorA") && ApplicationSetting.ContainKey("HeaderColorR") &&
-                ApplicationSetting.ContainKey("HeaderColorG") && ApplicationSetting.ContainKey("HeaderColorB"))
-            {
-                Color color = Color.FromArgb(Convert.ToByte(ApplicationSetting.HeaderColorA),
-                    Convert.ToByte(ApplicationSetting.HeaderColorR),
-                    Convert.ToByte(ApplicationSetting.HeaderColorG),
-                    Convert.ToByte(ApplicationSetting.HeaderColorB));
-                NavView.Background = new SolidColorBrush(color);
-            }
         }
 
         private async void ConfigureUpdate()
@@ -270,13 +258,12 @@ namespace Research_Flow
         private void Logout()
         {
             GraphService.OneDriveLogout();
-            
-            ContentFrame.IsEnabled = false;
-            accountLogout.Content = "restart this app";
             accountName1.Text = "";
             accountName2.Text = "";
             accountEmail.Text = "";
         }
+
+        private void AccountLogin_Click(object sender, RoutedEventArgs e) => Login();
 
         private async void AccountLogout_Click(object sender, RoutedEventArgs e)
         {
@@ -429,20 +416,19 @@ namespace Research_Flow
             }
         }
 
-        private void ColorPicker_ColorChanged(ColorPicker sender, ColorChangedEventArgs args)
+        private void FullScreen_Click(object sender, RoutedEventArgs e)
         {
-            NavView.Background = new SolidColorBrush(args.NewColor);
-            IsHeaderColorChanged = true;
-        }
-
-        private void ColorPicker_Closed(object sender, object e)
-        {
-            if (IsHeaderColorChanged)
+            AppBarButton button = sender as AppBarButton;
+            ApplicationView view = ApplicationView.GetForCurrentView();
+            if (view.IsFullScreenMode)
             {
-                ApplicationSetting.HeaderColorA = Convert.ToInt32(colorPicker.Color.A);
-                ApplicationSetting.HeaderColorR = Convert.ToInt32(colorPicker.Color.R);
-                ApplicationSetting.HeaderColorG = Convert.ToInt32(colorPicker.Color.G);
-                ApplicationSetting.HeaderColorB = Convert.ToInt32(colorPicker.Color.B);
+                view.ExitFullScreenMode();
+                button.Icon = new SymbolIcon(Symbol.FullScreen);
+            }
+            else
+            {
+                view.TryEnterFullScreenMode();
+                button.Icon = new SymbolIcon(Symbol.BackToWindow);
             }
         }
 

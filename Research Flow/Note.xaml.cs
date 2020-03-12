@@ -13,7 +13,6 @@ using Windows.System.Threading;
 using Windows.UI.Core;
 using Windows.UI.Input.Inking;
 using Windows.UI.Popups;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -168,22 +167,6 @@ namespace Research_Flow
                 this.inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Pen;
                 button.Tag = "pen";
                 button.Icon = new SymbolIcon((Symbol)0xED5F);
-            }
-        }
-
-        private void FullScreen_Click(object sender, RoutedEventArgs e)
-        {
-            AppBarButton button = sender as AppBarButton;
-            ApplicationView view = ApplicationView.GetForCurrentView();
-            if (view.IsFullScreenMode)
-            {
-                view.ExitFullScreenMode();
-                button.Icon = new SymbolIcon(Symbol.FullScreen);
-            }
-            else
-            {
-                view.TryEnterFullScreenMode();
-                button.Icon = new SymbolIcon(Symbol.BackToWindow);
             }
         }
 
