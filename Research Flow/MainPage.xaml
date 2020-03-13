@@ -39,7 +39,7 @@
                 </NavigationViewItem>
                 <NavigationViewItem Content="RSS Service" Tag="RSS">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE753;" />
+                        <FontIcon Glyph="&#xE701;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem Content="Search Engine" Tag="Search">
@@ -56,7 +56,12 @@
                 <NavigationViewItemSeparator/>
                 <NavigationViewItem Content="Drawable Note" Tag="Note">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xEA86;"/>
+                        <FontIcon Glyph="&#xEE56;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Picture Album" Tag="Picture">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xEB9F;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
@@ -99,7 +104,6 @@
                         <AppBarButton Icon="AttachCamera" Tapped="Flyout_Tapped" ToolTipService.ToolTip="ScreenShot" Width="42" Height="42">
                             <FlyoutBase.AttachedFlyout>
                                 <MenuFlyout>
-                                    <MenuFlyoutItem Text="Export" Click="ScreenShot_Export"/>
                                     <MenuFlyoutItem Text="Share" Click="ScreenShot_Share"/>
                                     <MenuFlyoutItem Text="Upload" Click="ScreenShot_Upload"/>
                                 </MenuFlyout>

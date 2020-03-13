@@ -37,12 +37,6 @@ namespace LogicService.Storage
             return await GetLocalCacheFolder().CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
         }
 
-        public static async Task<StorageFolder> GetTemporarySubFolderAsync(string folder)
-        {
-            return await GetTemporaryFolder().CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
-        }
-
-        // for database and list
         public static async Task<StorageFolder> GetDataFolderAsync()
         {
             return await GetLocalCacheFolder().CreateFolderAsync("Data", CreationCollisionOption.OpenIfExists);
@@ -53,7 +47,6 @@ namespace LogicService.Storage
             return ApplicationData.Current.LocalCacheFolder.Path + "\\Data";
         }
 
-        // for general logs and filetrace
         public static async Task<StorageFolder> GetLogFolderAsync()
         {
             return await GetLocalCacheFolder().CreateFolderAsync("Log", CreationCollisionOption.OpenIfExists);
@@ -64,26 +57,24 @@ namespace LogicService.Storage
             return ApplicationData.Current.LocalCacheFolder.Path + "\\Log";
         }
 
-        // for drawable notes
         public static async Task<StorageFolder> GetNoteFolderAsync()
         {
             return await GetLocalCacheFolder().CreateFolderAsync("Note", CreationCollisionOption.OpenIfExists);
         }
 
-        public static async Task<StorageFolder> GetNoteSubFolderAsync(string folder)
-        {
-            return await (await GetNoteFolderAsync()).CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
-        }
-
-        // for paper downloaded
         public async static Task<StorageFolder> GetPaperFolderAsync()
         {
             return await GetLocalCacheFolder().CreateFolderAsync("Paper", CreationCollisionOption.OpenIfExists);
         }
 
-        public static async Task<StorageFolder> GetPaperSubFolderAsync(string folder)
+        public async static Task<StorageFolder> GetPictureFolderAsync()
         {
-            return await (await GetPaperFolderAsync()).CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
+            return await GetLocalCacheFolder().CreateFolderAsync("Picture", CreationCollisionOption.OpenIfExists);
+        }
+
+        public async static Task<StorageFolder> GetPictureCacheAsync()
+        {
+            return await GetTemporaryFolder().CreateFolderAsync("Picture", CreationCollisionOption.OpenIfExists);
         }
 
         #endregion

@@ -12,16 +12,14 @@ using Windows.ApplicationModel.DataTransfer;
 using Windows.Graphics.Display;
 using Windows.Graphics.Imaging;
 using Windows.Storage;
-using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
-using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
@@ -51,7 +49,7 @@ namespace Research_Flow
                 Login();
             ConfigureUpdate();
             InitializeChat();
-            //ForegroundTask();
+            ForegroundTask();
             BackgroundTask();
         }
 
@@ -154,6 +152,7 @@ namespace Research_Flow
             ("Search", typeof(SearchEngine)),
             ("Crawler", typeof(Crawler)),
             ("Note", typeof(Note)),
+            ("Picture", typeof(Picture)),
         };
 
         private void NavView_Loaded(object sender, RoutedEventArgs e)
@@ -206,7 +205,7 @@ namespace Research_Flow
         {
             var item = _pages.FirstOrDefault(p => p.Tag.Equals(pageItem.Tag));
             
-            ContentFrame.Navigate(item.Page);
+            ContentFrame.Navigate(item.Page, null, new DrillInNavigationTransitionInfo());
         }
 
         private void NavView_Navigated(object sender, NavigationEventArgs e)
@@ -293,8 +292,6 @@ namespace Research_Flow
 
         #region Content
 
-        private bool IsHeaderColorChanged = false;
-
         private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
             => FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
 
@@ -306,37 +303,6 @@ namespace Research_Flow
 
         private void CrawlSearch_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
             => ContentFrame.Navigate(typeof(Crawler), crawlsearch.Text);
-
-        private async void ScreenShot_Export(object sender, RoutedEventArgs e)
-        {
-            FileSavePicker picker = new FileSavePicker
-            {
-                SuggestedStartLocation = PickerLocationId.Desktop,
-                SuggestedFileName = "ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png",
-            };
-            picker.FileTypeChoices.Add("ScreenShot", new string[] { ".png" });
-            StorageFile file = await picker.PickSaveFileAsync();
-            if (file != null)
-            {
-                var bitmap = new RenderTargetBitmap();
-                await bitmap.RenderAsync(FullPage);
-                var buffer = await bitmap.GetPixelsAsync();
-                using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
-                {
-                    var encode = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, stream);
-                    encode.SetPixelData(
-                        BitmapPixelFormat.Bgra8,
-                        BitmapAlphaMode.Ignore,
-                        (uint)bitmap.PixelWidth,
-                        (uint)bitmap.PixelHeight,
-                        DisplayInformation.GetForCurrentView().LogicalDpi,
-                        DisplayInformation.GetForCurrentView().LogicalDpi,
-                        buffer.ToArray()
-                       );
-                    await encode.FlushAsync();
-                }
-            }
-        }
 
         private void ScreenShot_Share(object sender, RoutedEventArgs e)
         {
@@ -354,7 +320,7 @@ namespace Research_Flow
             request.Data.Properties.Description = "Share your current idea";
 
             var bitmap = new RenderTargetBitmap();
-            StorageFile file = await LocalStorage.GetTemporaryFolder().CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
+            StorageFile file = await (await LocalStorage.GetPictureFolderAsync()).CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
             await bitmap.RenderAsync(FullPage);
             var buffer = await bitmap.GetPixelsAsync();
             using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
@@ -367,8 +333,7 @@ namespace Research_Flow
                     (uint)bitmap.PixelHeight,
                     DisplayInformation.GetForCurrentView().LogicalDpi,
                     DisplayInformation.GetForCurrentView().LogicalDpi,
-                    buffer.ToArray()
-                   );
+                    buffer.ToArray());
                 await encode.FlushAsync();
             }
 
@@ -382,7 +347,7 @@ namespace Research_Flow
         private async void ScreenShot_Upload(object sender, RoutedEventArgs e)
         {
             var bitmap = new RenderTargetBitmap();
-            StorageFile file = await LocalStorage.GetTemporaryFolder().CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
+            StorageFile file = await (await LocalStorage.GetPictureFolderAsync()).CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
             await bitmap.RenderAsync(FullPage);
             var buffer = await bitmap.GetPixelsAsync();
             using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
@@ -395,8 +360,7 @@ namespace Research_Flow
                     (uint)bitmap.PixelHeight,
                     DisplayInformation.GetForCurrentView().LogicalDpi,
                     DisplayInformation.GetForCurrentView().LogicalDpi,
-                    buffer.ToArray()
-                   );
+                    buffer.ToArray());
                 await encode.FlushAsync();
             }
 

@@ -82,8 +82,6 @@ namespace Research_Flow
 
         private void Pdftree_ItemClick(object sender, ItemClickEventArgs e)
         {
-            CleanPaperPanel();
-
             var filename = e.ClickedItem as string;
             currentfile = filename;
             pdfname.Text = filename;
@@ -91,6 +89,8 @@ namespace Research_Flow
             // there is only one paper in list or nothing
             foreach (Paper paper in Paper.DBSelectByFile(filename))
             {
+                CleanPaperPanel();
+
                 paperid.Text = paper.ID;
                 papertitle.Text = paper.Title;
                 paperauthor.Text = paper.Authors;
@@ -98,7 +98,6 @@ namespace Research_Flow
                 paperlink.NavigateUri = string.IsNullOrEmpty(paper.Link) ? null : new Uri(paper.Link);
                 papernote.Text = paper.Note;
                 papertags.Text = paper.Tags;
-
                 currentpaper = paper;
             }
         }

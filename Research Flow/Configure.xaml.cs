@@ -66,6 +66,7 @@ namespace Research_Flow
             await LocalStorage.GetLogFolderAsync();
             await LocalStorage.GetNoteFolderAsync();
             await LocalStorage.GetPaperFolderAsync();
+            await LocalStorage.GetPictureFolderAsync();
             configState.Text += "\nAll of the folders are prepared.\n";
         }
 
