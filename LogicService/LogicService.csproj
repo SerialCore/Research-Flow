@@ -131,6 +131,7 @@
     <Compile Include="Service\RssService.cs" />
     <Compile Include="Application\ApplicationInfo.cs" />
     <Compile Include="Storage\Synchronization.cs" />
+    <Compile Include="FlowTask\FeedTask.cs" />
     <EmbeddedResource Include="Properties\LogicService.rd.xml" />
   </ItemGroup>
   <ItemGroup>

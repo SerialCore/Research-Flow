@@ -1,4 +1,5 @@
-﻿using LogicService.Data;
+﻿using LogicService.Application;
+using LogicService.FlowTask;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -35,7 +36,12 @@ namespace Research_Flow
 
         private void ForegroundTask()
         {
-            Feed.TaskRun();
+            try
+            {
+                if (ApplicationInfo.IsNetworkAvailable)
+                    new FeedTask().Run();
+            }
+            catch { }
         }
 
         private async void BackgroundTask()

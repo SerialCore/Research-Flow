@@ -82,7 +82,7 @@
                     <TextBox x:Name="papertitle" Header="Title" IsSpellCheckEnabled="False"/>
                     <TextBox x:Name="paperid" Header="ID - DOI" IsSpellCheckEnabled="False"/>
                     <TextBox x:Name="pdfname" Header="Paper File" IsSpellCheckEnabled="False"/>
-                    <HyperlinkButton x:Name="paperlink" Content="Link"/>
+                    <AutoSuggestBox x:Name="paperlink" Header="Website" QueryIcon="Find" QuerySubmitted="PaperLink_QuerySubmitted"/>
                     <TextBox x:Name="paperauthor" Header="Authors" PlaceholderText="Author1, Author2, Author3" IsSpellCheckEnabled="False"/>
                     <TextBox x:Name="papernote" Header="Paper Note" PlaceholderText="reason to refer" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
                     <TextBox x:Name="papertags" Header="Paper Tags" PlaceholderText="#Tag1##Tag2#" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="100"/>

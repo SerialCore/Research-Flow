@@ -44,6 +44,7 @@
                             </Grid.ColumnDefinitions>
                             <AutoSuggestBox Grid.Column="0" x:Name="crawlsearch" QueryIcon="Find" QuerySubmitted="CrawlSearch_QuerySubmitted" HorizontalAlignment="Stretch"/>
                             <ComboBox Grid.Column="1" x:Name="searchtype" HorizontalAlignment="Stretch">
+                                <ComboBoxItem Content="Search Content"/>
                                 <ComboBoxItem Content="Search Text | Content"/>
                             </ComboBox>
                         </Grid>
@@ -92,7 +93,7 @@
                 <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                     <StackPanel Margin="10,10,10,40">
                         <TextBox x:Name="crawltext" Header="Text" IsSpellCheckEnabled="False"/>
-                        <HyperlinkButton x:Name="crawlurl" Content="Link"/>
+                        <AutoSuggestBox x:Name="crawlurl" Header="Link" QueryIcon="Find" QuerySubmitted="CrawlUrl_QuerySubmitted"/>
                         <TextBox x:Name="crawlcontent" Header="Crawler Content" PlaceholderText="page content | summary" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
                         <TextBox x:Name="crawltags" Header="Crawler Tags" PlaceholderText="#Tag1##Tag2#" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="100"/>
                         <AutoSuggestBox x:Name="linkFilter" Header="Select Filters" QueryIcon="Filter"/>

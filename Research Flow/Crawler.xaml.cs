@@ -47,8 +47,7 @@ namespace Research_Flow
                     if (!crawltext.Text.Equals(service.Title))
                     {
                         crawltext.Text = service.Title;
-                        crawlurl.Content = service.Url;
-                        crawlurl.NavigateUri = new Uri(service.Url);
+                        crawlurl.Text = service.Url;
                         crawlcontent.Text = service.Content;
                         crawltags.Text = "";
                         crawlfilters.Text = service.LinkFilters;
@@ -60,7 +59,7 @@ namespace Research_Flow
                 }
             }
 
-            InitializeCrawl();
+            InitializeCrawler();
             InitializeFavorite();
         }
 
@@ -83,11 +82,9 @@ namespace Research_Flow
             }
         }
 
-        private void InitializeCrawl()
+        private void InitializeCrawler()
         {
-            fromdatabase = Crawlable.DBSelectByLimit(100);
-            databaselist.ItemsSource = fromdatabase;
-            searchtype.SelectedIndex = 0;
+            searchtype.SelectedIndex = 1;
         }
 
         #region Favorite
@@ -105,8 +102,7 @@ namespace Research_Flow
             Crawlable crawlable = e.ClickedItem as Crawlable;
             currentCrawlable = crawlable;
             crawltext.Text = crawlable.Text;
-            crawlurl.Content = crawlable.Url;
-            crawlurl.NavigateUri = new Uri(crawlable.Url);
+            crawlurl.Text = crawlable.Url;
             crawlcontent.Text = crawlable.Content;
             crawltags.Text = crawlable.Tags;
             crawlfilters.Text = crawlable.Filters;
@@ -127,16 +123,28 @@ namespace Research_Flow
         private void CleanCrawlPanel()
         {
             crawltext.Text = "";
-            crawlurl.Content = "Link";
-            crawlurl.NavigateUri = null;
+            crawlurl.Text = "";
             crawlcontent.Text = "";
             crawltags.Text = "";
             crawlfilters.Text = "";
         }
 
+        private void CrawlUrl_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            if (!string.IsNullOrEmpty(crawlurl.Text))
+            {
+                this.Frame.Navigate(typeof(SearchEngine), crawlurl.Text);
+            }
+        }
+
         private void CrawlSearch_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            if (searchtype.SelectedIndex == 0) // search by text | Content
+            if (searchtype.SelectedIndex == 0) // search by Content
+            {
+                fromdatabase = Crawlable.DBSelectByContent(crawlsearch.Text);
+                databaselist.ItemsSource = fromdatabase;
+            }
+            else if (searchtype.SelectedIndex == 1) // search by text | Content
             {
                 fromdatabase = Crawlable.DBSelectByTextContent(crawlsearch.Text);
                 databaselist.ItemsSource = fromdatabase;
@@ -145,11 +153,11 @@ namespace Research_Flow
 
         private void CrawlCrawlable(object sender, RoutedEventArgs e)
         {
-            if (crawlurl.NavigateUri == null)
+            if (string.IsNullOrEmpty(crawlurl.Text))
                     return;
             craWaiting.IsActive = true;
 
-            currentService = new CrawlerService(crawlurl.Content as string);
+            currentService = new CrawlerService(crawlurl.Text);
             currentService.BeginGetResponse(
                 async (result) =>
                 {
@@ -175,13 +183,13 @@ namespace Research_Flow
 
         private void SaveCrawlable(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(crawltext.Text) || crawlurl.NavigateUri == null)
+            if (string.IsNullOrEmpty(crawltext.Text) || string.IsNullOrEmpty(crawlurl.Text))
             {
                 ApplicationMessage.SendMessage("CrawlerWarning: There must be Text and Url", ApplicationMessage.MessageType.InApp);
                 return;
             }
 
-            string id = HashEncode.MakeMD5(crawlurl.Content as string);
+            string id = HashEncode.MakeMD5(crawlurl.Text);
             if (Crawlable.DBSelectByID(id).Count != 0)
                 Crawlable.DBDeleteByID(id); // modify or delete?
             Crawlable.DBInsert(new List<Crawlable>()
@@ -191,7 +199,7 @@ namespace Research_Flow
                         ID = id,
                         ParentID = "",
                         Text = crawltext.Text,
-                        Url = crawlurl.Content as string,
+                        Url = crawlurl.Text,
                         Content = crawlcontent.Text,
                         Tags = crawltags.Text,
                         Filters = crawlfilters.Text,
@@ -209,10 +217,10 @@ namespace Research_Flow
                     favorites.Remove(currentFavor);
                 currentFavor = new Crawlable
                 {
-                    ID = HashEncode.MakeMD5(crawlurl.Content as string),
+                    ID = HashEncode.MakeMD5(crawlurl.Text),
                     ParentID = "",
                     Text = crawltext.Text,
-                    Url = crawlurl.Content as string,
+                    Url = crawlurl.Text,
                     Content = crawlcontent.Text,
                     Tags = crawltags.Text,
                     Filters = crawlfilters.Text,
@@ -255,8 +263,7 @@ namespace Research_Flow
 
             currentCrawlable = e.ClickedItem as Crawlable;
             crawltext.Text = currentCrawlable.Text;
-            crawlurl.Content = currentCrawlable.Url;
-            crawlurl.NavigateUri = new Uri(currentCrawlable.Url);
+            crawlurl.Text = currentCrawlable.Url;
             crawlcontent.Text = currentCrawlable.Content;
             crawltags.Text = currentCrawlable.Tags;
             crawlfilters.Text = currentCrawlable.Filters;
@@ -268,8 +275,7 @@ namespace Research_Flow
 
             var item = e.ClickedItem as Crawlable;
             crawltext.Text = item.Text;
-            crawlurl.Content = item.Url;
-            crawlurl.NavigateUri = new Uri(item.Url);
+            crawlurl.Text = item.Url;
             crawlcontent.Text = item.Content;
             crawltags.Text = item.Tags;
             crawlfilters.Text = item.Filters;

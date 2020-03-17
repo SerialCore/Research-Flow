@@ -1,9 +1,7 @@
-﻿using LogicService.Service;
-using LogicService.Storage;
+﻿using LogicService.Storage;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace LogicService.Data
@@ -258,47 +256,6 @@ namespace LogicService.Data
                     return node.InnerText;
             }
             return "";
-        }
-
-        #endregion
-
-        #region Task
-
-        public static void TaskRun()
-        {
-            // thread security
-            List<FeedSource> FeedSources = Task.Run(async () =>
-            {
-                return await LocalStorage.ReadJsonAsync<List<FeedSource>>(await LocalStorage.GetDataFolderAsync(), "rss.list");
-            }).Result;
-
-            foreach (FeedSource source in FeedSources)
-            {
-                RssService.GetRssItems(
-                    source.Uri,
-                    (items) =>
-                    {
-                        List<Feed> feeds = items as List<Feed>;
-                        DBInsert(feeds);
-                        source.LastUpdateTime = DateTime.Now;
-                        Task.Run(async () =>
-                        {
-                            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rss.list", FeedSources);
-                        });
-
-                        Task.Run(() =>
-                        {
-                            LocalStorage.GeneralLogAsync<Feed>("FeedTask.log", "feed updated-" + source.Name);
-                        });
-                    },
-                    (exception) =>
-                    {
-                        Task.Run(() =>
-                        {
-                            LocalStorage.GeneralLogAsync<Feed>("FeedTask.log", exception + "-" + source.Name);
-                        });
-                    }, null);
-            }
         }
 
         #endregion

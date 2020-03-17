@@ -141,6 +141,13 @@ namespace LogicService.Data
             return DBReader(reader);
         }
 
+        public static List<Crawlable> DBSelectByContent(string content)
+        {
+            string sql = "select * from Crawlable where Content like @Content;";
+            var reader = DataStorage.CrawlData.ExecuteRead(sql, new Dictionary<string, object> { { "@Content", '%' + content + '%' } });
+            return DBReader(reader);
+        }
+
         public static List<Crawlable> DBSelectByTextContent(string text)
         {
             string sql = "select * from Crawlable where Text like @Text or Content like @Text;";
@@ -242,20 +249,6 @@ namespace LogicService.Data
                 return service.Links;
             else
                 return null; // cannot reach here
-        }
-
-        #endregion
-
-        #region Task
-
-        public static void TaskRunCrawler()
-        {
-
-        }
-
-        public static void TaskRunSearch()
-        {
-
         }
 
         #endregion

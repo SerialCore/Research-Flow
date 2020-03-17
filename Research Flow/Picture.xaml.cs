@@ -1,4 +1,5 @@
-﻿using LogicService.Storage;
+﻿using LogicService.Application;
+using LogicService.Storage;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -64,9 +65,9 @@ namespace Research_Flow
 
         private async void Website_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            string[] urls = await SiteExtractor(sitelink.Text);
-
             picStatu.Visibility = Visibility.Visible;
+
+            string[] urls = await SiteExtractor(sitelink.Text);
             picStatu.Maximum = urls.Length;
             picCount.Text = urls.Length.ToString();
             int index = 1;
@@ -84,7 +85,7 @@ namespace Research_Flow
                             {
                                 string name = url.Substring(url.LastIndexOf('/') + 1);
                                 await response.Content.WriteToStreamAsync(stream);
-                                StorageFile file = await ApplicationData.Current.LocalCacheFolder.CreateFileAsync(name, CreationCollisionOption.GenerateUniqueName);
+                                StorageFile file = await (await LocalStorage.GetPictureFolderAsync()).CreateFileAsync(name, CreationCollisionOption.GenerateUniqueName);
                                 await FileIO.WriteBytesAsync(file, await ConvertImagetoByte(stream));
 
                                 pictures.Add(new PictureFile { FileName = file.Name, Uri = file.Path });
@@ -118,7 +119,7 @@ namespace Research_Flow
                     {
                         try
                         {
-                            var file = await item.CopyAsync(ApplicationData.Current.LocalCacheFolder);
+                            var file = await item.CopyAsync((await LocalStorage.GetPictureFolderAsync()));
                             pictures.Add(new PictureFile { FileName = file.Name, Uri = file.Path });
                             picStatu.Value = index++;
                         }
@@ -170,7 +171,7 @@ namespace Research_Flow
             {
                 foreach (PictureFile item in items)
                 {
-                    StorageFile file = await ApplicationData.Current.LocalCacheFolder.GetFileAsync(item.FileName);
+                    StorageFile file = await (await LocalStorage.GetPictureFolderAsync()).GetFileAsync(item.FileName);
                     await file.DeleteAsync();
                     pictures.Remove(item);
                 }

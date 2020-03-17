@@ -44,8 +44,7 @@ namespace Research_Flow
                         paperid.Text = Feed.GetDoi(feed.Nodes);
                         papertitle.Text = feed.Title;
                         paperauthor.Text = Feed.GetAuthor(feed.Nodes);
-                        paperlink.Content = feed.Link;
-                        paperlink.NavigateUri = new Uri(feed.Link);
+                        paperlink.Text = feed.Link;
                         papertags.Text = feed.Tags;
                     }
                 }
@@ -94,8 +93,7 @@ namespace Research_Flow
                 paperid.Text = paper.ID;
                 papertitle.Text = paper.Title;
                 paperauthor.Text = paper.Authors;
-                paperlink.Content = paper.Link;
-                paperlink.NavigateUri = string.IsNullOrEmpty(paper.Link) ? null : new Uri(paper.Link);
+                paperlink.Text = paper.Link;
                 papernote.Text = paper.Note;
                 papertags.Text = paper.Tags;
                 currentpaper = paper;
@@ -111,8 +109,7 @@ namespace Research_Flow
             papertitle.Text = currentpaper.Title;
             pdfname.Text = currentpaper.FileName;
             paperauthor.Text = currentpaper.Authors;
-            paperlink.Content = currentpaper.Link;
-            paperlink.NavigateUri = string.IsNullOrEmpty(currentpaper.Link) ? null : new Uri(currentpaper.Link);
+            paperlink.Text = currentpaper.Link;
             papernote.Text = currentpaper.Note;
             papertags.Text = currentpaper.Tags;
         }
@@ -270,13 +267,18 @@ namespace Research_Flow
 
         private List<Paper> papers = new List<Paper>();
 
+        private void PaperLink_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            if (!string.IsNullOrEmpty(paperlink.Text))
+                this.Frame.Navigate(typeof(SearchEngine), paperlink.Text);
+        }
+
         private void CleanPaperPanel()
         {
             paperid.Text = "";
             papertitle.Text = "";
             paperauthor.Text = "";
-            paperlink.Content = "Link";
-            paperlink.NavigateUri = null;
+            paperlink.Text = "";
             papernote.Text = "";
             papertags.Text = "";
         }
@@ -299,12 +301,13 @@ namespace Research_Flow
                         ParentID = "",
                         Title = papertitle.Text,
                         FileName = pdfname.Text,
-                        Link = paperlink.NavigateUri == null ? "" : paperlink.NavigateUri.ToString(),
+                        Link = paperlink.Text,
                         Authors = paperauthor.Text,
                         Note = papernote.Text,
                         Tags = papertags.Text,
                     }
                 });
+            InitializePaper();
             if (!string.IsNullOrEmpty(papertags.Text))
                 Topic.SaveTag(papertags.Text);
         }
@@ -322,6 +325,7 @@ namespace Research_Flow
                         pdfs.Remove(currentfile);
                         pdfs.Add(pdfname.Text);
                         pdfpanel.IsPaneOpen = true;
+                        InitializePdf();
                     }
                     catch (Exception ex)
                     {

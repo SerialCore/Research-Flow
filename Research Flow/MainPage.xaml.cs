@@ -1,5 +1,6 @@
 ﻿using LogicService.Application;
 using LogicService.Data;
+using LogicService.FlowTask;
 using LogicService.Service;
 using LogicService.Storage;
 using System;
@@ -127,7 +128,7 @@ namespace Research_Flow
             try // if the first time to use app which has no user data
             {
                 if (ApplicationInfo.IsNetworkAvailable)
-                    Feed.TaskRun();
+                    new FeedTask().Run();
             }
             catch { }
         }
