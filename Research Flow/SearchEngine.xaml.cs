@@ -5,14 +5,15 @@ using LogicService.Service;
 using LogicService.Storage;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.Storage;
 using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -54,6 +55,8 @@ namespace Research_Flow
                     }
                 }
             }
+
+            InitializeFavorite();
         }
 
         private async void InitializeSearch()
@@ -70,6 +73,7 @@ namespace Research_Flow
                 {
                     { "ACS", "https://pubs.acs.org/action/doSearch?AllField=QUERY" },
                     { "arXiv All", "https://arxiv.org/search/?query=QUERY&searchtype=all" },
+                    { "inspirehep", "http://inspirehep.net/search?ln=en&p=QUEST&jrec=26&sf=earliestdate" },
                 };
                 LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "search.list", SearchSources);
             }
@@ -82,6 +86,23 @@ namespace Research_Flow
                 linkFilter2.ItemsSource = Crawlable.LinkType.Keys;
                 linkFilter1.Text = "Text: NotEmpty";
                 linkFilter2.Text = "Text: NotEmpty";
+            }
+        }
+
+        private async void InitializeFavorite()
+        {
+            try
+            {
+                favorites = await LocalStorage.ReadJsonAsync<ObservableCollection<Crawlable>>(
+                    await LocalStorage.GetDataFolderAsync(), "favorite.list");
+            }
+            catch
+            {
+                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "favorite.list", favorites);
+            }
+            finally
+            {
+                favoritelist.ItemsSource = favorites;
             }
         }
 
@@ -193,6 +214,8 @@ namespace Research_Flow
 
         #region Browser
 
+        private ObservableCollection<Crawlable> favorites = new ObservableCollection<Crawlable>();
+
         private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
             => webWaiting.IsActive = true;
 
@@ -218,12 +241,19 @@ namespace Research_Flow
         {
             try
             {
-                string uri = siteUrl.Text;
-                uri = uri.StartsWith("http") ? uri : "http://" + uri;
-                webView.Source = new Uri(uri);
-                FirstCrawl(uri);
+                string url = siteUrl.Text;
+                url = url.StartsWith("http") ? url : "http://" + url;
+                webView.Source = new Uri(url);
+                FirstCrawl(url);
             }
             catch { }
+        }
+
+        private void FavoriteList_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Crawlable fav = e.ClickedItem as Crawlable;
+            webView.Source = new Uri(fav.Url);
+            FirstCrawl(fav.Url);
         }
 
         private void PageBack(object sender, RoutedEventArgs e)
@@ -236,13 +266,31 @@ namespace Research_Flow
             if (webView.CanGoForward) webView.GoForward();
         }
 
-        private void PageRefresh(object sender, RoutedEventArgs e)
-            => webView.Refresh();
-
-        private async void OpenBrowser(object sender, RoutedEventArgs e)
+        private void PageStop(object sender, RoutedEventArgs e)
         {
-            if (webView.Source!=null)
-                await Launcher.LaunchUriAsync(webView.Source);
+            webView.Stop();
+            webWaiting.IsActive = false;
+        }
+
+        private void PageRefresh(object sender, RoutedEventArgs e) => webView.Refresh();
+
+        private void Favorite_Click(object sender, RoutedEventArgs e)
+        {
+            if (webView.Source != null)
+            {
+                Crawlable newcrawl = new Crawlable()
+                {
+                    ID = HashEncode.MakeMD5(webView.Source.ToString()),
+                    ParentID = "",
+                    Text = webView.DocumentTitle,
+                    Url = webView.Source.ToString(),
+                    Content = "",
+                    Tags = "",
+                    Filters = ""
+                };
+                Crawlable.AddtoFavorite(newcrawl);
+                favorites.Add(newcrawl);
+            }
         }
 
         private async void AddToTagTopic(object sender, RoutedEventArgs e)
@@ -251,11 +299,12 @@ namespace Research_Flow
             {
                 var tags = await LocalStorage.ReadJsonAsync<HashSet<string>>(
                     await LocalStorage.GetDataFolderAsync(), "tag.list");
-                tags.UnionWith(new List<string> { queryQuest.Text , "Search"});
+                tags.UnionWith(new List<string> { queryQuest.Text , "@Search"});
                 LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
                 var topics = await LocalStorage.ReadJsonAsync<List<Topic>>(
                     await LocalStorage.GetDataFolderAsync(), "topic.list");
-                topics.Add(new Topic { ID = HashEncode.MakeMD5(DateTimeOffset.Now.ToString()), Title = "#Search##" + queryQuest.Text + '#' });
+                topics.Add(new Topic { ID = HashEncode.MakeMD5(DateTimeOffset.Now.ToString()), 
+                    Title = "#QSearch##" + queryQuest.Text + '#' + SearchSources.GetValueOrDefault(searchlist.SelectedItem as string)});
                 LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topic.list", topics);
             }
         }
@@ -357,21 +406,6 @@ namespace Research_Flow
 
         private CrawlerService currentCrawled = null;
 
-        private void Favorite_Click(object sender, RoutedEventArgs e)
-        {
-            if (currentCrawled != null)
-                Crawlable.AddtoFavorite(new Crawlable()
-                {
-                    ID = HashEncode.MakeMD5(currentCrawled.Url),
-                    ParentID = "",
-                    Text = currentCrawled.Title,
-                    Url = currentCrawled.Url,
-                    Content = currentCrawled.Content,
-                    Tags = "",
-                    Filters = ""
-                });
-        }
-
         private void FirstCrawl_Click(object sender, RoutedEventArgs e)
         {
             if (crawlPane.IsPaneOpen)
@@ -395,10 +429,21 @@ namespace Research_Flow
             currentCrawled.BeginGetResponse(
                 async (result) =>
                 {
-                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                     {
                         LinkFilter_QuerySubmitted(null, null);
                         craWaiting.IsActive = false;
+
+                        try
+                        {
+                            pagetitle.Text = result.Title;
+                            pagehost.Text = result.Host;
+                            pagesize.Text = result.PageSize.ToString();
+                            pagecontent.Text = result.Content;
+                            string htmlname = HashEncode.MakeMD5(result.Url) + ".txt";
+                            LocalStorage.GeneralWriteAsync(await LocalStorage.GetWebTempAsync(), htmlname, result.Html, false);
+                        }
+                        catch { }
                     });
                 },
                 async (exception) =>
@@ -410,6 +455,12 @@ namespace Research_Flow
                         ApplicationMessage.SendMessage("SearchException: " + exception, ApplicationMessage.MessageType.InApp);
                     });
                 });
+        }
+
+        private async void HtmlFile_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        {
+            StorageFile file = await (await LocalStorage.GetWebTempAsync()).GetFileAsync(HashEncode.MakeMD5(currentCrawled.Url) + ".txt");
+            await Launcher.LaunchFileAsync(file);
         }
 
         private void LinkFilter_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)

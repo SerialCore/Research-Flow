@@ -419,6 +419,7 @@ namespace Research_Flow
         private async void IdentifyChat(ChatBlock chat)
         {
             chatlist.Add(chat);
+            ChatBlade.IsOpen = true;
             // chat->topic request type
             LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "chat.list", chatlist);
         }

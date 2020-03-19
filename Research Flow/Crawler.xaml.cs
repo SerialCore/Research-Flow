@@ -25,6 +25,8 @@ namespace Research_Flow
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+
+            InitializeCrawler();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -59,7 +61,6 @@ namespace Research_Flow
                 }
             }
 
-            InitializeCrawler();
             InitializeFavorite();
         }
 
@@ -77,13 +78,13 @@ namespace Research_Flow
             finally
             {
                 favoritelist.ItemsSource = favorites;
-                linkFilter.ItemsSource = Crawlable.LinkType.Keys;
-                linkFilter.Text = "Text: NotEmpty";
             }
         }
 
         private void InitializeCrawler()
         {
+            linkFilter.ItemsSource = Crawlable.LinkType.Keys;
+            linkFilter.Text = "Text: NotEmpty";
             searchtype.SelectedIndex = 1;
         }
 

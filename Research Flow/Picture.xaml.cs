@@ -27,13 +27,12 @@ namespace Research_Flow
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-
-            InitializePicture();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-
+            if (AdaptiveGridViewControl.ItemsSource == null)
+                InitializePicture();
         }
 
         private async void InitializePicture()

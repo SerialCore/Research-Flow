@@ -43,9 +43,9 @@ namespace Research_Flow
             }
             catch
             {
-                tags = new HashSet<string>()
+                tags = new HashSet<string>() // these are system tags
                 {
-                    "AnOS", "QCD", "QED", "Pedal Motion", "DNA", "AI", "Bond", "Hydrogen", "Halogen", "OS"
+                    "@Search"/*search words in engine*/,
                 };
                 LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
             }

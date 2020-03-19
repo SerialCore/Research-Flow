@@ -19,20 +19,15 @@
             <SplitView x:Name="favoritepanel" Grid.Column="0">
                 <SplitView.Pane>
                     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                        <ListView x:Name="favoritelist" ItemClick="FavoriteList_ItemClick" IsItemClickEnabled="True" Margin="0,0,0,40">
+                        <ListView x:Name="favoritelist" ItemClick="FavoriteList_ItemClick" IsItemClickEnabled="True">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Padding="5">
-                                        <TextBlock Text="{Binding Text}" MaxLines="1" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>
+                                        <TextBlock Text="{Binding Text}" MaxLines="1"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                        <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                            <CommandBar.Content>
-                                <TextBlock Text="Favorites" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
-                            </CommandBar.Content>
-                        </CommandBar>
                     </Grid>
                 </SplitView.Pane>
                 <SplitView.Content>

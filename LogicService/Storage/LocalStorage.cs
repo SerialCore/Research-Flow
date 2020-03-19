@@ -1,6 +1,7 @@
 ﻿using ICSharpCode.SharpZipLib.Zip;
 using LogicService.Data;
 using LogicService.Helper;
+using LogicService.Security;
 using System;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -11,11 +12,6 @@ namespace LogicService.Storage
     {
 
         #region folder
-
-        public static StorageFolder GetLocalFolder()
-        {
-            return ApplicationData.Current.LocalFolder;
-        }
 
         public static StorageFolder GetLocalCacheFolder()
         {
@@ -72,21 +68,15 @@ namespace LogicService.Storage
             return await GetLocalCacheFolder().CreateFolderAsync("Picture", CreationCollisionOption.OpenIfExists);
         }
 
-        public async static Task<StorageFolder> GetPictureCacheAsync()
+        public async static Task<StorageFolder> GetWebTempAsync()
         {
-            return await GetTemporaryFolder().CreateFolderAsync("Picture", CreationCollisionOption.OpenIfExists);
+            return await GetTemporaryFolder().CreateFolderAsync("WebCache", CreationCollisionOption.OpenIfExists);
         }
 
         #endregion
 
         #region general / core
 
-        /// <summary>
-        /// will not be recorded
-        /// </summary>
-        /// <param name="folder"></param>
-        /// <param name="name">there must be a file or exception</param>
-        /// <returns></returns>
         public static async Task<string> GeneralReadAsync(StorageFolder folder, string name)
         {
             // FileNotFoundException will be catched externally for some reasons
@@ -94,34 +84,24 @@ namespace LogicService.Storage
             return await FileIO.ReadTextAsync(file);
         }
 
-        /// <summary>
-        /// will be recorded
-        /// </summary>
-        /// <param name="folder"></param>
-        /// <param name="name"></param>
-        /// <param name="content"></param>
-        /// <returns></returns>
-        public static async void GeneralWriteAsync(StorageFolder folder, string name, string content)
+        public static async void GeneralWriteAsync(StorageFolder folder, string name, string content, bool record = true)
         {
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
             await FileIO.WriteTextAsync(file, content);
-            // record
-            FileList.DBInsertList(folder.Name, name);
-            FileList.DBInsertTrace(folder.Name, name);
+            if (record)
+            {
+                FileList.DBInsertList(folder.Name, name);
+                FileList.DBInsertTrace(folder.Name, name);
+            }
         }
 
-        /// <summary>
-        /// will be recorded
-        /// </summary>
-        /// <param name="folder"></param>
-        /// <param name="name"></param>
-        public static async void GeneralDeleteAsync(StorageFolder folder, string name)
+        public static async void GeneralDeleteAsync(StorageFolder folder, string name, bool record = true)
         {
             // create then delete, equils to get and delete
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
             await file.DeleteAsync();
-            // record
-            FileList.DBDeleteList(folder.Name, name);
+            if (record)
+                FileList.DBDeleteList(folder.Name, name);
         }
 
         public static async void GeneralLogAsync<T>(string name, string line) where T : class
@@ -131,9 +111,10 @@ namespace LogicService.Storage
                                 "[" + DateTime.Now.ToString() + "]" + typeof(T).Name + " : " + line + "\n");
         }
 
-        public async static void Compression(StorageFolder origin)
+        public async static void Compression(StorageFolder origin, StorageFolder target)
         {
-            using (ZipFile zip = ZipFile.Create(LocalStorage.GetTemporaryFolder().Path + "\\" + origin.Name + ".zip"))
+            string temp = HashEncode.GetRandomValue();
+            using (ZipFile zip = ZipFile.Create(GetTemporaryFolder().Path + "\\" + temp))
             {
                 zip.BeginUpdate();
                 foreach (StorageFile file in await origin.GetFilesAsync())
@@ -142,27 +123,24 @@ namespace LogicService.Storage
                 }
                 zip.CommitUpdate();
             }
+
+            await (await GetTemporaryFolder().GetFileAsync(temp)).CopyAsync(target, "Research Flow " + origin.Name + ".zip", NameCollisionOption.GenerateUniqueName);
         }
 
-        public static void UnCompression(StorageFolder target)
+        public async static void UnCompression(StorageFile origin, StorageFolder target)
         {
-            new FastZip().ExtractZip(LocalStorage.GetTemporaryFolder().Path + "\\" + target.Name + ".zip", target.Path, "");
+            StorageFile temp = await origin.CopyAsync(GetTemporaryFolder(), HashEncode.GetRandomValue());
+            new FastZip().ExtractZip(temp.Path, target.Path, "");
         }
 
         #endregion
 
         #region custom
 
-        /// <summary>
-        /// will be recorded
-        /// </summary>
-        /// <param name="folder"></param>
-        /// <param name="name"></param>
-        /// <param name="o"></param>
-        public static void WriteJson(StorageFolder folder, string name, object o)
+        public static void WriteJson(StorageFolder folder, string name, object o, bool record = true)
         {
             string json = SerializeHelper.SerializeToJson(o);
-            GeneralWriteAsync(folder, name, json);
+            GeneralWriteAsync(folder, name, json, record);
         }
 
         public static async Task<T> ReadJsonAsync<T>(StorageFolder folder, string name) where T : class
