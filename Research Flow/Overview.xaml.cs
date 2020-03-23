@@ -4,6 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
+using Windows.System;
+using Windows.System.Diagnostics;
+using Windows.System.Threading;
+using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -28,26 +32,55 @@ namespace Research_Flow
         {
             if (IsPageFirstLoaded)
             {
-                ForegroundTask();
-                BackgroundTask();
+                InitBackgroundTask();
+                InitForegroundTask();
+                GetSystemPerformance();
                 IsPageFirstLoaded = false;
             }
         }
 
-        private void ForegroundTask()
+        private void InitForegroundTask()
         {
             try
             {
                 if (ApplicationInfo.IsNetworkAvailable)
-                    new FeedTask().Run();
+                {
+                    var task = new FeedTask();
+                    task.Run();
+                }
             }
             catch { }
         }
 
-        private async void BackgroundTask()
+        private async void InitBackgroundTask()
         {
             await ApplicationTask.RegisterTopicTask();
             await ApplicationTask.RegisterTagTask();
+        }
+
+        private ThreadPoolTimer PeriodicTimer;
+        private ProcessDiagnosticInfo process = ProcessDiagnosticInfo.GetForCurrentProcess();
+
+        private void GetSystemPerformance()
+        {
+            PeriodicTimer = ThreadPoolTimer.CreatePeriodicTimer(async (source) =>
+            {
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    var cpureport = process.CpuUsage.GetReport();
+                    var memreport = process.MemoryUsage.GetReport();
+                    systemstate.Text = cpureport.UserTime.ToString();
+                    systemstate.Text += '\n' + cpureport.KernelTime.ToString();
+                    systemstate.Text += '\n' + (memreport.VirtualMemorySizeInBytes/1024/1024).ToString();
+
+                    var diagnosticInfos = process.GetAppDiagnosticInfos();
+                    var diagnosticInfo = diagnosticInfos[0];
+                    var groups = diagnosticInfo.GetResourceGroups();
+                    var group = groups[0];
+                    systemstate.Text += '\n' + (group.GetMemoryReport().TotalCommitUsage/1024/1024).ToString();
+                    systemstate.Text += '\n' + (group.GetMemoryReport().PrivateCommitUsage/1024/1024).ToString();
+                });
+            }, TimeSpan.FromSeconds(1));
         }
     }
 

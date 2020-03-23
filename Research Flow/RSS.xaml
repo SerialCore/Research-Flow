@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Research_Flow"
+    xmlns:telerikPrimitives="using:Telerik.UI.Xaml.Controls.Primitives"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -80,22 +81,19 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <ProgressRing x:Name="waiting_feed" Height="100" Width="100"/>
+                <telerikPrimitives:RadBusyIndicator x:Name="waiting_feed" AnimationStyle="AnimationStyle7" IsActive="False"/>
             </Grid>
             
             <SplitView Grid.Column="1" Grid.ColumnSpan="2" x:Name="feedItem_detail" OpenPaneLength="400" DisplayMode="Overlay" PanePlacement="Right">
                 <SplitView.Pane>
                     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                        <Button Height="32" Click="Close_FeedDetail" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="LightBlue">
-                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE0AB;" />
-                        </Button>
-                        <ScrollViewer Padding="10,0" Margin="0,32,0,0">
+                        <ScrollViewer Margin="10,0">
                             <StackPanel>
                                 <TextBlock x:Name="feedTitle" FontSize="20" Style="{ThemeResource TitleTextBlockStyle}"/>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Content="Browse feed" Click="Browse_Feed" Background="LightBlue" Margin="0,0,5,0"/>
-                                    <Button Content="Add Paper" Click="Flow_Feed" Background="LightBlue" Margin="0,0,5,0"/>
-                                    <Button Content="Add Favorite" Click="Favorite_Feed" Background="LightBlue" Margin="0,0,5,0"/>
+                                    <Button Content="Browse feed" Click="Browse_Feed" Margin="0,0,5,0"/>
+                                    <Button Content="Add Paper" Click="Flow_Feed" Margin="0,0,5,0"/>
+                                    <Button Content="Add Favorite" Click="Favorite_Feed" Margin="0,0,5,0"/>
                                 </StackPanel>
                                 <TextBlock x:Name="feedPublished" FontSize="16" Style="{ThemeResource SubtitleTextBlockStyle}"/>
                                 <TextBlock x:Name="feedSummary" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>

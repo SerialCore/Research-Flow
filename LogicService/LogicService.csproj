@@ -108,7 +108,8 @@
   <ItemGroup>
     <Compile Include="Application\ApplicationNotification.cs" />
     <Compile Include="Application\ApplicationSetting.cs" />
-    <Compile Include="Data\Flow.cs" />
+    <Compile Include="FlowTask\Flow.cs" />
+    <Compile Include="FlowTask\ForegroundTask.cs" />
     <Compile Include="Helper\NetHelper.cs" />
     <Compile Include="Data\ChatBlock.cs" />
     <Compile Include="Data\Topic.cs" />

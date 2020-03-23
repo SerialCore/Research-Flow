@@ -44,7 +44,11 @@
                         <FlipView x:Name="pdfPages" SelectionChanged="PdfPages_SelectionChanged"  Margin="0,0,0,40">
                             <FlipView.ItemTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding }"/>
+                                    <ScrollViewer ZoomMode="Enabled">
+                                        <Viewbox Stretch="Uniform">
+                                            <Image Source="{Binding }"/>
+                                        </Viewbox>
+                                    </ScrollViewer>
                                 </DataTemplate>
                             </FlipView.ItemTemplate>
                         </FlipView>

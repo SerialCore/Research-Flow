@@ -1,6 +1,5 @@
 ﻿using LogicService.Application;
 using LogicService.Data;
-using LogicService.FlowTask;
 using LogicService.Service;
 using LogicService.Storage;
 using System;
@@ -9,7 +8,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel.Core;
-using Windows.ApplicationModel.DataTransfer;
 using Windows.Graphics.Display;
 using Windows.Graphics.Imaging;
 using Windows.Storage;
@@ -50,8 +48,6 @@ namespace Research_Flow
                 Login();
             ConfigureUpdate();
             InitializeChat();
-            ForegroundTask();
-            BackgroundTask();
         }
 
         private async void AppMessage_MessageReceived(string message, ApplicationMessage.MessageType type)
@@ -123,22 +119,6 @@ namespace Research_Flow
             }
         }
 
-        private void ForegroundTask()
-        {
-            try // if the first time to use app which has no user data
-            {
-                if (ApplicationInfo.IsNetworkAvailable)
-                    new FeedTask().Run();
-            }
-            catch { }
-        }
-
-        private async void BackgroundTask()
-        {
-            await ApplicationTask.RegisterTopicTask();
-            await ApplicationTask.RegisterTagTask();
-        }
-
         #region NavView
 
         private object NavParameter;
@@ -179,14 +159,14 @@ namespace Research_Flow
                 {
                     NavView.SelectedItem = NavView.MenuItems
                         .OfType<NavigationViewItem>()
-                        .First(n => n.Tag.Equals("TagTopic"));
+                        .First(n => n.Tag.Equals("Overview"));
                 }
             }
             else
             {
                 NavView.SelectedItem = NavView.MenuItems
                     .OfType<NavigationViewItem>()
-                    .First(n => n.Tag.Equals("TagTopic"));
+                    .First(n => n.Tag.Equals("Overview"));
             }
         }
 
@@ -304,46 +284,6 @@ namespace Research_Flow
 
         private void CrawlSearch_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
             => ContentFrame.Navigate(typeof(Crawler), crawlsearch.Text);
-
-        private void ScreenShot_Share(object sender, RoutedEventArgs e)
-        {
-            DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
-            dataTransferManager.DataRequested += DataTransferManager_DataRequested;
-            DataTransferManager.ShowShareUI();
-        }
-
-        private async void DataTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
-        {
-            DataRequestDeferral deferral = args.Request.GetDeferral();
-
-            DataRequest request = args.Request;
-            request.Data.Properties.Title = "ScreenShot";
-            request.Data.Properties.Description = "Share your current idea";
-
-            var bitmap = new RenderTargetBitmap();
-            StorageFile file = await (await LocalStorage.GetPictureFolderAsync()).CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
-            await bitmap.RenderAsync(FullPage);
-            var buffer = await bitmap.GetPixelsAsync();
-            using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
-            {
-                var encode = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, stream);
-                encode.SetPixelData(
-                    BitmapPixelFormat.Bgra8,
-                    BitmapAlphaMode.Ignore,
-                    (uint)bitmap.PixelWidth,
-                    (uint)bitmap.PixelHeight,
-                    DisplayInformation.GetForCurrentView().LogicalDpi,
-                    DisplayInformation.GetForCurrentView().LogicalDpi,
-                    buffer.ToArray());
-                await encode.FlushAsync();
-            }
-
-            RandomAccessStreamReference imageStreamRef = RandomAccessStreamReference.CreateFromFile(file);
-            request.Data.Properties.Thumbnail = imageStreamRef;
-            request.Data.SetBitmap(imageStreamRef);
-
-            deferral.Complete();
-        }
 
         private async void ScreenShot_Upload(object sender, RoutedEventArgs e)
         {

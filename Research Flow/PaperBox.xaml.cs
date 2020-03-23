@@ -174,7 +174,7 @@ namespace Research_Flow
 
             if (pdfDocument != null)
             {
-                uint pageCount = pdfDocument.PageCount > 10 ? 10 : pdfDocument.PageCount;
+                uint pageCount = pdfDocument.PageCount > 5 ? 5 : pdfDocument.PageCount;
                 pagecount.Text = pageCount.ToString();
                 pageindex.Text = "1";
 

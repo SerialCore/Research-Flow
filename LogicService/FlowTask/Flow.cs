@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LogicService.Data
+namespace LogicService.FlowTask
 {
     public class Flow<U, V>
     {
@@ -42,12 +42,12 @@ namespace LogicService.Data
         }
     }
 
-    class FlowDemo
-    {
-        public void demo()
-        {
-            Flow<string, int> flow = new Flow<string, int>("1", 1);
-            flow.AppendRight<double>(1.1);
-        }
-    }
+    //class FlowDemo
+    //{
+    //    public void demo()
+    //    {
+    //        Flow<string, int> flow = new Flow<string, int>("1", 1);
+    //        flow.AppendRight<double>(1.1);
+    //    }
+    //}
 }

@@ -12,40 +12,9 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <Grid >
-            <StackPanel Margin="10">
-                <GridView Header="Task" FontSize="20" IsItemClickEnabled="True">
-                    <GridView.Items>
-                        <Grid Height="150" Width="150" Padding="10" Background="LightGoldenrodYellow">
-                            <TextBlock Text="FeedTask"/>
-                        </Grid>
-                        <Grid Height="150" Width="150" Padding="10" Background="LightGoldenrodYellow">
-                            <TextBlock Text="SearchTask"/>
-                        </Grid>
-                        <Grid Height="150" Width="150" Padding="10" Background="LightGoldenrodYellow">
-                            <TextBlock Text="CrawlTask"/>
-                        </Grid>
-                    </GridView.Items>
-                </GridView>
-                <GridView Header="Flow" FontSize="20" IsItemClickEnabled="True">
-                    <GridView.Items>
-                        <Grid Height="150" Width="150" Padding="10" Background="LightGoldenrodYellow">
-                            <TextBlock Text="Feed->Crawl"/>
-                        </Grid>
-                        <Grid Height="150" Width="150" Padding="10" Background="LightGoldenrodYellow">
-                            <TextBlock Text="Feed->Paper"/>
-                        </Grid>
-                        <Grid Height="150" Width="150" Padding="10" Background="LightGoldenrodYellow">
-                            <TextBlock Text="Search->Crawl"/>
-                        </Grid>
-                        <Grid Height="150" Width="150" Padding="10" Background="LightGoldenrodYellow">
-                            <TextBlock Text="Search->Paper"/>
-                        </Grid>
-                        <Grid Height="150" Width="150" Padding="10" Background="LightGoldenrodYellow">
-                            <TextBlock Text="Crawl->Crawl"/>
-                        </Grid>
-                    </GridView.Items>
-                </GridView>
-            </StackPanel>
+
+            <TextBlock x:Name="systemstate" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
         </Grid>
 
     </Grid>

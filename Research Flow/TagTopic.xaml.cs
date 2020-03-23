@@ -6,11 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -45,7 +46,7 @@ namespace Research_Flow
             {
                 tags = new HashSet<string>() // these are system tags
                 {
-                    "@Search"/*search words in engine*/,
+                    "@Search"/*search words in engine*/, "@Remind"/*make user remind of content*/,
                 };
                 LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
             }
@@ -193,12 +194,27 @@ namespace Research_Flow
 
         private void AddTopicSetting(object sender, RoutedEventArgs e) => topicSetting.Visibility = Visibility.Visible;
 
+        private void ColorSpot1(object sender, RoutedEventArgs e) => topicTitle.Background = (sender as AppBarButton).Background;
+
+        private void ColorSpot2(object sender, RoutedEventArgs e) => topicTitle.Background = (sender as AppBarButton).Background;
+
+        private void ColorSpot3(object sender, RoutedEventArgs e) => topicTitle.Background = (sender as AppBarButton).Background;
+
+        private void ColorSpot4(object sender, RoutedEventArgs e) => topicTitle.Background = (sender as AppBarButton).Background;
+
+        private void ColorSpot5(object sender, RoutedEventArgs e) => topicTitle.Background = (sender as AppBarButton).Background;
+
+        private void ColorSpot6(object sender, RoutedEventArgs e) => topicTitle.Background = (sender as AppBarButton).Background;
+
+        private void ColorSpot7(object sender, RoutedEventArgs e) => topicTitle.Background = (sender as AppBarButton).Background;
+
         private async void SubmitTopic(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(topicTitle.Text))
             {
                 Topic topic = new Topic();
                 topic.Title = topicTitle.Text;
+                topic.Color = (topicTitle.Background as SolidColorBrush).Color.ToString();
                 if (deadLine.Date != null)
                     topic.Deadline = deadLine.Date.Value;
                 if (remindTime.Time != null)
@@ -317,6 +333,12 @@ namespace Research_Flow
 
             currentTopic = e.ClickedItem as Topic;
             topicTitle.Text = currentTopic.Title;
+            string hex = currentTopic.Color.Replace("#", string.Empty);
+            byte a = (byte)(Convert.ToUInt32(hex.Substring(0, 2), 16));
+            byte r = (byte)(Convert.ToUInt32(hex.Substring(2, 2), 16));
+            byte g = (byte)(Convert.ToUInt32(hex.Substring(4, 2), 16));
+            byte b = (byte)(Convert.ToUInt32(hex.Substring(6, 2), 16));
+            topicTitle.Background = new SolidColorBrush(Color.FromArgb(a, r, g, b));
             if (currentTopic.Deadline != DateTimeOffset.MinValue)
                 deadLine.Date = currentTopic.Deadline;
             if (currentTopic.RemindTime != TimeSpan.Zero)

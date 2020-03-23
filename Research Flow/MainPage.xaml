@@ -20,11 +20,11 @@
                         BackRequested="NavView_BackRequested">
 
             <NavigationView.MenuItems>
-                <!--<NavigationViewItem Content="Overview" Tag="Overview">
+                <NavigationViewItem Content="Overview" Tag="Overview">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEB68;"/>
                     </NavigationViewItem.Icon>
-                </NavigationViewItem>-->
+                </NavigationViewItem>
                 <NavigationViewItem Content="Tag + Topic" Tag="TagTopic">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEB50;"/>
@@ -101,14 +101,7 @@
                         </FlyoutBase.AttachedFlyout>
                     </ListViewItem>
                     <StackPanel Orientation="Horizontal">
-                        <AppBarButton Icon="AttachCamera" Tapped="Flyout_Tapped" ToolTipService.ToolTip="ScreenShot" Width="42" Height="42">
-                            <FlyoutBase.AttachedFlyout>
-                                <MenuFlyout>
-                                    <MenuFlyoutItem Text="Share" Click="ScreenShot_Share"/>
-                                    <MenuFlyoutItem Text="Upload" Click="ScreenShot_Upload"/>
-                                </MenuFlyout>
-                            </FlyoutBase.AttachedFlyout>
-                        </AppBarButton>
+                        <AppBarButton Icon="AttachCamera" Click="ScreenShot_Upload" ToolTipService.ToolTip="ScreenShot" Width="42" Height="42"/>
                         <!--<AppBarButton Icon="SwitchApps" Click="Open_FlowBlade" ToolTipService.ToolTip="Flow" Width="42" Height="42"/>-->
                         <AppBarButton Icon="Message" Click="Open_ChatBlade" ToolTipService.ToolTip="Chat" Width="42" Height="42"/>
                         <AppBarButton Icon="FullScreen" Click="FullScreen_Click" ToolTipService.ToolTip="FullScreen" Height="42" Width="42"/>

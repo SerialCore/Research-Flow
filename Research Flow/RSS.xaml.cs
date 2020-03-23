@@ -219,9 +219,6 @@ namespace Research_Flow
             });
         }
 
-        private void Close_FeedDetail(object sender, RoutedEventArgs e)
-            => feedItem_detail.IsPaneOpen = false;
-
         private void LoadFeed(FeedSource source)
         {
             try
