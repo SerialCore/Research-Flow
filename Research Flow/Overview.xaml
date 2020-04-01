@@ -3,8 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Research_Flow"
-    xmlns:data="using:LogicService.Data"
     xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:telerikPrimitives="using:Telerik.UI.Xaml.Controls.Primitives"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -13,7 +13,38 @@
 
         <Grid >
 
-            <TextBlock x:Name="systemstate" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBlock Text="Constructing Features" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <VariableSizedWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="8" ItemHeight="75" ItemWidth="75" >
+                    <!--<telerikPrimitives:RadCustomHubTile Width="295" Height="295" Title="Mail" VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="4">
+
+                    </telerikPrimitives:RadCustomHubTile>-->
+                    <!--<telerikPrimitives:RadHubTile Width="295" Height="145" Title="Mail" VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="2"/>-->
+                    <telerikPrimitives:RadCustomHubTile Width="145" Height="145" Title="Performance" VariableSizedWrapGrid.ColumnSpan="2" VariableSizedWrapGrid.RowSpan="2">
+                        <telerikPrimitives:RadCustomHubTile.FrontContent>
+                            <Grid Margin="0,0,0,20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="3*"/>
+                                </Grid.ColumnDefinitions>
+                                <FontIcon Grid.Row="0" Grid.Column="0" FontFamily="Segoe MDL2 Assets" Glyph="&#xE964;" />
+                                <FontIcon Grid.Row="1" Grid.Column="0" FontFamily="Segoe MDL2 Assets" Glyph="&#xE950;" />
+                                <FontIcon Grid.Row="2" Grid.Column="0" FontFamily="Segoe MDL2 Assets" Glyph="&#xECBF;" />
+                                <TextBlock Grid.Row="0" Grid.Column="1" x:Name="memstate" FontSize="15" Text="200 MB" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Row="1" Grid.Column="1" x:Name="cpustate" FontSize="15" Text="0.1%" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Row="2" Grid.Column="1" x:Name="battstate" FontSize="15" Text="90%" VerticalAlignment="Center"/>
+                            </Grid>
+                        </telerikPrimitives:RadCustomHubTile.FrontContent>
+                    </telerikPrimitives:RadCustomHubTile>
+                    <!--<telerikPrimitives:RadHubTile Width="70" Height="70" Title="Mail" HorizontalAlignment="Left" VerticalAlignment="Top"/>-->
+                </VariableSizedWrapGrid>
+            </ScrollViewer>
 
         </Grid>
 

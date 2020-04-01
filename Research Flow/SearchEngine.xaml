@@ -59,7 +59,7 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                        <telerikPrimitives:RadBusyIndicator Grid.Row="1" x:Name="craWaiting" AnimationStyle="AnimationStyle7" IsActive="False"/>
+                        <telerikPrimitives:RadBusyIndicator Grid.Row="1" x:Name="craWaiting" IsActive="False"/>
                         <Grid Grid.Row="2" x:Name="downloadPanel" Height="80" Visibility="Collapsed">
                             <ProgressBar x:Name="downloadBar" Margin="30,15" VerticalAlignment="Top"/>
                             <TextBlock x:Name="downloadStatus" Text="Text" FontSize="15" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="30,0,0,20"/>
@@ -122,7 +122,7 @@
                 </Grid.ColumnDefinitions>
                 <AutoSuggestBox Grid.Column="0" x:Name="siteUrl" QueryIcon="Find" Text="http://" 
                                 QuerySubmitted="Browse_QuerySubmitted" Margin="5,5,0,0"/>
-                <telerikPrimitives:RadBusyIndicator Grid.Column="1" x:Name="webWaiting" AnimationStyle="AnimationStyle8" IsActive="False" Margin="4,0,0,0" Height="32"/>
+                <telerikPrimitives:RadBusyIndicator Grid.Column="1" x:Name="webWaiting" IsActive="False" Margin="4,0,0,0" Height="32"/>
                 <CommandBar Grid.Column="2" HorizontalAlignment="Right" DefaultLabelPosition="Right" Background="Transparent" OverflowButtonVisibility="Collapsed">
                     <AppBarButton Label="Favorite" Icon="Favorite">
                         <AppBarButton.Flyout>

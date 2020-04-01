@@ -77,6 +77,7 @@ namespace Research_Flow
             Crawlable.DBInitialize();
             Feed.DBInitialize();
             Paper.DBInitialize();
+            PaperFile.DBInitialize();
             configState.Text += "\nAll of the databases are initialized.\n";
         }
 

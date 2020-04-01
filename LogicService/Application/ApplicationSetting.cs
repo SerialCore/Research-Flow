@@ -40,6 +40,30 @@ namespace LogicService.Application
             }
         }
 
+        public static string WorkingTime
+        {
+            get
+            {
+                return ApplicationData.Current.LocalSettings.Values["WorkingTime"] as string;
+            }
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values["WorkingTime"] = value;
+            }
+        }
+
+        public static string RelaxingTime
+        {
+            get
+            {
+                return ApplicationData.Current.LocalSettings.Values["RelaxingTime"] as string;
+            }
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values["RelaxingTime"] = value;
+            }
+        }
+
         public static void RemoveKey(string key)
             => ApplicationData.Current.LocalSettings.Values.Remove(key);
 

@@ -1,4 +1,5 @@
 ﻿using ICSharpCode.SharpZipLib.Zip;
+using LogicService.Application;
 using LogicService.Data;
 using LogicService.Helper;
 using LogicService.Security;
@@ -79,7 +80,6 @@ namespace LogicService.Storage
 
         public static async Task<string> GeneralReadAsync(StorageFolder folder, string name)
         {
-            // FileNotFoundException will be catched externally for some reasons
             StorageFile file = await folder.GetFileAsync(name);
             return await FileIO.ReadTextAsync(file);
         }
@@ -106,9 +106,16 @@ namespace LogicService.Storage
 
         public static async void GeneralLogAsync<T>(string name, string line) where T : class
         {
-            StorageFile file = await (await GetLogFolderAsync()).CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
-            await FileIO.AppendTextAsync(file,
-                                "[" + DateTime.Now.ToString() + "]" + typeof(T).Name + " : " + line + "\n");
+            try
+            {
+                StorageFile file = await (await GetLogFolderAsync()).CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
+                await FileIO.AppendTextAsync(file,
+                                    "[" + DateTime.Now.ToString() + "]" + typeof(T).Name + " : " + line + "\n");
+            }
+            catch (Exception ex)
+            {
+                ApplicationMessage.SendMessage(ex.Message, ApplicationMessage.MessageType.InApp);
+            }
         }
 
         public async static void Compression(StorageFolder origin, StorageFolder target)

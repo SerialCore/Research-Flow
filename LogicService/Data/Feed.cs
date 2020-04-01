@@ -228,14 +228,18 @@ namespace LogicService.Data
             return doc.DocumentElement.ChildNodes;
         }
 
-        public static string GetDoi(string xml)
+        public static string GetID(string xml)
         {
+            string doi = string.Empty;
+            string guid = string.Empty;
             foreach (XmlNode node in GetNodes(xml))
             {
                 if (node.Name.Equals("doi"))
-                    return node.InnerText;
+                    doi = node.InnerText;
+                if (node.Name.Equals("guid"))
+                    guid = node.InnerText;
             }
-            return "";
+            return string.IsNullOrEmpty(doi) ? guid : doi;
         }
 
         public static string GetAuthor(string xml)

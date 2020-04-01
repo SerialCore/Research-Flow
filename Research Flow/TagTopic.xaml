@@ -102,12 +102,12 @@
                             <ColumnDefinition />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <AppBarButton Grid.Column="0" Click="ColorSpot1" Background="LightCyan" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/> <!--E0FFFF-->
-                        <AppBarButton Grid.Column="1" Click="ColorSpot2" Background="LightYellow" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/> <!--FFFFE0-->
-                        <AppBarButton Grid.Column="2" Click="ColorSpot3" Background="LightGreen" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/> <!--90EE90-->
-                        <AppBarButton Grid.Column="3" Click="ColorSpot4" Background="LightGray" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/> <!--D3D3D3-->
-                        <AppBarButton Grid.Column="4" Click="ColorSpot5" Background="LightPink" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/> <!--FFB6C1-->
-                        <AppBarButton Grid.Column="5" Click="ColorSpot6" Background="LightSkyBlue" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/> <!--87CEFA-->
+                        <AppBarButton Grid.Column="0" Click="ColorSpot1" Background="#FFFFF7D1" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/> <!--E0FFFF-->
+                        <AppBarButton Grid.Column="1" Click="ColorSpot2" Background="#FFE4F9E0" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/> <!--FFFFE0-->
+                        <AppBarButton Grid.Column="2" Click="ColorSpot3" Background="#FFFFE4F1" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/> <!--90EE90-->
+                        <AppBarButton Grid.Column="3" Click="ColorSpot4" Background="#FFF2E6FF" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/> <!--D3D3D3-->
+                        <AppBarButton Grid.Column="4" Click="ColorSpot5" Background="#FFE2F1FF" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/> <!--FFB6C1-->
+                        <AppBarButton Grid.Column="5" Click="ColorSpot6" Background="#FFF3F2F1" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/> <!--87CEFA-->
                         <AppBarButton Grid.Column="6" Click="ColorSpot7" Background="LightSteelBlue" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/> <!--B0C4DE-->
                     </Grid>
                     <Grid Grid.Row="2">

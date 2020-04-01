@@ -232,9 +232,12 @@ namespace Research_Flow
                     dataviewer.ItemsSource = Paper.DBSelectByLimit(100);
                     break;
                 case 3:
-                    dataviewer.ItemsSource = FileList.DBSelectAllTrace();
+                    dataviewer.ItemsSource = PaperFile.DBSelectByLimit(100);
                     break;
                 case 4:
+                    dataviewer.ItemsSource = FileList.DBSelectAllTrace();
+                    break;
+                case 5:
                     dataviewer.ItemsSource = FileList.DBSelectAllList();
                     break;
             }

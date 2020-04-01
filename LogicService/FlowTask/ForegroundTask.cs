@@ -29,4 +29,15 @@ namespace LogicService.FlowTask
         }
 
     }
+
+    public class TaskCompletedEventArgs : EventArgs
+    {
+        private int log;
+
+        public int Log
+        {
+            get { return log; }
+            set { log = value; }
+        }
+    }
 }

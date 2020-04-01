@@ -5,8 +5,10 @@ using System.Globalization;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
+using Windows.Devices.Power;
 using Windows.Services.Store;
 using Windows.System;
+using Windows.System.Diagnostics;
 
 namespace LogicService.Application
 {
@@ -74,6 +76,39 @@ namespace LogicService.Application
         }
 
         public static bool IsNetworkAvailable => NetworkInterface.GetIsNetworkAvailable();
+
+        public static ulong MemoryUsage => MemoryManager.AppMemoryUsage / 1024 / 1024;
+
+        private static TimeSpan oldcputime = TimeSpan.Zero;
+        private static TimeSpan oldprotime = TimeSpan.Zero;
+
+        public static double CpuOccupation
+        {
+            get
+            {
+                var proreport = ProcessDiagnosticInfo.GetForCurrentProcess().CpuUsage.GetReport();
+                var cpureport = SystemDiagnosticInfo.GetForCurrentSystem().CpuUsage.GetReport();
+
+                TimeSpan addcputime = cpureport.UserTime + cpureport.KernelTime - oldcputime;
+                TimeSpan addprotime = proreport.UserTime + proreport.KernelTime - oldprotime;
+                oldcputime = cpureport.UserTime + cpureport.KernelTime;
+                oldprotime = proreport.UserTime + proreport.KernelTime;
+                double rate = (double)addprotime.Ticks / addcputime.Ticks;
+                return rate;
+            }
+        }
+
+        public static double BatteryUsage
+        {
+            get
+            {
+                var report = Battery.AggregateBattery.GetReport();
+                if (report.RemainingCapacityInMilliwattHours.HasValue && report.FullChargeCapacityInMilliwattHours.HasValue)
+                    return (double)report.RemainingCapacityInMilliwattHours.Value / report.FullChargeCapacityInMilliwattHours.Value;
+                else
+                    return 0;
+            }
+        }
 
     }
 }

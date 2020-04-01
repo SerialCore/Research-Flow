@@ -43,14 +43,12 @@ namespace Research_Flow
             {
                 FeedSources = new ObservableCollection<FeedSource>()
                 {
-                    new FeedSource{ ID = HashEncode.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd"),
-                        Name = "Hydrogen Bond in ACS", Uri = "https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DHydrogen%252BBond%2526target%253Ddefault%2526targetTab%253Dstd", Star = 5, IsJournal = true },
-                    new FeedSource{ ID = HashEncode.MakeMD5("https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd"),
-                        Name = "Pedal Motion in ACS", Uri = "https://pubs.acs.org/action/showFeed?ui=0&mi=51p9f8o&type=search&feed=rss&query=%2526AllField%253DPedal%252BMotion%2526target%253Ddefault%2526targetTab%253Dstd", Star = 5, IsJournal = true },
                     new FeedSource{ ID = HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prl.xml"),
                         Name = "Physical Review Letters", Uri = "http://feeds.aps.org/rss/recent/prl.xml", Star = 5, IsJournal = true },
-                    new FeedSource{ ID = HashEncode.MakeMD5("http://www.sciencenet.cn/xml/paper.aspx?di=7"),
-                        Name = "科学网-数理科学", Uri = "http://www.sciencenet.cn/xml/paper.aspx?di=7", Star = 5, IsJournal = false}
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prd.xml"),
+                        Name = "Physical Review D", Uri = "http://feeds.aps.org/rss/recent/prd.xml", Star = 5, IsJournal = true },
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://inspirehep.net/rss?ln=en&p=tetraquark"),
+                        Name = "Tetraquark Inspirehep", Uri = "http://inspirehep.net/rss?ln=en&p=tetraquark", Star = 5, IsJournal = true },
                 };
                 LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rss.list", FeedSources);
             }

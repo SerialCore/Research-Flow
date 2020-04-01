@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.ApplicationModel.Core;
 using Windows.Graphics.Display;
 using Windows.Graphics.Imaging;
 using Windows.Storage;
@@ -70,29 +69,13 @@ namespace Research_Flow
              });
         }
 
-        private async void ConfigureUpdate()
+        private void ConfigureUpdate()
         {
-            if (ApplicationInfo.ApplicationVersion.Equals("3.36.95.0") && !ApplicationInfo.FirstVersionInstalled.Equals("3.36.95.0") // app is updated
-                /*&& !ApplicationSetting.Updated.Equals("3.36.95.0")*/) // app content isn't updated
+            // updated version must be greater than the previous published version
+            if (!ApplicationSetting.Updated.Equals("3.42.108.0"))
             {
-                if (!ApplicationSetting.ContainKey("Updated"))
-                {
-                    ApplicationSetting.Updated = "3.36.95.0";
-                    // remove Null in Paper and Crawlable
-                    Paper.DBUpdateApp();
-                    Crawlable.DBUpdateApp();
-                    // remove Null in favorite
-                    try
-                    {
-                        string json = await LocalStorage.GeneralReadAsync(await LocalStorage.GetDataFolderAsync(), "favorite.list");
-                        LocalStorage.GeneralWriteAsync(await LocalStorage.GetDataFolderAsync(), "favorite.list", json.Replace("Null", ""));
-                    }
-                    catch { } 
-                }
-                else if (!ApplicationSetting.Updated.Equals("3.36.95.0"))
-                {
-                    ;
-                }
+                Paper.DBUpdateApp();
+                ApplicationSetting.Updated = "3.42.108.0";
             }
         }
 
@@ -225,6 +208,8 @@ namespace Research_Flow
                 accountEmail.Text = email;
                 accountPhoto1.ProfilePicture = image;
                 accountPhoto2.ProfilePicture = image;
+
+                ApplicationSetting.AccountName = email;
             }
             else
             {
@@ -261,8 +246,6 @@ namespace Research_Flow
                 messageDialog.CancelCommandIndex = 1;
                 await messageDialog.ShowAsync();
             }
-            else
-                await CoreApplication.RequestRestartAsync(string.Empty);
         }
 
         private void DeleteInvokedHandler(IUICommand command) => Logout();

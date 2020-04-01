@@ -176,6 +176,7 @@
                                     <ComboBoxItem Content="Feed" IsSelected="True"/>
                                     <ComboBoxItem Content="Crawl"/>
                                     <ComboBoxItem Content="Paper"/>
+                                    <ComboBoxItem Content="PaperFile"/>
                                     <ComboBoxItem Content="FileTrace"/>
                                     <ComboBoxItem Content="FileList"/>
                                 </ComboBox.Items>

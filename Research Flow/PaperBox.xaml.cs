@@ -41,8 +41,9 @@ namespace Research_Flow
                     Feed feed = e.Parameter as Feed;
                     if (!papertitle.Text.Equals(feed.Title))
                     {
-                        paperid.Text = Feed.GetDoi(feed.Nodes);
+                        paperid.Text = Feed.GetID(feed.Nodes);
                         papertitle.Text = feed.Title;
+                        paperdate.Text = feed.Published;
                         paperauthor.Text = Feed.GetAuthor(feed.Nodes);
                         paperlink.Text = feed.Link;
                         papertags.Text = feed.Tags;
@@ -86,13 +87,19 @@ namespace Research_Flow
             pdfname.Text = filename;
 
             // there is only one paper in list or nothing
-            foreach (Paper paper in Paper.DBSelectByFile(filename))
+            string nameid = "";
+            foreach (PaperFile file in PaperFile.DBSelectByFile(filename))
+            {
+                nameid = file.ID;
+            }
+            foreach (Paper paper in Paper.DBSelectByID(nameid))
             {
                 CleanPaperPanel();
 
                 paperid.Text = paper.ID;
                 papertitle.Text = paper.Title;
                 paperauthor.Text = paper.Authors;
+                paperdate.Text = paper.Published;
                 paperlink.Text = paper.Link;
                 papernote.Text = paper.Note;
                 papertags.Text = paper.Tags;
@@ -107,11 +114,17 @@ namespace Research_Flow
             currentpaper = e.ClickedItem as Paper;
             paperid.Text = currentpaper.ID;
             papertitle.Text = currentpaper.Title;
-            pdfname.Text = currentpaper.FileName;
             paperauthor.Text = currentpaper.Authors;
+            paperdate.Text = currentpaper.Published;
             paperlink.Text = currentpaper.Link;
             papernote.Text = currentpaper.Note;
             papertags.Text = currentpaper.Tags;
+            pdfname.Text = "";
+
+            foreach (PaperFile file in PaperFile.DBSelectByID(currentpaper.ID))
+            {
+                pdfname.Text = file.FileName;
+            }
         }
 
         #endregion
@@ -278,6 +291,7 @@ namespace Research_Flow
             paperid.Text = "";
             papertitle.Text = "";
             paperauthor.Text = "";
+            paperdate.Text = "";
             paperlink.Text = "";
             papernote.Text = "";
             papertags.Text = "";
@@ -299,14 +313,31 @@ namespace Research_Flow
                     {
                         ID = paperid.Text,
                         ParentID = "",
-                        Title = papertitle.Text,
-                        FileName = pdfname.Text,
+                        Title = papertitle.Text,                       
                         Link = paperlink.Text,
+                        Published = paperdate.Text,
                         Authors = paperauthor.Text,
                         Note = papernote.Text,
                         Tags = papertags.Text,
                     }
                 });
+
+            if (string.IsNullOrEmpty(pdfname.Text))
+                PaperFile.DBDeleteByID(paperid.Text);
+            else
+            {
+                if (PaperFile.DBSelectByID(paperid.Text).Count != 0) // select by id?
+                    PaperFile.DBDeleteByID(paperid.Text); // modify or delete?
+                PaperFile.DBInsert(new List<PaperFile>
+                {
+                    new PaperFile
+                    {
+                        ID = paperid.Text,
+                        FileName = pdfname.Text,
+                    }
+                });
+            }
+
             InitializePaper();
             if (!string.IsNullOrEmpty(papertags.Text))
                 Topic.SaveTag(papertags.Text);
@@ -354,6 +385,7 @@ namespace Research_Flow
             if (currentpaper != null) // paper
             {
                 Paper.DBDeleteByID(currentpaper.ID);
+                PaperFile.DBDeleteByID(currentpaper.ID);
                 //papers.Remove(currentpaper); // modify list from database
                 currentpaper = null;
             }

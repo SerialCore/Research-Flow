@@ -69,7 +69,7 @@
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
-                            <telerikPrimitives:RadBusyIndicator Grid.Column="1" x:Name="craWaiting" AnimationStyle="AnimationStyle7" IsActive="False"/>
+                            <telerikPrimitives:RadBusyIndicator Grid.Column="1" x:Name="craWaiting" IsActive="False"/>
                         </Grid>
                         <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
                             <CommandBar.Content>

@@ -35,11 +35,22 @@ namespace LogicService.FlowTask
             get { return _isavailable; }
         }
 
+        //public event EventHandler<TaskCompletedEventArgs> TaskCompleted;
+
         public async void Run()
         {
             _isrunning = true;
+            //TaskCompletedEventArgs args = new TaskCompletedEventArgs();
 
-            List<FeedSource> FeedSources = await LocalStorage.ReadJsonAsync<List<FeedSource>>(await LocalStorage.GetDataFolderAsync(), "rss.list");
+            List<FeedSource> FeedSources;
+            try
+            {
+                FeedSources = await LocalStorage.ReadJsonAsync<List<FeedSource>>(await LocalStorage.GetDataFolderAsync(), "rss.list");
+            }
+            catch
+            {
+                FeedSources = new List<FeedSource>();
+            }
 
             foreach (FeedSource source in FeedSources)
             {

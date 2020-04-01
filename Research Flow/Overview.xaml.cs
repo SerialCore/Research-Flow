@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
-using Windows.System;
-using Windows.System.Diagnostics;
 using Windows.System.Threading;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
@@ -39,27 +37,22 @@ namespace Research_Flow
             }
         }
 
-        private void InitForegroundTask()
-        {
-            try
-            {
-                if (ApplicationInfo.IsNetworkAvailable)
-                {
-                    var task = new FeedTask();
-                    task.Run();
-                }
-            }
-            catch { }
-        }
-
         private async void InitBackgroundTask()
         {
             await ApplicationTask.RegisterTopicTask();
             await ApplicationTask.RegisterTagTask();
         }
 
+        private void InitForegroundTask()
+        {
+            if (ApplicationInfo.IsNetworkAvailable)
+            {
+                var task = new FeedTask();
+                task.Run();
+            }
+        }
+
         private ThreadPoolTimer PeriodicTimer;
-        private ProcessDiagnosticInfo process = ProcessDiagnosticInfo.GetForCurrentProcess();
 
         private void GetSystemPerformance()
         {
@@ -67,18 +60,9 @@ namespace Research_Flow
             {
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    var cpureport = process.CpuUsage.GetReport();
-                    var memreport = process.MemoryUsage.GetReport();
-                    systemstate.Text = cpureport.UserTime.ToString();
-                    systemstate.Text += '\n' + cpureport.KernelTime.ToString();
-                    systemstate.Text += '\n' + (memreport.VirtualMemorySizeInBytes/1024/1024).ToString();
-
-                    var diagnosticInfos = process.GetAppDiagnosticInfos();
-                    var diagnosticInfo = diagnosticInfos[0];
-                    var groups = diagnosticInfo.GetResourceGroups();
-                    var group = groups[0];
-                    systemstate.Text += '\n' + (group.GetMemoryReport().TotalCommitUsage/1024/1024).ToString();
-                    systemstate.Text += '\n' + (group.GetMemoryReport().PrivateCommitUsage/1024/1024).ToString();
+                    memstate.Text = ApplicationInfo.MemoryUsage.ToString() + " MB";
+                    cpustate.Text = ApplicationInfo.CpuOccupation.ToString("P2");
+                    battstate.Text = ApplicationInfo.BatteryUsage.ToString("P2");
                 });
             }, TimeSpan.FromSeconds(1));
         }
