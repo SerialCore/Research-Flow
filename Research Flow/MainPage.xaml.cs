@@ -72,7 +72,8 @@ namespace Research_Flow
         private void ConfigureUpdate()
         {
             // updated version must be greater than the previous published version
-            if (!ApplicationSetting.Updated.Equals("3.42.108.0"))
+            // can be lighter than the next publish version
+            if (ApplicationVersion.Parse(ApplicationSetting.Updated) < new ApplicationVersion(3, 42, 108, 0))
             {
                 Paper.DBUpdateApp();
                 ApplicationSetting.Updated = "3.42.108.0";

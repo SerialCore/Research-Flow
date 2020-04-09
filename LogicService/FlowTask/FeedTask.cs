@@ -1,5 +1,4 @@
 ﻿using LogicService.Data;
-using LogicService.Security;
 using LogicService.Service;
 using LogicService.Storage;
 using System;
@@ -7,39 +6,21 @@ using System.Collections.Generic;
 
 namespace LogicService.FlowTask
 {
-    public class FeedTask
+    public class FeedTask : ForegroundTask
     {
-
-        private string _id;
-        private bool _isrunning;
-        private bool _isavailable;
-
-        public FeedTask()
-        {
-            this._id = HashEncode.GetRandomValue();
-            this._isrunning = false;
-        }
-
-        public string ID
-        {
-            get { return _id; }
-        }
-
-        public bool IsRunning
-        {
-            get { return _isrunning; }
-        }
-
-        public bool IsAvailable
-        {
-            get { return _isavailable; }
-        }
 
         //public event EventHandler<TaskCompletedEventArgs> TaskCompleted;
 
-        public async void Run()
+        public FeedTask()
         {
-            _isrunning = true;
+            this.id = "";
+            this.isrunning = false;
+            this.isavailable = false;
+        }
+
+        public override async void Run()
+        {
+            isrunning = true;
             //TaskCompletedEventArgs args = new TaskCompletedEventArgs();
 
             List<FeedSource> FeedSources;
@@ -64,12 +45,12 @@ namespace LogicService.FlowTask
                         LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rss.list", FeedSources);
 
                         LocalStorage.GeneralLogAsync<Feed>("FeedTask.log", "feed updated-" + source.Name);
-                        _isrunning = false;
+                        isrunning = false;
                     },
                     (exception) =>
                     {
                         LocalStorage.GeneralLogAsync<Feed>("FeedTask.log", exception + "-" + source.Name);
-                        _isrunning = false;
+                        isrunning = false;
                     }, null);
             }
         }

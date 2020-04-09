@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Globalization;
 using System.Net.NetworkInformation;
+using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.Devices.Power;
@@ -15,9 +16,9 @@ namespace LogicService.Application
     public class ApplicationInfo
     {
 
-        public static string ApplicationName => SystemInformation.ApplicationName;
+        public static string AppName => SystemInformation.ApplicationName;
 
-        public static string ApplicationVersion => $"{SystemInformation.ApplicationVersion.Major}.{SystemInformation.ApplicationVersion.Minor}.{SystemInformation.ApplicationVersion.Build}.{SystemInformation.ApplicationVersion.Revision}";
+        public static string AppVersion => $"{SystemInformation.ApplicationVersion.Major}.{SystemInformation.ApplicationVersion.Minor}.{SystemInformation.ApplicationVersion.Build}.{SystemInformation.ApplicationVersion.Revision}";
 
         public static CultureInfo Culture => SystemInformation.Culture;
 

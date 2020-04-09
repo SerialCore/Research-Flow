@@ -1,32 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LogicService.FlowTask
 {
-    public class ForegroundTask
+    public abstract class ForegroundTask
     {
 
-        private string _id;
-        private bool _isrunning;
-        private bool _isavailable;
+        protected string id;
+        protected bool isrunning;
+        protected bool isavailable;
 
-        public string ID
-        {
-            get { return _id; }
-        }
+        public string ID { get { return id; } }
 
-        public bool IsRunning
-        {
-            get { return _isrunning; }
-        }
+        public bool IsRunning { get { return isrunning; } }
 
-        public bool IsAvailable
-        {
-            get { return _isavailable; }
-        }
+        public bool IsAvailable { get { return isavailable; } }
+
+        public abstract void Run();
 
     }
 

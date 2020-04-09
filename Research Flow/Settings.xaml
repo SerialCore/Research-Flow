@@ -15,6 +15,7 @@
                 <ScrollViewer>
                     <StackPanel>
                         <TextBlock Text="Feedback" FontSize="20"/>
+                        <HyperlinkButton Content="Open Feedback Hub" Click="Give_Feedback" Margin="0,2"/>
                         <HyperlinkButton Content="Rate on Microsoft Store" Click="Give_Rate" Margin="0,2"/>
                         <HyperlinkButton Content="zwx.atomx@outlook.com" NavigateUri="mailto:zwx.atomx@outlook.com"/>
 

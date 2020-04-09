@@ -1,5 +1,6 @@
 ﻿using LogicService.Application;
 using LogicService.FlowTask;
+using Microsoft.Services.Store.Engagement;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -49,6 +50,7 @@ namespace Research_Flow
             {
                 var task = new FeedTask();
                 task.Run();
+                StoreServicesCustomEventLogger.GetDefault().Log("FeedTask");
             }
         }
 

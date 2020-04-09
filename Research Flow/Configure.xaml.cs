@@ -31,7 +31,7 @@ namespace Research_Flow
             tempParameter = e.Parameter;
             await ConfigurePath();
             ConfigureDB();
-            ApplicationSetting.Updated = ApplicationInfo.ApplicationVersion;
+            ApplicationSetting.Updated = ApplicationInfo.AppVersion;
         }
 
         private async void Login_Tapped(object sender, TappedRoutedEventArgs e)

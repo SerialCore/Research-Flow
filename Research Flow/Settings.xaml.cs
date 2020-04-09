@@ -2,6 +2,7 @@
 using LogicService.Data;
 using LogicService.Service;
 using LogicService.Storage;
+using Microsoft.Services.Store.Engagement;
 using System;
 using Windows.Storage;
 using Windows.Storage.Pickers;
@@ -25,6 +26,7 @@ namespace Research_Flow
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             // https://www.microsoft.com/store/apps/9P8CHR55RS31
+            // ms-windows-store://pdp/?productid=9P8CHR55RS31
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -34,9 +36,9 @@ namespace Research_Flow
 
         private void DisplaySystemInfo()
         {
-            applicationName.Text = ApplicationInfo.ApplicationName;
+            applicationName.Text = ApplicationInfo.AppName;
 
-            applicationVersion.Text = ApplicationInfo.ApplicationVersion;
+            applicationVersion.Text = ApplicationInfo.AppVersion;
 
             firstVersion.Text = ApplicationInfo.FirstVersionInstalled;
 
@@ -63,6 +65,19 @@ namespace Research_Flow
             totalLaunchCount.Text = ApplicationInfo.TotalLaunchCount.ToString();
 
             appUptime.Text = ApplicationInfo.AppUptime.ToString("G");
+        }
+
+        private async void Give_Feedback(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (Microsoft.Services.Store.Engagement.StoreServicesFeedbackLauncher.IsSupported())
+            {
+                var launcher = StoreServicesFeedbackLauncher.GetDefault();
+                await launcher.LaunchAsync();
+            }
+            else
+            {
+                ApplicationMessage.SendMessage("Your device doesn't support Feedback Hub", ApplicationMessage.MessageType.InApp);
+            }
         }
 
         private async void Give_Rate(object sender, Windows.UI.Xaml.RoutedEventArgs e)

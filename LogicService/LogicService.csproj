@@ -108,6 +108,7 @@
   <ItemGroup>
     <Compile Include="Application\ApplicationNotification.cs" />
     <Compile Include="Application\ApplicationSetting.cs" />
+    <Compile Include="Application\ApplicationVersion.cs" />
     <Compile Include="FlowTask\Flow.cs" />
     <Compile Include="FlowTask\ForegroundTask.cs" />
     <Compile Include="Helper\NetHelper.cs" />
