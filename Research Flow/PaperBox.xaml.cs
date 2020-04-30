@@ -4,17 +4,15 @@ using LogicService.Storage;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.Data.Pdf;
 using Windows.Storage;
 using Windows.Storage.Pickers;
-using Windows.Storage.Streams;
-using Windows.System;
+using Windows.UI.Core;
 using Windows.UI.Popups;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -72,13 +70,11 @@ namespace Research_Flow
             paperlist.ItemsSource = papers;
         }
 
-        #region File Management
+        #region List Operation
 
         private string currentfile = null; // the original name, must be faithfull // pdfname.Text can be new
 
         private ObservableCollection<string> pdfs = new ObservableCollection<string>();
-
-        private void Pdf_List(object sender, RoutedEventArgs e) => pdfpanel.IsPaneOpen = !pdfpanel.IsPaneOpen;
 
         private void Pdftree_ItemClick(object sender, ItemClickEventArgs e)
         {
@@ -131,10 +127,6 @@ namespace Research_Flow
 
         #region Pdf Operation
 
-        private ObservableCollection<BitmapImage> pages = new ObservableCollection<BitmapImage>();
-
-        PdfDocument pdfDocument = null;
-
         private async void Pdf_Import(object sender, RoutedEventArgs e)
         {
             FileOpenPicker picker = new FileOpenPicker();
@@ -175,56 +167,19 @@ namespace Research_Flow
             if (string.IsNullOrEmpty(currentfile))
                 return;
 
-            try
+            CoreApplicationView newView = CoreApplication.CreateNewView();
+            int newViewId = 0;
+            await newView.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                StorageFile file = await(await LocalStorage.GetPaperFolderAsync()).GetFileAsync(currentfile);
-                pdfDocument = await PdfDocument.LoadFromFileAsync(file);
-            }
-            catch (Exception exception)
-            {
-                ApplicationMessage.SendMessage("PdfException: " + exception.Message, ApplicationMessage.MessageType.InApp);
-            }
+                Frame frame = new Frame();
+                frame.Navigate(typeof(PdfViewer), currentfile);
+                Window.Current.Content = frame;
+                // You have to activate the window in order to show it later.
+                Window.Current.Activate();
 
-            if (pdfDocument != null)
-            {
-                uint pageCount = pdfDocument.PageCount > 5 ? 5 : pdfDocument.PageCount;
-                pagecount.Text = pageCount.ToString();
-                pageindex.Text = "1";
-
-                pages.Clear();
-                for (uint p = 0; p < pageCount; p++)
-                {
-                    using (PdfPage page = pdfDocument.GetPage(p))
-                    {
-                        await page.PreparePageAsync();
-
-                        InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream();
-                        await page.RenderToStreamAsync(stream);
-
-                        BitmapImage bitmap = new BitmapImage();
-                        bitmap.DecodePixelWidth = 1360;
-                        pages.Add(bitmap);
-                        await bitmap.SetSourceAsync(stream);
-                    }
-                }
-                pdfPages.ItemsSource = pages;
-            }
-        }
-
-        private async void Pdf_Launch(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(currentfile))
-                return;
-
-            try
-            {
-                StorageFile file = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(currentfile);
-                await Launcher.LaunchFileAsync(file);
-            }
-            catch (Exception exception)
-            {
-                ApplicationMessage.SendMessage("PdfException: " + exception.Message, ApplicationMessage.MessageType.InApp);
-            }
+                newViewId = ApplicationView.GetForCurrentView().Id;
+            });
+            bool viewShown = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
         }
 
         private void Pdf_Share(object sender, RoutedEventArgs e)
@@ -261,15 +216,14 @@ namespace Research_Flow
             deferral.Complete();
         }
 
-        private void PageIndex_KeyDown(object sender, KeyRoutedEventArgs e)
+        private void Pdf_Download(object sender, RoutedEventArgs e)
         {
-            if (e.Key == VirtualKey.Enter)
-                pdfPages.SelectedIndex = Convert.ToInt32(pageindex.Text) - 1;
-        }
 
-        private void PdfPages_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        }
+        
+        private void Pdf_Extract(object sender, RoutedEventArgs e)
         {
-            pageindex.Text = (pdfPages.SelectedIndex + 1).ToString();
+
         }
 
         #endregion
@@ -355,7 +309,6 @@ namespace Research_Flow
                         await file.RenameAsync(pdfname.Text); // whether to record
                         pdfs.Remove(currentfile);
                         pdfs.Add(pdfname.Text);
-                        pdfpanel.IsPaneOpen = true;
                         InitializePdf();
                     }
                     catch (Exception ex)

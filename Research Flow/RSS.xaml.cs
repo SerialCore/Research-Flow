@@ -234,7 +234,7 @@ namespace Research_Flow
             int selectedFeedIndex = FeedSources.IndexOf(source); // now you can modify source while fetching feed
 
             waiting_feed.IsActive = true;
-            RssService.GetRssItems(
+            RssService.BeginGetFeed(
                 source.Uri,
                 async (items) =>
                 {

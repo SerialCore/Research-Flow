@@ -203,6 +203,25 @@ namespace LogicService.Data
 
         #endregion
 
+        #region Helper
+
+        public static void TryDownload(string url)
+        {
+
+        }
+
+        public static void TryExtract()
+        {
+
+        }
+
+        public static void ReadDocument()
+        {
+
+        }
+
+        #endregion
+
     }
 
     public class PaperFile

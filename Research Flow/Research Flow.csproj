@@ -125,6 +125,9 @@
     <Compile Include="PaperBox.xaml.cs">
       <DependentUpon>PaperBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PdfViewer.xaml.cs">
+      <DependentUpon>PdfViewer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Picture.xaml.cs">
       <DependentUpon>Picture.xaml</DependentUpon>
     </Compile>
@@ -203,6 +206,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PaperBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PdfViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

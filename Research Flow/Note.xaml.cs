@@ -58,11 +58,6 @@ namespace Research_Flow
             InitializeNote();
         }
 
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            // cancel timer
-        }
-
         /// <summary>
         /// Add file, rename file or delete file, then re-Initialize
         /// </summary>
@@ -235,8 +230,6 @@ namespace Research_Flow
 
         private ObservableCollection<string> namelist = new ObservableCollection<string>();
 
-        private ThreadPoolTimer autoSaver;
-
         private void Open_Document(object sender, RoutedEventArgs e)
             => notepanel.IsPaneOpen = !notepanel.IsPaneOpen;
 
@@ -246,24 +239,6 @@ namespace Research_Flow
             var fileitem = await (await LocalStorage.GetNoteFolderAsync()).GetFileAsync(name + ".rfn");
             ImportFromInk(fileitem);
             notefilename.Text = name;
-        }
-
-        private void BeginAutoSaver()
-        {
-            autoSaver = ThreadPoolTimer.CreatePeriodicTimer(async (source) =>
-            {
-                // save
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                    () =>
-                    {
-                        // noti
-                    });
-            }, TimeSpan.FromSeconds(1));
-        }
-
-        private void EndAutoSaver()
-        {
-            autoSaver.Cancel();
         }
 
         /// <summary>

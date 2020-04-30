@@ -47,6 +47,7 @@ namespace Research_Flow
                 tags = new HashSet<string>() // these are system tags
                 {
                     "@Search"/*search words in engine*/, "@Remind"/*make user remind of content*/,
+                    "@Concentrate",/*make user concentrate on content*/
                 };
                 LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
             }
@@ -260,9 +261,9 @@ namespace Research_Flow
                 DateTimeOffset dateTime = new DateTimeOffset(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, DateTimeOffset.Now.Day,
                     topic.RemindTime.Hours, topic.RemindTime.Minutes, topic.RemindTime.Seconds, DateTimeOffset.Now.Offset);
                 if (DateTimeOffset.Now > dateTime)
-                    await ApplicationNotification.ScheduleRepeatAlarmToast(topic.ID, "Research Topic", topic.Title, dateTime.AddDays(1), TimeSpan.FromDays(1), 30);
+                    await ApplicationNotification.ScheduleRepeatAlarmToast(topic.ID, "Research Topic", topic.Title, dateTime.AddDays(1), TimeSpan.FromDays(1), 40);
                 else
-                    await ApplicationNotification.ScheduleRepeatAlarmToast(topic.ID, "Research Topic", topic.Title, dateTime, TimeSpan.FromDays(1), 30);
+                    await ApplicationNotification.ScheduleRepeatAlarmToast(topic.ID, "Research Topic", topic.Title, dateTime, TimeSpan.FromDays(1), 40);
             }
             else if (topic.RemindTime == TimeSpan.Zero) // a deadline
             {

@@ -19,24 +19,41 @@
 
             <Grid Grid.Row="0" Margin="5">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition />
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-
-                <AppBarButton Grid.Column="0" Icon="List" Click="Open_SearchList" ToolTipService.ToolTip="Search Engine" Width="38" Height="38"/>
-                <ComboBox Grid.Column="1" x:Name="searchlist" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
-                <AutoSuggestBox Grid.Column="2" x:Name="queryQuest" QueryIcon="Find"
-                                    QuerySubmitted="Search_QuerySubmitted" VerticalAlignment="Center"/>
-                <StackPanel Grid.Column="3" Orientation="Horizontal">
-                    <AppBarButton Icon="Tag" Click="AddToTagTopic" ToolTipService.ToolTip="AddTotag" Width="38" Height="38"/>
-                    <AppBarButton Icon="OutlineStar" Click="Favorite_Click" ToolTipService.ToolTip="Favorite" Width="38" Height="38"/>
-                    <AppBarButton Icon="Share" Click="ShareLink" ToolTipService.ToolTip="Share" Width="38" Height="38"/>
+                
+                <ComboBox Grid.Column="0" x:Name="searchlist" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <AppBarButton Grid.Column="0" Icon="List" Click="Open_SearchList" ToolTipService.ToolTip="Search Engine" Width="38" Height="38"/>
                     <AppBarButton Icon="Previous" Click="PageBack" ToolTipService.ToolTip="Back" IsEnabled="{x:Bind webView.CanGoBack,Mode=OneWay}" Width="38" Height="38"/>
                     <AppBarButton Icon="Next" Click="PageForward" ToolTipService.ToolTip="Forward" IsEnabled="{x:Bind webView.CanGoForward,Mode=OneWay}" Width="38" Height="38"/>
                     <AppBarButton Icon="Cancel" Click="PageStop" ToolTipService.ToolTip="Stop" Width="38" Height="38"/>
                     <AppBarButton Icon="Refresh" Click="PageRefresh" ToolTipService.ToolTip="Refresh" Width="38" Height="38"/>
+                </StackPanel>
+                <AutoSuggestBox Grid.Column="2" x:Name="queryQuest" QueryIcon="Find" PlaceholderText="Search Quest"
+                                    QuerySubmitted="Search_QuerySubmitted" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="3" Orientation="Horizontal">
+                    <AppBarButton Icon="OutlineStar" Click="Favorite_Click" ToolTipService.ToolTip="Favorite" Width="38" Height="38"/>
+                    <AppBarButton Icon="Tag" Click="AddToTagTopic" ToolTipService.ToolTip="AddTotag" Width="38" Height="38"/>
+                    <AppBarButton Icon="Favorite" Tapped="Flyout_Tapped" ToolTipService.ToolTip="Favorite List" Width="38" Height="38">
+                        <FlyoutBase.AttachedFlyout>
+                            <Flyout>
+                                <ListView x:Name="favoritelist" ItemClick="FavoriteList_ItemClick" IsItemClickEnabled="True" MaxWidth="300">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Padding="5">
+                                                <TextBlock Text="{Binding Text}" MaxLines="1"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Flyout>
+                        </FlyoutBase.AttachedFlyout>
+                    </AppBarButton>
+                    <AppBarButton Icon="Share" Click="ShareLink" ToolTipService.ToolTip="Share" Width="38" Height="38"/>
                 </StackPanel>
             </Grid>
 
@@ -69,6 +86,7 @@
                 </SplitView.Pane>
                 <SplitView.Content>
                     <Grid>
+                        <ProgressBar x:Name="webWaiting" IsIndeterminate="True" ShowPaused="True" Visibility="Collapsed" VerticalAlignment="Top"/>
                         <TextBlock Text="Browser | Search | First Crawl" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <WebView x:Name="webView" NavigationStarting="WebView_NavigationStarting" ManipulationCompleted="WebView_ManipulationCompleted"
                                  FrameNavigationCompleted="WebView_FrameNavigationCompleted" NavigationCompleted="WebView_NavigationCompleted"/>
@@ -117,29 +135,11 @@
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
                 <AutoSuggestBox Grid.Column="0" x:Name="siteUrl" QueryIcon="Find" Text="http://" 
                                 QuerySubmitted="Browse_QuerySubmitted" Margin="5,5,0,0"/>
-                <telerikPrimitives:RadBusyIndicator Grid.Column="1" x:Name="webWaiting" IsActive="False" Margin="4,0,0,0" Height="32"/>
-                <CommandBar Grid.Column="2" HorizontalAlignment="Right" DefaultLabelPosition="Right" Background="Transparent" OverflowButtonVisibility="Collapsed">
-                    <AppBarButton Label="Favorite" Icon="Favorite">
-                        <AppBarButton.Flyout>
-                            <Flyout>
-                                <ListView x:Name="favoritelist" ItemClick="FavoriteList_ItemClick" IsItemClickEnabled="True" MaxWidth="300">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Padding="5">
-                                                <TextBlock Text="{Binding Text}" MaxLines="1"/>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </Flyout>
-                        </AppBarButton.Flyout>
-                    </AppBarButton>
-                    <AppBarSeparator/>
+                <CommandBar Grid.Column="1" HorizontalAlignment="Right" DefaultLabelPosition="Right" Background="Transparent" OverflowButtonVisibility="Collapsed">
                     <AppBarButton Label="Archive" Icon="MoveToFolder">
                         <AppBarButton.Flyout>
                             <Flyout>

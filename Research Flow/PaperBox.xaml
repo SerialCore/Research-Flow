@@ -16,70 +16,43 @@
                 <ColumnDefinition Width="400"/>
             </Grid.ColumnDefinitions>
 
-            <SplitView Grid.Column="0" x:Name="pdfpanel" OpenPaneLength="300">
-                <SplitView.Pane>
-                    <Pivot Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                        <PivotItem Header="Downloaded">
-                            <ListView x:Name="pdftree" IsItemClickEnabled="True" ItemClick="Pdftree_ItemClick" Margin="0,0,0,40">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding }"/>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </PivotItem>
-                        <PivotItem Header="Database">
-                            <ListView x:Name="paperlist" IsItemClickEnabled="True" ItemClick="PaperList_ItemClick" Margin="0,0,0,40">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Title}"/>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </PivotItem>
-                    </Pivot>
-                </SplitView.Pane>
-                <SplitView.Content>
-                    <Grid>
-                        <FlipView x:Name="pdfPages" SelectionChanged="PdfPages_SelectionChanged"  Margin="0,0,0,40">
-                            <FlipView.ItemTemplate>
+            <Grid Grid.Column="0">
+                <Pivot Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="0,0,0,40">
+                    <PivotItem Header="Downloaded">
+                        <ListView x:Name="pdftree" IsItemClickEnabled="True" ItemClick="Pdftree_ItemClick">
+                            <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <ScrollViewer ZoomMode="Enabled">
-                                        <Viewbox Stretch="Uniform">
-                                            <Image Source="{Binding }"/>
-                                        </Viewbox>
-                                    </ScrollViewer>
+                                    <TextBlock Text="{Binding }"/>
                                 </DataTemplate>
-                            </FlipView.ItemTemplate>
-                        </FlipView>
-                        <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                            <CommandBar.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Preview" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
-                                    <TextBox x:Name="pageindex" Text="i" InputScope="Number" KeyDown="PageIndex_KeyDown" Margin="12,4,0,0"/>
-                                    <TextBlock Margin="6,10,0,0">
-                                        <Run Text="/"/>
-                                        <Run x:Name="pagecount" Text="N"/>
-                                    </TextBlock>
-                                </StackPanel>
-                            </CommandBar.Content>
-                            <AppBarButton Icon="OpenFile" Label="Open" Click="Pdf_Launch"/>
-                            <AppBarButton Icon="Preview" Label="Preview" Click="Pdf_Preview"/>
-                            <AppBarSeparator />
-                            <AppBarButton Icon="Share" Label="Export">
-                                <AppBarButton.Flyout>
-                                    <MenuFlyout>
-                                        <MenuFlyoutItem Text="Share" Click="Pdf_Share"/>
-                                        <MenuFlyoutItem Text="SaveAs" Click="Pdf_Export"/>
-                                    </MenuFlyout>
-                                </AppBarButton.Flyout>
-                            </AppBarButton>
-                            <AppBarButton Icon="Import" Label="Import" Click="Pdf_Import"/>
-                            <AppBarButton Icon="Document" Label="Papers" Click="Pdf_List"/>
-                        </CommandBar>
-                    </Grid>
-                </SplitView.Content>
-            </SplitView>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </PivotItem>
+                    <PivotItem Header="Database">
+                        <ListView x:Name="paperlist" IsItemClickEnabled="True" ItemClick="PaperList_ItemClick">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Title}"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </PivotItem>
+                </Pivot>
+                <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                    <CommandBar.Content>
+                        <TextBlock Text="Papers" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
+                    </CommandBar.Content>
+                    <AppBarButton Icon="Share" Label="Export">
+                        <AppBarButton.Flyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Text="Share" Click="Pdf_Share"/>
+                                <MenuFlyoutItem Text="SaveAs" Click="Pdf_Export"/>
+                            </MenuFlyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
+                    <AppBarButton Icon="Import" Label="Import" Click="Pdf_Import"/>
+                    <AppBarButton Icon="Preview" Label="Preview" Click="Pdf_Preview"/>
+                </CommandBar>
+            </Grid>
 
             <Grid Grid.Column="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                 <StackPanel Margin="10,10,10,40">
@@ -104,8 +77,8 @@
                     <AppBarButton Icon="Delete" Label="Delete" Click="DeletePaper"/>
                 </CommandBar>
             </Grid>
+
         </Grid>
-        
     </Grid>
-    
+
 </Page>

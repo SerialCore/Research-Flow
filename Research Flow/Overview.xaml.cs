@@ -31,9 +31,9 @@ namespace Research_Flow
         {
             if (IsPageFirstLoaded)
             {
+                GetSystemPerformance();
                 InitBackgroundTask();
                 InitForegroundTask();
-                GetSystemPerformance();
                 IsPageFirstLoaded = false;
             }
         }
@@ -50,9 +50,21 @@ namespace Research_Flow
             {
                 var task = new FeedTask();
                 task.Run();
+                task.TaskCompleted += Task_TaskCompleted;
                 StoreServicesCustomEventLogger.GetDefault().Log("FeedTask");
             }
         }
+
+        #region Tasks
+
+        private void Task_TaskCompleted(object sender, TaskCompletedEventArgs e)
+        {
+            ApplicationMessage.SendMessage("FeedTask Completed", ApplicationMessage.MessageType.Toast);
+        }
+
+        #endregion
+
+        #region Content
 
         private ThreadPoolTimer PeriodicTimer;
 
@@ -68,6 +80,8 @@ namespace Research_Flow
                 });
             }, TimeSpan.FromSeconds(1));
         }
+
+        #endregion
     }
 
     public class ApplicationTask

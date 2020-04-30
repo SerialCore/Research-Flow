@@ -14,6 +14,7 @@ using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -74,6 +75,7 @@ namespace Research_Flow
                     { "ACS", "https://pubs.acs.org/action/doSearch?AllField=QUERY" },
                     { "arXiv All", "https://arxiv.org/search/?query=QUERY&searchtype=all" },
                     { "inspirehep", "http://inspirehep.net/search?ln=en&ln=en&p=QUEST&of=hb&action_search=Search&sf=earliestdate&so=d&rm=&rg=25&sc=0" },
+                    { "Bing Academic", "https://cn.bing.com/academic/search?q=QUEST&FORM=HDRSC4" },
                 };
                 LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "search.list", SearchSources);
             }
@@ -216,24 +218,33 @@ namespace Research_Flow
 
         private ObservableCollection<Crawlable> favorites = new ObservableCollection<Crawlable>();
 
+        private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+            => FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
+
         private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
-            => webWaiting.IsActive = true;
+        {
+            webWaiting.Visibility = Visibility.Visible;
+            webWaiting.ShowPaused = false;
+        }
 
         private void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
-            webWaiting.IsActive = false;
+            webWaiting.ShowPaused = true;
+            webWaiting.Visibility = Visibility.Collapsed;
             siteUrl.Text = webView.Source.AbsoluteUri;
         }
 
         private void WebView_FrameNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
-            webWaiting.IsActive = false;
+            webWaiting.ShowPaused = true;
+            webWaiting.Visibility = Visibility.Collapsed;
             siteUrl.Text = webView.Source.AbsoluteUri;
         }
 
         private void WebView_ManipulationCompleted(object sender, Windows.UI.Xaml.Input.ManipulationCompletedRoutedEventArgs e)
         {
-            webWaiting.IsActive = false;
+            webWaiting.ShowPaused = true;
+            webWaiting.Visibility = Visibility.Collapsed;
             siteUrl.Text = webView.Source.AbsoluteUri;
         }
 
@@ -269,7 +280,8 @@ namespace Research_Flow
         private void PageStop(object sender, RoutedEventArgs e)
         {
             webView.Stop();
-            webWaiting.IsActive = false;
+            webWaiting.ShowPaused = true;
+            webWaiting.Visibility = Visibility.Collapsed;
         }
 
         private void PageRefresh(object sender, RoutedEventArgs e) => webView.Refresh();

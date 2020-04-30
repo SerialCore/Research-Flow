@@ -9,7 +9,7 @@ namespace LogicService.FlowTask
     public class FeedTask : ForegroundTask
     {
 
-        //public event EventHandler<TaskCompletedEventArgs> TaskCompleted;
+        public event EventHandler<TaskCompletedEventArgs> TaskCompleted;
 
         public FeedTask()
         {
@@ -21,7 +21,7 @@ namespace LogicService.FlowTask
         public override async void Run()
         {
             isrunning = true;
-            //TaskCompletedEventArgs args = new TaskCompletedEventArgs();
+            TaskCompletedEventArgs args = new TaskCompletedEventArgs();
 
             List<FeedSource> FeedSources;
             try
@@ -35,7 +35,7 @@ namespace LogicService.FlowTask
 
             foreach (FeedSource source in FeedSources)
             {
-                RssService.GetRssItems(
+                RssService.BeginGetFeed(
                     source.Uri,
                     async (items) =>
                     {
@@ -44,15 +44,19 @@ namespace LogicService.FlowTask
                         source.LastUpdateTime = DateTime.Now;
                         LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rss.list", FeedSources);
 
+                        args.Log += "feed updated-" + source.Name + "\r\n";
                         LocalStorage.GeneralLogAsync<Feed>("FeedTask.log", "feed updated-" + source.Name);
                         isrunning = false;
                     },
                     (exception) =>
                     {
+                        args.Log += exception + "-" + source.Name + "\r\n";
                         LocalStorage.GeneralLogAsync<Feed>("FeedTask.log", exception + "-" + source.Name);
                         isrunning = false;
                     }, null);
             }
+
+            //TaskCompleted(typeof(FeedTask), args);
         }
 
     }

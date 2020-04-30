@@ -21,9 +21,9 @@ namespace LogicService.FlowTask
 
     public class TaskCompletedEventArgs : EventArgs
     {
-        private int log;
+        private string log;
 
-        public int Log
+        public string Log
         {
             get { return log; }
             set { log = value; }
