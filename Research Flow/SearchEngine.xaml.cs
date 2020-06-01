@@ -74,7 +74,6 @@ namespace Research_Flow
                 {
                     { "ACS", "https://pubs.acs.org/action/doSearch?AllField=QUERY" },
                     { "arXiv All", "https://arxiv.org/search/?query=QUERY&searchtype=all" },
-                    { "inspirehep", "http://inspirehep.net/search?ln=en&ln=en&p=QUEST&of=hb&action_search=Search&sf=earliestdate&so=d&rm=&rg=25&sc=0" },
                     { "Bing Academic", "https://cn.bing.com/academic/search?q=QUEST&FORM=HDRSC4" },
                 };
                 LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "search.list", SearchSources);

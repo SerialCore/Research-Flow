@@ -3,14 +3,12 @@ using LogicService.Data;
 using LogicService.Security;
 using LogicService.Storage;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
@@ -21,40 +19,16 @@ namespace Research_Flow
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class TagTopic : Page
+    public sealed partial class TopicCase : Page
     {
-        public TagTopic()
+        public TopicCase()
         {
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            InitializeTag();
             InitializeTopic();
-        }
-
-        private async void InitializeTag()
-        {
-            try
-            {
-                tags = await LocalStorage.ReadJsonAsync<HashSet<string>>(
-                    await LocalStorage.GetDataFolderAsync(), "tag.list");
-            }
-            catch
-            {
-                tags = new HashSet<string>() // these are system tags
-                {
-                    "@Search"/*search words in engine*/, "@Remind"/*make user remind of content*/,
-                    "@Concentrate",/*make user concentrate on content*/
-                };
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
-            }
-            finally
-            {
-                LoadTagView();
-            }
         }
 
         private async void InitializeTopic()
@@ -75,119 +49,6 @@ namespace Research_Flow
                 topiclist.ItemsSource = topics;
             }
         }
-
-        #region Tag Management
-
-        private HashSet<string> tags;
-
-        private void ShowTagPanel_Click(object sender, RoutedEventArgs e)
-            => tagpanel.IsPaneOpen = !tagpanel.IsPaneOpen;
-
-        private void LoadTagView()
-        {
-            Func<string, string> AlphaKey = (tag) =>
-            {
-                char head = tag[0];
-                if (head >= '0' && head <= '9')
-                    return "#";
-                else if (head >= 'A' && head <= 'Z' || head >= 'a' && head <= 'z')
-                    return head.ToString().ToUpper();
-                else
-                    return "Other";
-            };
-
-            var groups = from t in tags
-                         orderby t
-                         group t by AlphaKey(t);
-
-            CollectionViewSource collectionVS = new CollectionViewSource();
-            collectionVS.IsSourceGrouped = true;
-            collectionVS.Source = groups;
-            taglist.ItemsSource = collectionVS.View;
-            tagKlist.ItemsSource = collectionVS.View.CollectionGroups;
-        }
-
-        private async void AddTagManually(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-        {
-            if (!string.IsNullOrEmpty(tagEmbed.Text))
-            {
-                tags.UnionWith(Topic.TagPick(tagEmbed.Text));
-                LoadTagView();
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
-            }
-        }
-
-        private async void DeleteTagManually(object sender, RoutedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(tagPanelTitle.Text))
-            {
-                tags.Remove(tagPanelTitle.Text);
-                LoadTagView();
-                ClearTagPanel();
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
-            }
-        }
-
-        private void Taglist_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            string tag = e.ClickedItem as string;
-            if (topicSetting.Visibility == Visibility.Visible) // if topic is ready to be edited
-            {
-                topicTitle.Text += '#' + tag + '#';
-            }
-            else
-            {
-                ClearTagPanel();
-                tagPanelTitle.Text = tag;
-                tagpanel.IsPaneOpen = true;
-                // topicTags should be handled immediately and there must exist tagPanelTitle.Text
-                // Pivot_SelectionChanged is an async process thus tagPanelTitle.Text could be null
-                if (topicTags.ItemsSource == null && !string.IsNullOrEmpty(tagPanelTitle.Text))
-                {
-                    List<Topic> selectTopic = new List<Topic>();
-                    foreach (Topic topic in topics)
-                    {
-                        if (topic.Title.Contains('#' + tagPanelTitle.Text + '#'))
-                            selectTopic.Add(topic);
-                    }
-                    topicTags.ItemsSource = selectTopic;
-                }
-            }
-        }
-
-        private void ClearTagPanel()
-        {
-            tagPanelTitle.Text = "";
-            topicTags.ItemsSource = null;
-            feedTags.ItemsSource = null;
-            crawlTags.ItemsSource = null;
-            paperTags.ItemsSource = null;
-        }
-
-        private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            switch ((sender as Pivot).SelectedIndex)
-            {
-                case 0:
-                    break;
-                case 1:
-                    if (feedTags.ItemsSource == null && !string.IsNullOrEmpty(tagPanelTitle.Text))
-                        feedTags.ItemsSource = Feed.DBSelectByTag(tagPanelTitle.Text);
-                    break;
-                case 2:
-                    if (crawlTags.ItemsSource == null && !string.IsNullOrEmpty(tagPanelTitle.Text))
-                        crawlTags.ItemsSource = Crawlable.DBSelectByTag(tagPanelTitle.Text);
-                    break;
-                case 3:
-                    if (paperTags.ItemsSource == null && !string.IsNullOrEmpty(tagPanelTitle.Text))
-                        paperTags.ItemsSource = Paper.DBSelectByTag(tagPanelTitle.Text);
-                    break;
-            }
-        }
-
-        #endregion
-
-        #region Task Management
 
         private ObservableCollection<Topic> topics;
 
@@ -234,14 +95,8 @@ namespace Research_Flow
                 topics.Insert(0, topic);
 
                 LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topic.list", topics);
-
-                // double check tags then add them
-                int count = tags.Count;
-                tags.UnionWith(Topic.TagPick(topicTitle.Text));
-                if (count != tags.Count)
-                    LoadTagView();
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
-
+                Topic.SaveTag(topicTitle.Text);
+                
                 // register a task
                 SubmitTopictoTask(topic);
             }
@@ -346,8 +201,5 @@ namespace Research_Flow
                 remindTime.Time = currentTopic.RemindTime;
         }
 
-        #endregion
-
     }
-
 }

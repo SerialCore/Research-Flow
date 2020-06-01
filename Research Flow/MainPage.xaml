@@ -25,7 +25,12 @@
                         <FontIcon Glyph="&#xEB68;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Tag + Topic" Tag="TagTopic">
+                <NavigationViewItem Content="Tag Center" Tag="Tag">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8EC;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Topic Case" Tag="Topic">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEB50;"/>
                     </NavigationViewItem.Icon>

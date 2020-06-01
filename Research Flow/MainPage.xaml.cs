@@ -111,7 +111,8 @@ namespace Research_Flow
         private readonly List<(string Tag, Type Page)> _pages = new List<(string Tag, Type Page)>
         {
             ("Overview", typeof(Overview)),
-            ("TagTopic", typeof(TagTopic)),
+            ("Tag", typeof(TagCenter)),
+            ("Topic", typeof(TopicCase)),
             ("PaperBox", typeof(PaperBox)),
             ("RSS", typeof(RSS)),
             ("Search", typeof(SearchEngine)),

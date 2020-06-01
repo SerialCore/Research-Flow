@@ -24,12 +24,14 @@
             </FlipView.ItemTemplate>
         </FlipView>
 
-        <Grid Grid.Row="0" x:Name="albumUI">
+        <Grid Grid.Row="0" x:Name="albumUI" Background="White">
             <toolkit:AdaptiveGridView x:Name="AdaptiveGridViewControl" ItemHeight="200" DesiredWidth="300"
                                       OneRowModeEnabled="False" SelectionMode="Single" IsItemClickEnabled="True" ItemClick="Image_ItemClick">
                 <toolkit:AdaptiveGridView.ItemTemplate>
                     <DataTemplate >
-                        <Image Source="{Binding Uri}" Stretch="UniformToFill"/>
+                        <Grid Margin="8">
+                            <Image Source="{Binding Uri}" Stretch="UniformToFill"/>
+                        </Grid>
                     </DataTemplate>
                 </toolkit:AdaptiveGridView.ItemTemplate>
             </toolkit:AdaptiveGridView>

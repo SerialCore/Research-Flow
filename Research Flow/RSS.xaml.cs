@@ -47,8 +47,6 @@ namespace Research_Flow
                         Name = "Physical Review Letters", Uri = "http://feeds.aps.org/rss/recent/prl.xml", Star = 5, IsJournal = true },
                     new FeedSource{ ID = HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prd.xml"),
                         Name = "Physical Review D", Uri = "http://feeds.aps.org/rss/recent/prd.xml", Star = 5, IsJournal = true },
-                    new FeedSource{ ID = HashEncode.MakeMD5("http://inspirehep.net/rss?ln=en&p=tetraquark"),
-                        Name = "Tetraquark Inspirehep", Uri = "http://inspirehep.net/rss?ln=en&p=tetraquark", Star = 5, IsJournal = true },
                 };
                 LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rss.list", FeedSources);
             }
