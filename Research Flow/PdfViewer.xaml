@@ -14,18 +14,15 @@
             <FlipView x:Name="pdfPages" SelectionChanged="PdfPages_SelectionChanged" Margin="0,0,0,40">
                 <FlipView.ItemTemplate>
                     <DataTemplate>
-                        <ScrollViewer x:Name="pdf_panel" ZoomMode="Enabled">
+                        <ScrollViewer ZoomMode="Enabled">
                             <Viewbox Stretch="Uniform" Margin="50">
-                                <Viewbox.RenderTransform>
-                                    <ScaleTransform x:Name="scale_panel"/>
-                                </Viewbox.RenderTransform>
                                 <Image Source="{Binding }"/>
                             </Viewbox>
                         </ScrollViewer>
                     </DataTemplate>
                 </FlipView.ItemTemplate>
             </FlipView>
-            
+
             <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
                 <CommandBar.Content>
                     <StackPanel Orientation="Horizontal">
@@ -37,14 +34,6 @@
                         </TextBlock>
                     </StackPanel>
                 </CommandBar.Content>
-                <AppBarButton Icon="ZoomIn" Label="Zoom" Tapped="Flyout_Tapped">
-                    <FlyoutBase.AttachedFlyout>
-                        <Flyout>
-                            <Slider x:Name="ZoomSlider" ValueChanged="ZoomSlider_ValueChanged" Value="0" Maximum="8" Minimum="-8" Width="200"/>
-                        </Flyout>
-                    </FlyoutBase.AttachedFlyout>
-                </AppBarButton>
-                <AppBarSeparator/>
                 <AppBarButton Icon="OpenFile" Label="Open" Click="Pdf_Launch"/>
             </CommandBar>
         </Grid>

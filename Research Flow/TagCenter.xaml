@@ -58,63 +58,58 @@
                             </Flyout>
                         </AppBarButton.Flyout>
                     </AppBarButton>
-                    <AppBarButton Icon="Comment" Label="Detail" Click="ShowTagPanel_Click"/>
                 </CommandBar>
             </Grid>
-        </Grid>
-        
-        <SplitView x:Name="tagpanel" Grid.Column="1" OpenPaneLength="400" PanePlacement="Right">
-            <SplitView.Pane>
-                <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                    <TextBlock x:Name="tagPanelTitle" FontSize="25" Margin="20"/>
-                    <StackPanel Orientation="Horizontal" Margin="10,60,10,0">
-                        <AppBarButton Icon="Delete" Click="DeleteTagManually" Height="38" Width="38"/>
-                    </StackPanel>
-                    <Pivot Margin="0,100,0,0" SelectionChanged="Pivot_SelectionChanged">
-                        <PivotItem Header="Topic">
-                            <ListView x:Name="topicTags">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Title}" MaxLines="2" Padding="5"/>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </PivotItem>
-                        <PivotItem Header="Feed">
-                            <ListView x:Name="feedTags">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Title}" MaxLines="2" Padding="5"/>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </PivotItem>
-                        <PivotItem Header="Crawl">
-                            <ListView x:Name="crawlTags">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Padding="5">
-                                            <TextBlock Text="{Binding Text}" MaxLines="2"/>
-                                            <TextBlock Text="{Binding Url}" MaxLines="2" Foreground="{ThemeResource SystemAccentColor}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </PivotItem>
-                        <PivotItem Header="Paper">
-                            <ListView x:Name="paperTags">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Title}" MaxLines="2" Padding="5"/>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </PivotItem>
-                    </Pivot>
-                </Grid>
-            </SplitView.Pane>
-        </SplitView>
 
+            <Grid Grid.Column="1">
+                <TextBlock x:Name="tagPanelTitle" FontSize="25" Margin="20"/>
+                <StackPanel Orientation="Horizontal" Margin="10,60,10,0">
+                    <AppBarButton Icon="Delete" Click="DeleteTagManually" Height="38" Width="38"/>
+                </StackPanel>
+                <Pivot Margin="0,100,0,0" SelectionChanged="Pivot_SelectionChanged">
+                    <PivotItem Header="Topic">
+                        <ListView x:Name="topicTags">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Title}" MaxLines="2" Padding="5"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </PivotItem>
+                    <PivotItem Header="Feed">
+                        <ListView x:Name="feedTags">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Title}" MaxLines="2" Padding="5"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </PivotItem>
+                    <PivotItem Header="Crawl">
+                        <ListView x:Name="crawlTags">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Padding="5">
+                                        <TextBlock Text="{Binding Text}" MaxLines="2"/>
+                                        <TextBlock Text="{Binding Url}" MaxLines="2" Foreground="{ThemeResource SystemAccentColor}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </PivotItem>
+                    <PivotItem Header="Paper">
+                        <ListView x:Name="paperTags">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Title}" MaxLines="2" Padding="5"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </PivotItem>
+                </Pivot>
+            </Grid>
+
+        </Grid>
     </Grid>
 
 </Page>

@@ -70,7 +70,7 @@ namespace Research_Flow
                         await page.RenderToStreamAsync(stream);
 
                         BitmapImage bitmap = new BitmapImage();
-                        bitmap.DecodePixelWidth = 1360;
+                        bitmap.DecodePixelWidth = 1920;
                         pages.Add(bitmap);
                         await bitmap.SetSourceAsync(stream);
                     }
@@ -78,9 +78,6 @@ namespace Research_Flow
                 pdfPages.ItemsSource = pages;
             }
         }
-
-        private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-            => FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
 
         private async void Pdf_Launch(object sender, RoutedEventArgs e)
         {
@@ -104,15 +101,6 @@ namespace Research_Flow
         private void PdfPages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             pageindex.Text = (pdfPages.SelectedIndex + 1).ToString();
-        }
-
-        private void ZoomSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
-        {
-            //scale_panel.CenterX = pdf_panel.ActualWidth / 2;
-            //scale_panel.CenterY = pdf_panel.ActualHeight / 2;
-            //scale_panel.ScaleX += 0.1 * (ZoomSlider.Value - currentScale);
-            //scale_panel.ScaleY += 0.1 * (ZoomSlider.Value - currentScale);
-            //currentScale = ZoomSlider.Value;
         }
     }
 }

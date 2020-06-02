@@ -52,9 +52,6 @@ namespace Research_Flow
 
         private HashSet<string> tags;
 
-        private void ShowTagPanel_Click(object sender, RoutedEventArgs e)
-            => tagpanel.IsPaneOpen = !tagpanel.IsPaneOpen;
-
         private void LoadTagView()
         {
             Func<string, string> AlphaKey = (tag) =>
@@ -105,7 +102,6 @@ namespace Research_Flow
             string tag = e.ClickedItem as string;
             ClearTagPanel();
             tagPanelTitle.Text = tag;
-            tagpanel.IsPaneOpen = true;
             // topicTags should be handled immediately and there must exist tagPanelTitle.Text
             // Pivot_SelectionChanged is an async process thus tagPanelTitle.Text could be null
             if (topicTags.ItemsSource == null && !string.IsNullOrEmpty(tagPanelTitle.Text))
