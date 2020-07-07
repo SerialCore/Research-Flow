@@ -54,7 +54,7 @@ namespace Research_Flow
 
         private Topic currentTopic = null;
 
-        private void AddTopicSetting(object sender, RoutedEventArgs e) => topicSetting.Visibility = Visibility.Visible;
+        private void AddTopicSetting(object sender, RoutedEventArgs e) => topicSetting.IsPaneOpen = true;
 
         private void ColorSpot1(object sender, RoutedEventArgs e) => topicTitle.Background = (sender as AppBarButton).Background;
 
@@ -178,14 +178,14 @@ namespace Research_Flow
             remindTime.Time = TimeSpan.Zero;
 
             topicDelete.Visibility = Visibility.Collapsed;
-            topicSetting.Visibility = Visibility.Collapsed;
+            topicSetting.IsPaneOpen = false;
         }
 
         private void Topiclist_ItemClick(object sender, ItemClickEventArgs e)
         {
             ClearTopicSetting();
             topicDelete.Visibility = Visibility.Visible;
-            topicSetting.Visibility = Visibility.Visible;
+            topicSetting.IsPaneOpen = true;
 
             currentTopic = e.ClickedItem as Topic;
             topicTitle.Text = currentTopic.Title;

@@ -86,10 +86,10 @@
                 </SplitView.Pane>
                 <SplitView.Content>
                     <Grid>
-                        <ProgressBar x:Name="webWaiting" IsIndeterminate="True" ShowPaused="True" Visibility="Collapsed" VerticalAlignment="Top"/>
                         <TextBlock Text="Browser | Search | First Crawl" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <WebView x:Name="webView" NavigationStarting="WebView_NavigationStarting" ManipulationCompleted="WebView_ManipulationCompleted"
                                  FrameNavigationCompleted="WebView_FrameNavigationCompleted" NavigationCompleted="WebView_NavigationCompleted"/>
+                        <ProgressBar x:Name="webWaiting" IsIndeterminate="True" ShowPaused="True" Visibility="Collapsed" VerticalAlignment="Top"/>
                     </Grid>
                 </SplitView.Content>
             </SplitView>

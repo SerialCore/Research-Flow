@@ -10,81 +10,83 @@
 
     <Grid>
 
-        <Grid >
-            <GridView x:Name="topiclist" IsItemClickEnabled="True" ItemClick="Topiclist_ItemClick" Margin="5,5,5,40">
-                <GridView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Height="250" Width="250" Padding="10" Background="{Binding Color}">
-                            <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Margin="0,0,0,40"/>
-                            <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Left">
-                                <TextBlock Text="{Binding Deadline}" Foreground="{ThemeResource SystemAccentColorDark1}"/>
-                                <TextBlock Text="{Binding RemindTime}" Foreground="{ThemeResource SystemAccentColorDark1}"/>
-                            </StackPanel>
+        <SplitView x:Name="topicSetting" OpenPaneLength="400" DisplayMode="Inline" PanePlacement="Right">
+            <SplitView.Pane>
+                <Grid x:Name="settingPanel" Padding="10" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="300"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="topicTitle" Background="LightCyan" PlaceholderText="#Tag1##Tag2#Idea/Topic/Project/TODO" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap"/>
+                        <Grid Grid.Row="1" Margin="0,5,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <AppBarButton Grid.Column="0" Click="ColorSpot1" Background="#FFFFF7D1" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/>
+                            <!--E0FFFF-->
+                            <AppBarButton Grid.Column="1" Click="ColorSpot2" Background="#FFE4F9E0" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/>
+                            <!--FFFFE0-->
+                            <AppBarButton Grid.Column="2" Click="ColorSpot3" Background="#FFFFE4F1" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/>
+                            <!--90EE90-->
+                            <AppBarButton Grid.Column="3" Click="ColorSpot4" Background="#FFF2E6FF" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/>
+                            <!--D3D3D3-->
+                            <AppBarButton Grid.Column="4" Click="ColorSpot5" Background="#FFE2F1FF" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/>
+                            <!--FFB6C1-->
+                            <AppBarButton Grid.Column="5" Click="ColorSpot6" Background="#FFF3F2F1" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/>
+                            <!--87CEFA-->
+                            <AppBarButton Grid.Column="6" Click="ColorSpot7" Background="LightSteelBlue" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/>
+                            <!--B0C4DE-->
                         </Grid>
-                    </DataTemplate>
-                </GridView.ItemTemplate>
-            </GridView>
-            <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                <CommandBar.Content>
-                    <TextBlock Text="Topics" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
-                </CommandBar.Content>
-                <AppBarButton Icon="Add" Label="Add" Click="AddTopicSetting"/>
-            </CommandBar>
-            <Grid x:Name="topicSetting" Visibility="Collapsed" VerticalAlignment="Center" HorizontalAlignment="Center"
-                      Width="400" Padding="10" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="200"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-                <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="topicTitle" Background="LightCyan" PlaceholderText="#Tag1##Tag2#Idea/Topic/Project/TODO" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap"/>
-                <Grid Grid.Row="1" Margin="0,5,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <AppBarButton Grid.Column="0" Click="ColorSpot1" Background="#FFFFF7D1" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/>
-                    <!--E0FFFF-->
-                    <AppBarButton Grid.Column="1" Click="ColorSpot2" Background="#FFE4F9E0" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/>
-                    <!--FFFFE0-->
-                    <AppBarButton Grid.Column="2" Click="ColorSpot3" Background="#FFFFE4F1" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/>
-                    <!--90EE90-->
-                    <AppBarButton Grid.Column="3" Click="ColorSpot4" Background="#FFF2E6FF" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/>
-                    <!--D3D3D3-->
-                    <AppBarButton Grid.Column="4" Click="ColorSpot5" Background="#FFE2F1FF" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/>
-                    <!--FFB6C1-->
-                    <AppBarButton Grid.Column="5" Click="ColorSpot6" Background="#FFF3F2F1" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/>
-                    <!--87CEFA-->
-                    <AppBarButton Grid.Column="6" Click="ColorSpot7" Background="LightSteelBlue" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/>
-                    <!--B0C4DE-->
+                        <TimePicker Grid.Row="2" x:Name="remindTime" Header="Remind Me" Time="0" HorizontalAlignment="Stretch" Margin="0,5,0,5"/>
+                        <CalendarDatePicker Grid.Row="3" x:Name="deadLine" Header="Deadline" HorizontalAlignment="Stretch" Margin="0,5,0,5"/>
+                        <Grid Grid.Row="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Row="2" Grid.Column="0" Content="Submit" Click="SubmitTopic" HorizontalAlignment="Stretch" Margin="0,5,5,5" Background="LightSkyBlue"/>
+                            <Button Grid.Row="2" Grid.Column="1" Content="Cancel" Click="CancelTopic" HorizontalAlignment="Stretch" Margin="5,10,0,10" Background="LightGray"/>
+                        </Grid>
+                        <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" x:Name="topicDelete" Content="Delete" Click="DeleteTopic" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
+                    </Grid>
                 </Grid>
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TimePicker Grid.Column="0" x:Name="remindTime" Header="Remind Me" Time="0" HorizontalAlignment="Stretch" Margin="0,5,0,5"/>
-                    <CalendarDatePicker Grid.Column="1" x:Name="deadLine" Header="Deadline" HorizontalAlignment="Stretch" Margin="5,5,0,5"/>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Grid >
+                    <GridView x:Name="topiclist" IsItemClickEnabled="True" ItemClick="Topiclist_ItemClick" Margin="5,5,5,40">
+                        <GridView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Height="250" Width="250" Padding="10" Background="{Binding Color}">
+                                    <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Margin="0,0,0,40"/>
+                                    <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Left">
+                                        <TextBlock Text="{Binding Deadline}" Foreground="{ThemeResource SystemAccentColorDark1}"/>
+                                        <TextBlock Text="{Binding RemindTime}" Foreground="{ThemeResource SystemAccentColorDark1}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                    </GridView>
+                    <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                        <CommandBar.Content>
+                            <TextBlock Text="Topics" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
+                        </CommandBar.Content>
+                        <AppBarButton Icon="Add" Label="Add" Click="AddTopicSetting"/>
+                    </CommandBar>
                 </Grid>
-                <Grid Grid.Row="3">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Button Grid.Row="2" Grid.Column="0" Content="Submit" Click="SubmitTopic" HorizontalAlignment="Stretch" Margin="0,5,5,5" Background="LightSkyBlue"/>
-                    <Button Grid.Row="2" Grid.Column="1" Content="Cancel" Click="CancelTopic" HorizontalAlignment="Stretch" Margin="5,10,0,10" Background="LightGray"/>
-                </Grid>
-                <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" x:Name="topicDelete" Content="Delete" Click="DeleteTopic" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
-            </Grid>
-        </Grid>
-        
+            </SplitView.Content>
+        </SplitView>
+
     </Grid>
 
 </Page>
