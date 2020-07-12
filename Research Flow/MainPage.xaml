@@ -20,51 +20,51 @@
                         BackRequested="NavView_BackRequested">
 
             <NavigationView.MenuItems>
-                <NavigationViewItem Content="Overview" Tag="Overview">
+                <NavigationViewItem x:Uid="Overview" Content="Overview" Tag="Overview">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEB68;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Tag Center" Tag="Tag">
+                <NavigationViewItem x:Uid="TagCenter" Content="Tag Center" Tag="Tag">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8EC;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Topic Case" Tag="Topic">
+                <NavigationViewItem x:Uid="TopicCase" Content="Topic Case" Tag="Topic">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEB50;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 
                 <NavigationViewItemSeparator/>
-                <NavigationViewItem Content="Paper Box" Tag="PaperBox">
+                <NavigationViewItem x:Uid="PaperBox" Content="Paper Box" Tag="PaperBox">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE7BE;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="RSS Service" Tag="RSS">
+                <NavigationViewItem x:Uid="RssService" Content="RSS Service" Tag="RSS">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE701;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Search Engine" Tag="Search">
+                <NavigationViewItem x:Uid="SearchEngine" Content="Search Engine" Tag="Search">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEDE4;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Crawler Service" Tag="Crawler">
+                <NavigationViewItem x:Uid="CrawlerService" Content="Crawler Service" Tag="Crawler">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE24A;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 
                 <NavigationViewItemSeparator/>
-                <NavigationViewItem Content="Drawable Note" Tag="Note">
+                <NavigationViewItem x:Uid="DrawableNote" Content="Drawable Note" Tag="Note">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEE56;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Picture Album" Tag="Picture">
+                <NavigationViewItem x:Uid="PictureAlbum" Content="Picture Album" Tag="Picture">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xEB9F;"/>
                     </NavigationViewItem.Icon>
@@ -72,7 +72,7 @@
             </NavigationView.MenuItems>
 
             <NavigationView.PaneHeader>
-                <TextBlock Text="  Research Flow (beta test)" VerticalAlignment="Center"/>
+                <TextBlock x:Uid="AppName" Text="Research Flow (preview)" VerticalAlignment="Center" Margin="8,0,0,0"/>
             </NavigationView.PaneHeader>
 
             <NavigationView.PaneFooter>
@@ -98,24 +98,24 @@
                                     <TextBlock Grid.Row="0" Grid.Column="1" x:Name="accountName2" FontWeight="Bold" FontSize="14" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
                                     <TextBlock Grid.Row="1" Grid.Column="1" x:Name="accountEmail" VerticalAlignment="Top" Margin="5,0,0,0"/>
                                     <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal">
-                                        <HyperlinkButton Content="Login" Click="AccountLogin_Click" Margin="5,0,10,0"/>
-                                        <HyperlinkButton Content="Logout" Click="AccountLogout_Click"/>
+                                        <HyperlinkButton x:Uid="LoginButton" Content="Login" Click="AccountLogin_Click" Margin="5,0,10,0"/>
+                                        <HyperlinkButton x:Uid="LogoutButton" Content="Logout" Click="AccountLogout_Click"/>
                                     </StackPanel>
                                 </Grid>
                             </Flyout>
                         </FlyoutBase.AttachedFlyout>
                     </ListViewItem>
                     <StackPanel Orientation="Horizontal">
-                        <AppBarButton Icon="AttachCamera" Click="ScreenShot_Upload" ToolTipService.ToolTip="ScreenShot" Width="42" Height="42"/>
+                        <AppBarButton x:Uid="ScreenShotButton" Icon="AttachCamera" Click="ScreenShot_Upload" ToolTipService.ToolTip="ScreenShot" Width="42" Height="42"/>
                         <!--<AppBarButton Icon="SwitchApps" Click="Open_FlowBlade" ToolTipService.ToolTip="Flow" Width="42" Height="42"/>-->
-                        <AppBarButton Icon="Message" Click="Open_ChatBlade" ToolTipService.ToolTip="Chat" Width="42" Height="42"/>
-                        <AppBarButton Icon="FullScreen" Click="FullScreen_Click" ToolTipService.ToolTip="FullScreen" Height="42" Width="42"/>
+                        <AppBarButton x:Uid="ChatButton" Icon="Message" Click="Open_ChatBlade" ToolTipService.ToolTip="Chat" Width="42" Height="42"/>
+                        <AppBarButton x:Uid="FullScreen" Icon="FullScreen" Click="FullScreen_Click" ToolTipService.ToolTip="FullScreen" Height="42" Width="42"/>
                     </StackPanel>
                 </StackPanel>
             </NavigationView.PaneFooter>
 
             <NavigationView.AutoSuggestBox>
-                <AutoSuggestBox x:Name="crawlsearch" QueryIcon="Find" PlaceholderText="search in your crawler database" QuerySubmitted="CrawlSearch_QuerySubmitted"/>
+                <AutoSuggestBox x:Uid="CrawlSearch" x:Name="crawlsearch" QueryIcon="Find" PlaceholderText="search in your crawler database" QuerySubmitted="CrawlSearch_QuerySubmitted"/>
             </NavigationView.AutoSuggestBox>
 
             <Frame x:Name="ContentFrame" Navigated="NavView_Navigated">
@@ -129,7 +129,7 @@
         </NavigationView>
 
         <toolkit:BladeView x:Name="BladeView" BladeMode="Normal" AutoCollapseCountThreshold="2" HorizontalAlignment="Right" Margin="0,32,0,0">
-            <toolkit:BladeItem x:Name="FlowBlade" Header="Flow" TitleBarVisibility="Visible" IsOpen="False">
+            <toolkit:BladeItem x:Uid="FlowBlade" x:Name="FlowBlade" Header="Flow" TitleBarVisibility="Visible" IsOpen="False">
                 <Grid Margin="10">
                 </Grid>
             </toolkit:BladeItem>
@@ -176,9 +176,9 @@
                         </ListView>
                     </ScrollViewer>
 
-                    <TextBox x:Name="chatbox" Grid.Row="1" PlaceholderText="User Requirements" AcceptsReturn="True" TextWrapping="Wrap"/>
+                    <TextBox x:Uid="ChatBox" x:Name="chatbox" Grid.Row="1" PlaceholderText="User Requirements" AcceptsReturn="True" TextWrapping="Wrap"/>
                     <ComboBox x:Name="chattype" Grid.Row="2" SelectionChanged="ChatType_SelectionChanged" HorizontalAlignment="Stretch" Margin="0,0,100,0"/>
-                    <Button Grid.Row="2" Content="Sumbit" Click="SubmitChat" Width="100" HorizontalAlignment="Right" Background="LightSkyBlue"/>
+                    <Button x:Uid="ChatSubmit" Grid.Row="2" Content="Sumbit" Click="SubmitChat" Width="100" HorizontalAlignment="Right" Background="LightSkyBlue"/>
                 </Grid>
             </toolkit:BladeItem>
         </toolkit:BladeView>

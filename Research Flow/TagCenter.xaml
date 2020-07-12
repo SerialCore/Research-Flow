@@ -51,10 +51,10 @@
                     <CommandBar.Content>
                         <TextBlock Text="Tags" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
                     </CommandBar.Content>
-                    <AppBarButton Icon="Add" Label="Add">
+                    <AppBarButton x:Uid="AddTag" Icon="Add" Label="Add">
                         <AppBarButton.Flyout>
                             <Flyout >
-                                <AutoSuggestBox x:Name="tagEmbed" QueryIcon="Add" PlaceholderText="#Tag1##Tag2#" QuerySubmitted="AddTagManually" AllowFocusOnInteraction="True" Width="300"/>
+                                <AutoSuggestBox x:Uid="TagInput" x:Name="tagEmbed" QueryIcon="Add" PlaceholderText="#Tag1##Tag2#" QuerySubmitted="AddTagManually" AllowFocusOnInteraction="True" Width="300"/>
                             </Flyout>
                         </AppBarButton.Flyout>
                     </AppBarButton>
@@ -67,7 +67,7 @@
                     <AppBarButton Icon="Delete" Click="DeleteTagManually" Height="38" Width="38"/>
                 </StackPanel>
                 <Pivot Margin="0,100,0,0" SelectionChanged="Pivot_SelectionChanged">
-                    <PivotItem Header="Topic">
+                    <PivotItem x:Uid="TagOfTopic" Header="Topic">
                         <ListView x:Name="topicTags">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
@@ -76,7 +76,7 @@
                             </ListView.ItemTemplate>
                         </ListView>
                     </PivotItem>
-                    <PivotItem Header="Feed">
+                    <PivotItem x:Uid="TagOfFeed" Header="Feed">
                         <ListView x:Name="feedTags">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
@@ -85,7 +85,7 @@
                             </ListView.ItemTemplate>
                         </ListView>
                     </PivotItem>
-                    <PivotItem Header="Crawl">
+                    <PivotItem x:Uid="TagOfCrawl" Header="Crawl">
                         <ListView x:Name="crawlTags">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
@@ -97,7 +97,7 @@
                             </ListView.ItemTemplate>
                         </ListView>
                     </PivotItem>
-                    <PivotItem Header="Paper">
+                    <PivotItem x:Uid="TagOfPaper" Header="Paper">
                         <ListView x:Name="paperTags">
                             <ListView.ItemTemplate>
                                 <DataTemplate>

@@ -12,7 +12,7 @@
         <StackPanel Background="Transparent" VerticalAlignment="Center">
             <PersonPicture x:Name="accountIcon" Tapped="Login_Tapped" Height="150" Width="150"/>
             <TextBlock x:Name="accountName" FontSize="20" Margin="0,20,0,0" HorizontalAlignment="Center"/>
-            <TextBlock x:Name="accountStatu" Text="Tap the icon to login OneDrive" FontSize="20" Margin="0,10,0,20" HorizontalAlignment="Center"/>
+            <TextBlock x:Uid="AccountStatu" x:Name="accountStatu" Text="Tap the icon to login OneDrive" FontSize="20" Margin="0,10,0,20" HorizontalAlignment="Center"/>
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                 <ProgressBar x:Name="syncStatu" Width="200" Visibility="Collapsed"/>
                 <TextBlock x:Name="syncCount" Margin="10,0,0,0"/>
@@ -21,7 +21,7 @@
 
         <TextBlock x:Name="configState" FontSize="20" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
 
-        <HyperlinkButton Content="Skip this" FontSize="20" Click="SkipAccount" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="50"/>
+        <HyperlinkButton x:Uid="SkipLogin" Content="Skip this" FontSize="20" Click="SkipAccount" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="50"/>
     </Grid>
     
 </Page>

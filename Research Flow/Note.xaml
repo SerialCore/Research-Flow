@@ -27,7 +27,7 @@
                     <ColumnDefinition />
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" x:Name="notefilename" PlaceholderText="Note Name" IsSpellCheckEnabled="False" VerticalAlignment="Center" Margin="5,0"/>
+                <TextBox x:Uid="NoteFileName" Grid.Column="0" x:Name="notefilename" PlaceholderText="Note Name" IsSpellCheckEnabled="False" VerticalAlignment="Center" Margin="5,0"/>
                 <AppBarButton Grid.Column="1" Icon="Save" Click="Save_Note" Height="40" Width="38" LabelPosition="Collapsed"/>
             </Grid>
 
@@ -44,8 +44,8 @@
                 <AppBarButton Icon="Share" Tapped="Flyout_Tapped" Height="40" Width="38">
                     <FlyoutBase.AttachedFlyout>
                         <MenuFlyout>
-                            <MenuFlyoutItem Text="Share" Click="Share_Note"/>
-                            <MenuFlyoutItem Text="SaveAs" Click="Export_Note"/>
+                            <MenuFlyoutItem x:Uid="ShareNote" Text="Share" Click="Share_Note"/>
+                            <MenuFlyoutItem x:Uid="ExportNote" Text="SaveAs" Click="Export_Note"/>
                         </MenuFlyout>
                     </FlyoutBase.AttachedFlyout>
                 </AppBarButton>
@@ -65,9 +65,9 @@
                         </ListView>
                         <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
                             <CommandBar.Content>
-                                <TextBlock Text="Notes" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
+                                <TextBlock x:Uid="NoteHeader" Text="Notes" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
                             </CommandBar.Content>
-                            <AppBarButton Icon="Delete" Label="Delete" Click="Delete_Note"/>
+                            <AppBarButton x:Uid="NoteDelete" Icon="Delete" Label="Delete" Click="Delete_Note"/>
                         </CommandBar>
                     </Grid>
                 </SplitView.Pane>

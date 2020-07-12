@@ -49,7 +49,7 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <ListView Grid.Column="0" x:Name="databaselist" Header="Database" IsItemClickEnabled="True" ItemClick="DatabaseList_ItemClick" Margin="5">
+                            <ListView x:Uid="CrawlDatabasePane" Grid.Column="0" x:Name="databaselist" Header="Database" IsItemClickEnabled="True" ItemClick="DatabaseList_ItemClick" Margin="5">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Padding="5">
@@ -59,7 +59,7 @@
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
-                            <ListView Grid.Column="1" x:Name="servicelist" Header="CrawlerService" IsItemClickEnabled="True" ItemClick="ServiceList_ItemClick" Margin="5">
+                            <ListView x:Uid="CrawlServicePane" Grid.Column="1" x:Name="servicelist" Header="CrawlerService" IsItemClickEnabled="True" ItemClick="ServiceList_ItemClick" Margin="5">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Padding="5">
@@ -73,13 +73,13 @@
                         </Grid>
                         <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
                             <CommandBar.Content>
-                                <TextBlock Text="Pool" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
+                                <TextBlock x:Uid="PoolHeader" Text="Pool" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
                             </CommandBar.Content>
-                            <AppBarButton Icon="List" Label="ShowDatabase" Click="ShowDatabase_Click"/>
+                            <AppBarButton x:Uid="ShowCrawlDatabase" Icon="List" Label="ShowDatabase" Click="ShowDatabase_Click"/>
                             <AppBarSeparator/>
-                            <AppBarButton Icon="Save" Label="SaveCrawlerLinks" Click="SaveLinks_Click"/>
+                            <AppBarButton x:Uid="SaveCrawlLinks" Icon="Save" Label="SaveCrawlerLinks" Click="SaveLinks_Click"/>
                             <AppBarSeparator/>
-                            <AppBarButton Icon="List" Label="Favorites" Click="OpenFavorites_Click"/>
+                            <AppBarButton x:Uid="CrawlFavorites" Icon="List" Label="Favorites" Click="OpenFavorites_Click"/>
                         </CommandBar>
                     </Grid>
                 </SplitView.Content>
@@ -88,24 +88,24 @@
             <Grid Grid.Column="1">
                 <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                     <StackPanel Margin="10,10,10,40">
-                        <TextBox x:Name="crawltext" Header="Text" IsSpellCheckEnabled="False"/>
-                        <AutoSuggestBox x:Name="crawlurl" Header="Link" QueryIcon="Find" QuerySubmitted="CrawlUrl_QuerySubmitted"/>
-                        <TextBox x:Name="crawlcontent" Header="Crawler Content" PlaceholderText="page content | summary" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
-                        <TextBox x:Name="crawltags" Header="Crawler Tags" PlaceholderText="#Tag1##Tag2#" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="100"/>
-                        <AutoSuggestBox x:Name="linkFilter" Header="Select Filters" QueryIcon="Filter"/>
-                        <TextBox x:Name="crawlfilters" Header="Crawler Filters" PlaceholderText="Filter1&#x000A;Filter2" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
+                        <TextBox x:Uid="CrawlText" x:Name="crawltext" Header="Text" IsSpellCheckEnabled="False"/>
+                        <AutoSuggestBox x:Uid="CrawlLink" x:Name="crawlurl" Header="Link" QueryIcon="Find" QuerySubmitted="CrawlUrl_QuerySubmitted"/>
+                        <TextBox x:Uid="CrawlContent" x:Name="crawlcontent" Header="Crawler Content" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
+                        <TextBox x:Uid="CrawlTags" x:Name="crawltags" Header="Crawler Tags" PlaceholderText="#Tag1##Tag2#" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="100"/>
+                        <AutoSuggestBox x:Uid="CrawlSelectFilter" x:Name="linkFilter" Header="Select Filters" QueryIcon="Filter"/>
+                        <TextBox x:Uid="CrawlFilter" x:Name="crawlfilters" Header="Crawler Filters" PlaceholderText="Filter1&#x000A;Filter2" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
                     </StackPanel>
                     <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                        <AppBarButton Icon="Find" Label="CrawlNow" Click="CrawlCrawlable"/>
-                        <AppBarButton Icon="Save" Label="Save">
+                        <AppBarButton x:Uid="CrawlNow" Icon="Find" Label="CrawlNow" Click="CrawlCrawlable"/>
+                        <AppBarButton x:Uid="SaveLink" Icon="Save" Label="Save">
                             <AppBarButton.Flyout>
                                 <MenuFlyout>
-                                    <MenuFlyoutItem Text="To Favorite" Click="SaveFavorite"/>
-                                    <MenuFlyoutItem Text="To Database" Click="SaveCrawlable"/>
+                                    <MenuFlyoutItem x:Uid="SaveToFavorite" Text="To Favorite" Click="SaveFavorite"/>
+                                    <MenuFlyoutItem x:Uid="SaveToDatabase" Text="To Database" Click="SaveCrawlable"/>
                                 </MenuFlyout>
                             </AppBarButton.Flyout>
                         </AppBarButton>
-                        <AppBarButton Icon="Delete" Label="Delete" Click="DeleteCrawlable"/>
+                        <AppBarButton x:Uid="CrawlDelete" Icon="Delete" Label="Delete" Click="DeleteCrawlable"/>
                     </CommandBar>
                 </Grid>
             </Grid>
