@@ -4,8 +4,6 @@ using LogicService.Service;
 using LogicService.Storage;
 using Microsoft.Services.Store.Engagement;
 using System;
-using Windows.Storage;
-using Windows.Storage.Pickers;
 using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -133,42 +131,6 @@ namespace Research_Flow
                 syncStatu.Value = e.SyncedCount;
                 syncCount.Text = e.SyncedCount + "/" + e.TotalCount;
             });
-        }
-
-        private async void CompressPaper_Click(object sender, RoutedEventArgs e)
-        {
-            FolderPicker picker = new FolderPicker();
-            picker.FileTypeFilter.Add(".zip");
-            StorageFolder folder = await picker.PickSingleFolderAsync();
-            if (folder != null)
-                LocalStorage.Compression(await LocalStorage.GetPaperFolderAsync(), folder);
-        }
-
-        private async void ImportPaper_Click(object sender, RoutedEventArgs e)
-        {
-            FileOpenPicker picker = new FileOpenPicker();
-            picker.FileTypeFilter.Add(".zip");
-            StorageFile file = await picker.PickSingleFileAsync();
-            if (file != null)
-                LocalStorage.UnCompression(file, await LocalStorage.GetPaperFolderAsync());
-        }
-
-        private async void CompressPicture_Click(object sender, RoutedEventArgs e)
-        {
-            FolderPicker picker = new FolderPicker();
-            picker.FileTypeFilter.Add(".zip");
-            StorageFolder folder = await picker.PickSingleFolderAsync();
-            if (folder != null)
-                LocalStorage.Compression(await LocalStorage.GetPictureFolderAsync(), folder);
-        }
-
-        private async void ImportPicture_Click(object sender, RoutedEventArgs e)
-        {
-            FileOpenPicker picker = new FileOpenPicker();
-            picker.FileTypeFilter.Add(".zip");
-            StorageFile file = await picker.PickSingleFileAsync();
-            if (file != null)
-                LocalStorage.UnCompression(file, await LocalStorage.GetPictureFolderAsync());
         }
 
         #endregion

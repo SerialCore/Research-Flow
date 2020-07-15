@@ -127,6 +127,15 @@ namespace Research_Flow
 
         #region Pdf Operation
 
+        private async void Paper_UnCompress(object sender, RoutedEventArgs e)
+        {
+            FileOpenPicker picker = new FileOpenPicker();
+            picker.FileTypeFilter.Add(".zip");
+            StorageFile file = await picker.PickSingleFileAsync();
+            if (file != null)
+                LocalStorage.UnCompression(file, await LocalStorage.GetPaperFolderAsync());
+        }
+
         private async void Pdf_Import(object sender, RoutedEventArgs e)
         {
             FileOpenPicker picker = new FileOpenPicker();
@@ -140,6 +149,15 @@ namespace Research_Flow
                     pdfs.Add(file.Name);
                 }
             }
+        }
+
+        private async void Paper_Compress(object sender, RoutedEventArgs e)
+        {
+            FolderPicker picker = new FolderPicker();
+            picker.FileTypeFilter.Add(".zip");
+            StorageFolder folder = await picker.PickSingleFolderAsync();
+            if (folder != null)
+                LocalStorage.Compression(await LocalStorage.GetPaperFolderAsync(), folder);
         }
 
         private async void Pdf_Export(object sender, RoutedEventArgs e)
@@ -167,9 +185,8 @@ namespace Research_Flow
             if (string.IsNullOrEmpty(currentfile))
                 return;
 
-            CoreApplicationView newView = CoreApplication.CreateNewView();
             int newViewId = 0;
-            await newView.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await CoreApplication.CreateNewView().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 Frame frame = new Frame();
                 frame.Navigate(typeof(PdfViewer), currentfile);
@@ -179,7 +196,7 @@ namespace Research_Flow
 
                 newViewId = ApplicationView.GetForCurrentView().Id;
             });
-            bool viewShown = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
+            await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
         }
 
         private void Pdf_Share(object sender, RoutedEventArgs e)

@@ -44,8 +44,8 @@
                 <AppBarButton Icon="Share" Tapped="Flyout_Tapped" Height="40" Width="38">
                     <FlyoutBase.AttachedFlyout>
                         <MenuFlyout>
-                            <MenuFlyoutItem x:Uid="ShareNote" Text="Share" Click="Share_Note"/>
-                            <MenuFlyoutItem x:Uid="ExportNote" Text="SaveAs" Click="Export_Note"/>
+                            <MenuFlyoutItem x:Uid="ShareButton" Text="Share" Click="Share_Note"/>
+                            <MenuFlyoutItem x:Uid="SaveAsButton" Text="SaveAs" Click="Export_Note"/>
                         </MenuFlyout>
                     </FlyoutBase.AttachedFlyout>
                 </AppBarButton>
@@ -67,7 +67,7 @@
                             <CommandBar.Content>
                                 <TextBlock x:Uid="NoteHeader" Text="Notes" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
                             </CommandBar.Content>
-                            <AppBarButton x:Uid="NoteDelete" Icon="Delete" Label="Delete" Click="Delete_Note"/>
+                            <AppBarButton x:Uid="DeleteBarButton" Icon="Delete" Label="Delete" Click="Delete_Note"/>
                         </CommandBar>
                     </Grid>
                 </SplitView.Pane>

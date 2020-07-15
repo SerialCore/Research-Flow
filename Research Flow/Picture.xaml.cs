@@ -99,6 +99,15 @@ namespace Research_Flow
             picCount.Text = "";
         }
 
+        private async void UnCompress_Picture(object sender, RoutedEventArgs e)
+        {
+            FileOpenPicker picker = new FileOpenPicker();
+            picker.FileTypeFilter.Add(".zip");
+            StorageFile file = await picker.PickSingleFileAsync();
+            if (file != null)
+                LocalStorage.UnCompression(file, await LocalStorage.GetPictureFolderAsync());
+        }
+
         private async void Import_Images(object sender, RoutedEventArgs e)
         {
             FileOpenPicker picker = new FileOpenPicker();
@@ -128,6 +137,15 @@ namespace Research_Flow
                 picStatu.Visibility = Visibility.Collapsed;
                 picCount.Text = "";
             }
+        }
+
+        private async void Compress_Picture(object sender, RoutedEventArgs e)
+        {
+            FolderPicker picker = new FolderPicker();
+            picker.FileTypeFilter.Add(".zip");
+            StorageFolder folder = await picker.PickSingleFolderAsync();
+            if (folder != null)
+                LocalStorage.Compression(await LocalStorage.GetPictureFolderAsync(), folder);
         }
 
         private async void Export_Images(object sender, RoutedEventArgs e)

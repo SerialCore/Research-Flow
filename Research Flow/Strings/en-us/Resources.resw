@@ -120,16 +120,16 @@
   <data name="AccountStatu.Text" xml:space="preserve">
     <value>Tap the icon to login OneDrive</value>
   </data>
-  <data name="AddTag.Label" xml:space="preserve">
+  <data name="AddBarButton.Label" xml:space="preserve">
     <value>Add</value>
   </data>
-  <data name="AddTopic.Label" xml:space="preserve">
-    <value>Add</value>
+  <data name="AddSearchToTag.ToolTipService.ToolTip" xml:space="preserve">
+    <value>AddTotag</value>
+  </data>
+  <data name="AddToFavorite.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Favorite</value>
   </data>
   <data name="AppDisplayName" xml:space="preserve">
-    <value>Research Flow (preview)</value>
-  </data>
-  <data name="AppName.Text" xml:space="preserve">
     <value>Research Flow (preview)</value>
   </data>
   <data name="ArchiveSite.Label" xml:space="preserve">
@@ -138,13 +138,7 @@
   <data name="BrowseFeed.Content" xml:space="preserve">
     <value>Browse Feed</value>
   </data>
-  <data name="CancelEngine.Content" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
-  <data name="CancelRSS.Content" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
-  <data name="CancelTopic.Content" xml:space="preserve">
+  <data name="CancelButton.Content" xml:space="preserve">
     <value>Cancel</value>
   </data>
   <data name="ChatBlade.Header" xml:space="preserve">
@@ -159,6 +153,9 @@
   <data name="ChatSubmit.Content" xml:space="preserve">
     <value>Submit</value>
   </data>
+  <data name="CompressAll.Text" xml:space="preserve">
+    <value>Compress All</value>
+  </data>
   <data name="ConfirmEngine.Content" xml:space="preserve">
     <value>Confirm</value>
   </data>
@@ -171,9 +168,6 @@
   <data name="CrawlDatabasePane.Header" xml:space="preserve">
     <value>Database</value>
   </data>
-  <data name="CrawlDelete.Label" xml:space="preserve">
-    <value>Delete</value>
-  </data>
   <data name="CrawlerService.Content" xml:space="preserve">
     <value>Crawler Service</value>
   </data>
@@ -184,15 +178,12 @@
     <value>Crawler Filters</value>
   </data>
   <data name="CrawlFilter.PlaceholderText" xml:space="preserve">
-    <value>Filter1&amp;#x000A;Filter2</value>
+    <value>Filter1;Filter2;(can be blank here)</value>
   </data>
   <data name="CrawlLink.Header" xml:space="preserve">
     <value>Link</value>
   </data>
-  <data name="CrawlNow.Header" xml:space="preserve">
-    <value>CrawlNow</value>
-  </data>
-  <data name="CrawlPicture.Label" xml:space="preserve">
+  <data name="CrawlNow.Label" xml:space="preserve">
     <value>Crawl</value>
   </data>
   <data name="CrawlSearch.PlaceholderText" xml:space="preserve">
@@ -204,31 +195,16 @@
   <data name="CrawlServicePane.Header" xml:space="preserve">
     <value>CrawlerService</value>
   </data>
-  <data name="CrawlSiteNow.Label" xml:space="preserve">
-    <value>Crawl</value>
-  </data>
   <data name="CrawlTags.Header" xml:space="preserve">
     <value>Crawler Tags</value>
-  </data>
-  <data name="CrawlTags.PlaceholderText" xml:space="preserve">
-    <value>#Tag1##Tag2#</value>
   </data>
   <data name="CrawlText.Header" xml:space="preserve">
     <value>Text</value>
   </data>
-  <data name="DeleteEngine.Content" xml:space="preserve">
+  <data name="DeleteBarButton.Label" xml:space="preserve">
     <value>Delete</value>
   </data>
-  <data name="DeletePaper.Label" xml:space="preserve">
-    <value>Delete</value>
-  </data>
-  <data name="DeletePicture.Label" xml:space="preserve">
-    <value>Delete</value>
-  </data>
-  <data name="DeleteRSS.Content" xml:space="preserve">
-    <value>Delete</value>
-  </data>
-  <data name="DeleteTopic.Content" xml:space="preserve">
+  <data name="DeleteButton.Content" xml:space="preserve">
     <value>Delete</value>
   </data>
   <data name="DrawableNote.Content" xml:space="preserve">
@@ -240,8 +216,8 @@
   <data name="EngineUrl.Header" xml:space="preserve">
     <value>Url</value>
   </data>
-  <data name="ExportNote.Text" xml:space="preserve">
-    <value>SaveAs</value>
+  <data name="ExportBarButton.Label" xml:space="preserve">
+    <value>Export</value>
   </data>
   <data name="FeedToFavorite.Content" xml:space="preserve">
     <value>Add Favorite</value>
@@ -258,14 +234,17 @@
   <data name="GetFeedButton.Label" xml:space="preserve">
     <value>GetFeed</value>
   </data>
+  <data name="ImportBarButton.Label" xml:space="preserve">
+    <value>Import</value>
+  </data>
   <data name="LoginButton.Content" xml:space="preserve">
     <value>Login</value>
   </data>
   <data name="LogoutButton.Content" xml:space="preserve">
     <value>Logout</value>
   </data>
-  <data name="NoteDelete.Label" xml:space="preserve">
-    <value>Delete</value>
+  <data name="MultiPictures.Text" xml:space="preserve">
+    <value>Pictures</value>
   </data>
   <data name="NoteFileName.PlaceholderText" xml:space="preserve">
     <value>Note Name</value>
@@ -282,6 +261,18 @@
   <data name="OverviewBanner.Text" xml:space="preserve">
     <value>Constructing Features</value>
   </data>
+  <data name="PageBack.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="PageForward.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Forward</value>
+  </data>
+  <data name="PageRefresh.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="PageStop.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Stop</value>
+  </data>
   <data name="PaperAuthors.Header" xml:space="preserve">
     <value>Authors</value>
   </data>
@@ -297,17 +288,14 @@
   <data name="PaperDownloadPane.Header" xml:space="preserve">
     <value>Download</value>
   </data>
-  <data name="PaperExport.Label" xml:space="preserve">
-    <value>Export</value>
-  </data>
   <data name="PaperFile.Header" xml:space="preserve">
     <value>Paper File</value>
   </data>
-  <data name="PaperHeader.Header" xml:space="preserve">
+  <data name="PaperHeader.Text" xml:space="preserve">
     <value>Papers</value>
   </data>
-  <data name="PaperImport.Label" xml:space="preserve">
-    <value>Import</value>
+  <data name="PaperImportSingle.Text" xml:space="preserve">
+    <value>Single File</value>
   </data>
   <data name="PaperNote.Header" xml:space="preserve">
     <value>Paper Note</value>
@@ -321,17 +309,8 @@
   <data name="PaperPublished.Header" xml:space="preserve">
     <value>Published</value>
   </data>
-  <data name="PaperSaveAs.Text" xml:space="preserve">
-    <value>SaveAs</value>
-  </data>
-  <data name="PaperShare.Text" xml:space="preserve">
-    <value>Share</value>
-  </data>
   <data name="PaperTags.Header" xml:space="preserve">
     <value>Paper Tags</value>
-  </data>
-  <data name="PaperTags.PlaceholderText" xml:space="preserve">
-    <value>#Tag1##Tag2#</value>
   </data>
   <data name="PaperTitle.Header" xml:space="preserve">
     <value>Title</value>
@@ -345,14 +324,8 @@
   <data name="PictureAlbum.Content" xml:space="preserve">
     <value>Picture Album</value>
   </data>
-  <data name="PictureExport.Label" xml:space="preserve">
-    <value>Export</value>
-  </data>
   <data name="PictureHeader.Text" xml:space="preserve">
     <value>Pictures</value>
-  </data>
-  <data name="PictureImport.Label" xml:space="preserve">
-    <value>Import</value>
   </data>
   <data name="PoolHeader.Text" xml:space="preserve">
     <value>Pool</value>
@@ -375,14 +348,14 @@
   <data name="RSSTitle.Header" xml:space="preserve">
     <value>Title</value>
   </data>
+  <data name="SaveAsButton.Text" xml:space="preserve">
+    <value>SaveAs</value>
+  </data>
+  <data name="SaveBarButton.Label" xml:space="preserve">
+    <value>Save</value>
+  </data>
   <data name="SaveCrawlLinks.Label" xml:space="preserve">
     <value>SaveCrawlerLinks</value>
-  </data>
-  <data name="SaveLink.Label" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="SavePaper.Label" xml:space="preserve">
-    <value>Save</value>
   </data>
   <data name="SavePaperToDatabase.Text" xml:space="preserve">
     <value>To Database</value>
@@ -405,6 +378,9 @@
   <data name="SearchEngineBanner.Text" xml:space="preserve">
     <value>Browser | Search | First Crawl</value>
   </data>
+  <data name="SearchEngineList.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Search Engine</value>
+  </data>
   <data name="SelectAllPicture.Label" xml:space="preserve">
     <value>Select All</value>
   </data>
@@ -414,20 +390,14 @@
   <data name="SelectNonePicture.Label" xml:space="preserve">
     <value>Select None</value>
   </data>
-  <data name="ShareNote.Text" xml:space="preserve">
+  <data name="ShareButton.Text" xml:space="preserve">
     <value>Share</value>
   </data>
   <data name="ShowCrawlDatabase.Label" xml:space="preserve">
     <value>ShowDatabase</value>
   </data>
-  <data name="SiteFilter.Header" xml:space="preserve">
-    <value>Crawl Filters</value>
-  </data>
-  <data name="SiteFilter.PlaceholderText" xml:space="preserve">
-    <value>Filter1&amp;#x000A;Filter2&amp;#x000A;(user requirements, can be blank here)</value>
-  </data>
-  <data name="SiteSelectFilter.Header" xml:space="preserve">
-    <value>Select Filters</value>
+  <data name="ShowFavorite.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Favorite List</value>
   </data>
   <data name="SkipLogin.Content" xml:space="preserve">
     <value>Skip this</value>
@@ -470,6 +440,9 @@
   </data>
   <data name="TopicTitle.PlaceholderText" xml:space="preserve">
     <value>#Tag1##Tag2#Idea/Topic/Project/TODO</value>
+  </data>
+  <data name="UnCompressAll.Text" xml:space="preserve">
+    <value>UnCompress All</value>
   </data>
   <data name="WebsiteInfo.Label" xml:space="preserve">
     <value>Info</value>

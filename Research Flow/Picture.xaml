@@ -46,17 +46,33 @@
                 </StackPanel>
             </CommandBar.Content>
             <CommandBar.SecondaryCommands>
-                <AppBarButton x:Uid="DeletePicture" x:Name="delete_button" Icon="Delete" Label="Delete" Click="Delete_Selected" Visibility="Collapsed"/>
+                <AppBarButton x:Uid="DeleteBarButton" x:Name="delete_button" Icon="Delete" Label="Delete" Click="Delete_Selected" Visibility="Collapsed"/>
             </CommandBar.SecondaryCommands>
-            <AppBarButton x:Uid="CrawlPicture" Icon="Download" Label="Crawl">
+            <AppBarButton x:Uid="CrawlNow" Icon="Download" Label="Crawl">
                 <AppBarButton.Flyout>
                     <Flyout>
                         <AutoSuggestBox x:Uid="WebsiteOfPicture" x:Name="sitelink" PlaceholderText="website" QueryIcon="Find" QuerySubmitted="Website_QuerySubmitted" Width="300" AllowFocusOnInteraction="True"/>
                     </Flyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
-            <AppBarButton x:Uid="PictureExport" Icon="Share" Label="Export" Click="Export_Images"/>
-            <AppBarButton x:Uid="PictureImport" Icon="Import" Label="Import" Click="Import_Images"/>
+            <AppBarButton x:Uid="ExportBarButton" Icon="Share" Label="Export">
+                <AppBarButton.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem x:Uid="MultiPictures" Text="Pictures" Click="Export_Images"/>
+                        <MenuFlyoutSeparator/>
+                        <MenuFlyoutItem x:Uid="CompressAll" Text="Compress All" Click="Compress_Picture"/>
+                    </MenuFlyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarButton x:Uid="ImportBarButton" Icon="Import" Label="Import">
+                <AppBarButton.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem x:Uid="MultiPictures" Text="Pictures" Click="Import_Images"/>
+                        <MenuFlyoutSeparator/>
+                        <MenuFlyoutItem x:Uid="UnCompressAll" Text="UnCompress All" Click="UnCompress_Picture"/>
+                    </MenuFlyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
             <AppBarSeparator />
             <AppBarButton x:Uid="SelectNonePicture" x:Name="select_null" Icon="ClearSelection" Label="Select None" Click="Select_None" Visibility="Collapsed"/>
             <AppBarButton x:Uid="SelectAllPicture" x:Name="select_all" Icon="SelectAll" Label="Select All" Click="Select_All" Visibility="Collapsed"/>

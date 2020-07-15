@@ -72,7 +72,7 @@
             </NavigationView.MenuItems>
 
             <NavigationView.PaneHeader>
-                <TextBlock x:Uid="AppName" Text="Research Flow (preview)" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                <TextBlock x:Uid="AppDisplayName" Text="Research Flow (preview)" VerticalAlignment="Center" Margin="8,0,0,0"/>
             </NavigationView.PaneHeader>
 
             <NavigationView.PaneFooter>

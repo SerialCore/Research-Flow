@@ -51,7 +51,7 @@
                     <CommandBar.Content>
                         <TextBlock Text="Tags" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
                     </CommandBar.Content>
-                    <AppBarButton x:Uid="AddTag" Icon="Add" Label="Add">
+                    <AppBarButton x:Uid="AddBarButton" Icon="Add" Label="Add">
                         <AppBarButton.Flyout>
                             <Flyout >
                                 <AutoSuggestBox x:Uid="TagInput" x:Name="tagEmbed" QueryIcon="Add" PlaceholderText="#Tag1##Tag2#" QuerySubmitted="AddTagManually" AllowFocusOnInteraction="True" Width="300"/>

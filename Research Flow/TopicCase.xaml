@@ -56,9 +56,9 @@
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <Button x:Uid="SubmitTopic" Grid.Row="2" Grid.Column="0" Content="Submit" Click="SubmitTopic" HorizontalAlignment="Stretch" Margin="0,5,5,5" Background="LightSkyBlue"/>
-                            <Button x:Uid="CancelTopic" Grid.Row="2" Grid.Column="1" Content="Cancel" Click="CancelTopic" HorizontalAlignment="Stretch" Margin="5,10,0,10" Background="LightGray"/>
+                            <Button x:Uid="CancelButton" Grid.Row="2" Grid.Column="1" Content="Cancel" Click="CancelTopic" HorizontalAlignment="Stretch" Margin="5,10,0,10" Background="LightGray"/>
                         </Grid>
-                        <Button x:Uid="DeleteTopic" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" x:Name="topicDelete" Content="Delete" Click="DeleteTopic" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
+                        <Button x:Uid="DeleteButton" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" x:Name="topicDelete" Content="Delete" Click="DeleteTopic" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
                     </Grid>
                 </Grid>
             </SplitView.Pane>
@@ -81,7 +81,7 @@
                         <CommandBar.Content>
                             <TextBlock x:Uid="TopicHeader" Text="Topics" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
                         </CommandBar.Content>
-                        <AppBarButton x:Uid="AddTopic" Icon="Add" Label="Add" Click="AddTopicSetting"/>
+                        <AppBarButton x:Uid="AddBarButton" Icon="Add" Label="Add" Click="AddTopicSetting"/>
                     </CommandBar>
                 </Grid>
             </SplitView.Content>

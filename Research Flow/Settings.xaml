@@ -37,13 +37,6 @@
                             <ProgressBar x:Name="syncStatu" Width="200" Margin="10,0,0,0" Visibility="Collapsed"/>
                             <TextBlock x:Name="syncCount" VerticalAlignment="Center" Margin="10,0,0,0"/>
                         </StackPanel>
-                        <TextBlock Text="The data following will be managed by user." Margin="0,5,0,2"/>
-                        <StackPanel Orientation="Horizontal" Margin="0,2">
-                            <Button Content="Compress Papers" Click="CompressPaper_Click"/>
-                            <Button Content="Import Pictures" Click="ImportPaper_Click" Margin="10,0,0,0"/>
-                            <Button Content="Compress Pictures" Click="CompressPicture_Click" Margin="10,0,0,0"/>
-                            <Button Content="Import Pictures" Click="ImportPicture_Click" Margin="10,0,0,0"/>
-                        </StackPanel>
 
                     </StackPanel>
                 </ScrollViewer>

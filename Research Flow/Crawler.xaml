@@ -91,13 +91,13 @@
                         <TextBox x:Uid="CrawlText" x:Name="crawltext" Header="Text" IsSpellCheckEnabled="False"/>
                         <AutoSuggestBox x:Uid="CrawlLink" x:Name="crawlurl" Header="Link" QueryIcon="Find" QuerySubmitted="CrawlUrl_QuerySubmitted"/>
                         <TextBox x:Uid="CrawlContent" x:Name="crawlcontent" Header="Crawler Content" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
-                        <TextBox x:Uid="CrawlTags" x:Name="crawltags" Header="Crawler Tags" PlaceholderText="#Tag1##Tag2#" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="100"/>
+                        <TextBox x:Uid="TagInput" x:Name="crawltags" Header="Crawler Tags" PlaceholderText="#Tag1##Tag2#" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="100"/>
                         <AutoSuggestBox x:Uid="CrawlSelectFilter" x:Name="linkFilter" Header="Select Filters" QueryIcon="Filter"/>
                         <TextBox x:Uid="CrawlFilter" x:Name="crawlfilters" Header="Crawler Filters" PlaceholderText="Filter1&#x000A;Filter2" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
                     </StackPanel>
                     <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
                         <AppBarButton x:Uid="CrawlNow" Icon="Find" Label="CrawlNow" Click="CrawlCrawlable"/>
-                        <AppBarButton x:Uid="SaveLink" Icon="Save" Label="Save">
+                        <AppBarButton x:Uid="SaveBarButton" Icon="Save" Label="Save">
                             <AppBarButton.Flyout>
                                 <MenuFlyout>
                                     <MenuFlyoutItem x:Uid="SaveToFavorite" Text="To Favorite" Click="SaveFavorite"/>
@@ -105,7 +105,7 @@
                                 </MenuFlyout>
                             </AppBarButton.Flyout>
                         </AppBarButton>
-                        <AppBarButton x:Uid="CrawlDelete" Icon="Delete" Label="Delete" Click="DeleteCrawlable"/>
+                        <AppBarButton x:Uid="DeleteBarButton" Icon="Delete" Label="Delete" Click="DeleteCrawlable"/>
                     </CommandBar>
                 </Grid>
             </Grid>
