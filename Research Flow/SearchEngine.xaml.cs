@@ -317,7 +317,8 @@ namespace Research_Flow
                 var topics = await LocalStorage.ReadJsonAsync<List<Topic>>(
                     await LocalStorage.GetDataFolderAsync(), "topic.list");
                 topics.Add(new Topic { ID = HashEncode.MakeMD5(DateTimeOffset.Now.ToString()), 
-                    Title = "#QSearch##" + queryQuest.Text + '#' + SearchSources.GetValueOrDefault(searchlist.SelectedItem as string)});
+                    Title = "#QSearch##" + queryQuest.Text + '#' + SearchSources.GetValueOrDefault(searchlist.SelectedItem as string),
+                    Color = "#FFFFF7D1"});
                 LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topic.list", topics);
             }
         }

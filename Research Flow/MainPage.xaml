@@ -5,6 +5,7 @@
     xmlns:local="using:Research_Flow"
     xmlns:data="using:LogicService.Data"
     xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -183,11 +184,17 @@
             </toolkit:BladeItem>
         </toolkit:BladeView>
 
-        <toolkit:InAppNotification x:Name="InAppNotification" 
-                                    ShowDismissButton="True"
-                                    AnimationDuration="00:00:00.1000000"
-                                    VerticalOffset="100"
-                                    HorizontalOffset="0"/>
+        <toolkit:InAppNotification x:Name="InAppNotification"
+                                   ShowDismissButton="True"
+                                   AnimationDuration="00:00:00.1000000"
+                                   VerticalOffset="100"
+                                   HorizontalOffset="0"/>
+
+        <muxc:TeachingTip x:Name="BannerMessage"
+                          PreferredPlacement="RightBottom"
+                          PlacementMargin="20"
+                          IsLightDismissEnabled="False">
+        </muxc:TeachingTip>
 
     </Grid>
 

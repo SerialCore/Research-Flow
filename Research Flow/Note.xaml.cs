@@ -264,7 +264,7 @@ namespace Research_Flow
             FileList.DBInsertList((await LocalStorage.GetNoteFolderAsync()).Name, notename + ".rfn");
             FileList.DBInsertTrace((await LocalStorage.GetNoteFolderAsync()).Name, notename + ".rfn");
 
-            ApplicationMessage.SendMessage("Note "+ notename + " saved", ApplicationMessage.MessageType.Chat);
+            ApplicationMessage.SendMessage("Note "+ notename + " saved", ApplicationMessage.MessageType.Banner);
             foreach (string item in namelist)
             {
                 if (item.Equals(notename))

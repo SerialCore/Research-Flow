@@ -4,7 +4,6 @@ using LogicService.Security;
 using LogicService.Storage;
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -77,6 +76,7 @@ namespace Research_Flow
                 Topic topic = new Topic();
                 topic.Title = topicTitle.Text;
                 topic.Color = (topicTitle.Background as SolidColorBrush).Color.ToString();
+                topic.Completeness = completeness.Value;
                 if (deadLine.Date != null)
                     topic.Deadline = deadLine.Date.Value;
                 if (remindTime.Time != null)
@@ -174,6 +174,7 @@ namespace Research_Flow
         {
             currentTopic = null;
             topicTitle.Text = "";
+            completeness.Value = 0;
             deadLine.Date = null;
             remindTime.Time = TimeSpan.Zero;
 
@@ -195,6 +196,7 @@ namespace Research_Flow
             byte g = (byte)(Convert.ToUInt32(hex.Substring(4, 2), 16));
             byte b = (byte)(Convert.ToUInt32(hex.Substring(6, 2), 16));
             topicTitle.Background = new SolidColorBrush(Color.FromArgb(a, r, g, b));
+            completeness.Value = currentTopic.Completeness;
             if (currentTopic.Deadline != DateTimeOffset.MinValue)
                 deadLine.Date = currentTopic.Deadline;
             if (currentTopic.RemindTime != TimeSpan.Zero)

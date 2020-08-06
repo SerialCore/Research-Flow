@@ -8,7 +8,11 @@
         public enum MessageType
         {
             /// <summary>
-            /// Information
+            /// Real-time Message in App
+            /// </summary>
+            Banner,
+            /// <summary>
+            /// Robot Message
             /// </summary>
             Chat,
             /// <summary>
@@ -16,7 +20,7 @@
             /// </summary>
             InApp,
             /// <summary>
-            /// Reminder
+            /// Background Notification
             /// </summary>
             Toast
         }

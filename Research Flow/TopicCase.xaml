@@ -21,6 +21,7 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
                         <TextBox x:Uid="TopicTitle" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="topicTitle" Background="LightCyan" PlaceholderText="#Tag1##Tag2#Idea/Topic/Project/TODO" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap"/>
                         <Grid Grid.Row="1" Margin="0,5,0,0">
@@ -48,9 +49,10 @@
                             <AppBarButton Grid.Column="6" Click="ColorSpot7" Background="LightSteelBlue" CornerRadius="20" Height="30" Width="30" HorizontalAlignment="Center"/>
                             <!--B0C4DE-->
                         </Grid>
-                        <TimePicker x:Uid="TopicRemindMe" Grid.Row="2" x:Name="remindTime" Header="Remind Me" Time="0" HorizontalAlignment="Stretch" Margin="0,5,0,5"/>
-                        <CalendarDatePicker x:Uid="TopicDeadLine" Grid.Row="3" x:Name="deadLine" Header="Deadline" HorizontalAlignment="Stretch" Margin="0,5,0,5"/>
-                        <Grid Grid.Row="4">
+                        <Slider x:Uid="TopicCompleteness" Grid.Row="2" x:Name="completeness" Header="Completeness" Maximum="100" TickFrequency="10" TickPlacement="Outside"/>
+                        <TimePicker x:Uid="TopicRemindMe" Grid.Row="3" x:Name="remindTime" Header="Remind Me" Time="0" HorizontalAlignment="Stretch" Margin="0,5,0,5"/>
+                        <CalendarDatePicker x:Uid="TopicDeadLine" Grid.Row="4" x:Name="deadLine" Header="Deadline" HorizontalAlignment="Stretch" Margin="0,5,0,5"/>
+                        <Grid Grid.Row="5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
                                 <ColumnDefinition />
@@ -58,7 +60,7 @@
                             <Button x:Uid="SubmitTopic" Grid.Row="2" Grid.Column="0" Content="Submit" Click="SubmitTopic" HorizontalAlignment="Stretch" Margin="0,5,5,5" Background="LightSkyBlue"/>
                             <Button x:Uid="CancelButton" Grid.Row="2" Grid.Column="1" Content="Cancel" Click="CancelTopic" HorizontalAlignment="Stretch" Margin="5,10,0,10" Background="LightGray"/>
                         </Grid>
-                        <Button x:Uid="DeleteButton" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" x:Name="topicDelete" Content="Delete" Click="DeleteTopic" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
+                        <Button x:Uid="DeleteButton" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" x:Name="topicDelete" Content="Delete" Click="DeleteTopic" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
                     </Grid>
                 </Grid>
             </SplitView.Pane>

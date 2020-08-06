@@ -429,6 +429,9 @@
   <data name="TopicCase.Content" xml:space="preserve">
     <value>话题</value>
   </data>
+  <data name="TopicCompleteness.Header" xml:space="preserve">
+    <value>完成度</value>
+  </data>
   <data name="TopicDeadLine.Header" xml:space="preserve">
     <value>截止日期</value>
   </data>

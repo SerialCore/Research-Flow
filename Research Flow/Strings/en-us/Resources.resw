@@ -429,6 +429,9 @@
   <data name="TopicCase.Content" xml:space="preserve">
     <value>Topic Case</value>
   </data>
+  <data name="TopicCompleteness.Header" xml:space="preserve">
+    <value>Completeness</value>
+  </data>
   <data name="TopicDeadLine.Header" xml:space="preserve">
     <value>Deadline</value>
   </data>

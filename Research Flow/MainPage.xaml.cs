@@ -55,6 +55,11 @@ namespace Research_Flow
              {
                  switch (type)
                  {
+                     case ApplicationMessage.MessageType.Banner:
+                         BannerMessage.Title = "Research Flow";
+                         BannerMessage.Subtitle = message;
+                         BannerMessage.IsOpen = true;
+                         break;
                      case ApplicationMessage.MessageType.Chat:
                          ChatBlade.IsOpen = true;
                          IdentifyChat(new ChatBlock { Comment = message, IsSelf = false, Published = DateTimeOffset.Now });
