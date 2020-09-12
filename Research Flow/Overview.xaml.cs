@@ -59,7 +59,8 @@ namespace Research_Flow
 
         private void Task_TaskCompleted(object sender, TaskCompletedEventArgs e)
         {
-            ApplicationMessage.SendMessage("FeedTask Completed", ApplicationMessage.MessageType.Toast);
+            ApplicationMessage.SendMessage(new ShortMessage { Title = "Task", Content = "FeedTask Completed", Time = DateTimeOffset.Now}, 
+                ApplicationMessage.MessageType.Toast);
         }
 
         #endregion

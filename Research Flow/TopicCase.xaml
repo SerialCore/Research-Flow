@@ -66,7 +66,8 @@
             </SplitView.Pane>
             <SplitView.Content>
                 <Grid >
-                    <GridView x:Name="topiclist" IsItemClickEnabled="True" ItemClick="Topiclist_ItemClick" Margin="5,5,5,40">
+                    <GridView x:Name="topiclist" IsItemClickEnabled="True" ItemClick="Topiclist_ItemClick" Margin="5,5,5,40"
+                              CanDragItems="True" CanReorderItems="True" AllowDrop="True" DragItemsCompleted="TopicList_DragItemsCompleted">
                         <GridView.ItemTemplate>
                             <DataTemplate>
                                 <Grid Height="250" Width="250" Padding="10" Background="{Binding Color}">

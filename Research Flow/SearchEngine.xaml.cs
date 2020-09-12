@@ -397,7 +397,8 @@ namespace Research_Flow
                         await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                         {
                             downloadClose.IsEnabled = true;
-                            ApplicationMessage.SendMessage("RssException: " + exception, ApplicationMessage.MessageType.InApp);
+                            ApplicationMessage.SendMessage(new ShortMessage { Title = "DownloadException", Content = exception, Time = DateTimeOffset.Now }, 
+                                ApplicationMessage.MessageType.InApp);
                         });
                     });
             }
@@ -479,7 +480,8 @@ namespace Research_Flow
                     {
                         currentCrawled = null;
                         craWaiting.IsActive = false;
-                        ApplicationMessage.SendMessage("SearchException: " + exception, ApplicationMessage.MessageType.InApp);
+                        ApplicationMessage.SendMessage(new ShortMessage { Title = "SearchException", Content = exception , Time = DateTimeOffset.Now }, 
+                            ApplicationMessage.MessageType.InApp);
                     });
                 });
         }

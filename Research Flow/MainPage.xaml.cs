@@ -49,26 +49,26 @@ namespace Research_Flow
             InitializeChat();
         }
 
-        private async void AppMessage_MessageReceived(string message, ApplicationMessage.MessageType type)
+        private async void AppMessage_MessageReceived(ShortMessage message, ApplicationMessage.MessageType type)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
              {
                  switch (type)
                  {
                      case ApplicationMessage.MessageType.Banner:
-                         BannerMessage.Title = "Research Flow";
-                         BannerMessage.Subtitle = message;
+                         BannerMessage.Title = message.Title;
+                         BannerMessage.Subtitle = message.Content;
                          BannerMessage.IsOpen = true;
                          break;
                      case ApplicationMessage.MessageType.Chat:
                          ChatBlade.IsOpen = true;
-                         IdentifyChat(new ChatBlock { Comment = message, IsSelf = false, Published = DateTimeOffset.Now });
+                         IdentifyChat(new ChatBlock { Comment = message.Title + "\t\n" + message.Content, IsSelf = false, Published = message.Time });
                          break;
                      case ApplicationMessage.MessageType.InApp:
-                         InAppNotification.Show(message);
+                         InAppNotification.Show(message.Title + ": " + message.Content);
                          break;
                      case ApplicationMessage.MessageType.Toast:
-                         ApplicationNotification.ShowTextToast("Research Flow", message);
+                         ApplicationNotification.ShowTextToast(message.Title, message.Content);
                          break;
                  }
              });
@@ -301,12 +301,14 @@ namespace Research_Flow
                 try
                 {
                     await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetPictureAsync(), file);
-                    ApplicationMessage.SendMessage("Screenshot Saved to OneDrive", ApplicationMessage.MessageType.Toast);
+                    ApplicationMessage.SendMessage(new ShortMessage { Title = "Screenshot", Content = "Saved to OneDrive", Time = DateTimeOffset.Now },
+                        ApplicationMessage.MessageType.Toast);
                 }
                 catch
                 {
                     await file.CopyAsync(KnownFolders.PicturesLibrary, file.Name);
-                    ApplicationMessage.SendMessage("Screenshot Saved to Pictures Library", ApplicationMessage.MessageType.Toast);
+                    ApplicationMessage.SendMessage(new ShortMessage { Title = "Screenshot", Content = "Saved to Pictures Library", Time = DateTimeOffset.Now }, 
+                        ApplicationMessage.MessageType.Toast);
                 }
             }
         }

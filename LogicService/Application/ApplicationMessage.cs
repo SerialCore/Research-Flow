@@ -1,4 +1,6 @@
-﻿namespace LogicService.Application
+﻿using System;
+
+namespace LogicService.Application
 {
     /// <summary>
     /// Instance of customized event handle
@@ -25,7 +27,7 @@
             Toast
         }
 
-        public delegate void MessageHandle(string message, MessageType type);
+        public delegate void MessageHandle(ShortMessage message, MessageType type);
         // public static event EventHandler<MessageEventArgs> MessageReceived;
 
         /// <summary>
@@ -39,13 +41,22 @@
         /// </summary>
         /// <param name="text">message</param>
         /// <param name="span">time span for message in second</param>
-        public static void SendMessage(string text, MessageType type)
+        public static void SendMessage(ShortMessage message, MessageType type)
         {
             if (MessageReceived != null)
             {
-                MessageReceived(text, type);
+                MessageReceived(message, type);
             }
         }
 
+    }
+
+    public class ShortMessage
+    {
+        public string Title { get; set; }
+
+        public string Content { get; set; }
+
+        public DateTimeOffset Time { get; set; }
     }
 }

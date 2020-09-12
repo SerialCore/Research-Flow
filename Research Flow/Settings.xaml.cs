@@ -74,7 +74,8 @@ namespace Research_Flow
             }
             else
             {
-                ApplicationMessage.SendMessage("Your device doesn't support Feedback Hub", ApplicationMessage.MessageType.InApp);
+                ApplicationMessage.SendMessage(new ShortMessage { Title = "Exception", Content = "Your device doesn't support Feedback Hub", Time = DateTimeOffset.Now}, 
+                    ApplicationMessage.MessageType.InApp);
             }
         }
 
@@ -147,7 +148,8 @@ namespace Research_Flow
             }
             catch (Exception exception)
             {
-                ApplicationMessage.SendMessage("SettingException: " + exception, ApplicationMessage.MessageType.InApp);
+                ApplicationMessage.SendMessage(new ShortMessage { Title = "SettingException", Content = exception.Message, Time = DateTimeOffset.Now },
+                    ApplicationMessage.MessageType.InApp);
             }
         }
 
@@ -161,7 +163,8 @@ namespace Research_Flow
             }
             catch (Exception exception)
             {
-                ApplicationMessage.SendMessage("SettingException: " + exception, ApplicationMessage.MessageType.InApp);
+                ApplicationMessage.SendMessage(new ShortMessage { Title = "SettingException", Content = exception.Message, Time = DateTimeOffset.Now },
+                    ApplicationMessage.MessageType.InApp);
             }
         }
 
@@ -175,7 +178,8 @@ namespace Research_Flow
             }
             catch (Exception exception)
             {
-                ApplicationMessage.SendMessage("SettingException: " + exception, ApplicationMessage.MessageType.InApp);
+                ApplicationMessage.SendMessage(new ShortMessage { Title = "SettingException", Content = exception.Message, Time = DateTimeOffset.Now }, 
+                    ApplicationMessage.MessageType.InApp);
             }
         }
 

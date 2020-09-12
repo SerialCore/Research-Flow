@@ -176,7 +176,8 @@ namespace Research_Flow
             }
             catch (Exception ex)
             {
-                ApplicationMessage.SendMessage("PdfException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+                ApplicationMessage.SendMessage(new ShortMessage { Title = "PdfException", Content = ex.Message, Time = DateTimeOffset.Now },
+                    ApplicationMessage.MessageType.InApp);
             }
         }
 
@@ -227,7 +228,7 @@ namespace Research_Flow
             }
             catch (Exception ex)
             {
-                ApplicationMessage.SendMessage("PdfException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+                ApplicationMessage.SendMessage(new ShortMessage { Title = "PdfException", Content = ex.Message, Time = DateTimeOffset.Now }, ApplicationMessage.MessageType.InApp);
             }
 
             deferral.Complete();
@@ -272,7 +273,8 @@ namespace Research_Flow
         {
             if (string.IsNullOrEmpty(paperid.Text) || string.IsNullOrEmpty(papertitle.Text))
             {
-                ApplicationMessage.SendMessage("PaperWarning: There must be Title and ID", ApplicationMessage.MessageType.InApp);
+                ApplicationMessage.SendMessage(new ShortMessage { Title = "PaperWarning", Content = "There must be Title and ID", Time = DateTimeOffset.Now }, 
+                    ApplicationMessage.MessageType.InApp);
                 return;
             }
 
@@ -330,7 +332,8 @@ namespace Research_Flow
                     }
                     catch (Exception ex)
                     {
-                        ApplicationMessage.SendMessage("PdfException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+                        ApplicationMessage.SendMessage(new ShortMessage { Title = "PdfException", Content = ex.Message, Time = DateTimeOffset.Now },
+                            ApplicationMessage.MessageType.InApp);
                     }
                 }
             }
@@ -372,7 +375,8 @@ namespace Research_Flow
                 }
                 catch (Exception ex)
                 {
-                    ApplicationMessage.SendMessage("PdfException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+                    ApplicationMessage.SendMessage(new ShortMessage { Title = "PdfException", Content = ex.Message, Time = DateTimeOffset.Now }, 
+                        ApplicationMessage.MessageType.InApp);
                 }
             }
 

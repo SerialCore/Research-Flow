@@ -100,7 +100,6 @@ namespace Research_Flow
                 // register a task
                 SubmitTopictoTask(topic);
             }
-            ClearTopicSetting();
         }
 
         private async void SubmitTopictoTask(Topic topic)
@@ -139,7 +138,8 @@ namespace Research_Flow
                 }
                 catch (ArgumentException)
                 {
-                    ApplicationMessage.SendMessage("TopicWarning: Research Flow does not offer Time-Machine", ApplicationMessage.MessageType.InApp);
+                    ApplicationMessage.SendMessage(new ShortMessage { Title = "TopicWarning", Content = "Research Flow does not offer Time-Machine", Time = DateTimeOffset.Now }, 
+                        ApplicationMessage.MessageType.InApp);
                 }
             }
         }
@@ -203,5 +203,9 @@ namespace Research_Flow
                 remindTime.Time = currentTopic.RemindTime;
         }
 
+        private async void TopicList_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
+        {
+            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topic.list", topics);
+        }
     }
 }

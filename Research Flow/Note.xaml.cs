@@ -49,7 +49,8 @@ namespace Research_Flow
                         }
                         catch (Exception ex)
                         {
-                            ApplicationMessage.SendMessage("NoteException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+                            ApplicationMessage.SendMessage(new ShortMessage{ Title = "NoteException", Content = ex.Message, Time = DateTimeOffset.Now }, 
+                                ApplicationMessage.MessageType.InApp);
                         }
                     }
                 }
@@ -117,7 +118,8 @@ namespace Research_Flow
             }
             catch (Exception ex)
             {
-                ApplicationMessage.SendMessage("NoteException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+                ApplicationMessage.SendMessage(new ShortMessage { Title = "NoteException", Content = ex.Message, Time = DateTimeOffset.Now }, 
+                    ApplicationMessage.MessageType.InApp);
             }
         }
 
@@ -134,7 +136,8 @@ namespace Research_Flow
             }
             catch (Exception ex)
             {
-                ApplicationMessage.SendMessage("NoteException: " + ex.Message, ApplicationMessage.MessageType.InApp);
+                ApplicationMessage.SendMessage(new ShortMessage { Title = "NoteException", Content = ex.Message, Time = DateTimeOffset.Now },
+                    ApplicationMessage.MessageType.InApp);
             }
         }
 
@@ -166,6 +169,7 @@ namespace Research_Flow
         }
 
         #endregion
+
 
         #region File Operation (out App)
 
@@ -264,7 +268,8 @@ namespace Research_Flow
             FileList.DBInsertList((await LocalStorage.GetNoteFolderAsync()).Name, notename + ".rfn");
             FileList.DBInsertTrace((await LocalStorage.GetNoteFolderAsync()).Name, notename + ".rfn");
 
-            ApplicationMessage.SendMessage("Note "+ notename + " saved", ApplicationMessage.MessageType.Banner);
+            ApplicationMessage.SendMessage(new ShortMessage { Title = "Note", Content = notename + " is saved", Time = DateTime.Now }, 
+                ApplicationMessage.MessageType.Banner);
             foreach (string item in namelist)
             {
                 if (item.Equals(notename))

@@ -177,7 +177,8 @@ namespace Research_Flow
                     {
                         currentService = null;
                         craWaiting.IsActive = false;
-                        ApplicationMessage.SendMessage("CrawlerException: " + exception, ApplicationMessage.MessageType.InApp);
+                        ApplicationMessage.SendMessage(new ShortMessage { Title = "CrawlerException", Content = exception, Time = DateTimeOffset.Now },
+                            ApplicationMessage.MessageType.InApp);
                     });
                 });
         }
@@ -186,7 +187,8 @@ namespace Research_Flow
         {
             if (string.IsNullOrEmpty(crawltext.Text) || string.IsNullOrEmpty(crawlurl.Text))
             {
-                ApplicationMessage.SendMessage("CrawlerWarning: There must be Text and Url", ApplicationMessage.MessageType.InApp);
+                ApplicationMessage.SendMessage(new ShortMessage { Title = "CrawlerWarning", Content = "There must be Text and Url", Time = DateTimeOffset.Now }, 
+                    ApplicationMessage.MessageType.InApp);
                 return;
             }
 
