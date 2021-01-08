@@ -60,7 +60,7 @@
                             </MenuFlyout>
                         </AppBarButton.Flyout>
                     </AppBarButton>
-                    <AppBarButton x:Uid="PaperPreview" Icon="Preview" Label="Preview" Click="Pdf_Preview"/>
+                    <AppBarButton x:Uid="PaperPreview" Icon="Preview" Label="Open" Click="Pdf_Open"/>
                 </CommandBar>
             </Grid>
 

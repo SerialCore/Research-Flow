@@ -116,14 +116,12 @@ namespace Research_Flow
         private readonly List<(string Tag, Type Page)> _pages = new List<(string Tag, Type Page)>
         {
             ("Overview", typeof(Overview)),
-            ("Tag", typeof(TagCenter)),
             ("Topic", typeof(TopicCase)),
-            ("PaperBox", typeof(PaperBox)),
+            ("Paper", typeof(PaperBox)),
             ("RSS", typeof(RSS)),
             ("Search", typeof(SearchEngine)),
             ("Crawler", typeof(Crawler)),
             ("Note", typeof(Note)),
-            ("Picture", typeof(Picture)),
         };
 
         private void NavView_Loaded(object sender, RoutedEventArgs e)
@@ -272,9 +270,6 @@ namespace Research_Flow
         private void Open_ChatBlade(object sender, RoutedEventArgs e)
             => ChatBlade.IsOpen = true;
 
-        private void CrawlSearch_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-            => ContentFrame.Navigate(typeof(Crawler), crawlsearch.Text);
-
         private async void ScreenShot_Upload(object sender, RoutedEventArgs e)
         {
             var bitmap = new RenderTargetBitmap();
@@ -302,13 +297,13 @@ namespace Research_Flow
                 {
                     await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetPictureAsync(), file);
                     ApplicationMessage.SendMessage(new ShortMessage { Title = "Screenshot", Content = "Saved to OneDrive", Time = DateTimeOffset.Now },
-                        ApplicationMessage.MessageType.Toast);
+                        ApplicationMessage.MessageType.Banner);
                 }
                 catch
                 {
-                    await file.CopyAsync(KnownFolders.PicturesLibrary, file.Name);
+                    await file.CopyAsync(KnownFolders.PicturesLibrary);
                     ApplicationMessage.SendMessage(new ShortMessage { Title = "Screenshot", Content = "Saved to Pictures Library", Time = DateTimeOffset.Now }, 
-                        ApplicationMessage.MessageType.Toast);
+                        ApplicationMessage.MessageType.Banner);
                 }
             }
         }

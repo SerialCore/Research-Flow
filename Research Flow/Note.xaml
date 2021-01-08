@@ -17,21 +17,16 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Row="0" Grid.Column="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="auto"/>
-                </Grid.ColumnDefinitions>
-                <TextBox x:Uid="NoteFileName" Grid.Column="0" x:Name="notefilename" PlaceholderText="Note Name" IsSpellCheckEnabled="False" VerticalAlignment="Center" Margin="5,0"/>
-                <AppBarButton Grid.Column="1" Icon="Save" Click="Save_Note" Height="40" Width="38" LabelPosition="Collapsed"/>
+                <AutoSuggestBox x:Uid="NoteFileName" x:Name="notefilename" PlaceholderText="Note Name" QuerySubmitted="notefilename_QuerySubmitted" QueryIcon="Save" VerticalAlignment="Center" Margin="5,0"/>
             </Grid>
 
-            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                 <AppBarButton Click="ChooseInputDevice" Tag="pen" Height="40" Width="38">
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xED5F;" />
                 </AppBarButton>

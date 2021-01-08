@@ -4,13 +4,11 @@ using LogicService.Storage;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.Storage.Pickers;
-using Windows.UI.Core;
+using Windows.System;
 using Windows.UI.Popups;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -181,23 +179,24 @@ namespace Research_Flow
             }
         }
 
-        private async void Pdf_Preview(object sender, RoutedEventArgs e)
+        private async void Pdf_Open(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(currentfile))
                 return;
 
-            int newViewId = 0;
-            await CoreApplication.CreateNewView().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                Frame frame = new Frame();
-                frame.Navigate(typeof(PdfViewer), currentfile);
-                Window.Current.Content = frame;
-                // You have to activate the window in order to show it later.
-                Window.Current.Activate();
+            //int newViewId = 0;
+            //await CoreApplication.CreateNewView().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            //{
+            //    Frame frame = new Frame();
+            //    frame.Navigate(typeof(PdfViewer), currentfile);
+            //    Window.Current.Content = frame;
+            //    // You have to activate the window in order to show it later.
+            //    Window.Current.Activate();
 
-                newViewId = ApplicationView.GetForCurrentView().Id;
-            });
-            await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
+            //    newViewId = ApplicationView.GetForCurrentView().Id;
+            //});
+            //await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
+            await Launcher.LaunchFileAsync(await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(currentfile));
         }
 
         private void Pdf_Share(object sender, RoutedEventArgs e)

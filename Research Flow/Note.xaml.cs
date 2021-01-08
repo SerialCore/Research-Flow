@@ -55,7 +55,7 @@ namespace Research_Flow
                     }
                 }
             }
-            
+
             InitializeNote();
         }
 
@@ -249,8 +249,8 @@ namespace Research_Flow
         /// will be recorded
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void Save_Note(object sender, RoutedEventArgs e)
+        /// <param name="args"></param>
+        private async void notefilename_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             string notename; // without extention
             if (notefilename.Text.Equals(""))
@@ -261,14 +261,14 @@ namespace Research_Flow
             {
                 notename = notefilename.Text.Replace(".rfn", ""); // in case of *.rfn.rfn
             }
-            StorageFile file = await (await LocalStorage.GetNoteFolderAsync()).CreateFileAsync(notename + ".rfn", CreationCollisionOption.OpenIfExists);
+            StorageFile file = await(await LocalStorage.GetNoteFolderAsync()).CreateFileAsync(notename + ".rfn", CreationCollisionOption.OpenIfExists);
             ExportAsInk(file);
             // record
             // note and paper shall be recorded dependently from general write, and how to deal with subfolder?
             FileList.DBInsertList((await LocalStorage.GetNoteFolderAsync()).Name, notename + ".rfn");
             FileList.DBInsertTrace((await LocalStorage.GetNoteFolderAsync()).Name, notename + ".rfn");
 
-            ApplicationMessage.SendMessage(new ShortMessage { Title = "Note", Content = notename + " is saved", Time = DateTime.Now }, 
+            ApplicationMessage.SendMessage(new ShortMessage { Title = "Note", Content = notename + " is saved", Time = DateTime.Now },
                 ApplicationMessage.MessageType.Banner);
             foreach (string item in namelist)
             {

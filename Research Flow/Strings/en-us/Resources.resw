@@ -169,7 +169,7 @@
     <value>Database</value>
   </data>
   <data name="CrawlerService.Content" xml:space="preserve">
-    <value>Crawler Service</value>
+    <value>Crawler</value>
   </data>
   <data name="CrawlFavorites.Label" xml:space="preserve">
     <value>Favorites</value>
@@ -208,7 +208,7 @@
     <value>Delete</value>
   </data>
   <data name="DrawableNote.Content" xml:space="preserve">
-    <value>Drawable Note</value>
+    <value>Draw</value>
   </data>
   <data name="EngineName.Header" xml:space="preserve">
     <value>Name</value>
@@ -224,6 +224,9 @@
   </data>
   <data name="FeedToPaper.Content" xml:space="preserve">
     <value>Add Paper</value>
+  </data>
+  <data name="FileExplore.Content" xml:space="preserve">
+    <value>Explore</value>
   </data>
   <data name="FlowBlade.Header" xml:space="preserve">
     <value>Flow</value>
@@ -280,7 +283,7 @@
     <value>Author1, Author2, Author3</value>
   </data>
   <data name="PaperBox.Content" xml:space="preserve">
-    <value>Paper Box</value>
+    <value>Paper</value>
   </data>
   <data name="PaperDatabasePane.Header" xml:space="preserve">
     <value>Database</value>
@@ -322,7 +325,7 @@
     <value>Performance</value>
   </data>
   <data name="PictureAlbum.Content" xml:space="preserve">
-    <value>Picture Album</value>
+    <value>Album</value>
   </data>
   <data name="PictureHeader.Text" xml:space="preserve">
     <value>Pictures</value>
@@ -340,7 +343,7 @@
     <value>Is journal</value>
   </data>
   <data name="RssService.Content" xml:space="preserve">
-    <value>RSS Service</value>
+    <value>RSS</value>
   </data>
   <data name="RSSSource.Header" xml:space="preserve">
     <value>Url</value>
@@ -373,7 +376,7 @@
     <value>Search Quest</value>
   </data>
   <data name="SearchEngine.Content" xml:space="preserve">
-    <value>Search Engine</value>
+    <value>Search</value>
   </data>
   <data name="SearchEngineBanner.Text" xml:space="preserve">
     <value>Browser | Search | First Crawl</value>
@@ -427,7 +430,7 @@
     <value>Topic</value>
   </data>
   <data name="TopicCase.Content" xml:space="preserve">
-    <value>Topic Case</value>
+    <value>Topic</value>
   </data>
   <data name="TopicCompleteness.Header" xml:space="preserve">
     <value>Completeness</value>

@@ -225,6 +225,9 @@
   <data name="FeedToPaper.Content" xml:space="preserve">
     <value>转为论文</value>
   </data>
+  <data name="FileExplore.Content" xml:space="preserve">
+    <value>文件夹</value>
+  </data>
   <data name="FlowBlade.Header" xml:space="preserve">
     <value>流</value>
   </data>
