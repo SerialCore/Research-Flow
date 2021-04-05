@@ -20,22 +20,21 @@
                         BackRequested="NavView_BackRequested">
 
             <NavigationView.MenuItems>
-                <NavigationViewItem x:Uid="Overview" Content="Overview" Tag="Overview"/>
-                <NavigationViewItem x:Uid="TopicCase" Content="Topic" Tag="Topic"/>
+                <NavigationViewItem Content="Overview" Tag="Overview"/>
+                <NavigationViewItem Content="Topic" Tag="Topic"/>
 
                 <NavigationViewItemSeparator/>
-                <NavigationViewItem x:Uid="PaperBox" Content="Paper" Tag="Paper"/>
-                <NavigationViewItem x:Uid="RssService" Content="RSS" Tag="RSS"/>
-                <NavigationViewItem x:Uid="SearchEngine" Content="Search" Tag="Search"/>
-                <NavigationViewItem x:Uid="CrawlerService" Content="Crawler" Tag="Crawler"/>
+                <NavigationViewItem Content="Paper" Tag="Paper"/>
+                <NavigationViewItem Content="RSS" Tag="RSS"/>
+                <NavigationViewItem Content="Search" Tag="Search"/>
 
                 <NavigationViewItemSeparator/>
-                <NavigationViewItem x:Uid="DrawableNote" Content="Draw" Tag="Note"/>
+                <NavigationViewItem Content="Draw" Tag="Note"/>
             </NavigationView.MenuItems>
 
             <NavigationView.PaneFooter>
                 <StackPanel Orientation="Horizontal">
-                    <ListViewItem Tapped="Flyout_Tapped">
+                    <!--<ListViewItem Tapped="Flyout_Tapped">
                         <StackPanel Orientation="Horizontal">
                             <PersonPicture x:Name="accountPhoto1" Height="20" Width="20"/>
                             <TextBlock x:Name="accountName1" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center"/>
@@ -56,17 +55,17 @@
                                     <TextBlock Grid.Row="0" Grid.Column="1" x:Name="accountName2" FontWeight="Bold" FontSize="14" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
                                     <TextBlock Grid.Row="1" Grid.Column="1" x:Name="accountEmail" VerticalAlignment="Top" Margin="5,0,0,0"/>
                                     <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal">
-                                        <HyperlinkButton x:Uid="LoginButton" Content="Login" Click="AccountLogin_Click" Margin="5,0,10,0"/>
-                                        <HyperlinkButton x:Uid="LogoutButton" Content="Logout" Click="AccountLogout_Click"/>
+                                        <HyperlinkButton Content="Login" Click="AccountLogin_Click" Margin="5,0,10,0"/>
+                                        <HyperlinkButton Content="Logout" Click="AccountLogout_Click"/>
                                     </StackPanel>
                                 </Grid>
                             </Flyout>
                         </FlyoutBase.AttachedFlyout>
-                    </ListViewItem>
-                    <AppBarButton x:Uid="ScreenShotButton" Icon="AttachCamera" Click="ScreenShot_Upload" ToolTipService.ToolTip="ScreenShot" Width="42" Height="42"/>
+                    </ListViewItem>-->
+                    <AppBarButton Icon="AttachCamera" Click="ScreenShot_Upload" ToolTipService.ToolTip="ScreenShot" Width="42" Height="42"/>
                     <!--<AppBarButton Icon="SwitchApps" Click="Open_FlowBlade" ToolTipService.ToolTip="Flow" Width="42" Height="42"/>-->
-                    <AppBarButton x:Uid="ChatButton" Icon="Message" Click="Open_ChatBlade" ToolTipService.ToolTip="Chat" Width="42" Height="42"/>
-                    <AppBarButton x:Uid="FullScreen" Icon="FullScreen" Click="FullScreen_Click" ToolTipService.ToolTip="FullScreen" Height="42" Width="42"/>
+                    <!--<AppBarButton Icon="Message" Click="Open_ChatBlade" ToolTipService.ToolTip="Chat" Width="42" Height="42"/>-->
+                    <AppBarButton Icon="FullScreen" Click="FullScreen_Click" ToolTipService.ToolTip="FullScreen" Height="42" Width="42"/>
                 </StackPanel>
             </NavigationView.PaneFooter>
 
@@ -81,7 +80,7 @@
         </NavigationView>
 
         <toolkit:BladeView x:Name="BladeView" BladeMode="Normal" AutoCollapseCountThreshold="2" HorizontalAlignment="Right" Margin="0,32,0,0">
-            <toolkit:BladeItem x:Uid="FlowBlade" x:Name="FlowBlade" Header="Flow" TitleBarVisibility="Visible" IsOpen="False">
+            <toolkit:BladeItem x:Name="FlowBlade" Header="Flow" TitleBarVisibility="Visible" IsOpen="False">
                 <Grid Margin="10">
                 </Grid>
             </toolkit:BladeItem>
@@ -128,9 +127,9 @@
                         </ListView>
                     </ScrollViewer>
 
-                    <TextBox x:Uid="ChatBox" x:Name="chatbox" Grid.Row="1" PlaceholderText="User Requirements" AcceptsReturn="True" TextWrapping="Wrap"/>
+                    <TextBox x:Name="chatbox" Grid.Row="1" PlaceholderText="User Requirements" AcceptsReturn="True" TextWrapping="Wrap"/>
                     <ComboBox x:Name="chattype" Grid.Row="2" SelectionChanged="ChatType_SelectionChanged" HorizontalAlignment="Stretch" Margin="0,0,100,0"/>
-                    <Button x:Uid="ChatSubmit" Grid.Row="2" Content="Sumbit" Click="SubmitChat" Width="100" HorizontalAlignment="Right" Background="LightSkyBlue"/>
+                    <Button Grid.Row="2" Content="Sumbit" Click="SubmitChat" Width="100" HorizontalAlignment="Right" Background="LightSkyBlue"/>
                 </Grid>
             </toolkit:BladeItem>
         </toolkit:BladeView>

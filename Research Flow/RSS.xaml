@@ -50,13 +50,13 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <TextBox x:Uid="RSSTitle" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssName" Header="Title" IsSpellCheckEnabled="False" Margin="0,5"/>
-                            <TextBox x:Uid="RSSSource" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssUrl" Header="Url" IsSpellCheckEnabled="False" Margin="0,5"/>
-                            <CheckBox x:Uid="RSSisJournal" Grid.Row="2" Grid.Column="0" x:Name="isJournal" Content="Is journal" Margin="0,5"/>
+                            <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssName" Header="Title" IsSpellCheckEnabled="False" Margin="0,5"/>
+                            <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssUrl" Header="Url" IsSpellCheckEnabled="False" Margin="0,5"/>
+                            <CheckBox Grid.Row="2" Grid.Column="0" x:Name="isJournal" Content="Is journal" Margin="0,5"/>
                             <RatingControl Grid.Row="2" Grid.Column="1" x:Name="rssStar"/>
-                            <Button x:Uid="ConfirmRSS" Grid.Row="3" Grid.Column="0" Click="Confirm_FeedSetting" Content="Confirm" Margin="0,0,5,0" HorizontalAlignment="Stretch" Background="LightSkyBlue"/>
-                            <Button x:Uid="CancelButton" Grid.Row="3" Grid.Column="1" Click="Leave_FeedSetting" Content="Cancel" Margin="5,0,0,0" HorizontalAlignment="Stretch" Background="LightGray"/>
-                            <Button x:Uid="DeleteButton" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssDelete" Click="Delete_RSSSetting" Content="Delete" Margin="0,10,0,0" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
+                            <Button Grid.Row="3" Grid.Column="0" Click="Confirm_FeedSetting" Content="Confirm" Margin="0,0,5,0" HorizontalAlignment="Stretch" Background="LightSkyBlue"/>
+                            <Button Grid.Row="3" Grid.Column="1" Click="Leave_FeedSetting" Content="Cancel" Margin="5,0,0,0" HorizontalAlignment="Stretch" Background="LightGray"/>
+                            <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssDelete" Click="Delete_RSSSetting" Content="Delete" Margin="0,10,0,0" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
                         </Grid>
                     </StackPanel>
                 </ScrollViewer>
@@ -64,7 +64,7 @@
                     <CommandBar.Content>
                         <TextBlock Text="RSS" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
                     </CommandBar.Content>
-                    <AppBarButton x:Uid="GetFeedButton" Icon="Download" Label="GetFeed" Click="RSS_SourceRefresh"/>
+                    <AppBarButton Icon="Download" Label="GetFeed" Click="RSS_SourceRefresh"/>
                 </CommandBar>
             </Grid>
             
@@ -91,9 +91,9 @@
                             <StackPanel>
                                 <TextBlock x:Name="feedTitle" FontSize="20" Style="{ThemeResource TitleTextBlockStyle}"/>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button x:Uid="BrowseFeed" Content="Browse Feed" Click="Browse_Feed" Margin="0,0,5,0"/>
-                                    <Button x:Uid="FeedToPaper" Content="Add Paper" Click="Flow_Feed" Margin="0,0,5,0"/>
-                                    <Button x:Uid="FeedToFavorite" Content="Add Favorite" Click="Favorite_Feed" Margin="0,0,5,0"/>
+                                    <Button Content="Browse Feed" Click="Browse_Feed" Margin="0,0,5,0"/>
+                                    <Button Content="Add Paper" Click="Flow_Feed" Margin="0,0,5,0"/>
+                                    <Button Content="Add Favorite" Click="Favorite_Feed" Margin="0,0,5,0"/>
                                 </StackPanel>
                                 <TextBlock x:Name="feedPublished" FontSize="16" Style="{ThemeResource SubtitleTextBlockStyle}"/>
                                 <TextBlock x:Name="feedSummary" FontSize="16" Style="{ThemeResource BodyTextBlockStyle}"/>

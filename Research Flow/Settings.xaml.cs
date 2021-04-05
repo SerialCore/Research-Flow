@@ -84,55 +84,55 @@ namespace Research_Flow
 
         #region Settings
 
-        private async void AccountDownload_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void AccountDownload_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            if (GraphService.IsConnected && ApplicationInfo.IsNetworkAvailable)
-            {
-                var button = sender as Button;
-                button.IsEnabled = false;
-                waitSync1.IsActive = true;
-                syncStatu.Visibility = Visibility.Visible;
+            //if (GraphService.IsConnected && ApplicationInfo.IsNetworkAvailable)
+            //{
+            //    var button = sender as Button;
+            //    button.IsEnabled = false;
+            //    waitSync1.IsActive = true;
+            //    syncStatu.Visibility = Visibility.Visible;
 
-                Synchronization.SyncProgressChanged += Synchronization_SyncProgressChanged;
-                await Synchronization.DownloadAll();
-                Synchronization.SyncProgressChanged -= Synchronization_SyncProgressChanged;
+            //    Synchronization.SyncProgressChanged += Synchronization_SyncProgressChanged;
+            //    await Synchronization.DownloadAll();
+            //    Synchronization.SyncProgressChanged -= Synchronization_SyncProgressChanged;
 
-                syncStatu.Visibility = Visibility.Collapsed;
-                waitSync1.IsActive = false;
-                button.IsEnabled = true;
-                syncCount.Text = "";
-            }
+            //    syncStatu.Visibility = Visibility.Collapsed;
+            //    waitSync1.IsActive = false;
+            //    button.IsEnabled = true;
+            //    syncCount.Text = "";
+            //}
         }
 
-        private async void AccountSync_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void AccountSync_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            if (GraphService.IsConnected && ApplicationInfo.IsNetworkAvailable)
-            {
-                var button = sender as Button;
-                button.IsEnabled = false;
-                waitSync2.IsActive = true;
-                syncStatu.Visibility = Visibility.Visible;
+            //if (GraphService.IsConnected && ApplicationInfo.IsNetworkAvailable)
+            //{
+            //    var button = sender as Button;
+            //    button.IsEnabled = false;
+            //    waitSync2.IsActive = true;
+            //    syncStatu.Visibility = Visibility.Visible;
 
-                Synchronization.SyncProgressChanged += Synchronization_SyncProgressChanged;
-                await Synchronization.ScanFiles();
-                Synchronization.SyncProgressChanged -= Synchronization_SyncProgressChanged;
+            //    //Synchronization.SyncProgressChanged += Synchronization_SyncProgressChanged;
+            //    //await Synchronization.ScanFiles();
+            //    //Synchronization.SyncProgressChanged -= Synchronization_SyncProgressChanged;
 
-                syncStatu.Visibility = Visibility.Collapsed;
-                waitSync2.IsActive = false;
-                button.IsEnabled = true;
-                syncCount.Text = "";
-            }
+            //    syncStatu.Visibility = Visibility.Collapsed;
+            //    waitSync2.IsActive = false;
+            //    button.IsEnabled = true;
+            //    syncCount.Text = "";
+            //}
         }
 
-        private async void Synchronization_SyncProgressChanged(object sender, SyncEventArgs e)
-        {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                syncStatu.Maximum = e.TotalCount;
-                syncStatu.Value = e.SyncedCount;
-                syncCount.Text = e.SyncedCount + "/" + e.TotalCount;
-            });
-        }
+        //private async void Synchronization_SyncProgressChanged(object sender, SyncEventArgs e)
+        //{
+        //    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+        //    {
+        //        syncStatu.Maximum = e.TotalCount;
+        //        syncStatu.Value = e.SyncedCount;
+        //        syncCount.Text = e.SyncedCount + "/" + e.TotalCount;
+        //    });
+        //}
 
         #endregion
 

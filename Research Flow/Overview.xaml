@@ -13,7 +13,7 @@
 
         <Grid >
 
-            <TextBlock x:Uid="OverviewBanner" Text="Constructing Features" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBlock Text="Constructing Features" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
             <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" HorizontalAlignment="Left">
                 <VariableSizedWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="8" ItemHeight="75" ItemWidth="75" >
@@ -21,7 +21,7 @@
 
                     </telerikPrimitives:RadCustomHubTile>-->
                     <!--<telerikPrimitives:RadHubTile Width="295" Height="145" Title="Mail" VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="2"/>-->
-                    <telerikPrimitives:RadCustomHubTile x:Uid="PerformanceTile" Width="145" Height="145" Title="Performance" VariableSizedWrapGrid.ColumnSpan="2" VariableSizedWrapGrid.RowSpan="2">
+                    <telerikPrimitives:RadCustomHubTile Width="145" Height="145" Title="Performance" VariableSizedWrapGrid.ColumnSpan="2" VariableSizedWrapGrid.RowSpan="2">
                         <telerikPrimitives:RadCustomHubTile.FrontContent>
                             <Grid Margin="0,0,0,20">
                                 <Grid.RowDefinitions>

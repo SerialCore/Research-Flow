@@ -26,7 +26,7 @@
             <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
                 <CommandBar.Content>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock x:Uid="PreviewHeader" Text="Preview" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
+                        <TextBlock Text="Preview" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
                         <TextBox x:Name="pageindex" Text="i" InputScope="Number" KeyDown="PageIndex_KeyDown" Margin="12,4,0,0"/>
                         <TextBlock Margin="6,10,0,0">
                                         <Run Text="/"/>
@@ -34,7 +34,7 @@
                         </TextBlock>
                     </StackPanel>
                 </CommandBar.Content>
-                <AppBarButton x:Uid="OpenPaper" Icon="OpenFile" Label="Open" Click="Pdf_Launch"/>
+                <AppBarButton Icon="OpenFile" Label="Open" Click="Pdf_Launch"/>
             </CommandBar>
         </Grid>
 

@@ -40,43 +40,43 @@
         <CommandBar Grid.Row="1" DefaultLabelPosition="Right" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
             <CommandBar.Content>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock x:Uid="PictureHeader" Text="Pictures" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
+                    <TextBlock Text="Pictures" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
                     <ProgressBar x:Name="picStatu" Width="200" Margin="20,12,0,0" Visibility="Collapsed"/>
                     <TextBlock x:Name="picCount" VerticalAlignment="Center" Margin="10,10,0,0"/>
                 </StackPanel>
             </CommandBar.Content>
             <CommandBar.SecondaryCommands>
-                <AppBarButton x:Uid="DeleteBarButton" x:Name="delete_button" Icon="Delete" Label="Delete" Click="Delete_Selected" Visibility="Collapsed"/>
+                <AppBarButton x:Name="delete_button" Icon="Delete" Label="Delete" Click="Delete_Selected" Visibility="Collapsed"/>
             </CommandBar.SecondaryCommands>
-            <AppBarButton x:Uid="CrawlNow" Icon="Download" Label="Crawl">
+            <AppBarButton Icon="Download" Label="Crawl">
                 <AppBarButton.Flyout>
                     <Flyout>
-                        <AutoSuggestBox x:Uid="WebsiteOfPicture" x:Name="sitelink" PlaceholderText="website" QueryIcon="Find" QuerySubmitted="Website_QuerySubmitted" Width="300" AllowFocusOnInteraction="True"/>
+                        <AutoSuggestBox x:Name="sitelink" PlaceholderText="website" QueryIcon="Find" QuerySubmitted="Website_QuerySubmitted" Width="300" AllowFocusOnInteraction="True"/>
                     </Flyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
-            <AppBarButton x:Uid="ExportBarButton" Icon="Share" Label="Export">
+            <AppBarButton Icon="Share" Label="Export">
                 <AppBarButton.Flyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem x:Uid="MultiPictures" Text="Pictures" Click="Export_Images"/>
+                        <MenuFlyoutItem Text="Pictures" Click="Export_Images"/>
                         <MenuFlyoutSeparator/>
-                        <MenuFlyoutItem x:Uid="CompressAll" Text="Compress All" Click="Compress_Picture"/>
+                        <MenuFlyoutItem Text="Compress All" Click="Compress_Picture"/>
                     </MenuFlyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
-            <AppBarButton x:Uid="ImportBarButton" Icon="Import" Label="Import">
+            <AppBarButton Icon="Import" Label="Import">
                 <AppBarButton.Flyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem x:Uid="MultiPictures" Text="Pictures" Click="Import_Images"/>
+                        <MenuFlyoutItem Text="Pictures" Click="Import_Images"/>
                         <MenuFlyoutSeparator/>
-                        <MenuFlyoutItem x:Uid="UnCompressAll" Text="UnCompress All" Click="UnCompress_Picture"/>
+                        <MenuFlyoutItem Text="UnCompress All" Click="UnCompress_Picture"/>
                     </MenuFlyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
             <AppBarSeparator />
-            <AppBarButton x:Uid="SelectNonePicture" x:Name="select_null" Icon="ClearSelection" Label="Select None" Click="Select_None" Visibility="Collapsed"/>
-            <AppBarButton x:Uid="SelectAllPicture" x:Name="select_all" Icon="SelectAll" Label="Select All" Click="Select_All" Visibility="Collapsed"/>
-            <AppBarButton x:Uid="SelectMultiPicture" Icon="AllApps" Label="Select" Click="Select_Multi"/>
+            <AppBarButton x:Name="select_null" Icon="ClearSelection" Label="Select None" Click="Select_None" Visibility="Collapsed"/>
+            <AppBarButton x:Name="select_all" Icon="SelectAll" Label="Select All" Click="Select_All" Visibility="Collapsed"/>
+            <AppBarButton Icon="AllApps" Label="Select" Click="Select_Multi"/>
         </CommandBar>
     </Grid>
     

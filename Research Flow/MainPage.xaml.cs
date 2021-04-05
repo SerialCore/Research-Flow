@@ -40,13 +40,20 @@ namespace Research_Flow
             ApplicationMessage.MessageReceived += AppMessage_MessageReceived;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             NavParameter = e.Parameter;
-            if (ApplicationSetting.ContainKey("AccountName"))
-                Login();
-            ConfigureUpdate();
-            InitializeChat();
+
+            if (ApplicationInfo.IsFirstUse)
+            {
+                await ApplicationConfig.ConfigurePath();
+                ApplicationConfig.ConfigureDB();
+                ApplicationConfig.ConfigureVersion();
+            }
+            //if (ApplicationSetting.ContainKey("AccountName"))
+            //    Login();
+            ApplicationConfig.ConfigureUpdate();
+            //InitializeChat();
         }
 
         private async void AppMessage_MessageReceived(ShortMessage message, ApplicationMessage.MessageType type)
@@ -72,17 +79,6 @@ namespace Research_Flow
                          break;
                  }
              });
-        }
-
-        private void ConfigureUpdate()
-        {
-            // updated version must be greater than the previous published version
-            // can be lighter than the next publish version
-            if (ApplicationVersion.Parse(ApplicationSetting.Updated) < new ApplicationVersion(3, 42, 108, 0))
-            {
-                Paper.DBUpdateApp();
-                ApplicationSetting.Updated = "3.42.108.0";
-            }
         }
 
         private async void InitializeChat()
@@ -120,7 +116,6 @@ namespace Research_Flow
             ("Paper", typeof(PaperBox)),
             ("RSS", typeof(RSS)),
             ("Search", typeof(SearchEngine)),
-            ("Crawler", typeof(Crawler)),
             ("Note", typeof(Note)),
         };
 
@@ -200,60 +195,60 @@ namespace Research_Flow
 
         #region Account
 
-        private async void Login()
-        {
-            if (await GraphService.OneDriveLogin())
-            {
-                string name = await GraphService.GetDisplayName();
-                string email = await GraphService.GetPrincipalName();
-                BitmapImage image = new BitmapImage();
-                image.UriSource = new Uri("ms-appx:///Images/ResearchFlow_logo.jpg");
-                accountName1.Text = name;
-                accountName2.Text = name;
-                accountEmail.Text = email;
-                accountPhoto1.ProfilePicture = image;
-                accountPhoto2.ProfilePicture = image;
+        //private async void Login()
+        //{
+        //    if (await GraphService.OneDriveLogin())
+        //    {
+        //        string name = await GraphService.GetDisplayName();
+        //        string email = await GraphService.GetPrincipalName();
+        //        BitmapImage image = new BitmapImage();
+        //        image.UriSource = new Uri("ms-appx:///Images/ResearchFlow_logo.jpg");
+        //        accountName1.Text = name;
+        //        accountName2.Text = name;
+        //        accountEmail.Text = email;
+        //        accountPhoto1.ProfilePicture = image;
+        //        accountPhoto2.ProfilePicture = image;
 
-                ApplicationSetting.AccountName = email;
-            }
-            else
-            {
-                accountName1.Text = "Offline";
-                accountName2.Text = "Offline";
-                if (ApplicationSetting.ContainKey("AccountName"))
-                    accountEmail.Text = ApplicationSetting.AccountName;
-            }
+        //        ApplicationSetting.AccountName = email;
+        //    }
+        //    else
+        //    {
+        //        accountName1.Text = "Offline";
+        //        accountName2.Text = "Offline";
+        //        if (ApplicationSetting.ContainKey("AccountName"))
+        //            accountEmail.Text = ApplicationSetting.AccountName;
+        //    }
+        //}
+
+        //private void Logout()
+        //{
+        //    GraphService.OneDriveLogout();
+        //    accountName1.Text = "";
+        //    accountName2.Text = "";
+        //    accountEmail.Text = "";
+        //}
+
+        private void AccountLogin_Click(object sender, RoutedEventArgs e) { }
+
+        private void AccountLogout_Click(object sender, RoutedEventArgs e)
+        {
+            //if (ApplicationSetting.ContainKey("AccountName"))
+            //{
+            //    var messageDialog = new MessageDialog("Are you sure to log out?");
+            //    messageDialog.Commands.Add(new UICommand(
+            //        "True",
+            //        new UICommandInvokedHandler(this.DeleteInvokedHandler)));
+            //    messageDialog.Commands.Add(new UICommand(
+            //        "Joke",
+            //        new UICommandInvokedHandler(this.CancelInvokedHandler)));
+
+            //    messageDialog.DefaultCommandIndex = 0;
+            //    messageDialog.CancelCommandIndex = 1;
+            //    await messageDialog.ShowAsync();
+            //}
         }
 
-        private void Logout()
-        {
-            GraphService.OneDriveLogout();
-            accountName1.Text = "";
-            accountName2.Text = "";
-            accountEmail.Text = "";
-        }
-
-        private void AccountLogin_Click(object sender, RoutedEventArgs e) => Login();
-
-        private async void AccountLogout_Click(object sender, RoutedEventArgs e)
-        {
-            if (ApplicationSetting.ContainKey("AccountName"))
-            {
-                var messageDialog = new MessageDialog("Are you sure to log out?");
-                messageDialog.Commands.Add(new UICommand(
-                    "True",
-                    new UICommandInvokedHandler(this.DeleteInvokedHandler)));
-                messageDialog.Commands.Add(new UICommand(
-                    "Joke",
-                    new UICommandInvokedHandler(this.CancelInvokedHandler)));
-
-                messageDialog.DefaultCommandIndex = 0;
-                messageDialog.CancelCommandIndex = 1;
-                await messageDialog.ShowAsync();
-            }
-        }
-
-        private void DeleteInvokedHandler(IUICommand command) => Logout();
+        //private void DeleteInvokedHandler(IUICommand command) => Logout();
 
         private void CancelInvokedHandler(IUICommand command) { }
 
@@ -292,19 +287,9 @@ namespace Research_Flow
 
             if (file != null)
             {
-                // confirm the app was associated with Microsoft account
-                try
-                {
-                    await OneDriveStorage.CreateFileAsync(await OneDriveStorage.GetPictureAsync(), file);
-                    ApplicationMessage.SendMessage(new ShortMessage { Title = "Screenshot", Content = "Saved to OneDrive", Time = DateTimeOffset.Now },
-                        ApplicationMessage.MessageType.Banner);
-                }
-                catch
-                {
-                    await file.CopyAsync(KnownFolders.PicturesLibrary);
-                    ApplicationMessage.SendMessage(new ShortMessage { Title = "Screenshot", Content = "Saved to Pictures Library", Time = DateTimeOffset.Now }, 
-                        ApplicationMessage.MessageType.Banner);
-                }
+                await file.CopyAsync(KnownFolders.PicturesLibrary);
+                ApplicationMessage.SendMessage(new ShortMessage { Title = "Screenshot", Content = "Saved to Pictures Library", Time = DateTimeOffset.Now },
+                    ApplicationMessage.MessageType.Banner);
             }
         }
 

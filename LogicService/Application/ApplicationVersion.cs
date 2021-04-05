@@ -38,8 +38,8 @@ namespace LogicService.Application
 
         public static ApplicationVersion CurrentVersion()
         {
-            return new ApplicationVersion(SystemInformation.ApplicationVersion.Major, SystemInformation.ApplicationVersion.Minor,
-                SystemInformation.ApplicationVersion.Build, SystemInformation.ApplicationVersion.Revision);
+            return new ApplicationVersion(SystemInformation.Instance.ApplicationVersion.Major, SystemInformation.Instance.ApplicationVersion.Minor,
+                SystemInformation.Instance.ApplicationVersion.Build, SystemInformation.Instance.ApplicationVersion.Revision);
         }
 
         public static bool operator >(ApplicationVersion version1, ApplicationVersion version2)

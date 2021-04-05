@@ -20,7 +20,7 @@ namespace LogicService.Data
             { "Url: Has=", "" },
             { "Url: HasDoi", "doi" },
             { "Url: HasPDF", @"(.pdf\z)|(/pdf/)" },
-            { "Url: Insite", "" }, // for tag only, not truely dictionary
+            { "Url: Insite", "" }, // for tag only, not true dictionary
         };
 
         public string ID { get; set; }

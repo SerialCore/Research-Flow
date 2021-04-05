@@ -86,9 +86,7 @@ namespace Research_Flow
                 searchlist.SelectedIndex = 0;
                 source_list.ItemsSource = SearchSources;
                 linkFilter1.ItemsSource = Crawlable.LinkType.Keys;
-                linkFilter2.ItemsSource = Crawlable.LinkType.Keys;
                 linkFilter1.Text = "Text: NotEmpty";
-                linkFilter2.Text = "Text: NotEmpty";
             }
         }
 
@@ -492,23 +490,8 @@ namespace Research_Flow
             await Launcher.LaunchFileAsync(file);
         }
 
-        private void LinkFilter_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
-            => LinkFilter_QuerySubmitted(null, null);
-
         private void LinkFilter_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
             => link_list.ItemsSource = Crawlable.LinkFilter(currentCrawled, linkFilter1.Text);
-
-        //private void LinkFilter2_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-        //    => crawlfilters.Text += linkFilter2.Text + "\t\n";
-
-        private void SubmitToCrawler(object sender, RoutedEventArgs e)
-        {
-            if (currentCrawled != null)
-            {
-                currentCrawled.LinkFilters = crawlfilters.Text;
-                this.Frame.Navigate(typeof(Crawler), currentCrawled);
-            }
-        }
 
         #endregion
 

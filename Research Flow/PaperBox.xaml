@@ -18,7 +18,7 @@
 
             <Grid Grid.Column="0">
                 <Pivot Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="0,0,0,40">
-                    <PivotItem x:Uid="PaperDownloadPane" Header="Downloaded">
+                    <PivotItem Header="Downloaded">
                         <ListView x:Name="pdftree" IsItemClickEnabled="True" ItemClick="Pdftree_ItemClick">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
@@ -27,7 +27,7 @@
                             </ListView.ItemTemplate>
                         </ListView>
                     </PivotItem>
-                    <PivotItem x:Uid="PaperDatabasePane" Header="Database">
+                    <PivotItem Header="Database">
                         <ListView x:Name="paperlist" IsItemClickEnabled="True" ItemClick="PaperList_ItemClick">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
@@ -39,52 +39,52 @@
                 </Pivot>
                 <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
                     <CommandBar.Content>
-                        <TextBlock x:Uid="PaperHeader" Text="Papers" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
+                        <TextBlock Text="Papers" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
                     </CommandBar.Content>
-                    <AppBarButton x:Uid="ExportBarButton" Icon="Share" Label="Export">
+                    <AppBarButton Icon="Share" Label="Export">
                         <AppBarButton.Flyout>
                             <MenuFlyout>
-                                <MenuFlyoutItem x:Uid="ShareButton" Text="Share" Click="Pdf_Share"/>
-                                <MenuFlyoutItem x:Uid="SaveAsButton" Text="SaveAs" Click="Pdf_Export"/>
+                                <MenuFlyoutItem Text="Share" Click="Pdf_Share"/>
+                                <MenuFlyoutItem Text="SaveAs" Click="Pdf_Export"/>
                                 <MenuFlyoutSeparator/>
-                                <MenuFlyoutItem x:Uid="CompressAll" Text="Compress All" Click="Paper_Compress"/>
+                                <MenuFlyoutItem Text="Compress All" Click="Paper_Compress"/>
                             </MenuFlyout>
                         </AppBarButton.Flyout>
                     </AppBarButton>
-                    <AppBarButton x:Uid="ImportBarButton" Icon="Import" Label="Import">
+                    <AppBarButton Icon="Import" Label="Import">
                         <AppBarButton.Flyout>
                             <MenuFlyout>
-                                <MenuFlyoutItem x:Uid="PaperImportSingle" Text="Single File" Click="Pdf_Import"/>
+                                <MenuFlyoutItem Text="Single File" Click="Pdf_Import"/>
                                 <MenuFlyoutSeparator/>
-                                <MenuFlyoutItem x:Uid="UnCompressAll" Text="UnCompress All" Click="Paper_UnCompress"/>
+                                <MenuFlyoutItem Text="UnCompress All" Click="Paper_UnCompress"/>
                             </MenuFlyout>
                         </AppBarButton.Flyout>
                     </AppBarButton>
-                    <AppBarButton x:Uid="PaperPreview" Icon="Preview" Label="Open" Click="Pdf_Open"/>
+                    <AppBarButton Icon="Preview" Label="Open" Click="Pdf_Open"/>
                 </CommandBar>
             </Grid>
 
             <Grid Grid.Column="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                 <StackPanel Margin="10,10,10,40">
-                    <TextBox x:Uid="PaperTitle" x:Name="papertitle" Header="Title" IsSpellCheckEnabled="False"/>
+                    <TextBox x:Name="papertitle" Header="Title" IsSpellCheckEnabled="False"/>
                     <TextBox x:Name="paperid" Header="ID, doi, arXiv" IsSpellCheckEnabled="False"/>
-                    <AutoSuggestBox x:Uid="PaperWebSite" x:Name="paperlink" Header="Website" QueryIcon="Find" QuerySubmitted="PaperLink_QuerySubmitted"/>
-                    <TextBox x:Uid="PaperPublished" x:Name="paperdate" Header="Published" IsSpellCheckEnabled="False"/>
-                    <TextBox x:Uid="PaperAuthors" x:Name="paperauthor" Header="Authors" PlaceholderText="Author1, Author2, Author3" IsSpellCheckEnabled="False"/>
-                    <TextBox x:Uid="PaperNote" x:Name="papernote" Header="Paper Note" PlaceholderText="reason to refer" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
-                    <TextBox x:Uid="TagInput" x:Name="papertags" Header="Paper Tags" PlaceholderText="#Tag1##Tag2#" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="100"/>
-                    <TextBox x:Uid="PaperFile" x:Name="pdfname" Header="Paper File" IsSpellCheckEnabled="False"/>
+                    <AutoSuggestBox x:Name="paperlink" Header="Website" QueryIcon="Find" QuerySubmitted="PaperLink_QuerySubmitted"/>
+                    <TextBox x:Name="paperdate" Header="Published" IsSpellCheckEnabled="False"/>
+                    <TextBox x:Name="paperauthor" Header="Authors" PlaceholderText="Author1, Author2, Author3" IsSpellCheckEnabled="False"/>
+                    <TextBox x:Name="papernote" Header="Paper Note" PlaceholderText="reason to refer" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
+                    <TextBox x:Name="papertags" Header="Paper Tags" PlaceholderText="#Tag1##Tag2#" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="100"/>
+                    <TextBox x:Name="pdfname" Header="Paper File" IsSpellCheckEnabled="False"/>
                 </StackPanel>
                 <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                    <AppBarButton x:Uid="SaveBarButton" Icon="Save" Label="Save">
+                    <AppBarButton Icon="Save" Label="Save">
                         <AppBarButton.Flyout>
                             <MenuFlyout>
-                                <MenuFlyoutItem x:Uid="RenamePdf" Text="Rename Pdf" Click="SavePdfFile"/>
-                                <MenuFlyoutItem x:Uid="SaveToDatabase" Text="To Database" Click="SavePaper"/>
+                                <MenuFlyoutItem Text="Rename Pdf" Click="SavePdfFile"/>
+                                <MenuFlyoutItem Text="To Database" Click="SavePaper"/>
                             </MenuFlyout>
                         </AppBarButton.Flyout>
                     </AppBarButton>
-                    <AppBarButton x:Uid="DeleteBarButton" Icon="Delete" Label="Delete" Click="DeletePaper"/>
+                    <AppBarButton Icon="Delete" Label="Delete" Click="DeletePaper"/>
                 </CommandBar>
             </Grid>
 

@@ -27,18 +27,18 @@
                 
                 <ComboBox Grid.Column="0" x:Name="searchlist" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <AppBarButton x:Uid="SearchEngineList" Grid.Column="0" Icon="List" Click="Open_SearchList" ToolTipService.ToolTip="Search Engine" Width="38" Height="38"/>
-                    <AppBarButton x:Uid="PageBack" Icon="Previous" Click="PageBack" ToolTipService.ToolTip="Back" IsEnabled="{x:Bind webView.CanGoBack,Mode=OneWay}" Width="38" Height="38"/>
-                    <AppBarButton x:Uid="PageForward" Icon="Next" Click="PageForward" ToolTipService.ToolTip="Forward" IsEnabled="{x:Bind webView.CanGoForward,Mode=OneWay}" Width="38" Height="38"/>
-                    <AppBarButton x:Uid="PageStop" Icon="Cancel" Click="PageStop" ToolTipService.ToolTip="Stop" Width="38" Height="38"/>
-                    <AppBarButton x:Uid="PageRefresh" Icon="Refresh" Click="PageRefresh" ToolTipService.ToolTip="Refresh" Width="38" Height="38"/>
+                    <AppBarButton Grid.Column="0" Icon="List" Click="Open_SearchList" ToolTipService.ToolTip="Search Engine" Width="38" Height="38"/>
+                    <AppBarButton Icon="Previous" Click="PageBack" ToolTipService.ToolTip="Back" IsEnabled="{x:Bind webView.CanGoBack,Mode=OneWay}" Width="38" Height="38"/>
+                    <AppBarButton Icon="Next" Click="PageForward" ToolTipService.ToolTip="Forward" IsEnabled="{x:Bind webView.CanGoForward,Mode=OneWay}" Width="38" Height="38"/>
+                    <AppBarButton Icon="Cancel" Click="PageStop" ToolTipService.ToolTip="Stop" Width="38" Height="38"/>
+                    <AppBarButton Icon="Refresh" Click="PageRefresh" ToolTipService.ToolTip="Refresh" Width="38" Height="38"/>
                 </StackPanel>
-                <AutoSuggestBox x:Uid="SearchBox" Grid.Column="2" x:Name="queryQuest" QueryIcon="Find" PlaceholderText="Search Quest"
+                <AutoSuggestBox Grid.Column="2" x:Name="queryQuest" QueryIcon="Find" PlaceholderText="Search Quest"
                                     QuerySubmitted="Search_QuerySubmitted" VerticalAlignment="Center"/>
                 <StackPanel Grid.Column="3" Orientation="Horizontal">
-                    <AppBarButton x:Uid="AddToFavorite" Icon="OutlineStar" Click="Favorite_Click" ToolTipService.ToolTip="Favorite" Width="38" Height="38"/>
-                    <AppBarButton x:Uid="AddSearchToTag" Icon="Tag" Click="AddToTagTopic" ToolTipService.ToolTip="AddTotag" Width="38" Height="38"/>
-                    <AppBarButton x:Uid="ShowFavorite" Icon="Favorite" Tapped="Flyout_Tapped" ToolTipService.ToolTip="Favorite List" Width="38" Height="38">
+                    <AppBarButton Icon="OutlineStar" Click="Favorite_Click" ToolTipService.ToolTip="Favorite" Width="38" Height="38"/>
+                    <AppBarButton Icon="Tag" Click="AddToTagTopic" ToolTipService.ToolTip="AddTotag" Width="38" Height="38"/>
+                    <AppBarButton Icon="Favorite" Tapped="Flyout_Tapped" ToolTipService.ToolTip="Favorite List" Width="38" Height="38">
                         <FlyoutBase.AttachedFlyout>
                             <Flyout>
                                 <ListView x:Name="favoritelist" ItemClick="FavoriteList_ItemClick" IsItemClickEnabled="True" MaxWidth="300">
@@ -65,7 +65,7 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
-                        <AutoSuggestBox Grid.Row="0" x:Name="linkFilter1" QueryIcon="Filter" QuerySubmitted="LinkFilter_QuerySubmitted" TextChanged="LinkFilter_TextChanged" Padding="4"/>
+                        <AutoSuggestBox Grid.Row="0" x:Name="linkFilter1" QueryIcon="Filter" QuerySubmitted="LinkFilter_QuerySubmitted" Padding="4"/>
                         <ListView Grid.Row="1" x:Name="link_list" IsItemClickEnabled="True" ItemClick="Link_list_ItemClick">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
@@ -86,7 +86,7 @@
                 </SplitView.Pane>
                 <SplitView.Content>
                     <Grid>
-                        <TextBlock x:Uid="SearchEngineBanner" Text="Browser | Search | First Crawl" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Browser | Search | First Crawl" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <WebView x:Name="webView" NavigationStarting="WebView_NavigationStarting" ManipulationCompleted="WebView_ManipulationCompleted"
                                  FrameNavigationCompleted="WebView_FrameNavigationCompleted" NavigationCompleted="WebView_NavigationCompleted"/>
                         <ProgressBar x:Name="webWaiting" IsIndeterminate="True" ShowPaused="True" Visibility="Collapsed" VerticalAlignment="Top"/>
@@ -121,11 +121,11 @@
                                     <ColumnDefinition />
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
-                                <TextBox x:Uid="EngineName" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="searchName" Header="Name" IsSpellCheckEnabled="False" />
-                                <TextBox x:Uid="EngineUrl" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="searchUrl" Header="Url" IsSpellCheckEnabled="False" PlaceholderText="http://***/***query=QUEST***" Margin="0,10"/>
-                                <Button x:Uid="ConfirmEngine" Grid.Row="2" Grid.Column="0" Click="Confirm_SearchSetting"  Content="Confirm" Margin="0,0,5,0" HorizontalAlignment="Stretch" Background="LightSkyBlue"/>
-                                <Button x:Uid="CancelButton" Grid.Row="2" Grid.Column="1" Click="Leave_SearchSetting" Content="Cancel" Margin="5,0,0,0" HorizontalAlignment="Stretch" Background="LightGray"/>
-                                <Button x:Uid="DeleteButton" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" x:Name="searchDelete" Click="Delete_SearchSetting" Content="Delete" Margin="0,10,0,10" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
+                                <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="searchName" Header="Name" IsSpellCheckEnabled="False" />
+                                <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="searchUrl" Header="Url" IsSpellCheckEnabled="False" PlaceholderText="http://***/***query=QUEST***" Margin="0,10"/>
+                                <Button Grid.Row="2" Grid.Column="0" Click="Confirm_SearchSetting"  Content="Confirm" Margin="0,0,5,0" HorizontalAlignment="Stretch" Background="LightSkyBlue"/>
+                                <Button Grid.Row="2" Grid.Column="1" Click="Leave_SearchSetting" Content="Cancel" Margin="5,0,0,0" HorizontalAlignment="Stretch" Background="LightGray"/>
+                                <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" x:Name="searchDelete" Click="Delete_SearchSetting" Content="Delete" Margin="0,10,0,10" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
                             </Grid>
                         </StackPanel>
                     </ScrollViewer>
@@ -140,24 +140,12 @@
                 <AutoSuggestBox Grid.Column="0" x:Name="siteUrl" QueryIcon="Find" Text="http://" 
                                 QuerySubmitted="Browse_QuerySubmitted" Margin="5,5,0,0"/>
                 <CommandBar Grid.Column="1" HorizontalAlignment="Right" DefaultLabelPosition="Right" Background="Transparent" OverflowButtonVisibility="Collapsed">
-                    <AppBarButton x:Uid="ArchiveSite" Label="Archive" Icon="MoveToFolder">
-                        <AppBarButton.Flyout>
-                            <Flyout>
-                                <StackPanel Width="300">
-                                    <AutoSuggestBox x:Uid="CrawlSelectFilter" x:Name="linkFilter2" Header="Select Filters" QueryIcon="Filter" AllowFocusOnInteraction="True"/>
-                                    <TextBox x:Uid="CrawlFilter" x:Name="crawlfilters" Header="Crawl Filters" PlaceholderText="Filter1&#x000A;Filter2&#x000A;(user requirements, can be blank here)"
-                                             IsSpellCheckEnabled="False" AllowFocusOnInteraction="True" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
-                                    <Button x:Uid="SubmitToCrawler" Content="Submit to Crawler" Click="SubmitToCrawler" HorizontalAlignment="Stretch"/>
-                                </StackPanel>
-                            </Flyout>
-                        </AppBarButton.Flyout>
-                    </AppBarButton>
-                    <AppBarButton x:Uid="WebsiteInfo" Label="Info" Icon="Important">
+                    <AppBarButton Label="Info" Icon="Important">
                         <AppBarButton.Flyout>
                             <Flyout>
                                 <ScrollViewer>
                                     <TextBlock MaxLines="30" MaxWidth="400" TextWrapping="Wrap" Margin="10">
-                                        <Run x:Uid="WebsiteTitle" Text="Title:   " FontWeight="Bold"/>
+                                        <Run Text="Title:   " FontWeight="Bold"/>
                                         <Run x:Name="pagetitle"/><LineBreak/><LineBreak/>
                                         <Run Text="Host:   " FontWeight="Bold"/>
                                         <Run x:Name="pagehost"/><LineBreak/><LineBreak/>
@@ -171,7 +159,7 @@
                             </Flyout>
                         </AppBarButton.Flyout>
                     </AppBarButton>
-                    <AppBarButton x:Uid="CrawlNow" Label="Crawl" Icon="Find" Click="FirstCrawl_Click"/>
+                    <AppBarButton Label="Crawl" Icon="Find" Click="FirstCrawl_Click"/>
                 </CommandBar>
             </Grid>
 

@@ -16,49 +16,52 @@ namespace LogicService.Application
     public class ApplicationInfo
     {
 
-        public static string AppName => SystemInformation.ApplicationName;
+        public static string AppName => SystemInformation.Instance.ApplicationName;
 
-        public static string AppVersion => $"{SystemInformation.ApplicationVersion.Major}.{SystemInformation.ApplicationVersion.Minor}.{SystemInformation.ApplicationVersion.Build}.{SystemInformation.ApplicationVersion.Revision}";
+        public static string AppVersion => $"{SystemInformation.Instance.ApplicationVersion.Major}." +
+            $"{SystemInformation.Instance.ApplicationVersion.Minor}." +
+            $"{SystemInformation.Instance.ApplicationVersion.Build}." +
+            $"{SystemInformation.Instance.ApplicationVersion.Revision}";
 
-        public static CultureInfo Culture => SystemInformation.Culture;
+        public static CultureInfo Culture => SystemInformation.Instance.Culture;
 
-        public static string OperatingSystem => SystemInformation.OperatingSystem;
+        public static string OperatingSystem => SystemInformation.Instance.OperatingSystem;
 
-        public static ProcessorArchitecture OperatingSystemArchitecture => SystemInformation.OperatingSystemArchitecture;
+        public static ProcessorArchitecture OperatingSystemArchitecture => SystemInformation.Instance.OperatingSystemArchitecture;
 
-        public static OSVersion OperatingSystemVersion => SystemInformation.OperatingSystemVersion;
+        public static OSVersion OperatingSystemVersion => SystemInformation.Instance.OperatingSystemVersion;
 
-        public static string DeviceFamily => SystemInformation.DeviceFamily;
+        public static string DeviceFamily => SystemInformation.Instance.DeviceFamily;
 
-        public static string DeviceModel => SystemInformation.DeviceModel;
+        public static string DeviceModel => SystemInformation.Instance.DeviceModel;
 
-        public static string DeviceManufacturer => SystemInformation.DeviceManufacturer;
+        public static string DeviceManufacturer => SystemInformation.Instance.DeviceManufacturer;
 
-        public static float AvailableMemory => SystemInformation.AvailableMemory;
+        public static float AvailableMemory => SystemInformation.Instance.AvailableMemory;
 
-        public static bool IsFirstUse => SystemInformation.IsFirstRun;
+        public static bool IsFirstUse => SystemInformation.Instance.IsFirstRun;
 
-        public static bool IsAppUpdated => SystemInformation.IsAppUpdated;
+        public static bool IsAppUpdated => SystemInformation.Instance.IsAppUpdated;
 
-        public static string FirstVersionInstalled => SystemInformation.FirstVersionInstalled.ToFormattedString();
+        public static string FirstVersionInstalled => SystemInformation.Instance.FirstVersionInstalled.ToFormattedString();
 
-        public static DateTime FirstUseTime => SystemInformation.FirstUseTime;
+        public static DateTime FirstUseTime => SystemInformation.Instance.FirstUseTime;
 
-        public static DateTime LaunchTime => SystemInformation.LaunchTime;
+        public static DateTime LaunchTime => SystemInformation.Instance.LaunchTime;
 
-        public static DateTime LastLaunchTime => SystemInformation.LastLaunchTime;
+        public static DateTime LastLaunchTime => SystemInformation.Instance.LastLaunchTime;
 
-        public static DateTime LastResetTime => SystemInformation.LastResetTime;
+        public static DateTime LastResetTime => SystemInformation.Instance.LastResetTime;
 
-        public static long LaunchCount => SystemInformation.LaunchCount;
+        public static long LaunchCount => SystemInformation.Instance.LaunchCount;
 
-        public static long TotalLaunchCount => SystemInformation.TotalLaunchCount;
+        public static long TotalLaunchCount => SystemInformation.Instance.TotalLaunchCount;
 
-        public static TimeSpan AppUptime => SystemInformation.AppUptime;
+        public static TimeSpan AppUptime => SystemInformation.Instance.AppUptime;
 
         public static void TrackAppUse(LaunchActivatedEventArgs args)
         {
-            SystemInformation.TrackAppUse(args);
+            SystemInformation.Instance.TrackAppUse(args);
         }
 
         public static async Task<bool> ShowRatingReviewDialog()
