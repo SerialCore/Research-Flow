@@ -48,9 +48,7 @@ namespace LogicService.Service
                                     Title = f.Title.Text,
                                     Published = f.PublishedDate.ToString(),
                                     Link = f.Links[0].Uri.AbsoluteUri,
-                                    Summary = WebUtility.HtmlDecode(Regex.Replace(f.Summary.Text, "<[^>]+?>", "")),
-                                    Tags = "",
-                                    Nodes = f.GetXmlDocument(SyndicationFormat.Rss20).GetXml(),
+                                    Summary = WebUtility.HtmlDecode(Regex.Replace(f.Summary.Text, "<[^>]+?>", ""))
                                 });
                             }
                             if (onGetRssItemsCompleted != null)
@@ -110,9 +108,7 @@ namespace LogicService.Service
                                 Title = f.Title.Text,
                                 Published = f.PublishedDate.ToString(),
                                 Link = f.Links[0].Uri.AbsoluteUri,
-                                Summary = WebUtility.HtmlDecode(Regex.Replace(f.Summary.Text, "<[^>]+?>", "")),
-                                Tags = "",
-                                Nodes = f.GetXmlDocument(SyndicationFormat.Rss20).GetXml(),
+                                Summary = WebUtility.HtmlDecode(Regex.Replace(f.Summary.Text, "<[^>]+?>", ""))
                             });
                         }
                         if (onGetRssItemsCompleted != null)

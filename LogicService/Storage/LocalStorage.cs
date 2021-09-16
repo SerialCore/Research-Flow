@@ -29,9 +29,14 @@ namespace LogicService.Storage
             return ApplicationData.Current.TemporaryFolder;
         }
 
-        public static async Task<StorageFolder> GetCacheSubFolderAsync(string folder)
+        public static async Task<StorageFolder> GetPictureLibrary()
         {
-            return await GetLocalCacheFolder().CreateFolderAsync(folder, CreationCollisionOption.OpenIfExists);
+            return await KnownFolders.PicturesLibrary.CreateFolderAsync("Research Flow", CreationCollisionOption.OpenIfExists); ;
+        }
+
+        public static async Task<StorageFolder> GetDocumentLibrary()
+        {
+            return await KnownFolders.DocumentsLibrary.CreateFolderAsync("Research Flow", CreationCollisionOption.OpenIfExists); ;
         }
 
         public static async Task<StorageFolder> GetDataFolderAsync()
@@ -56,22 +61,12 @@ namespace LogicService.Storage
 
         public static async Task<StorageFolder> GetNoteFolderAsync()
         {
-            return await GetLocalCacheFolder().CreateFolderAsync("Note", CreationCollisionOption.OpenIfExists);
+            return await (await GetDocumentLibrary()).CreateFolderAsync("Note", CreationCollisionOption.OpenIfExists);
         }
 
         public async static Task<StorageFolder> GetPaperFolderAsync()
         {
-            return await GetLocalCacheFolder().CreateFolderAsync("Paper", CreationCollisionOption.OpenIfExists);
-        }
-
-        public async static Task<StorageFolder> GetPictureFolderAsync()
-        {
-            return await GetLocalCacheFolder().CreateFolderAsync("Picture", CreationCollisionOption.OpenIfExists);
-        }
-
-        public async static Task<StorageFolder> GetWebTempAsync()
-        {
-            return await GetTemporaryFolder().CreateFolderAsync("WebCache", CreationCollisionOption.OpenIfExists);
+            return await (await GetDocumentLibrary()).CreateFolderAsync("Paper", CreationCollisionOption.OpenIfExists);
         }
 
         #endregion

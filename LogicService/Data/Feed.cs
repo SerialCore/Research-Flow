@@ -76,10 +76,6 @@ namespace LogicService.Data
 
         public string Summary { get; set; }
 
-        public string Tags { get; set; }
-
-        public string Nodes { get; set; }
-
         #region Equals
 
         public override bool Equals(object obj)
@@ -125,19 +121,15 @@ namespace LogicService.Data
                     [Title] varchar(100) not null,
                     [Published] varchar(50) not null,
                     [Link] varchar(100) not null,
-                    [Summary] varchar(500),
-                    [Tags] varchar(500),
-                    [Nodes] varchar(1000));";
+                    [Summary] varchar(500));";
             DataStorage.FeedData.ExecuteWrite(sql);
         }
 
         public static int DBInsert(List<Feed> feeds)
         {
-            DBDeleteByPID(feeds[0].ParentID);
-
             int affectedRows = 0;
             string sql = @"insert into Feed(ID, ParentID, Title, Published, Link, Summary, Tags, Nodes)
-                values(@ID, @ParentID, @Title, @Published, @Link, @Summary, @Tags, @Nodes);";
+                values(@ID, @ParentID, @Title, @Published, @Link, @Summary);";
             foreach (Feed feed in feeds)
             {
                 affectedRows += DataStorage.FeedData.ExecuteWrite(sql, new Dictionary<string, object>
@@ -147,10 +139,8 @@ namespace LogicService.Data
                     { "@Title", feed.Title },
                     { "@Published", feed.Published },
                     { "@Link", feed.Link },
-                    { "@Summary", feed.Summary },
-                    { "@Tags", feed.Tags },
-                    { "@Nodes", feed.Nodes },
-                });
+                    { "@Summary", feed.Summary }
+                }, false);
             }
 
             FileList.DBInsertList("Data", DataStorage.FeedData.Database);
@@ -178,13 +168,6 @@ namespace LogicService.Data
             return DBReader(reader);
         }
 
-        public static List<Feed> DBSelectByTag(string tag)
-        {
-            string sql = "select * from Feed where Tags like @Tags;";
-            var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@Tags", '%' + tag + '%' } });
-            return DBReader(reader);
-        }
-
         private static List<Feed> DBReader(SqliteDataReader reader)
         {
             List<Feed> feeds = new List<Feed>();
@@ -197,9 +180,7 @@ namespace LogicService.Data
                     Title = reader.GetString(2),
                     Published = reader.GetString(3),
                     Link = reader.GetString(4),
-                    Summary = reader.GetString(5),
-                    Tags = reader.GetString(6),
-                    Nodes = reader.GetString(7)
+                    Summary = reader.GetString(5)
                 });
             }
             reader.Close();

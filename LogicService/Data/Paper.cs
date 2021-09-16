@@ -19,10 +19,6 @@ namespace LogicService.Data
 
         public string Authors { get; set; }
 
-        public string Note { get; set; }
-
-        public string Tags { get; set; }
-
         #region Equals
 
         public override bool Equals(object obj)
@@ -68,9 +64,7 @@ namespace LogicService.Data
                     [Title] varchar(100) not null,
                     [Link] varchar(100),
                     [Published] varchar(50),
-                    [Authors] varchar(100),
-                    [Note] varchar(1000),
-                    [Tags] varchar(500))";
+                    [Authors] varchar(100));";
             DataStorage.PaperData.ExecuteWrite(sql);
         }
 
@@ -78,7 +72,7 @@ namespace LogicService.Data
         {
             int affectedRows = 0;
             string sql = @"insert into Paper(ID, ParentID, Title, Link, Published, Authors, Note, Tags)
-                values(@ID, @ParentID, @Title, @Link, @Published, @Authors, @Note, @Tags);";
+                values(@ID, @ParentID, @Title, @Link, @Published, @Authors);";
 
             foreach (Paper paper in paperlist)
             {
@@ -89,9 +83,7 @@ namespace LogicService.Data
                     { "@Title", paper.Title },
                     { "@Link", paper.Link },
                     { "@Published", paper.Published },
-                    { "@Authors", paper.Authors },
-                    { "@Note", paper.Note },
-                    { "@Tags", paper.Tags },
+                    { "@Authors", paper.Authors }
                 });
             }
 
@@ -148,9 +140,7 @@ namespace LogicService.Data
                         Title = reader.GetString(2),
                         Link = reader.GetString(3),
                         Published = reader.GetString(4),
-                        Authors = reader.GetString(5),
-                        Note = reader.GetString(6),
-                        Tags = reader.GetString(7),
+                        Authors = reader.GetString(5)
                     });
                 }
                 reader.Close();
@@ -180,13 +170,11 @@ namespace LogicService.Data
                     [Title] varchar(100) not null,
                     [Link] varchar(100),
                     [Published] varchar(50),
-                    [Authors] varchar(100),
-                    [Note] varchar(1000),
-                    [Tags] varchar(500))";
+                    [Authors] varchar(100));";
             DataStorage.PaperData.ExecuteWrite(sql1);
 
-            string sql2 = @"insert into temp(ID, ParentID, Title, Link, Authors, Note, Tags) 
-                    select ID, ParentID, Title, Link, Authors, Note, Tags from Paper;";
+            string sql2 = @"insert into temp(ID, ParentID, Title, Link, Authors) 
+                    select ID, ParentID, Title, Link, Authors from Paper;";
             DataStorage.PaperData.ExecuteWrite(sql2);
 
             string sql21 = "update temp set Published = '';";

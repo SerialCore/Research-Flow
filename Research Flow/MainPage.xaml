@@ -10,7 +10,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid x:Name="FullPage" Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+    <Grid x:Name="FullPage" Background="WhiteSmoke">
 
         <NavigationView x:Name="NavView"
                         PaneDisplayMode="Top"
@@ -62,10 +62,10 @@
                             </Flyout>
                         </FlyoutBase.AttachedFlyout>
                     </ListViewItem>-->
-                    <AppBarButton Icon="AttachCamera" Click="ScreenShot_Upload" ToolTipService.ToolTip="ScreenShot" Width="42" Height="42"/>
+                    <AppBarButton Icon="AttachCamera" Click="ScreenShot_Upload" ToolTipService.ToolTip="ScreenShot" Width="40"/>
                     <!--<AppBarButton Icon="SwitchApps" Click="Open_FlowBlade" ToolTipService.ToolTip="Flow" Width="42" Height="42"/>-->
                     <!--<AppBarButton Icon="Message" Click="Open_ChatBlade" ToolTipService.ToolTip="Chat" Width="42" Height="42"/>-->
-                    <AppBarButton Icon="FullScreen" Click="FullScreen_Click" ToolTipService.ToolTip="FullScreen" Height="42" Width="42"/>
+                    <AppBarButton Icon="FullScreen" Click="FullScreen_Click" ToolTipService.ToolTip="FullScreen" Width="40"/>
                 </StackPanel>
             </NavigationView.PaneFooter>
 
@@ -141,7 +141,7 @@
                                    HorizontalOffset="0"/>
 
         <muxc:TeachingTip x:Name="BannerMessage"
-                          PreferredPlacement="RightBottom"
+                          PreferredPlacement="RightTop"
                           PlacementMargin="20"
                           IsLightDismissEnabled="False">
         </muxc:TeachingTip>

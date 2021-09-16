@@ -13,7 +13,7 @@
 
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -34,9 +34,9 @@
             </StackPanel>
 
             <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                <AppBarButton Icon="Undo" Click="UndoInk" Height="40" Width="38"/>
-                <AppBarButton Icon="Redo" Click="RedoInk" Height="40" Width="38"/>
-                <AppBarButton Icon="Share" Tapped="Flyout_Tapped" Height="40" Width="38">
+                <AppBarButton Icon="Undo" ToolTipService.ToolTip="Undo" Click="UndoInk" Width="40"/>
+                <AppBarButton Icon="Redo" ToolTipService.ToolTip="Redo" Click="RedoInk" Width="40"/>
+                <AppBarButton Icon="Share" ToolTipService.ToolTip="Share" Tapped="Flyout_Tapped" Width="40">
                     <FlyoutBase.AttachedFlyout>
                         <MenuFlyout>
                             <MenuFlyoutItem Text="Share" Click="Share_Note"/>
@@ -44,26 +44,26 @@
                         </MenuFlyout>
                     </FlyoutBase.AttachedFlyout>
                 </AppBarButton>
-                <AppBarButton Icon="OpenFile" Click="Import_Note" Height="40" Width="38"/>
-                <AppBarButton Icon="Document" Click="Open_Document" Height="40" Width="38"/>
+                <AppBarButton Icon="OpenFile" ToolTipService.ToolTip="Open File" Click="Import_Note" Width="40"/>
+                <AppBarButton Icon="Document" ToolTipService.ToolTip="Documents" Click="Open_Document" Width="40"/>
             </StackPanel>
 
-            <SplitView Grid.Row="1" Grid.ColumnSpan="3" x:Name="notepanel" OpenPaneLength="400" PanePlacement="Right" DisplayMode="Overlay">
+            <SplitView Grid.Row="1" Grid.ColumnSpan="3" x:Name="notepanel" OpenPaneLength="300" PanePlacement="Right" DisplayMode="Overlay">
                 <SplitView.Pane>
                     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                        <ListView x:Name="notelist" IsItemClickEnabled="True" ItemClick="Notelist_ItemClick" Margin="0,0,0,40">
+                        <CommandBar Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                            <CommandBar.Content>
+                                <TextBlock Text="Notes" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,16,0,0"/>
+                            </CommandBar.Content>
+                            <AppBarButton Icon="Delete" Label="Delete" Click="Delete_Note"/>
+                        </CommandBar>
+                        <ListView x:Name="notelist" IsItemClickEnabled="True" ItemClick="Notelist_ItemClick" Margin="0,50,0,0">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding}"/>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                        <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                            <CommandBar.Content>
-                                <TextBlock Text="Notes" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,10,0,0"/>
-                            </CommandBar.Content>
-                            <AppBarButton Icon="Delete" Label="Delete" Click="Delete_Note"/>
-                        </CommandBar>
                     </Grid>
                 </SplitView.Pane>
                 <SplitView.Content>

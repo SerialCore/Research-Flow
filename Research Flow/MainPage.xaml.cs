@@ -1,6 +1,5 @@
 ﻿using LogicService.Application;
 using LogicService.Data;
-using LogicService.Service;
 using LogicService.Storage;
 using System;
 using System.Collections.Generic;
@@ -267,8 +266,8 @@ namespace Research_Flow
 
         private async void ScreenShot_Upload(object sender, RoutedEventArgs e)
         {
+            var file = await (await LocalStorage.GetPictureLibrary()).CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
             var bitmap = new RenderTargetBitmap();
-            StorageFile file = await (await LocalStorage.GetPictureFolderAsync()).CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
             await bitmap.RenderAsync(FullPage);
             var buffer = await bitmap.GetPixelsAsync();
             using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
@@ -285,12 +284,8 @@ namespace Research_Flow
                 await encode.FlushAsync();
             }
 
-            if (file != null)
-            {
-                await file.CopyAsync(KnownFolders.PicturesLibrary);
-                ApplicationMessage.SendMessage(new ShortMessage { Title = "Screenshot", Content = "Saved to Pictures Library", Time = DateTimeOffset.Now },
+            ApplicationMessage.SendMessage(new ShortMessage { Title = "Screenshot", Content = "Saved to Pictures Library", Time = DateTimeOffset.Now },
                     ApplicationMessage.MessageType.Banner);
-            }
         }
 
         private void FullScreen_Click(object sender, RoutedEventArgs e)

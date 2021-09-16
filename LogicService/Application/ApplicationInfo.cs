@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Globalization;
 using System.Net.NetworkInformation;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.Devices.Power;

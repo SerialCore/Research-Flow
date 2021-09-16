@@ -1,11 +1,9 @@
 ﻿using LogicService.Application;
 using LogicService.Data;
-using LogicService.Service;
 using LogicService.Storage;
 using Microsoft.Services.Store.Engagement;
 using System;
 using Windows.System;
-using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -138,91 +136,91 @@ namespace Research_Flow
 
         #region Developer
 
-        private async void Show_FeedTaskLog(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var folder = await LocalStorage.GetLogFolderAsync();
-                var file = await folder.GetFileAsync("FeedTask.log");
-                await Launcher.LaunchFileAsync(file);
-            }
-            catch (Exception exception)
-            {
-                ApplicationMessage.SendMessage(new ShortMessage { Title = "SettingException", Content = exception.Message, Time = DateTimeOffset.Now },
-                    ApplicationMessage.MessageType.InApp);
-            }
-        }
+        //private async void Show_FeedTaskLog(object sender, RoutedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        var folder = await LocalStorage.GetLogFolderAsync();
+        //        var file = await folder.GetFileAsync("FeedTask.log");
+        //        await Launcher.LaunchFileAsync(file);
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        ApplicationMessage.SendMessage(new ShortMessage { Title = "SettingException", Content = exception.Message, Time = DateTimeOffset.Now },
+        //            ApplicationMessage.MessageType.InApp);
+        //    }
+        //}
 
-        private async void Show_RSSList(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            try
-            {
-                var folder = await LocalStorage.GetDataFolderAsync();
-                var file = await folder.GetFileAsync("rss.list");
-                await Launcher.LaunchFileAsync(file);
-            }
-            catch (Exception exception)
-            {
-                ApplicationMessage.SendMessage(new ShortMessage { Title = "SettingException", Content = exception.Message, Time = DateTimeOffset.Now },
-                    ApplicationMessage.MessageType.InApp);
-            }
-        }
+        //private async void Show_RSSList(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        var folder = await LocalStorage.GetDataFolderAsync();
+        //        var file = await folder.GetFileAsync("rss.list");
+        //        await Launcher.LaunchFileAsync(file);
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        ApplicationMessage.SendMessage(new ShortMessage { Title = "SettingException", Content = exception.Message, Time = DateTimeOffset.Now },
+        //            ApplicationMessage.MessageType.InApp);
+        //    }
+        //}
 
-        private async void Show_TopicList(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            try
-            {
-                var folder = await LocalStorage.GetDataFolderAsync();
-                var file = await folder.GetFileAsync("topic.list");
-                await Launcher.LaunchFileAsync(file);
-            }
-            catch (Exception exception)
-            {
-                ApplicationMessage.SendMessage(new ShortMessage { Title = "SettingException", Content = exception.Message, Time = DateTimeOffset.Now }, 
-                    ApplicationMessage.MessageType.InApp);
-            }
-        }
+        //private async void Show_TopicList(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        var folder = await LocalStorage.GetDataFolderAsync();
+        //        var file = await folder.GetFileAsync("topic.list");
+        //        await Launcher.LaunchFileAsync(file);
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        ApplicationMessage.SendMessage(new ShortMessage { Title = "SettingException", Content = exception.Message, Time = DateTimeOffset.Now }, 
+        //            ApplicationMessage.MessageType.InApp);
+        //    }
+        //}
 
-        private void Show_BackgroundTask(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            tasklist.ItemsSource = ApplicationTask.ListBackgroundTask();
-        }
+        //private void Show_BackgroundTask(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        //{
+        //    tasklist.ItemsSource = ApplicationTask.ListBackgroundTask();
+        //}
 
-        private void Show_AlarmToast(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            toastlist.ItemsSource = ApplicationNotification.ListAlarmToast();
-        }
+        //private void Show_AlarmToast(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        //{
+        //    toastlist.ItemsSource = ApplicationNotification.ListAlarmToast();
+        //}
 
-        private async void Cancel_AlarmToast(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            await ApplicationNotification.CancelAllToast();
-            toastlist.ItemsSource = ApplicationNotification.ListAlarmToast();
-        }
+        //private async void Cancel_AlarmToast(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        //{
+        //    await ApplicationNotification.CancelAllToast();
+        //    toastlist.ItemsSource = ApplicationNotification.ListAlarmToast();
+        //}
 
-        private void Show_Database(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            switch (databaselist.SelectedIndex)
-            {
-                case 0:
-                    dataviewer.ItemsSource = Feed.DBSelectByLimit(100);
-                    break;
-                case 1:
-                    dataviewer.ItemsSource = Crawlable.DBSelectByLimit(100);
-                    break;
-                case 2:
-                    dataviewer.ItemsSource = Paper.DBSelectByLimit(100);
-                    break;
-                case 3:
-                    dataviewer.ItemsSource = PaperFile.DBSelectByLimit(100);
-                    break;
-                case 4:
-                    dataviewer.ItemsSource = FileList.DBSelectAllTrace();
-                    break;
-                case 5:
-                    dataviewer.ItemsSource = FileList.DBSelectAllList();
-                    break;
-            }
-        }
+        //private void Show_Database(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        //{
+        //    switch (databaselist.SelectedIndex)
+        //    {
+        //        case 0:
+        //            dataviewer.ItemsSource = Feed.DBSelectByLimit(100);
+        //            break;
+        //        case 1:
+        //            dataviewer.ItemsSource = Crawlable.DBSelectByLimit(100);
+        //            break;
+        //        case 2:
+        //            dataviewer.ItemsSource = Paper.DBSelectByLimit(100);
+        //            break;
+        //        case 3:
+        //            dataviewer.ItemsSource = PaperFile.DBSelectByLimit(100);
+        //            break;
+        //        case 4:
+        //            dataviewer.ItemsSource = FileList.DBSelectAllTrace();
+        //            break;
+        //        case 5:
+        //            dataviewer.ItemsSource = FileList.DBSelectAllList();
+        //            break;
+        //    }
+        //}
 
         #endregion
 

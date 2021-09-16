@@ -1,9 +1,5 @@
 ﻿using LogicService.Data;
 using LogicService.Storage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LogicService.Application
@@ -17,14 +13,12 @@ namespace LogicService.Application
             await LocalStorage.GetLogFolderAsync();
             await LocalStorage.GetNoteFolderAsync();
             await LocalStorage.GetPaperFolderAsync();
-            await LocalStorage.GetPictureFolderAsync();
         }
 
         public static void ConfigureDB()
         {
             FileList.DBInitializeTrace();
             FileList.DBInitializeList();
-            Crawlable.DBInitialize();
             Feed.DBInitialize();
             Paper.DBInitialize();
             PaperFile.DBInitialize();

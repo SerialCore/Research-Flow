@@ -33,10 +33,6 @@ namespace LogicService.Data
 
         public string Content { get; set; }
 
-        public string Tags { get; set; }
-
-        public string Filters { get; set; }
-
         #region Equals
 
         public override bool Equals(object obj)
@@ -81,17 +77,15 @@ namespace LogicService.Data
                     [ParentID] varchar(50),
                     [Text] varchar(100) not null,
                     [Url] varchar(100) not null,
-                    [Content] varchar(1000),
-                    [Tags] varchar(100),
-                    [Filters] varchar(500))";
+                    [Content] varchar(1000));";
             DataStorage.CrawlData.ExecuteWrite(sql);
         }
 
         public static int DBInsert(List<Crawlable> crawlablelist)
         {
             int affectedRows = 0;
-            string sql = @"insert into Crawlable(ID, ParentID, Text, Url, Content, Tags, Filters)
-                values(@ID, @ParentID, @Text, @Url, @Content, @Tags, @Filters);";
+            string sql = @"insert into Crawlable(ID, ParentID, Text, Url, Content)
+                values(@ID, @ParentID, @Text, @Url, @Content);";
 
             foreach (Crawlable crawlable in crawlablelist)
             {
@@ -103,9 +97,7 @@ namespace LogicService.Data
                     { "@ParentID", crawlable.ParentID },
                     { "@Text", crawlable.Text },
                     { "@Url", crawlable.Url },
-                    { "@Content", crawlable.Content },
-                    { "@Tags", crawlable.Tags },
-                    { "@Filters", crawlable.Filters },
+                    { "@Content", crawlable.Content }
                 }, false);
             }
 
@@ -155,13 +147,6 @@ namespace LogicService.Data
             return DBReader(reader);
         }
 
-        public static List<Crawlable> DBSelectByTag(string tag)
-        {
-            string sql = "select * from Crawlable where Tags like @Tags;";
-            var reader = DataStorage.CrawlData.ExecuteRead(sql, new Dictionary<string, object> { { "@Tags", '%' + tag + '%' } });
-            return DBReader(reader);
-        }
-
         private static List<Crawlable> DBReader(SqliteDataReader reader)
         {
             List<Crawlable> crawl = new List<Crawlable>();
@@ -173,9 +158,7 @@ namespace LogicService.Data
                     ParentID = reader.GetString(1),
                     Text = reader.GetString(2),
                     Url = reader.GetString(3),
-                    Content = reader.GetString(4),
-                    Tags = reader.GetString(5),
-                    Filters = reader.GetString(6),
+                    Content = reader.GetString(4)
                 });
             }
             reader.Close();

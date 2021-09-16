@@ -181,23 +181,17 @@ namespace Research_Flow
         {
             var feed = e.ClickedItem as Feed;
             selectedFeed = feed;
-            this.feedItem_detail.IsPaneOpen = true;
+            this.feedDetail.IsOpen = true;
 
             feedTitle.Text = feed.Title + "\n";
+            feedLink.Content = feed.Link;
+            feedLink.NavigateUri = new Uri(feed.Link);
             feedPublished.Text = feed.Published;
             feedSummary.Text = feed.Summary + "\n";
-
-            StringBuilder builder = new StringBuilder();
-            foreach (XmlElement pair in Feed.GetNodes(feed.Nodes))
-            {
-                builder.AppendLine(pair.Name + " : " + pair.InnerText);
-            }
-            feedNodes.Text = builder.ToString();
         }
 
         private void Browse_Feed(object sender, RoutedEventArgs e)
             => this.Frame.Navigate(typeof(SearchEngine), selectedFeed.Link);
-
 
         private void Flow_Feed(object sender, RoutedEventArgs e)
             => this.Frame.Navigate(typeof(PaperBox), selectedFeed);
@@ -211,8 +205,6 @@ namespace Research_Flow
                 Text = selectedFeed.Title,
                 Url = selectedFeed.Link,
                 Content = selectedFeed.Summary,
-                Tags = selectedFeed.Tags,
-                Filters = "",
             });
         }
 

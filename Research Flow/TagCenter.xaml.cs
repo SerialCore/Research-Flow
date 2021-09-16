@@ -135,23 +135,6 @@ namespace Research_Flow
 
         private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            switch ((sender as Pivot).SelectedIndex)
-            {
-                case 0:
-                    break;
-                case 1:
-                    if (feedTags.ItemsSource == null && !string.IsNullOrEmpty(tagPanelTitle.Text))
-                        feedTags.ItemsSource = Feed.DBSelectByTag(tagPanelTitle.Text);
-                    break;
-                case 2:
-                    if (crawlTags.ItemsSource == null && !string.IsNullOrEmpty(tagPanelTitle.Text))
-                        crawlTags.ItemsSource = Crawlable.DBSelectByTag(tagPanelTitle.Text);
-                    break;
-                case 3:
-                    if (paperTags.ItemsSource == null && !string.IsNullOrEmpty(tagPanelTitle.Text))
-                        paperTags.ItemsSource = Paper.DBSelectByTag(tagPanelTitle.Text);
-                    break;
-            }
         }
 
     }

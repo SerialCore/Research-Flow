@@ -11,42 +11,10 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <Pivot Margin="20,0,20,10">
-            <PivotItem Header="Setting">
-                <ScrollViewer>
-                    <StackPanel>
-                        <TextBlock Text="Feedback" FontSize="20"/>
-                        <HyperlinkButton Content="Open Feedback Hub" Click="Give_Feedback" Margin="0,2"/>
-                        <HyperlinkButton Content="Rate on Microsoft Store" Click="Give_Rate" Margin="0,2"/>
-                        <HyperlinkButton Content="zwx.atomx@outlook.com" NavigateUri="mailto:zwx.atomx@outlook.com"/>
-
-                        <TextBlock Text="Data Management" FontSize="20"/>
-                        <TextBlock Text="Please do not modify data in File Explorer unless you are ready to clear this account. &#x000A;User data should have been hidden from all of you." Margin="0,5,0,2"/>
-                        <StackPanel Orientation="Horizontal" Margin="0,2">
-                            <Button Click="AccountDownload_Click">
-                                <Grid>
-                                    <TextBlock Text="Download all from OneDrive"/>
-                                    <ProgressRing x:Name="waitSync1"/>
-                                </Grid>
-                            </Button>
-                            <Button Click="AccountSync_Click" Margin="10,0,0,0">
-                                <Grid>
-                                    <TextBlock Text="Synchronize with OneDrive"/>
-                                    <ProgressRing x:Name="waitSync2"/>
-                                </Grid>
-                            </Button>
-                            <ProgressBar x:Name="syncStatu" Width="200" Margin="10,0,0,0" Visibility="Collapsed"/>
-                            <TextBlock x:Name="syncCount" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                        </StackPanel>
-
-                    </StackPanel>
-                </ScrollViewer>
-            </PivotItem>
-            
             <PivotItem Header="Information">
                 <ScrollViewer>
                     <Grid >
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
                             <ColumnDefinition />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
@@ -84,7 +52,12 @@
                         </TextBlock>
                         <ScrollViewer Grid.Column="1">
                             <StackPanel Margin="5,0">
-                                <TextBlock Text="Privacy Policy" FontWeight="Bold" Margin="0,10"/>
+                                <TextBlock Text="Feedback" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,10"/>
+                                <HyperlinkButton Content="Open Feedback Hub" Click="Give_Feedback" Margin="0,2"/>
+                                <HyperlinkButton Content="Rate on Microsoft Store" Click="Give_Rate" Margin="0,2"/>
+                                <HyperlinkButton Content="serialcore@outlook.com" NavigateUri="mailto:serialcore@outlook.com"/>
+
+                                <TextBlock Text="Privacy Policy" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,10"/>
                                 <TextBlock TextWrapping="Wrap">
                                     <Run >
                                         Please note that this app would never utilize any user data for malignant purpose. 
@@ -92,11 +65,8 @@
                                         Some data will be found explicitly in OneDrive folder with user’s confirmation and synchronization.
                                     </Run>
                                 </TextBlock>
-                            </StackPanel>
-                        </ScrollViewer>
-                        <ScrollViewer Grid.Column="2">
-                            <StackPanel Margin="5,0">
-                                <TextBlock Text="Question - Answer" FontWeight="Bold" Margin="0,10"/>
+
+                                <TextBlock Text="Question - Answer" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,10"/>
                                 <TextBlock TextWrapping="Wrap">
                                     <Run Text="What if I got a malformed database disk image?" FontWeight="SemiBold"/><LineBreak/>
                                     <Run >
@@ -111,7 +81,7 @@
                 </ScrollViewer>
             </PivotItem>
 
-            <PivotItem x:Name="developerPanel" Header="Developer">
+            <!--<PivotItem x:Name="developerPanel" Header="Developer">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition />
@@ -180,7 +150,7 @@
                         <toolkit:DataGrid x:Name="dataviewer" Margin="0,32,0,0" MaxColumnWidth="300"/>
                     </Grid>
                 </Grid>
-            </PivotItem>
+            </PivotItem>-->
         </Pivot>
     </Grid>
 

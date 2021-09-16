@@ -13,7 +13,7 @@
         <Grid >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="300"/>
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
@@ -71,8 +71,6 @@
                     <AutoSuggestBox x:Name="paperlink" Header="Website" QueryIcon="Find" QuerySubmitted="PaperLink_QuerySubmitted"/>
                     <TextBox x:Name="paperdate" Header="Published" IsSpellCheckEnabled="False"/>
                     <TextBox x:Name="paperauthor" Header="Authors" PlaceholderText="Author1, Author2, Author3" IsSpellCheckEnabled="False"/>
-                    <TextBox x:Name="papernote" Header="Paper Note" PlaceholderText="reason to refer" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="200"/>
-                    <TextBox x:Name="papertags" Header="Paper Tags" PlaceholderText="#Tag1##Tag2#" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" Height="100"/>
                     <TextBox x:Name="pdfname" Header="Paper File" IsSpellCheckEnabled="False"/>
                 </StackPanel>
                 <CommandBar VerticalAlignment="Bottom" Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">

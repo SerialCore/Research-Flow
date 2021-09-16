@@ -8,8 +8,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.Storage;
-using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -44,20 +42,16 @@ namespace Research_Flow
                     if (webView.Source == null)
                     {
                         webView.Source = new Uri(link);
-                        FirstCrawl(link);
                     }
                     else
                     {
                         if (!webView.Source.ToString().Equals(link)) // to solve the BUG: always re-pass parameter when GoBack
                         {
                             webView.Source = new Uri(link);
-                            FirstCrawl(link);
                         }
                     }
                 }
             }
-
-            InitializeFavorite();
         }
 
         private async void InitializeSearch()
@@ -74,34 +68,15 @@ namespace Research_Flow
                 {
                     { "ACS", "https://pubs.acs.org/action/doSearch?AllField=QUERY" },
                     { "arXiv All", "https://arxiv.org/search/?query=QUERY&searchtype=all" },
-                    { "Bing Academic", "https://cn.bing.com/academic/search?q=QUEST&FORM=HDRSC4" },
+                    { "Bing Academic", "https://cn.bing.com/academic/search?q=QUERY&FORM=HDRSC4" },
                 };
                 LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "search.list", SearchSources);
             }
             finally
             {
                 searchlist.ItemsSource = SearchSources.Keys;
-                searchlist.SelectedIndex = 0;
+                searchlist.SelectedIndex = 1;
                 source_list.ItemsSource = SearchSources;
-                linkFilter1.ItemsSource = Crawlable.LinkType.Keys;
-                linkFilter1.Text = "Text: NotEmpty";
-            }
-        }
-
-        private async void InitializeFavorite()
-        {
-            try
-            {
-                favorites = await LocalStorage.ReadJsonAsync<ObservableCollection<Crawlable>>(
-                    await LocalStorage.GetDataFolderAsync(), "favorite.list");
-            }
-            catch
-            {
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "favorite.list", favorites);
-            }
-            finally
-            {
-                favoritelist.ItemsSource = favorites;
             }
         }
 
@@ -111,9 +86,8 @@ namespace Research_Flow
 
         private void Search_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            string link = SearchSources.GetValueOrDefault(searchlist.SelectedItem as string).Replace("QUEST", queryQuest.Text);
+            string link = SearchSources.GetValueOrDefault(searchlist.SelectedItem as string).Replace("QUERY", queryQuest.Text);
             webView.Source = new Uri(link);
-            FirstCrawl(link);
         }
 
         private void Open_SearchList(object sender, RoutedEventArgs e)
@@ -213,11 +187,6 @@ namespace Research_Flow
 
         #region Browser
 
-        private ObservableCollection<Crawlable> favorites = new ObservableCollection<Crawlable>();
-
-        private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-            => FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
-
         private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
         {
             webWaiting.Visibility = Visibility.Visible;
@@ -228,40 +197,18 @@ namespace Research_Flow
         {
             webWaiting.ShowPaused = true;
             webWaiting.Visibility = Visibility.Collapsed;
-            siteUrl.Text = webView.Source.AbsoluteUri;
         }
 
         private void WebView_FrameNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
             webWaiting.ShowPaused = true;
             webWaiting.Visibility = Visibility.Collapsed;
-            siteUrl.Text = webView.Source.AbsoluteUri;
         }
 
         private void WebView_ManipulationCompleted(object sender, Windows.UI.Xaml.Input.ManipulationCompletedRoutedEventArgs e)
         {
             webWaiting.ShowPaused = true;
             webWaiting.Visibility = Visibility.Collapsed;
-            siteUrl.Text = webView.Source.AbsoluteUri;
-        }
-
-        private void Browse_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-        {
-            try
-            {
-                string url = siteUrl.Text;
-                url = url.StartsWith("http") ? url : "http://" + url;
-                webView.Source = new Uri(url);
-                FirstCrawl(url);
-            }
-            catch { }
-        }
-
-        private void FavoriteList_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            Crawlable fav = e.ClickedItem as Crawlable;
-            webView.Source = new Uri(fav.Url);
-            FirstCrawl(fav.Url);
         }
 
         private void PageBack(object sender, RoutedEventArgs e)
@@ -282,42 +229,6 @@ namespace Research_Flow
         }
 
         private void PageRefresh(object sender, RoutedEventArgs e) => webView.Refresh();
-
-        private void Favorite_Click(object sender, RoutedEventArgs e)
-        {
-            if (webView.Source != null)
-            {
-                Crawlable newcrawl = new Crawlable()
-                {
-                    ID = HashEncode.MakeMD5(webView.Source.ToString()),
-                    ParentID = "",
-                    Text = webView.DocumentTitle,
-                    Url = webView.Source.ToString(),
-                    Content = "",
-                    Tags = "",
-                    Filters = ""
-                };
-                Crawlable.AddtoFavorite(newcrawl);
-                favorites.Add(newcrawl);
-            }
-        }
-
-        private async void AddToTagTopic(object sender, RoutedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(queryQuest.Text))
-            {
-                var tags = await LocalStorage.ReadJsonAsync<HashSet<string>>(
-                    await LocalStorage.GetDataFolderAsync(), "tag.list");
-                tags.UnionWith(new List<string> { queryQuest.Text , "@Search"});
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
-                var topics = await LocalStorage.ReadJsonAsync<List<Topic>>(
-                    await LocalStorage.GetDataFolderAsync(), "topic.list");
-                topics.Add(new Topic { ID = HashEncode.MakeMD5(DateTimeOffset.Now.ToString()), 
-                    Title = "#QSearch##" + queryQuest.Text + '#' + SearchSources.GetValueOrDefault(searchlist.SelectedItem as string),
-                    Color = "#FFFFF7D1"});
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topic.list", topics);
-            }
-        }
 
         private void ShareLink(object sender, RoutedEventArgs e)
         {
@@ -345,139 +256,92 @@ namespace Research_Flow
             }
         }
 
-        private async void Link_list_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            string link = (e.ClickedItem as Crawlable).Url;
+        //private async void AddToTagTopic(object sender, RoutedEventArgs e)
+        //{
+        //    if (!string.IsNullOrEmpty(queryQuest.Text))
+        //    {
+        //        var tags = await LocalStorage.ReadJsonAsync<HashSet<string>>(
+        //            await LocalStorage.GetDataFolderAsync(), "tag.list");
+        //        tags.UnionWith(new List<string> { queryQuest.Text, "@Search" });
+        //        LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
+        //        var topics = await LocalStorage.ReadJsonAsync<List<Topic>>(
+        //            await LocalStorage.GetDataFolderAsync(), "topic.list");
+        //        topics.Add(new Topic
+        //        {
+        //            ID = HashEncode.MakeMD5(DateTimeOffset.Now.ToString()),
+        //            Title = "#QSearch##" + queryQuest.Text + '#' + SearchSources.GetValueOrDefault(searchlist.SelectedItem as string),
+        //            Color = "#FFFFF7D1"
+        //        });
+        //        LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topic.list", topics);
+        //    }
+        //}
 
-            // check if a downloadable link
-            if (Regex.IsMatch(link, Crawlable.LinkType["Url: HasPDF"]))
-            {
-                string name = "";
-                // choose url name or page title to be file name, by user setting
-                string[] split = link.Split('/');
-                // or use regex ".*/(.*?)$"
-                if (string.IsNullOrEmpty(split[split.Length - 1]))
-                    name = DateTime.Now.ToString("yyyyMMddhhmm") + ".pdf";
-                else
-                    name = split[split.Length - 1].Replace(".pdf", "") + ".pdf"; // in case of *.pdf.pdf
+        //private async void Link_list_ItemClick(object sender, ItemClickEventArgs e)
+        //{
+        //    string link = (e.ClickedItem as Crawlable).Url;
 
-                downloadClose.IsEnabled = false;
-                downloadStatus.Text = "Processing";
-                downloadPanel.Visibility = Visibility.Visible;
-                WebClientService webClient = new WebClientService();
-                webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
-                webClient.DownloadFile(link, (await LocalStorage.GetPaperFolderAsync()).Path, name,
-                    async () =>
-                    {
-                        webClient.DownloadProgressChanged -= WebClient_DownloadProgressChanged;
-                        await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                        {
-                            downloadClose.IsEnabled = true;
-                            // TODO: auto open
-                        });
-                    },
-                    async (exception) =>
-                    {
-                        await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                        {
-                            downloadClose.IsEnabled = true;
-                            ApplicationMessage.SendMessage(new ShortMessage { Title = "DownloadException", Content = exception, Time = DateTimeOffset.Now }, 
-                                ApplicationMessage.MessageType.InApp);
-                        });
-                    });
-            }
-            else
-                try
-                {
-                    webView.Source = new Uri(link);
-                }
-                catch { }
-        }
+        //    // check if a downloadable link
+        //    if (Regex.IsMatch(link, Crawlable.LinkType["Url: HasPDF"]))
+        //    {
+        //        string name = "";
+        //        // choose url name or page title to be file name, by user setting
+        //        string[] split = link.Split('/');
+        //        // or use regex ".*/(.*?)$"
+        //        if (string.IsNullOrEmpty(split[split.Length - 1]))
+        //            name = DateTime.Now.ToString("yyyyMMddhhmm") + ".pdf";
+        //        else
+        //            name = split[split.Length - 1].Replace(".pdf", "") + ".pdf"; // in case of *.pdf.pdf
 
-        private async void WebClient_DownloadProgressChanged(object sender, DownloadEventArgs e)
-        {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                int received = e.BytesReceived / 1024;
-                int total = e.TotalBytes / 1024;
-                downloadBar.Maximum = total;
-                downloadBar.Value = received;
-                downloadStatus.Text = received + " / " + total + " KB";
-            });
-        }
+        //        downloadClose.IsEnabled = false;
+        //        downloadStatus.Text = "Processing";
+        //        downloadPanel.Visibility = Visibility.Visible;
+        //        WebClientService webClient = new WebClientService();
+        //        webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
+        //        webClient.DownloadFile(link, (await LocalStorage.GetPaperFolderAsync()).Path, name,
+        //            async () =>
+        //            {
+        //                webClient.DownloadProgressChanged -= WebClient_DownloadProgressChanged;
+        //                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+        //                {
+        //                    downloadClose.IsEnabled = true;
+        //                    // TODO: auto open
+        //                });
+        //            },
+        //            async (exception) =>
+        //            {
+        //                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+        //                {
+        //                    downloadClose.IsEnabled = true;
+        //                    ApplicationMessage.SendMessage(new ShortMessage { Title = "DownloadException", Content = exception, Time = DateTimeOffset.Now }, 
+        //                        ApplicationMessage.MessageType.InApp);
+        //                });
+        //            });
+        //    }
+        //    else
+        //        try
+        //        {
+        //            webView.Source = new Uri(link);
+        //        }
+        //        catch { }
+        //}
 
-        private void CloseDownloadPanel(object sender, RoutedEventArgs e)
-        {
-            downloadBar.Value = 0;
-            downloadPanel.Visibility = Visibility.Collapsed;
-        }
+        //private async void WebClient_DownloadProgressChanged(object sender, DownloadEventArgs e)
+        //{
+        //    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+        //    {
+        //        int received = e.BytesReceived / 1024;
+        //        int total = e.TotalBytes / 1024;
+        //        downloadBar.Maximum = total;
+        //        downloadBar.Value = received;
+        //        downloadStatus.Text = received + " / " + total + " KB";
+        //    });
+        //}
 
-        #endregion
-
-        #region Fisrt Crawl
-
-        private CrawlerService currentCrawled = null;
-
-        private void FirstCrawl_Click(object sender, RoutedEventArgs e)
-        {
-            if (crawlPane.IsPaneOpen)
-            {
-                crawlPane.IsPaneOpen = false;
-                return;
-            }
-            if (webView.Source != null)
-                FirstCrawl(webView.Source.ToString());
-        }
-
-        private void FirstCrawl(string urlstring)
-        {
-            crawlPane.IsPaneOpen = true;
-            if (currentCrawled != null)
-                if (currentCrawled.Url.Equals(urlstring)) // in case of gb2312
-                    return;
-            craWaiting.IsActive = true;
-
-            currentCrawled = new CrawlerService(urlstring);
-            currentCrawled.BeginGetResponse(
-                async (result) =>
-                {
-                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-                    {
-                        LinkFilter_QuerySubmitted(null, null);
-                        craWaiting.IsActive = false;
-
-                        try
-                        {
-                            pagetitle.Text = result.Title;
-                            pagehost.Text = result.Host;
-                            pagesize.Text = result.PageSize.ToString();
-                            pagecontent.Text = result.Content;
-                            string htmlname = HashEncode.MakeMD5(result.Url) + ".txt";
-                            LocalStorage.GeneralWriteAsync(await LocalStorage.GetWebTempAsync(), htmlname, result.Html, false);
-                        }
-                        catch { }
-                    });
-                },
-                async (exception) =>
-                {
-                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    {
-                        currentCrawled = null;
-                        craWaiting.IsActive = false;
-                        ApplicationMessage.SendMessage(new ShortMessage { Title = "SearchException", Content = exception , Time = DateTimeOffset.Now }, 
-                            ApplicationMessage.MessageType.InApp);
-                    });
-                });
-        }
-
-        private async void HtmlFile_Click(Windows.UI.Xaml.Documents.Hyperlink sender, Windows.UI.Xaml.Documents.HyperlinkClickEventArgs args)
-        {
-            StorageFile file = await (await LocalStorage.GetWebTempAsync()).GetFileAsync(HashEncode.MakeMD5(currentCrawled.Url) + ".txt");
-            await Launcher.LaunchFileAsync(file);
-        }
-
-        private void LinkFilter_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-            => link_list.ItemsSource = Crawlable.LinkFilter(currentCrawled, linkFilter1.Text);
+        //private void CloseDownloadPanel(object sender, RoutedEventArgs e)
+        //{
+        //    downloadBar.Value = 0;
+        //    downloadPanel.Visibility = Visibility.Collapsed;
+        //}
 
         #endregion
 

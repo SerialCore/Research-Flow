@@ -37,12 +37,11 @@ namespace Research_Flow
                     Feed feed = e.Parameter as Feed;
                     if (!papertitle.Text.Equals(feed.Title))
                     {
-                        paperid.Text = Feed.GetID(feed.Nodes);
+                        paperid.Text = ""; // TODO: crawer
                         papertitle.Text = feed.Title;
                         paperdate.Text = feed.Published;
-                        paperauthor.Text = Feed.GetAuthor(feed.Nodes);
+                        paperauthor.Text = ""; // TODO: crawer
                         paperlink.Text = feed.Link;
-                        papertags.Text = feed.Tags;
                     }
                 }
             }
@@ -95,8 +94,6 @@ namespace Research_Flow
                 paperauthor.Text = paper.Authors;
                 paperdate.Text = paper.Published;
                 paperlink.Text = paper.Link;
-                papernote.Text = paper.Note;
-                papertags.Text = paper.Tags;
                 currentpaper = paper;
             }
         }
@@ -111,8 +108,6 @@ namespace Research_Flow
             paperauthor.Text = currentpaper.Authors;
             paperdate.Text = currentpaper.Published;
             paperlink.Text = currentpaper.Link;
-            papernote.Text = currentpaper.Note;
-            papertags.Text = currentpaper.Tags;
             pdfname.Text = "";
 
             foreach (PaperFile file in PaperFile.DBSelectByID(currentpaper.ID))
@@ -264,8 +259,6 @@ namespace Research_Flow
             paperauthor.Text = "";
             paperdate.Text = "";
             paperlink.Text = "";
-            papernote.Text = "";
-            papertags.Text = "";
         }
 
         private void SavePaper(object sender, RoutedEventArgs e)
@@ -288,9 +281,7 @@ namespace Research_Flow
                         Title = papertitle.Text,                       
                         Link = paperlink.Text,
                         Published = paperdate.Text,
-                        Authors = paperauthor.Text,
-                        Note = papernote.Text,
-                        Tags = papertags.Text,
+                        Authors = paperauthor.Text
                     }
                 });
 
@@ -311,8 +302,6 @@ namespace Research_Flow
             }
 
             InitializePaper();
-            if (!string.IsNullOrEmpty(papertags.Text))
-                Topic.SaveTag(papertags.Text);
         }
 
         private async void SavePdfFile(object sender, RoutedEventArgs e)
