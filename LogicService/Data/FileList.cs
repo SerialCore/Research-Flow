@@ -122,6 +122,7 @@ namespace LogicService.Data
                     DateModified = DateTimeOffset.Parse(reader.GetString(2))
                 });
             }
+            reader.Close();
             return trace;
         }
 
@@ -145,6 +146,7 @@ namespace LogicService.Data
                 trace.FileName = reader.GetString(1);
                 trace.DateModified = DateTimeOffset.Parse(reader.GetString(2));
             }
+            reader.Close();
             return trace;
         }
 
@@ -235,6 +237,7 @@ namespace LogicService.Data
                     DateModified = DateTimeOffset.Parse(reader.GetString(2))
                 });
             }
+            reader.Close();
             return list;
         }
 
@@ -258,6 +261,7 @@ namespace LogicService.Data
                 list.FileName = reader.GetString(1);
                 list.DateModified = DateTimeOffset.Parse(reader.GetString(2));
             }
+            reader.Close();
             return list;
         }
 

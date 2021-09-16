@@ -202,6 +202,7 @@ namespace LogicService.Data
                     Nodes = reader.GetString(7)
                 });
             }
+            reader.Close();
             return feeds;
         }
 

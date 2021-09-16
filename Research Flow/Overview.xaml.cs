@@ -31,7 +31,6 @@ namespace Research_Flow
         {
             if (IsPageFirstLoaded)
             {
-                GetSystemPerformance();
                 InitBackgroundTask();
                 InitForegroundTask();
                 IsPageFirstLoaded = false;
@@ -65,24 +64,6 @@ namespace Research_Flow
 
         #endregion
 
-        #region Content
-
-        private ThreadPoolTimer PeriodicTimer;
-
-        private void GetSystemPerformance()
-        {
-            PeriodicTimer = ThreadPoolTimer.CreatePeriodicTimer(async (source) =>
-            {
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                {
-                    memstate.Text = ApplicationInfo.MemoryUsage.ToString() + " MB";
-                    cpustate.Text = ApplicationInfo.CpuOccupation.ToString("P2");
-                    battstate.Text = ApplicationInfo.BatteryUsage.ToString("P2");
-                });
-            }, TimeSpan.FromSeconds(1));
-        }
-
-        #endregion
     }
 
     public class ApplicationTask

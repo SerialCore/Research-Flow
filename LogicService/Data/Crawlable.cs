@@ -178,6 +178,7 @@ namespace LogicService.Data
                     Filters = reader.GetString(6),
                 });
             }
+            reader.Close();
             return crawl;
         }
 

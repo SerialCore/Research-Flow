@@ -153,6 +153,7 @@ namespace LogicService.Data
                         Tags = reader.GetString(7),
                     });
                 }
+                reader.Close();
             }
             return papers;
         }
@@ -330,6 +331,7 @@ namespace LogicService.Data
                         FileName = reader.GetString(1)
                     });
                 }
+                reader.Close();
             }
             return papers;
         }

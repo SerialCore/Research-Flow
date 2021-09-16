@@ -53,8 +53,6 @@ namespace Research_Flow
 
         private Topic currentTopic = null;
 
-        private void AddTopicSetting(object sender, RoutedEventArgs e) => topicSetting.IsPaneOpen = true;
-
         private void ColorSpot1(object sender, RoutedEventArgs e) => topicTitle.Background = (sender as AppBarButton).Background;
 
         private void ColorSpot2(object sender, RoutedEventArgs e) => topicTitle.Background = (sender as AppBarButton).Background;
@@ -68,6 +66,12 @@ namespace Research_Flow
         private void ColorSpot6(object sender, RoutedEventArgs e) => topicTitle.Background = (sender as AppBarButton).Background;
 
         private void ColorSpot7(object sender, RoutedEventArgs e) => topicTitle.Background = (sender as AppBarButton).Background;
+
+        private void AddTopicSetting(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            ClearTopicSetting();
+            topicSetting.IsOpen = true;
+        }
 
         private async void SubmitTopic(object sender, RoutedEventArgs e)
         {
@@ -179,14 +183,14 @@ namespace Research_Flow
             remindTime.Time = TimeSpan.Zero;
 
             topicDelete.Visibility = Visibility.Collapsed;
-            topicSetting.IsPaneOpen = false;
+            topicSetting.IsOpen = false;
         }
 
         private void Topiclist_ItemClick(object sender, ItemClickEventArgs e)
         {
             ClearTopicSetting();
             topicDelete.Visibility = Visibility.Visible;
-            topicSetting.IsPaneOpen = true;
+            topicSetting.IsOpen = true;
 
             currentTopic = e.ClickedItem as Topic;
             topicTitle.Text = currentTopic.Title;
@@ -207,5 +211,6 @@ namespace Research_Flow
         {
             LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topic.list", topics);
         }
+
     }
 }

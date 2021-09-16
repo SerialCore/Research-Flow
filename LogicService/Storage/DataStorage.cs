@@ -122,8 +122,6 @@ namespace LogicService.Storage
             }
         }
 
-        public SqliteConnection Connection => _conn;
-
         public string Database => _dbname;
 
         public string AbsolutePath => _dbpath;
@@ -142,12 +140,10 @@ namespace LogicService.Storage
             try
             {
                 SqliteCommand command = new SqliteCommand(sql, _conn);
-
                 if (parameters != null)
                 {
                     command.Parameters.AddRange(SetParameters(parameters));
                 }
-
                 affectedRows = command.ExecuteNonQuery();
             }
             catch (SqliteException ex)
@@ -157,6 +153,9 @@ namespace LogicService.Storage
                         ApplicationMessage.MessageType.InApp);
             }
 
+            _conn.Close();
+            _conn.Dispose();
+
             return affectedRows;
         }
 
@@ -165,19 +164,26 @@ namespace LogicService.Storage
             try
             {
                 SqliteCommand command = new SqliteCommand(sql, _conn);
-
                 if (parameters != null)
                 {
                     command.Parameters.AddRange(SetParameters(parameters));
                 }
+                SqliteDataReader reader = command.ExecuteReader();
 
-                return command.ExecuteReader();
+                _conn.Close();
+                _conn.Dispose();
+
+                return reader;
             }
             catch (SqliteException ex)
             {
                 if (ifnotify)
                     ApplicationMessage.SendMessage(new ShortMessage { Title = "DatabaseException", Content = ex.Message, Time = DateTimeOffset.Now },
                         ApplicationMessage.MessageType.InApp);
+
+                _conn.Close();
+                _conn.Dispose();
+
                 return null;
             }
         }
@@ -192,11 +198,6 @@ namespace LogicService.Storage
             }
 
             return sqlite_param.ToArray();
-        }
-        
-        public DataTable GetSchema()
-        {
-            return _conn.GetSchema("TABLES");
         }
 
         #endregion

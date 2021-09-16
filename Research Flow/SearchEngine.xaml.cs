@@ -7,13 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
-using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.Popups;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -372,22 +370,10 @@ namespace Research_Flow
                     async () =>
                     {
                         webClient.DownloadProgressChanged -= WebClient_DownloadProgressChanged;
-                        await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                        await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                         {
                             downloadClose.IsEnabled = true;
-                            // auto open
-                            int newViewId = 0;
-                            await CoreApplication.CreateNewView().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                            {
-                                Frame frame = new Frame();
-                                frame.Navigate(typeof(PdfViewer), name);
-                                Window.Current.Content = frame;
-                                // You have to activate the window in order to show it later.
-                                Window.Current.Activate();
-
-                                newViewId = ApplicationView.GetForCurrentView().Id;
-                            });
-                            await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
+                            // TODO: auto open
                         });
                     },
                     async (exception) =>
