@@ -62,12 +62,11 @@ namespace LogicService.Data
         {
             try
             {
-                HashSet<string> tags = await LocalStorage.ReadJsonAsync<HashSet<string>>(
-                    await LocalStorage.GetDataFolderAsync(), "tag.list");
+                HashSet<string> tags = await LocalStorage.ReadJsonAsync<HashSet<string>>(LocalStorage.GetLocalCacheFolder(), "tag.list");
                 int oldcount = tags.Count;
                 tags.UnionWith(TagPick(content));
                 if (tags.Count > oldcount)
-                    LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
+                    LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "tag.list", tags);
             }
             catch { }
         }

@@ -9,8 +9,6 @@ namespace LogicService.Application
 
         public static async Task ConfigurePath()
         {
-            await LocalStorage.GetDataFolderAsync();
-            await LocalStorage.GetLogFolderAsync();
             await LocalStorage.GetNoteFolderAsync();
             await LocalStorage.GetPaperFolderAsync();
         }
@@ -35,7 +33,7 @@ namespace LogicService.Application
             // can be lighter than the next publish version
             if (ApplicationVersion.Parse(ApplicationSetting.Updated) < new ApplicationVersion(3, 42, 108, 0))
             {
-                Paper.DBUpdateApp();
+                // TODO
                 ApplicationSetting.Updated = "3.42.108.0";
             }
         }

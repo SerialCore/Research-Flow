@@ -39,26 +39,6 @@ namespace LogicService.Storage
             return await KnownFolders.DocumentsLibrary.CreateFolderAsync("Research Flow", CreationCollisionOption.OpenIfExists); ;
         }
 
-        public static async Task<StorageFolder> GetDataFolderAsync()
-        {
-            return await GetLocalCacheFolder().CreateFolderAsync("Data", CreationCollisionOption.OpenIfExists);
-        }
-
-        public static string TryGetDataPath()
-        {
-            return ApplicationData.Current.LocalCacheFolder.Path + "\\Data";
-        }
-
-        public static async Task<StorageFolder> GetLogFolderAsync()
-        {
-            return await GetLocalCacheFolder().CreateFolderAsync("Log", CreationCollisionOption.OpenIfExists);
-        }
-
-        public static string TryGetLogPath()
-        {
-            return ApplicationData.Current.LocalCacheFolder.Path + "\\Log";
-        }
-
         public static async Task<StorageFolder> GetNoteFolderAsync()
         {
             return await (await GetDocumentLibrary()).CreateFolderAsync("Note", CreationCollisionOption.OpenIfExists);
@@ -103,7 +83,7 @@ namespace LogicService.Storage
         {
             try
             {
-                StorageFile file = await (await GetLogFolderAsync()).CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
+                StorageFile file = await LocalStorage.GetLocalCacheFolder().CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
                 await FileIO.AppendTextAsync(file,
                                     "[" + DateTime.Now.ToString() + "]" + typeof(T).Name + " : " + line + "\n");
             }

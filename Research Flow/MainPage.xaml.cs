@@ -84,8 +84,7 @@ namespace Research_Flow
         {
             try
             {
-                chatlist = await LocalStorage.ReadJsonAsync<ObservableCollection<ChatBlock>>(
-                    await LocalStorage.GetDataFolderAsync(), "chat.list");
+                chatlist = await LocalStorage.ReadJsonAsync<ObservableCollection<ChatBlock>>(LocalStorage.GetLocalCacheFolder(), "chat.list");
             }
             catch
             {
@@ -93,7 +92,7 @@ namespace Research_Flow
                 {
                     new ChatBlock { Comment = "Hello", IsSelf = false },
                 };
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "chat.list", chatlist);
+                LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "chat.list", chatlist);
             }
             finally
             {
@@ -323,12 +322,12 @@ namespace Research_Flow
                 chatbox.Text = "";
         }
 
-        private async void IdentifyChat(ChatBlock chat)
+        private void IdentifyChat(ChatBlock chat)
         {
             chatlist.Add(chat);
             ChatBlade.IsOpen = true;
             // chat->topic request type
-            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "chat.list", chatlist);
+            LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "chat.list", chatlist);
         }
 
         private void SubmitChat(object sender, RoutedEventArgs e)

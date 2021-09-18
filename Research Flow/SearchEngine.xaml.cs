@@ -58,8 +58,7 @@ namespace Research_Flow
         {
             try
             {
-                SearchSources = await LocalStorage.ReadJsonAsync<Dictionary<string, string>>(
-                    await LocalStorage.GetDataFolderAsync(), "search.list");
+                SearchSources = await LocalStorage.ReadJsonAsync<Dictionary<string, string>>(LocalStorage.GetLocalCacheFolder(), "search.list");
             }
             catch
             {
@@ -70,7 +69,7 @@ namespace Research_Flow
                     { "arXiv All", "https://arxiv.org/search/?query=QUERY&searchtype=all" },
                     { "Bing Academic", "https://cn.bing.com/academic/search?q=QUERY&FORM=HDRSC4" },
                 };
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "search.list", SearchSources);
+                LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "search.list", SearchSources);
             }
             finally
             {
@@ -109,7 +108,7 @@ namespace Research_Flow
             source_panel.Visibility = Visibility.Visible;
         }
 
-        private async void Confirm_SearchSetting(object sender, RoutedEventArgs e)
+        private void Confirm_SearchSetting(object sender, RoutedEventArgs e)
         {
             // add: change name and url
             // modify: just change name
@@ -139,7 +138,7 @@ namespace Research_Flow
             searchlist.SelectedIndex = 0;
             source_list.ItemsSource = null;
             source_list.ItemsSource = SearchSources;
-            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "search.list", SearchSources);
+            LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "search.list", SearchSources);
 
             ClearSettings();
         }
@@ -155,7 +154,7 @@ namespace Research_Flow
             await messageDialog.ShowAsync();
         }
 
-        private async void DeleteInvokedHandler(IUICommand command)
+        private void DeleteInvokedHandler(IUICommand command)
         {
             SearchSources.Remove(searchName.Text);
 
@@ -164,7 +163,7 @@ namespace Research_Flow
             searchlist.SelectedIndex = 0;
             source_list.ItemsSource = null;
             source_list.ItemsSource = SearchSources;
-            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "search.list", SearchSources);
+            LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "search.list", SearchSources);
 
             ClearSettings();
         }

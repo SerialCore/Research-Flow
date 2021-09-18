@@ -32,8 +32,7 @@ namespace Research_Flow
         {
             try
             {
-                tags = await LocalStorage.ReadJsonAsync<HashSet<string>>(
-                    await LocalStorage.GetDataFolderAsync(), "tag.list");
+                tags = await LocalStorage.ReadJsonAsync<HashSet<string>>(LocalStorage.GetLocalCacheFolder(), "tag.list");
             }
             catch
             {
@@ -42,7 +41,7 @@ namespace Research_Flow
                     "@Search"/*search words in engine*/, "@Remind"/*make user remind of content*/,
                     "@Concentrate",/*make user concentrate on content*/
                 };
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
+                LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "tag.list", tags);
             }
             finally
             {
@@ -76,24 +75,24 @@ namespace Research_Flow
             tagKlist.ItemsSource = collectionVS.View.CollectionGroups;
         }
 
-        private async void AddTagManually(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        private void AddTagManually(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             if (!string.IsNullOrEmpty(tagEmbed.Text))
             {
                 tags.UnionWith(Topic.TagPick(tagEmbed.Text));
                 LoadTagView();
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
+                LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "tag.list", tags);
             }
         }
 
-        private async void DeleteTagManually(object sender, RoutedEventArgs e)
+        private void DeleteTagManually(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(tagPanelTitle.Text))
             {
                 tags.Remove(tagPanelTitle.Text);
                 LoadTagView();
                 ClearTagPanel();
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "tag.list", tags);
+                LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "tag.list", tags);
             }
         }
 
@@ -111,8 +110,7 @@ namespace Research_Flow
                 List<Topic> topics = new List<Topic>();
                 try
                 {
-                    topics = await LocalStorage.ReadJsonAsync<List<Topic>>(
-                        await LocalStorage.GetDataFolderAsync(), "topic.list");
+                    topics = await LocalStorage.ReadJsonAsync<List<Topic>>(LocalStorage.GetLocalCacheFolder(), "topic.list");
                 }
                 catch { }
                 foreach (Topic topic in topics)

@@ -36,8 +36,7 @@ namespace Research_Flow
         {
             try
             {
-                FeedSources = await LocalStorage.ReadJsonAsync<ObservableCollection<FeedSource>>(
-                    await LocalStorage.GetDataFolderAsync(), "rss.list");
+                FeedSources = await LocalStorage.ReadJsonAsync<ObservableCollection<FeedSource>>(LocalStorage.GetLocalCacheFolder(), "rss.list");
             }
             catch
             {
@@ -48,7 +47,7 @@ namespace Research_Flow
                     new FeedSource{ ID = HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prd.xml"),
                         Name = "Physical Review D", Uri = "http://feeds.aps.org/rss/recent/prd.xml", Star = 5, IsJournal = true },
                 };
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rss.list", FeedSources);
+                LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "rss.list", FeedSources);
             }
             finally
             {
@@ -88,7 +87,7 @@ namespace Research_Flow
             }
         }
 
-        private async void Confirm_FeedSetting(object sender, RoutedEventArgs e)
+        private void Confirm_FeedSetting(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(rssUrl.Text))
             {
@@ -120,7 +119,7 @@ namespace Research_Flow
                     }
                     FeedSources.Add(source);
                 }
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rss.list", FeedSources);
+                LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "rss.list", FeedSources);
             }
             ClearSettings();
         }
@@ -136,10 +135,10 @@ namespace Research_Flow
             await messageDialog.ShowAsync();
         }
 
-        private async void DeleteInvokedHandler(IUICommand command)
+        private void DeleteInvokedHandler(IUICommand command)
         {
             FeedSources.Remove(modifiedRSS);
-            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rss.list", FeedSources);
+            LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "rss.list", FeedSources);
             // check
             Feed.DBDeleteByPID(modifiedRSS.ID);
             ClearSettings();
@@ -238,7 +237,7 @@ namespace Research_Flow
                     });
                     Feed.DBInsert(feeds);
                     FeedSources[selectedFeedIndex].LastUpdateTime = DateTime.Now;
-                    LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rss.list", FeedSources);
+                    LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "rss.list", FeedSources);
                 },
                 async (exception) =>
                 {

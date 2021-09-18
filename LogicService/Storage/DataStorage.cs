@@ -24,21 +24,21 @@ namespace LogicService.Storage
         {
             switch (type)
             {
-                case DataType.CrawlData:
-                    _dbname = "crawlable.db";
-                    _dbpath = LocalStorage.TryGetDataPath() + "\\" + _dbname;
-                    break;
+                //case DataType.CrawlData:
+                //    _dbname = "crawlable.db";
+                //    _dbpath = LocalStorage.GetLocalCacheFolder().Path + "\\" + _dbname;
+                //    break;
                 case DataType.PaperData:
                     _dbname = "paper.db";
-                    _dbpath = LocalStorage.TryGetDataPath() + "\\" + _dbname;
+                    _dbpath = LocalStorage.GetLocalCacheFolder().Path + "\\" + _dbname;
                     break;
                 case DataType.FeedData:
                     _dbname = "feed.db";
-                    _dbpath = LocalStorage.TryGetDataPath() + "\\" + _dbname;
+                    _dbpath = LocalStorage.GetLocalCacheFolder().Path + "\\" + _dbname;
                     break;
                 case DataType.FileTrace:
                     _dbname = "filetrace.db";
-                    _dbpath = LocalStorage.TryGetLogPath() + "\\" + _dbname;
+                    _dbpath = LocalStorage.GetLocalCacheFolder().Path + "\\" + _dbname;
                     break;
                 case DataType.FileList:
                     _dbname = "filelist.db";

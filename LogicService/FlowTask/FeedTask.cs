@@ -26,7 +26,7 @@ namespace LogicService.FlowTask
             List<FeedSource> FeedSources;
             try
             {
-                FeedSources = await LocalStorage.ReadJsonAsync<List<FeedSource>>(await LocalStorage.GetDataFolderAsync(), "rss.list");
+                FeedSources = await LocalStorage.ReadJsonAsync<List<FeedSource>>(LocalStorage.GetLocalCacheFolder(), "rss.list");
             }
             catch
             {
@@ -36,13 +36,12 @@ namespace LogicService.FlowTask
             foreach (FeedSource source in FeedSources)
             {
                 RssService.BeginGetFeed(
-                    source.Uri,
-                    async (items) =>
+                    source.Uri, (items) =>
                     {
                         List<Feed> feeds = items as List<Feed>;
                         Feed.DBInsert(feeds);
                         source.LastUpdateTime = DateTime.Now;
-                        LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "rss.list", FeedSources);
+                        LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "rss.list", FeedSources);
 
                         args.Log += "feed updated-" + source.Name + "\r\n";
                         LocalStorage.GeneralLogAsync<Feed>("FeedTask.log", "feed updated-" + source.Name);

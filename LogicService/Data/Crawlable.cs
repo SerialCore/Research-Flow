@@ -183,9 +183,9 @@ namespace LogicService.Data
 
         public async static void AddtoFavorite(Crawlable crawlable)
         {
-            var favorites = await LocalStorage.ReadJsonAsync<List<Crawlable>>(await LocalStorage.GetDataFolderAsync(), "favorite.list");
+            var favorites = await LocalStorage.ReadJsonAsync<List<Crawlable>>(LocalStorage.GetLocalCacheFolder(), "favorite.list");
             favorites.Add(crawlable);
-            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "favorite.list", favorites);
+            LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "favorite.list", favorites);
 
             DBInsert(new List<Crawlable>() { crawlable });
         }

@@ -34,14 +34,13 @@ namespace Research_Flow
         {
             try
             {
-                topics = await LocalStorage.ReadJsonAsync<ObservableCollection<Topic>>(
-                    await LocalStorage.GetDataFolderAsync(), "topic.list");
+                topics = await LocalStorage.ReadJsonAsync<ObservableCollection<Topic>>(LocalStorage.GetLocalCacheFolder(), "topic.list");
             }
             catch
             {
                 // for new user, remember to load default feed from file, not the follows
                 topics = new ObservableCollection<Topic>();
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topic.list", topics);
+                LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "topic.list", topics);
             }
             finally
             {
@@ -73,7 +72,7 @@ namespace Research_Flow
             topicSetting.IsOpen = true;
         }
 
-        private async void SubmitTopic(object sender, RoutedEventArgs e)
+        private void SubmitTopic(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(topicTitle.Text))
             {
@@ -98,7 +97,7 @@ namespace Research_Flow
                 }
                 topics.Insert(0, topic);
 
-                LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topic.list", topics);
+                LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "topic.list", topics);
                 Topic.SaveTag(topicTitle.Text);
                 
                 // register a task
@@ -163,7 +162,7 @@ namespace Research_Flow
         {
             string topicID = currentTopic.ID;
             topics.Remove(currentTopic);
-            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topic.list", topics);
+            LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "topic.list", topics);
             ClearTopicSetting();
 
             // cancel notification
@@ -207,9 +206,9 @@ namespace Research_Flow
                 remindTime.Time = currentTopic.RemindTime;
         }
 
-        private async void TopicList_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
+        private void TopicList_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
-            LocalStorage.WriteJson(await LocalStorage.GetDataFolderAsync(), "topic.list", topics);
+            LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "topic.list", topics);
         }
 
     }
