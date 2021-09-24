@@ -45,7 +45,7 @@ namespace Research_Flow
                 rootFrame.NavigationFailed += OnNavigationFailed;
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
-                //TODO: Load state from previously suspended application
+                    //TODO: Load state from previously suspended application
                 }
 
                 // Place the frame in the current Window
@@ -72,7 +72,7 @@ namespace Research_Flow
 
         protected override void OnActivated(IActivatedEventArgs args)
         {
-            if(args.Kind==ActivationKind.Protocol)
+            if (args.Kind == ActivationKind.Protocol)
             {
                 Frame rootFrame = Window.Current.Content as Frame;
                 ConfigureUI();

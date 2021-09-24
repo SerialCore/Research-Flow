@@ -22,7 +22,7 @@ namespace LogicService.Helper
 
         #region URL的64位解码
         public static string Base64Decrypt(string eStr)
-        {        
+        {
             if (!IsBase64(eStr))
             {
                 return eStr;
@@ -73,8 +73,8 @@ namespace LogicService.Helper
         /// </summary>
         public static string UpdateParam(string url, string paramName, string value)
         {
-            string keyWord = paramName+"=";
-            int index = url.IndexOf(keyWord)+keyWord.Length;
+            string keyWord = paramName + "=";
+            int index = url.IndexOf(keyWord) + keyWord.Length;
             int index1 = url.IndexOf("&", index);
             if (index1 == -1)
             {
@@ -82,7 +82,7 @@ namespace LogicService.Helper
                 url = string.Concat(url, value);
                 return url;
             }
-            url = url.Remove(index,index1 - index);
+            url = url.Remove(index, index1 - index);
             url = url.Insert(index, value);
             return url;
         }
@@ -122,8 +122,8 @@ namespace LogicService.Helper
                             Authority = "www." + Authority;
                         }
                         int index = Authority.IndexOf('.', 0);
-                        domain = Authority.Substring(index + 1, Authority.Length - index - 1).Replace("comhttp","com");
-                        subDomain = Authority.Replace("comhttp", "com"); 
+                        domain = Authority.Substring(index + 1, Authority.Length - index - 1).Replace("comhttp", "com");
+                        subDomain = Authority.Replace("comhttp", "com");
                         if (ss.Length < 2)
                         {
                             domain = "不明路径";

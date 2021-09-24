@@ -110,8 +110,8 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Note.xaml.cs">
-      <DependentUpon>Note.xaml</DependentUpon>
+    <Compile Include="NoteDrawer.xaml.cs">
+      <DependentUpon>NoteDrawer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Overview.xaml.cs">
       <DependentUpon>Overview.xaml</DependentUpon>
@@ -119,8 +119,8 @@
     <Compile Include="PaperBox.xaml.cs">
       <DependentUpon>PaperBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RSS.xaml.cs">
-      <DependentUpon>RSS.xaml</DependentUpon>
+    <Compile Include="FeedCollector.xaml.cs">
+      <DependentUpon>FeedCollector.xaml</DependentUpon>
     </Compile>
     <Compile Include="SearchEngine.xaml.cs">
       <DependentUpon>SearchEngine.xaml</DependentUpon>
@@ -179,7 +179,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Note.xaml">
+    <Page Include="NoteDrawer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -191,7 +191,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RSS.xaml">
+    <Page Include="FeedCollector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -238,11 +238,6 @@
       <Project>{e77fadc0-a4ea-4081-b574-f459c3549078}</Project>
       <Name>LogicService</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <SDKReference Include="Microsoft.Services.Store.Engagement, Version=10.0">
-      <Name>Microsoft Engagement Framework</Name>
-    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

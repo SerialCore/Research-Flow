@@ -1,18 +1,10 @@
-﻿using LogicService.Application;
-using LogicService.Data;
-using LogicService.Security;
-using LogicService.Service;
-using LogicService.Storage;
+﻿using LogicService.Storage;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text.RegularExpressions;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -30,6 +22,7 @@ namespace Research_Flow
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
             InitializeSearch();
+            webView.Source = new Uri("https://github.com/SerialCore");
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -128,7 +121,7 @@ namespace Research_Flow
                 }
             }
             else if (!SearchSources.ContainsKey(searchName.Text)) // add new
-            { 
+            {
                 // url will be checked
                 SearchSources.Add(searchName.Text, searchUrl.Text);
             }
@@ -218,13 +211,6 @@ namespace Research_Flow
         private void PageForward(object sender, RoutedEventArgs e)
         {
             if (webView.CanGoForward) webView.GoForward();
-        }
-
-        private void PageStop(object sender, RoutedEventArgs e)
-        {
-            webView.Stop();
-            webWaiting.ShowPaused = true;
-            webWaiting.Visibility = Visibility.Collapsed;
         }
 
         private void PageRefresh(object sender, RoutedEventArgs e) => webView.Refresh();

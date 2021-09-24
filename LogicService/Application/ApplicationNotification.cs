@@ -25,7 +25,7 @@ namespace LogicService.Application
 
         public static async Task ScheduleRepeatAlarmToast(string id, string title, string content, DateTimeOffset dateTime, TimeSpan period, uint repeat)
         {
-            await Task.Run(()=>
+            await Task.Run(() =>
             {
                 for (int i = 0; i < repeat; i++)
                 {

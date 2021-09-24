@@ -1,9 +1,7 @@
 ﻿using LogicService.Application;
-using LogicService.Data;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
-using System.Data;
 
 namespace LogicService.Storage
 {

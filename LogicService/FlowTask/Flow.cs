@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LogicService.FlowTask
+﻿namespace LogicService.FlowTask
 {
     public class Flow<U, V>
     {

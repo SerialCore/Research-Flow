@@ -99,7 +99,7 @@ namespace Research_Flow
 
                 LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "topic.list", topics);
                 Topic.SaveTag(topicTitle.Text);
-                
+
                 // register a task
                 SubmitTopictoTask(topic);
             }
@@ -141,7 +141,7 @@ namespace Research_Flow
                 }
                 catch (ArgumentException)
                 {
-                    ApplicationMessage.SendMessage(new ShortMessage { Title = "TopicWarning", Content = "Research Flow does not offer Time-Machine", Time = DateTimeOffset.Now }, 
+                    ApplicationMessage.SendMessage(new ShortMessage { Title = "TopicWarning", Content = "Research Flow does not offer Time-Machine", Time = DateTimeOffset.Now },
                         ApplicationMessage.MessageType.InApp);
                 }
             }

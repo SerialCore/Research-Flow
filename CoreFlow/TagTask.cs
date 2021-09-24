@@ -1,5 +1,4 @@
-﻿using LogicService.Application;
-using Windows.ApplicationModel.Background;
+﻿using Windows.ApplicationModel.Background;
 
 namespace CoreFlow
 {

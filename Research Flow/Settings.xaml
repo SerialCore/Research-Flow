@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Research_Flow"
-    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -53,7 +52,6 @@
                         <ScrollViewer Grid.Column="1">
                             <StackPanel Margin="5,0">
                                 <TextBlock Text="Feedback" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,10"/>
-                                <HyperlinkButton Content="Open Feedback Hub" Click="Give_Feedback" Margin="0,2"/>
                                 <HyperlinkButton Content="Rate on Microsoft Store" Click="Give_Rate" Margin="0,2"/>
                                 <HyperlinkButton Content="serialcore@outlook.com" NavigateUri="mailto:serialcore@outlook.com"/>
 

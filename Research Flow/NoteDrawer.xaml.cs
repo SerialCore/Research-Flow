@@ -23,9 +23,9 @@ namespace Research_Flow
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class Note : Page
+    public sealed partial class NoteDrawer : Page
     {
-        public Note()
+        public NoteDrawer()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
@@ -47,7 +47,7 @@ namespace Research_Flow
                         }
                         catch (Exception ex)
                         {
-                            ApplicationMessage.SendMessage(new ShortMessage{ Title = "NoteException", Content = ex.Message, Time = DateTimeOffset.Now }, 
+                            ApplicationMessage.SendMessage(new ShortMessage { Title = "NoteException", Content = ex.Message, Time = DateTimeOffset.Now },
                                 ApplicationMessage.MessageType.InApp);
                         }
                     }
@@ -63,7 +63,7 @@ namespace Research_Flow
         private async void InitializeNote()
         {
             namelist.Clear();
-            var filelist = await (await LocalStorage.GetNoteFolderAsync()).GetFilesAsync();
+            var filelist = await LocalStorage.GetNoteFolderAsync().GetFilesAsync();
             foreach (var file in filelist)
             {
                 namelist.Add(file.DisplayName.Replace(".rfn", ""));
@@ -116,7 +116,7 @@ namespace Research_Flow
             }
             catch (Exception ex)
             {
-                ApplicationMessage.SendMessage(new ShortMessage { Title = "NoteException", Content = ex.Message, Time = DateTimeOffset.Now }, 
+                ApplicationMessage.SendMessage(new ShortMessage { Title = "NoteException", Content = ex.Message, Time = DateTimeOffset.Now },
                     ApplicationMessage.MessageType.InApp);
             }
         }
@@ -167,7 +167,6 @@ namespace Research_Flow
         }
 
         #endregion
-
 
         #region File Operation (out App)
 
@@ -233,12 +232,12 @@ namespace Research_Flow
         private ObservableCollection<string> namelist = new ObservableCollection<string>();
 
         private void Open_Document(object sender, RoutedEventArgs e)
-            => notepanel.IsPaneOpen = !notepanel.IsPaneOpen;
+            => notepanel.IsOpen = true;
 
         private async void Notelist_ItemClick(object sender, ItemClickEventArgs e)
         {
             var name = e.ClickedItem as string;
-            var fileitem = await (await LocalStorage.GetNoteFolderAsync()).GetFileAsync(name + ".rfn");
+            var fileitem = await LocalStorage.GetNoteFolderAsync().GetFileAsync(name + ".rfn");
             ImportFromInk(fileitem);
             notefilename.Text = name;
         }
@@ -259,12 +258,12 @@ namespace Research_Flow
             {
                 notename = notefilename.Text.Replace(".rfn", ""); // in case of *.rfn.rfn
             }
-            StorageFile file = await(await LocalStorage.GetNoteFolderAsync()).CreateFileAsync(notename + ".rfn", CreationCollisionOption.OpenIfExists);
+            StorageFile file = await LocalStorage.GetNoteFolderAsync().CreateFileAsync(notename + ".rfn", CreationCollisionOption.OpenIfExists);
             ExportAsInk(file);
             // record
             // note and paper shall be recorded dependently from general write, and how to deal with subfolder?
-            FileList.DBInsertList((await LocalStorage.GetNoteFolderAsync()).Name, notename + ".rfn");
-            FileList.DBInsertTrace((await LocalStorage.GetNoteFolderAsync()).Name, notename + ".rfn");
+            FileList.DBInsertList(LocalStorage.GetNoteFolderAsync().Name, notename + ".rfn");
+            FileList.DBInsertTrace(LocalStorage.GetNoteFolderAsync().Name, notename + ".rfn");
 
             ApplicationMessage.SendMessage(new ShortMessage { Title = "Note", Content = notename + " is saved", Time = DateTime.Now },
                 ApplicationMessage.MessageType.Banner);
@@ -287,10 +286,10 @@ namespace Research_Flow
             await messageDialog.ShowAsync();
         }
 
-        private async void DeleteInvokedHandler(IUICommand command)
+        private void DeleteInvokedHandler(IUICommand command)
         {
             var name = notelist.SelectedItem as string;
-            LocalStorage.GeneralDeleteAsync(await LocalStorage.GetNoteFolderAsync(), name + ".rfn");
+            LocalStorage.GeneralDeleteAsync(LocalStorage.GetNoteFolderAsync(), name + ".rfn");
             namelist.Remove(name);
             notefilename.Text = "";
         }

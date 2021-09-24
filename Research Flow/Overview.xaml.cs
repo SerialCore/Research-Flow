@@ -1,6 +1,5 @@
 ﻿using LogicService.Application;
 using LogicService.FlowTask;
-using Microsoft.Services.Store.Engagement;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -48,7 +47,7 @@ namespace Research_Flow
                 var task = new FeedTask();
                 task.Run();
                 task.TaskCompleted += Task_TaskCompleted;
-                StoreServicesCustomEventLogger.GetDefault().Log("FeedTask");
+                //StoreServicesCustomEventLogger.GetDefault().Log("FeedTask");
             }
         }
 
@@ -56,7 +55,7 @@ namespace Research_Flow
 
         private void Task_TaskCompleted(object sender, TaskCompletedEventArgs e)
         {
-            ApplicationMessage.SendMessage(new ShortMessage { Title = "Task", Content = "FeedTask Completed", Time = DateTimeOffset.Now}, 
+            ApplicationMessage.SendMessage(new ShortMessage { Title = "Task", Content = "FeedTask Completed", Time = DateTimeOffset.Now },
                 ApplicationMessage.MessageType.Toast);
         }
 

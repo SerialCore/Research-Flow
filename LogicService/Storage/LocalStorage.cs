@@ -14,6 +14,11 @@ namespace LogicService.Storage
 
         #region folder
 
+        public static StorageFolder GetLocalFolder()
+        {
+            return ApplicationData.Current.LocalFolder;
+        }
+
         public static StorageFolder GetLocalCacheFolder()
         {
             return ApplicationData.Current.LocalCacheFolder;
@@ -29,24 +34,19 @@ namespace LogicService.Storage
             return ApplicationData.Current.TemporaryFolder;
         }
 
-        public static async Task<StorageFolder> GetPictureLibrary()
+        public static StorageFolder GetPictureLibrary()
         {
-            return await KnownFolders.PicturesLibrary.CreateFolderAsync("Research Flow", CreationCollisionOption.OpenIfExists); ;
+            return KnownFolders.SavedPictures;
         }
 
-        public static async Task<StorageFolder> GetDocumentLibrary()
+        public static StorageFolder GetNoteFolderAsync()
         {
-            return await KnownFolders.DocumentsLibrary.CreateFolderAsync("Research Flow", CreationCollisionOption.OpenIfExists); ;
+            return GetLocalFolder();
         }
 
-        public static async Task<StorageFolder> GetNoteFolderAsync()
+        public static StorageFolder GetPaperFolderAsync()
         {
-            return await (await GetDocumentLibrary()).CreateFolderAsync("Note", CreationCollisionOption.OpenIfExists);
-        }
-
-        public async static Task<StorageFolder> GetPaperFolderAsync()
-        {
-            return await (await GetDocumentLibrary()).CreateFolderAsync("Paper", CreationCollisionOption.OpenIfExists);
+            return GetLocalFolder();
         }
 
         #endregion
@@ -89,7 +89,7 @@ namespace LogicService.Storage
             }
             catch (Exception ex)
             {
-                ApplicationMessage.SendMessage(new ShortMessage { Title = "StorageException", Content = ex.Message, Time = DateTimeOffset.Now},
+                ApplicationMessage.SendMessage(new ShortMessage { Title = "StorageException", Content = ex.Message, Time = DateTimeOffset.Now },
                     ApplicationMessage.MessageType.InApp);
             }
         }

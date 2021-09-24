@@ -76,7 +76,7 @@ namespace LogicService.Application
         {
             if (!ContainKey(key))
                 return false;
-            
+
             if (ApplicationData.Current.LocalSettings.Values[key] == value)
                 return true;
             else

@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="Research_Flow.RSS"
+    x:Class="Research_Flow.FeedCollector"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Research_Flow"
@@ -35,7 +35,7 @@
             <Grid Grid.Column="1">
                 <CommandBar Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
                     <CommandBar.Content>
-                        <TextBlock Text="RSS" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,16,0,0"/>
+                        <TextBlock Text="Feed" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,16,0,0"/>
                     </CommandBar.Content>
                     <AppBarButton Icon="Download" Label="GetFeed" Click="RSS_SourceRefresh"/>
                 </CommandBar>
@@ -92,9 +92,9 @@
             <StackPanel>
                 <TextBlock x:Name="feedTitle" Style="{ThemeResource TitleTextBlockStyle}"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <AppBarButton Icon="BrowsePhotos" ToolTipService.ToolTip="Browser" Click="Browse_Feed" Height="50" Width="40"/>
-                    <AppBarButton Icon="Document" ToolTipService.ToolTip="Paper" Click="Flow_Feed" Height="50" Width="40"/>
-                    <AppBarButton Icon="Favorite" ToolTipService.ToolTip="Favorite" Click="Favorite_Feed" Height="50" Width="40"/>
+                    <AppBarButton Icon="Link" ToolTipService.ToolTip="Browser" Click="Browse_Feed" Height="50" Width="40"/>
+                    <AppBarButton Icon="OutlineStar" ToolTipService.ToolTip="Favorite" Click="Favorite_Feed" Height="50" Width="40"/>
+                    <AppBarButton Icon="Page2" ToolTipService.ToolTip="Paper" Click="Flow_Feed" Height="50" Width="40"/>
                 </StackPanel>
                 <HyperlinkButton x:Name="feedLink"/>
                 <TextBlock x:Name="feedPublished" Style="{ThemeResource BodyTextBlockStyle}"/>

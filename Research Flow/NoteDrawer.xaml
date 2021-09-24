@@ -1,0 +1,83 @@
+﻿<Page
+    x:Class="Research_Flow.NoteDrawer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Research_Flow"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <AppBarButton Click="ChooseInputDevice" Tag="pen" Height="40" Width="38">
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xED5F;" />
+                </AppBarButton>
+                <InkToolbar TargetInkCanvas="{x:Bind inkCanvas}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <AppBarButton Icon="Undo" ToolTipService.ToolTip="Undo" Click="UndoInk" Width="40"/>
+                <AppBarButton Icon="Redo" ToolTipService.ToolTip="Redo" Click="RedoInk" Width="40"/>
+                <AppBarButton Icon="Share" ToolTipService.ToolTip="Share" Tapped="Flyout_Tapped" Width="40">
+                    <FlyoutBase.AttachedFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Text="Share" Click="Share_Note"/>
+                            <MenuFlyoutItem Text="SaveAs" Click="Export_Note"/>
+                        </MenuFlyout>
+                    </FlyoutBase.AttachedFlyout>
+                </AppBarButton>
+                <AppBarButton Icon="OpenWith" ToolTipService.ToolTip="Open File" Click="Import_Note" Width="40"/>
+                <AppBarButton Icon="List" ToolTipService.ToolTip="Documents" Click="Open_Document" Width="40"/>
+            </StackPanel>
+
+            <ScrollViewer Grid.Row="1" Grid.ColumnSpan="3" x:Name="paintpanel" ZoomMode="Enabled" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+                <Viewbox Stretch="Uniform" StretchDirection="Both" Margin="20">
+                    <toolkit:DropShadowPanel BlurRadius="8" ShadowOpacity="0.5" Color="Black"
+                                  OffsetX="2" OffsetY="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Grid>
+                            <Rectangle Fill="White" Height="4096" Width="2048"/>
+                            <InkCanvas x:Name="inkCanvas"/>
+                        </Grid>
+                    </toolkit:DropShadowPanel>
+                </Viewbox>
+            </ScrollViewer>
+
+        </Grid>
+
+        <muxc:TeachingTip x:Name="notepanel"
+                          PreferredPlacement="RightBottom"
+                          PlacementMargin="20"
+                          IsLightDismissEnabled="True">
+            <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                <AutoSuggestBox x:Name="notefilename" PlaceholderText="Note Name" QuerySubmitted="notefilename_QuerySubmitted" QueryIcon="Save"/>
+                <ListView x:Name="notelist" IsItemClickEnabled="True" ItemClick="Notelist_ItemClick">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <CommandBar Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                    <AppBarButton Icon="Delete" Click="Delete_Note"/>
+                </CommandBar>
+            </StackPanel>
+        </muxc:TeachingTip>
+
+    </Grid>
+
+</Page>

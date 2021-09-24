@@ -17,24 +17,23 @@
 
             <Grid Grid.Row="0" Margin="5">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition />
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="150"/>
                 </Grid.ColumnDefinitions>
 
-                <ComboBox Grid.Column="0" x:Name="searchlist" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+                <AutoSuggestBox Grid.Column="0" x:Name="queryQuest" QueryIcon="Find" PlaceholderText="Search Quest" QuerySubmitted="Search_QuerySubmitted" VerticalAlignment="Center"/>
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <AppBarButton Grid.Column="0" Icon="List" Click="Open_SearchList" ToolTipService.ToolTip="Search Engine" Width="40"/>
                     <AppBarButton Icon="Previous" Click="PageBack" ToolTipService.ToolTip="Back" IsEnabled="{x:Bind webView.CanGoBack,Mode=OneWay}" Width="40"/>
                     <AppBarButton Icon="Next" Click="PageForward" ToolTipService.ToolTip="Forward" IsEnabled="{x:Bind webView.CanGoForward,Mode=OneWay}" Width="40"/>
-                    <AppBarButton Icon="Cancel" Click="PageStop" ToolTipService.ToolTip="Stop" Width="40"/>
                     <AppBarButton Icon="Refresh" Click="PageRefresh" ToolTipService.ToolTip="Refresh" Width="40"/>
                     <AppBarButton Icon="Share" Click="ShareLink" ToolTipService.ToolTip="Share" Width="40"/>
+                    <AppBarButton Icon="List" Click="Open_SearchList" ToolTipService.ToolTip="Search Engine" Width="40"/>
                 </StackPanel>
-                <AutoSuggestBox Grid.Column="2" x:Name="queryQuest" QueryIcon="Find" PlaceholderText="Search Quest" QuerySubmitted="Search_QuerySubmitted" VerticalAlignment="Center"/>
+                <ComboBox Grid.Column="2" x:Name="searchlist" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
             </Grid>
 
-            <SplitView Grid.Row="1" x:Name="searchPane">
+            <SplitView Grid.Row="1" x:Name="searchPane" PanePlacement="Right">
                 <SplitView.Pane>
                     <ScrollViewer>
                         <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -62,7 +61,7 @@
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
                                 <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="searchName" Header="Name" IsSpellCheckEnabled="False" />
-                                <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="searchUrl" Header="Url" IsSpellCheckEnabled="False" PlaceholderText="http://***/***query=QUEST***" Margin="0,10"/>
+                                <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="searchUrl" Header="Url" IsSpellCheckEnabled="False" PlaceholderText="http://***/***query=QUERY***" Margin="0,10"/>
                                 <Button Grid.Row="2" Grid.Column="0" Click="Confirm_SearchSetting"  Content="Confirm" Margin="0,0,5,0" HorizontalAlignment="Stretch" Background="LightSkyBlue"/>
                                 <Button Grid.Row="2" Grid.Column="1" Click="Leave_SearchSetting" Content="Cancel" Margin="5,0,0,0" HorizontalAlignment="Stretch" Background="LightGray"/>
                                 <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" x:Name="searchDelete" Click="Delete_SearchSetting" Content="Delete" Margin="0,10,0,10" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
@@ -72,7 +71,6 @@
                 </SplitView.Pane>
                 <SplitView.Content>
                     <Grid>
-                        <TextBlock Text="Browser | Search" Style="{StaticResource TitleTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <WebView x:Name="webView" NavigationStarting="WebView_NavigationStarting" ManipulationCompleted="WebView_ManipulationCompleted"
                                  FrameNavigationCompleted="WebView_FrameNavigationCompleted" NavigationCompleted="WebView_NavigationCompleted"/>
                         <ProgressBar x:Name="webWaiting" IsIndeterminate="True" ShowPaused="True" Visibility="Collapsed" VerticalAlignment="Top"/>

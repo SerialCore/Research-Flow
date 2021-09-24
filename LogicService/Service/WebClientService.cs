@@ -20,7 +20,7 @@ namespace LogicService.Service
             get { return bytesSent; }
             set { bytesSent = value; }
         }
-        
+
         public int TotalBytes
         {
             get { return totalBytes; }
@@ -39,13 +39,13 @@ namespace LogicService.Service
             get { return bytesReceived; }
             set { bytesReceived = value; }
         }
- 
+
         public int TotalBytes
         {
             get { return totalBytes; }
             set { totalBytes = value; }
         }
- 
+
         public byte[] ReceivedData
         {
             get { return receivedData; }
@@ -76,7 +76,7 @@ namespace LogicService.Service
             requestHeaders = new WebHeaderCollection();
             responseHeaders = new WebHeaderCollection();
         }
-        
+
         public int BufferSize
         {
             get { return bufferSize; }
@@ -288,7 +288,7 @@ namespace LogicService.Service
             }
             stream.Close();
         }
-        
+
         private HttpWebRequest CreateRequest(string url, string method)
         {
             Uri uri = new Uri(url);
@@ -320,7 +320,7 @@ namespace LogicService.Service
         {
             return true;
         }
- 
+
         private static void SaveCookiesToDisk()
         {
             string cookieFile = System.Environment.GetFolderPath(Environment.SpecialFolder.Cookies) + "\\webclient.cookie";
@@ -336,7 +336,7 @@ namespace LogicService.Service
                 if (fs != null) fs.Close();
             }
         }
-  
+
         private static void LoadCookiesFromDisk()
         {
             cc = new CookieContainer();
@@ -395,7 +395,7 @@ namespace LogicService.Service
             ms = new MemoryStream();
             encoding = Encoding.Default;
         }
- 
+
         public void AddString(string name, string value)
         {
             StringBuilder sb = new StringBuilder();

@@ -4,10 +4,6 @@ using LogicService.Storage;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Windows.ApplicationModel.DataTransfer;
-using Windows.Storage;
-using Windows.Storage.Pickers;
-using Windows.System;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -47,18 +43,6 @@ namespace Research_Flow
             }
 
             InitializePaper();
-            InitializePdf();
-        }
-
-        private async void InitializePdf()
-        {
-            pdfs.Clear();
-            var filelist = await (await LocalStorage.GetPaperFolderAsync()).GetFilesAsync();
-            foreach (var file in filelist)
-            {
-                pdfs.Add(file.Name);
-            }
-            pdftree.ItemsSource = pdfs;
         }
 
         private void InitializePaper()
@@ -118,128 +102,6 @@ namespace Research_Flow
 
         #endregion
 
-        #region Pdf Operation
-
-        private async void Paper_UnCompress(object sender, RoutedEventArgs e)
-        {
-            FileOpenPicker picker = new FileOpenPicker();
-            picker.FileTypeFilter.Add(".zip");
-            StorageFile file = await picker.PickSingleFileAsync();
-            if (file != null)
-                LocalStorage.UnCompression(file, await LocalStorage.GetPaperFolderAsync());
-        }
-
-        private async void Pdf_Import(object sender, RoutedEventArgs e)
-        {
-            FileOpenPicker picker = new FileOpenPicker();
-            picker.FileTypeFilter.Add(".pdf");
-            var files = await picker.PickMultipleFilesAsync();
-            if (files != null)
-            {
-                foreach (var file in files)
-                {
-                    await file.CopyAsync(await LocalStorage.GetPaperFolderAsync());
-                    pdfs.Add(file.Name);
-                }
-            }
-        }
-
-        private async void Paper_Compress(object sender, RoutedEventArgs e)
-        {
-            FolderPicker picker = new FolderPicker();
-            picker.FileTypeFilter.Add(".zip");
-            StorageFolder folder = await picker.PickSingleFolderAsync();
-            if (folder != null)
-                LocalStorage.Compression(await LocalStorage.GetPaperFolderAsync(), folder);
-        }
-
-        private async void Pdf_Export(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(currentfile))
-                return;
-
-            try
-            {
-                var file = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(currentfile);
-                FolderPicker picker = new FolderPicker();
-                picker.FileTypeFilter.Add(".pdf");
-                StorageFolder folder = await picker.PickSingleFolderAsync();
-                if (folder != null)
-                    await file.CopyAsync(folder);
-            }
-            catch (Exception ex)
-            {
-                ApplicationMessage.SendMessage(new ShortMessage { Title = "PdfException", Content = ex.Message, Time = DateTimeOffset.Now },
-                    ApplicationMessage.MessageType.InApp);
-            }
-        }
-
-        private async void Pdf_Open(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(currentfile))
-                return;
-
-            //int newViewId = 0;
-            //await CoreApplication.CreateNewView().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            //{
-            //    Frame frame = new Frame();
-            //    frame.Navigate(typeof(PdfViewer), currentfile);
-            //    Window.Current.Content = frame;
-            //    // You have to activate the window in order to show it later.
-            //    Window.Current.Activate();
-
-            //    newViewId = ApplicationView.GetForCurrentView().Id;
-            //});
-            //await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
-            await Launcher.LaunchFileAsync(await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(currentfile));
-        }
-
-        private void Pdf_Share(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(currentfile))
-                return;
-
-            DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
-            dataTransferManager.DataRequested += FileTransferManager_DataRequested;
-            DataTransferManager.ShowShareUI();
-        }
-
-        private async void FileTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
-        {
-            DataRequestDeferral deferral = args.Request.GetDeferral();
-
-            DataRequest request = args.Request;
-            request.Data.Properties.Title = "Pdf File";
-            request.Data.Properties.Description = "Share the paper you found";
-
-            try
-            {
-                StorageFile file = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(currentfile);
-
-                var storage = new List<IStorageItem>();
-                storage.Add(file);
-                request.Data.SetStorageItems(storage);
-            }
-            catch (Exception ex)
-            {
-                ApplicationMessage.SendMessage(new ShortMessage { Title = "PdfException", Content = ex.Message, Time = DateTimeOffset.Now }, ApplicationMessage.MessageType.InApp);
-            }
-
-            deferral.Complete();
-        }
-
-        private void Pdf_Download(object sender, RoutedEventArgs e)
-        {
-
-        }
-        
-        private void Pdf_Extract(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        #endregion
-
         #region Paper Management
 
         private Paper currentpaper = null;
@@ -265,7 +127,7 @@ namespace Research_Flow
         {
             if (string.IsNullOrEmpty(paperid.Text) || string.IsNullOrEmpty(papertitle.Text))
             {
-                ApplicationMessage.SendMessage(new ShortMessage { Title = "PaperWarning", Content = "There must be Title and ID", Time = DateTimeOffset.Now }, 
+                ApplicationMessage.SendMessage(new ShortMessage { Title = "PaperWarning", Content = "There must be Title and ID", Time = DateTimeOffset.Now },
                     ApplicationMessage.MessageType.InApp);
                 return;
             }
@@ -278,7 +140,7 @@ namespace Research_Flow
                     {
                         ID = paperid.Text,
                         ParentID = "",
-                        Title = papertitle.Text,                       
+                        Title = papertitle.Text,
                         Link = paperlink.Text,
                         Published = paperdate.Text,
                         Authors = paperauthor.Text
@@ -312,11 +174,10 @@ namespace Research_Flow
                 {
                     try
                     {
-                        var file = await(await LocalStorage.GetPaperFolderAsync()).GetFileAsync(currentfile);
+                        var file = await LocalStorage.GetPaperFolderAsync().GetFileAsync(currentfile);
                         await file.RenameAsync(pdfname.Text); // whether to record
                         pdfs.Remove(currentfile);
                         pdfs.Add(pdfname.Text);
-                        InitializePdf();
                     }
                     catch (Exception ex)
                     {
@@ -356,14 +217,14 @@ namespace Research_Flow
                 //LocalStorage.GeneralDeleteAsync(await LocalStorage.GetPaperFolderAsync(), pdfname.Text);
                 try
                 {
-                    await (await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(currentfile)).DeleteAsync();
+                    await (await LocalStorage.GetPaperFolderAsync().GetFileAsync(currentfile)).DeleteAsync();
                     pdfs.Remove(currentfile);
                     currentfile = "";
                     pdfname.Text = "";
                 }
                 catch (Exception ex)
                 {
-                    ApplicationMessage.SendMessage(new ShortMessage { Title = "PdfException", Content = ex.Message, Time = DateTimeOffset.Now }, 
+                    ApplicationMessage.SendMessage(new ShortMessage { Title = "PdfException", Content = ex.Message, Time = DateTimeOffset.Now },
                         ApplicationMessage.MessageType.InApp);
                 }
             }

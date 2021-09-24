@@ -6,8 +6,6 @@ using LogicService.Storage;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
-using System.Xml;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -22,9 +20,9 @@ namespace Research_Flow
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class RSS : Page
+    public sealed partial class FeedCollector : Page
     {
-        public RSS()
+        public FeedCollector()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
@@ -243,7 +241,7 @@ namespace Research_Flow
                 {
                     await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
-                        ApplicationMessage.SendMessage(new ShortMessage { Title = "RssException", Content = exception, Time = DateTimeOffset.Now }, 
+                        ApplicationMessage.SendMessage(new ShortMessage { Title = "RssException", Content = exception, Time = DateTimeOffset.Now },
                             ApplicationMessage.MessageType.InApp);
                         waiting_feed.IsActive = false;
                     });

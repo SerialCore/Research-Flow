@@ -71,7 +71,7 @@ namespace LogicService.Data
         public static int DBInsert(List<Paper> paperlist)
         {
             int affectedRows = 0;
-            string sql = @"insert into Paper(ID, ParentID, Title, Link, Published, Authors, Note, Tags)
+            string sql = @"insert into Paper(ID, ParentID, Title, Link, Published, Authors)
                 values(@ID, @ParentID, @Title, @Link, @Published, @Authors);";
 
             foreach (Paper paper in paperlist)

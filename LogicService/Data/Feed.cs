@@ -128,7 +128,7 @@ namespace LogicService.Data
         public static int DBInsert(List<Feed> feeds)
         {
             int affectedRows = 0;
-            string sql = @"insert into Feed(ID, ParentID, Title, Published, Link, Summary, Tags, Nodes)
+            string sql = @"insert into Feed(ID, ParentID, Title, Published, Link, Summary)
                 values(@ID, @ParentID, @Title, @Published, @Link, @Summary);";
             foreach (Feed feed in feeds)
             {
@@ -161,29 +161,32 @@ namespace LogicService.Data
             return DBReader(reader);
         }
 
-        public static List<Feed> DBSelectByPID(string pid)
+        public static List<Feed> DBSelectByPID(string pid, int limit = 100)
         {
-            string sql = "select * from Feed where ParentID = @ParentID;";
-            var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@ParentID", pid } });
+            string sql = "select * from Feed where ParentID = @ParentID limit @Limit;";
+            var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@Limit", limit }, { "@ParentID", pid } });
             return DBReader(reader);
         }
 
         private static List<Feed> DBReader(SqliteDataReader reader)
         {
             List<Feed> feeds = new List<Feed>();
-            while (reader.Read())
+            if (reader != null)
             {
-                feeds.Add(new Feed
+                while (reader.Read())
                 {
-                    ID = reader.GetString(0),
-                    ParentID = reader.GetString(1),
-                    Title = reader.GetString(2),
-                    Published = reader.GetString(3),
-                    Link = reader.GetString(4),
-                    Summary = reader.GetString(5)
-                });
+                    feeds.Add(new Feed
+                    {
+                        ID = reader.GetString(0),
+                        ParentID = reader.GetString(1),
+                        Title = reader.GetString(2),
+                        Published = reader.GetString(3),
+                        Link = reader.GetString(4),
+                        Summary = reader.GetString(5)
+                    });
+                }
+                reader.Close();
             }
-            reader.Close();
             return feeds;
         }
 

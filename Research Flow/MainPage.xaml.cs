@@ -39,13 +39,12 @@ namespace Research_Flow
             ApplicationMessage.MessageReceived += AppMessage_MessageReceived;
         }
 
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             NavParameter = e.Parameter;
 
             if (ApplicationInfo.IsFirstUse)
             {
-                await ApplicationConfig.ConfigurePath();
                 ApplicationConfig.ConfigureDB();
                 ApplicationConfig.ConfigureVersion();
             }
@@ -110,11 +109,11 @@ namespace Research_Flow
         private readonly List<(string Tag, Type Page)> _pages = new List<(string Tag, Type Page)>
         {
             ("Overview", typeof(Overview)),
-            ("Topic", typeof(TopicCase)),
+            ("Feed", typeof(FeedCollector)),
             ("Paper", typeof(PaperBox)),
-            ("RSS", typeof(RSS)),
             ("Search", typeof(SearchEngine)),
-            ("Note", typeof(Note)),
+            ("Topic", typeof(TopicCase)),
+            ("Note", typeof(NoteDrawer)),
         };
 
         private void NavView_Loaded(object sender, RoutedEventArgs e)
@@ -128,7 +127,7 @@ namespace Research_Flow
                     StorageFile parameter = NavParameter as StorageFile;
                     if (parameter.FileType.Equals(".rfn"))
                     {
-                        ContentFrame.Navigate(typeof(Note), parameter);
+                        ContentFrame.Navigate(typeof(NoteDrawer), parameter);
                     }
                 }
                 else if (NavParameter.GetType().Equals(typeof(Uri)))
@@ -166,7 +165,7 @@ namespace Research_Flow
         private void NavView_Navigate(NavigationViewItem pageItem)
         {
             var item = _pages.FirstOrDefault(p => p.Tag.Equals(pageItem.Tag));
-            
+
             ContentFrame.Navigate(item.Page, null, new DrillInNavigationTransitionInfo());
         }
 
@@ -265,7 +264,7 @@ namespace Research_Flow
 
         private async void ScreenShot_Upload(object sender, RoutedEventArgs e)
         {
-            var file = await (await LocalStorage.GetPictureLibrary()).CreateFileAsync("ScreenShot-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
+            var file = await LocalStorage.GetPictureLibrary().CreateFileAsync("Research Flow-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
             var bitmap = new RenderTargetBitmap();
             await bitmap.RenderAsync(FullPage);
             var buffer = await bitmap.GetPixelsAsync();

@@ -139,14 +139,17 @@ namespace LogicService.Data
                 { "@FilePosition", position }, { "@FileName", name } });
 
             FileList trace = null;
-            while (reader.Read())
+            if (reader != null)
             {
-                trace = new FileList();
-                trace.FilePosition = reader.GetString(0);
-                trace.FileName = reader.GetString(1);
-                trace.DateModified = DateTimeOffset.Parse(reader.GetString(2));
+                while (reader.Read())
+                {
+                    trace = new FileList();
+                    trace.FilePosition = reader.GetString(0);
+                    trace.FileName = reader.GetString(1);
+                    trace.DateModified = DateTimeOffset.Parse(reader.GetString(2));
+                }
+                reader.Close();
             }
-            reader.Close();
             return trace;
         }
 
@@ -228,16 +231,19 @@ namespace LogicService.Data
             var reader = DataStorage.FileList.ExecuteRead(sql);
 
             HashSet<FileList> list = new HashSet<FileList>();
-            while (reader.Read())
+            if (reader != null)
             {
-                list.Add(new FileList
+                while (reader.Read())
                 {
-                    FilePosition = reader.GetString(0),
-                    FileName = reader.GetString(1),
-                    DateModified = DateTimeOffset.Parse(reader.GetString(2))
-                });
+                    list.Add(new FileList
+                    {
+                        FilePosition = reader.GetString(0),
+                        FileName = reader.GetString(1),
+                        DateModified = DateTimeOffset.Parse(reader.GetString(2))
+                    });
+                }
+                reader.Close();
             }
-            reader.Close();
             return list;
         }
 

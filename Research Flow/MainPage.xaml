@@ -21,15 +21,15 @@
 
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Overview" Tag="Overview"/>
-                <NavigationViewItem Content="Topic" Tag="Topic"/>
 
                 <NavigationViewItemSeparator/>
+                <NavigationViewItem Content="Feed" Tag="Feed"/>
                 <NavigationViewItem Content="Paper" Tag="Paper"/>
-                <NavigationViewItem Content="RSS" Tag="RSS"/>
                 <NavigationViewItem Content="Search" Tag="Search"/>
 
                 <NavigationViewItemSeparator/>
-                <NavigationViewItem Content="Draw" Tag="Note"/>
+                <NavigationViewItem Content="Topic" Tag="Topic"/>
+                <NavigationViewItem Content="Note" Tag="Note"/>
             </NavigationView.MenuItems>
 
             <NavigationView.PaneFooter>
@@ -143,7 +143,7 @@
         <muxc:TeachingTip x:Name="BannerMessage"
                           PreferredPlacement="RightTop"
                           PlacementMargin="20"
-                          IsLightDismissEnabled="False">
+                          IsLightDismissEnabled="True">
         </muxc:TeachingTip>
 
     </Grid>

@@ -442,7 +442,7 @@ namespace LogicService.Helper
             //将接收到的数据写入临时缓冲区
             Buffer.BlockCopy(buffer, 0, tempBuffer, 0, receiveCount);
             //转换成字符串，并将其返回
-            return Encoding.Default.GetString(tempBuffer); 
+            return Encoding.Default.GetString(tempBuffer);
         }
         #endregion
 

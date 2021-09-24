@@ -2,7 +2,7 @@
 
 namespace CoreFlow
 {
-    public sealed class VoiceCommandService:IBackgroundTask
+    public sealed class VoiceCommandService : IBackgroundTask
     {
 
         public void Run(IBackgroundTaskInstance taskInstance)

@@ -150,18 +150,21 @@ namespace LogicService.Data
         private static List<Crawlable> DBReader(SqliteDataReader reader)
         {
             List<Crawlable> crawl = new List<Crawlable>();
-            while (reader.Read())
+            if (reader != null)
             {
-                crawl.Add(new Crawlable
+                while (reader.Read())
                 {
-                    ID = reader.GetString(0),
-                    ParentID = reader.GetString(1),
-                    Text = reader.GetString(2),
-                    Url = reader.GetString(3),
-                    Content = reader.GetString(4)
-                });
+                    crawl.Add(new Crawlable
+                    {
+                        ID = reader.GetString(0),
+                        ParentID = reader.GetString(1),
+                        Text = reader.GetString(2),
+                        Url = reader.GetString(3),
+                        Content = reader.GetString(4)
+                    });
+                }
+                reader.Close();
             }
-            reader.Close();
             return crawl;
         }
 
@@ -190,7 +193,7 @@ namespace LogicService.Data
             DBInsert(new List<Crawlable>() { crawlable });
         }
 
-        public static List<Crawlable> LinkFilter(CrawlerService service,string filter)
+        public static List<Crawlable> LinkFilter(CrawlerService service, string filter)
         {
             Regex regex = new Regex(@"(?<header>^(Text|Url):\s(\w+$|\w+=))(?<param>\w*$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
             Match match = regex.Match(filter);

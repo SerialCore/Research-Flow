@@ -1,10 +1,4 @@
 ﻿using LogicService.Application;
-using LogicService.Data;
-using LogicService.Storage;
-using Microsoft.Services.Store.Engagement;
-using System;
-using Windows.System;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -63,64 +57,95 @@ namespace Research_Flow
             appUptime.Text = ApplicationInfo.AppUptime.ToString("G");
         }
 
-        private async void Give_Feedback(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            if (Microsoft.Services.Store.Engagement.StoreServicesFeedbackLauncher.IsSupported())
-            {
-                var launcher = StoreServicesFeedbackLauncher.GetDefault();
-                await launcher.LaunchAsync();
-            }
-            else
-            {
-                ApplicationMessage.SendMessage(new ShortMessage { Title = "Exception", Content = "Your device doesn't support Feedback Hub", Time = DateTimeOffset.Now}, 
-                    ApplicationMessage.MessageType.InApp);
-            }
-        }
-
         private async void Give_Rate(object sender, Windows.UI.Xaml.RoutedEventArgs e)
             => await ApplicationInfo.ShowRatingReviewDialog();
 
         #region Settings
 
-        private void AccountDownload_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            //if (GraphService.IsConnected && ApplicationInfo.IsNetworkAvailable)
-            //{
-            //    var button = sender as Button;
-            //    button.IsEnabled = false;
-            //    waitSync1.IsActive = true;
-            //    syncStatu.Visibility = Visibility.Visible;
+        //private async void Paper_UnCompress(object sender, RoutedEventArgs e)
+        //{
+        //    FileOpenPicker picker = new FileOpenPicker();
+        //    picker.FileTypeFilter.Add(".zip");
+        //    StorageFile file = await picker.PickSingleFileAsync();
+        //    if (file != null)
+        //        LocalStorage.UnCompression(file, LocalStorage.GetPaperFolderAsync());
+        //}
 
-            //    Synchronization.SyncProgressChanged += Synchronization_SyncProgressChanged;
-            //    await Synchronization.DownloadAll();
-            //    Synchronization.SyncProgressChanged -= Synchronization_SyncProgressChanged;
+        //private async void Pdf_Import(object sender, RoutedEventArgs e)
+        //{
+        //    FileOpenPicker picker = new FileOpenPicker();
+        //    picker.FileTypeFilter.Add(".pdf");
+        //    var files = await picker.PickMultipleFilesAsync();
+        //    if (files != null)
+        //    {
+        //        foreach (var file in files)
+        //        {
+        //            await file.CopyAsync(LocalStorage.GetPaperFolderAsync());
+        //            pdfs.Add(file.Name);
+        //        }
+        //    }
+        //}
 
-            //    syncStatu.Visibility = Visibility.Collapsed;
-            //    waitSync1.IsActive = false;
-            //    button.IsEnabled = true;
-            //    syncCount.Text = "";
-            //}
-        }
+        //private async void Pdf_Export(object sender, RoutedEventArgs e)
+        //{
+        //    if (string.IsNullOrEmpty(currentfile))
+        //        return;
 
-        private void AccountSync_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            //if (GraphService.IsConnected && ApplicationInfo.IsNetworkAvailable)
-            //{
-            //    var button = sender as Button;
-            //    button.IsEnabled = false;
-            //    waitSync2.IsActive = true;
-            //    syncStatu.Visibility = Visibility.Visible;
+        //    try
+        //    {
+        //        var file = await LocalStorage.GetPaperFolderAsync().GetFileAsync(currentfile);
+        //        FolderPicker picker = new FolderPicker();
+        //        picker.FileTypeFilter.Add(".pdf");
+        //        StorageFolder folder = await picker.PickSingleFolderAsync();
+        //        if (folder != null)
+        //            await file.CopyAsync(folder);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ApplicationMessage.SendMessage(new ShortMessage { Title = "PdfException", Content = ex.Message, Time = DateTimeOffset.Now },
+        //            ApplicationMessage.MessageType.InApp);
+        //    }
+        //}
 
-            //    //Synchronization.SyncProgressChanged += Synchronization_SyncProgressChanged;
-            //    //await Synchronization.ScanFiles();
-            //    //Synchronization.SyncProgressChanged -= Synchronization_SyncProgressChanged;
+        //private void AccountDownload_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        //{
+        //    if (GraphService.IsConnected && ApplicationInfo.IsNetworkAvailable)
+        //    {
+        //        var button = sender as Button;
+        //        button.IsEnabled = false;
+        //        waitSync1.IsActive = true;
+        //        syncStatu.Visibility = Visibility.Visible;
 
-            //    syncStatu.Visibility = Visibility.Collapsed;
-            //    waitSync2.IsActive = false;
-            //    button.IsEnabled = true;
-            //    syncCount.Text = "";
-            //}
-        }
+        //        Synchronization.SyncProgressChanged += Synchronization_SyncProgressChanged;
+        //        await Synchronization.DownloadAll();
+        //        Synchronization.SyncProgressChanged -= Synchronization_SyncProgressChanged;
+
+        //        syncStatu.Visibility = Visibility.Collapsed;
+        //        waitSync1.IsActive = false;
+        //        button.IsEnabled = true;
+        //        syncCount.Text = "";
+        //    }
+        //}
+
+        //private void AccountSync_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        //{
+        //    if (GraphService.IsConnected && ApplicationInfo.IsNetworkAvailable)
+        //    {
+        //        var button = sender as Button;
+        //        button.IsEnabled = false;
+        //        waitSync2.IsActive = true;
+        //        syncStatu.Visibility = Visibility.Visible;
+
+        //        //Synchronization.SyncProgressChanged += Synchronization_SyncProgressChanged;
+        //        //await Synchronization.ScanFiles();
+        //        //Synchronization.SyncProgressChanged -= Synchronization_SyncProgressChanged;
+
+        //        syncStatu.Visibility = Visibility.Collapsed;
+        //        waitSync2.IsActive = false;
+        //        button.IsEnabled = true;
+        //        syncCount.Text = "";
+        //    }
+        //}
 
         //private async void Synchronization_SyncProgressChanged(object sender, SyncEventArgs e)
         //{

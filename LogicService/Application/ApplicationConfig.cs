@@ -1,18 +1,9 @@
 ﻿using LogicService.Data;
-using LogicService.Storage;
-using System.Threading.Tasks;
 
 namespace LogicService.Application
 {
     public class ApplicationConfig
     {
-
-        public static async Task ConfigurePath()
-        {
-            await LocalStorage.GetNoteFolderAsync();
-            await LocalStorage.GetPaperFolderAsync();
-        }
-
         public static void ConfigureDB()
         {
             FileList.DBInitializeTrace();
