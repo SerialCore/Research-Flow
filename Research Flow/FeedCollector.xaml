@@ -18,7 +18,8 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
-                <ListView x:Name="feedItem_list" IsItemClickEnabled="True" ItemClick="Feed_ItemClick">
+                <AutoSuggestBox x:Name="feedQuery" QueryIcon="Find" PlaceholderText="Search Feed" QuerySubmitted="SearchFeed_QuerySubmitted" VerticalAlignment="Top" Margin="5"/>
+                <ListView x:Name="feedItem_list" IsItemClickEnabled="True" ItemClick="Feed_ItemClick" Margin="0,40,0,0">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Padding="10">
@@ -73,8 +74,8 @@
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssName" Header="Title" IsSpellCheckEnabled="False" Margin="0,5"/>
-                            <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssUrl" Header="Url" IsSpellCheckEnabled="False" Margin="0,5"/>
-                            <CheckBox Grid.Row="2" Grid.Column="0" x:Name="isJournal" Content="Is journal" Margin="0,5"/>
+                            <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssUrl" Header="Url" PlaceholderText="Page/RSS" IsSpellCheckEnabled="False" Margin="0,5"/>
+                            <CheckBox Grid.Row="2" Grid.Column="0" x:Name="isRSS" Content="Is RSS" Margin="0,5"/>
                             <RatingControl Grid.Row="2" Grid.Column="1" x:Name="rssStar"/>
                             <Button Grid.Row="3" Grid.Column="0" Click="Confirm_FeedSetting" Content="Confirm" Margin="0,0,5,0" HorizontalAlignment="Stretch" Background="LightSkyBlue"/>
                             <Button Grid.Row="3" Grid.Column="1" Click="Leave_FeedSetting" Content="Cancel" Margin="5,0,0,0" HorizontalAlignment="Stretch" Background="LightGray"/>

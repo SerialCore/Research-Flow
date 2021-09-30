@@ -73,7 +73,7 @@
                     </ListView.ItemTemplate>
                 </ListView>
                 <CommandBar Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                    <AppBarButton Icon="Delete" Click="Delete_Note"/>
+                    <AppBarButton Icon="Delete" Click="Delete_Note" LabelPosition="Collapsed"/>
                 </CommandBar>
             </StackPanel>
         </muxc:TeachingTip>

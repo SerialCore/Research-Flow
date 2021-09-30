@@ -22,7 +22,7 @@
                     <ColumnDefinition Width="150"/>
                 </Grid.ColumnDefinitions>
 
-                <AutoSuggestBox Grid.Column="0" x:Name="queryQuest" QueryIcon="Find" PlaceholderText="Search Quest" QuerySubmitted="Search_QuerySubmitted" VerticalAlignment="Center"/>
+                <AutoSuggestBox Grid.Column="0" x:Name="queryQuest" QueryIcon="Find" PlaceholderText="Search Query" QuerySubmitted="Search_QuerySubmitted" VerticalAlignment="Center"/>
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                     <AppBarButton Icon="Previous" Click="PageBack" ToolTipService.ToolTip="Back" IsEnabled="{x:Bind webView.CanGoBack,Mode=OneWay}" Width="40"/>
                     <AppBarButton Icon="Next" Click="PageForward" ToolTipService.ToolTip="Forward" IsEnabled="{x:Bind webView.CanGoForward,Mode=OneWay}" Width="40"/>

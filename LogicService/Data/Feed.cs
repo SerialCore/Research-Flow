@@ -17,7 +17,7 @@ namespace LogicService.Data
 
         public double Star { get; set; }
 
-        public bool IsJournal { get; set; }
+        public bool IsRSS { get; set; }
 
         //public bool IsNotificationOn { get; set; }
 
@@ -165,6 +165,13 @@ namespace LogicService.Data
         {
             string sql = "select * from Feed where ParentID = @ParentID limit @Limit;";
             var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@Limit", limit }, { "@ParentID", pid } });
+            return DBReader(reader);
+        }
+
+        public static List<Feed> DBSelectByText(string pattern, int limit = 100)
+        {
+            string sql = "select * from Feed where Title like @Pattern or Summary like @Pattern limit @Limit;";
+            var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@Pattern", '%' + pattern + '%' }, { "@Limit", limit } });
             return DBReader(reader);
         }
 

@@ -41,9 +41,9 @@ namespace Research_Flow
                 FeedSources = new ObservableCollection<FeedSource>()
                 {
                     new FeedSource{ ID = HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prl.xml"),
-                        Name = "Physical Review Letters", Uri = "http://feeds.aps.org/rss/recent/prl.xml", Star = 5, IsJournal = true },
+                        Name = "Physical Review Letters", Uri = "http://feeds.aps.org/rss/recent/prl.xml", Star = 5, IsRSS = true },
                     new FeedSource{ ID = HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prd.xml"),
-                        Name = "Physical Review D", Uri = "http://feeds.aps.org/rss/recent/prd.xml", Star = 5, IsJournal = true },
+                        Name = "Physical Review D", Uri = "http://feeds.aps.org/rss/recent/prd.xml", Star = 5, IsRSS = true },
                 };
                 LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "rss.list", FeedSources);
             }
@@ -79,7 +79,7 @@ namespace Research_Flow
                     rssName.Text = item.Name;
                     rssUrl.Text = item.Uri;
                     rssStar.Value = item.Star;
-                    isJournal.IsChecked = item.IsJournal;
+                    isRSS.IsChecked = item.IsRSS;
                     rssUrl.IsReadOnly = true;
                 }
             }
@@ -95,7 +95,7 @@ namespace Research_Flow
                     Name = rssName.Text,
                     Uri = rssUrl.Text,
                     Star = rssStar.Value,
-                    IsJournal = (bool)(isJournal.IsChecked)
+                    IsRSS = (bool)(isRSS.IsChecked)
                 };
                 if (modifiedRSS != null)
                 {
@@ -152,7 +152,7 @@ namespace Research_Flow
             rssName.Text = "";
             rssUrl.Text = "";
             rssStar.Value = -1;
-            isJournal.IsChecked = false;
+            isRSS.IsChecked = false;
 
             rssUrl.IsReadOnly = false;
             rssDelete.Visibility = Visibility.Collapsed;
@@ -173,6 +173,11 @@ namespace Research_Flow
         #region RSS Feed
 
         private Feed selectedFeed = null;
+
+        private void SearchFeed_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            feedItem_list.ItemsSource = Feed.DBSelectByText(feedQuery.Text);
+        }
 
         private void Feed_ItemClick(object sender, ItemClickEventArgs e)
         {

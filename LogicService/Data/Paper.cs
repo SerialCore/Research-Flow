@@ -119,13 +119,6 @@ namespace LogicService.Data
             return DBReader(reader);
         }
 
-        public static List<Paper> DBSelectByTag(string tag)
-        {
-            string sql = "select * from Paper where Tags like @Tags;";
-            var reader = DataStorage.PaperData.ExecuteRead(sql, new Dictionary<string, object> { { "@Tags", '%' + tag + '%' } });
-            return DBReader(reader);
-        }
-
         private static List<Paper> DBReader(SqliteDataReader reader)
         {
             List<Paper> papers = new List<Paper>();
