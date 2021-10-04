@@ -52,20 +52,6 @@ namespace Research_Flow
 
         private Topic currentTopic = null;
 
-        private void ColorSpot1(object sender, RoutedEventArgs e) => topicTitle.Background = (sender as AppBarButton).Background;
-
-        private void ColorSpot2(object sender, RoutedEventArgs e) => topicTitle.Background = (sender as AppBarButton).Background;
-
-        private void ColorSpot3(object sender, RoutedEventArgs e) => topicTitle.Background = (sender as AppBarButton).Background;
-
-        private void ColorSpot4(object sender, RoutedEventArgs e) => topicTitle.Background = (sender as AppBarButton).Background;
-
-        private void ColorSpot5(object sender, RoutedEventArgs e) => topicTitle.Background = (sender as AppBarButton).Background;
-
-        private void ColorSpot6(object sender, RoutedEventArgs e) => topicTitle.Background = (sender as AppBarButton).Background;
-
-        private void ColorSpot7(object sender, RoutedEventArgs e) => topicTitle.Background = (sender as AppBarButton).Background;
-
         private void AddTopicSetting(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             ClearTopicSetting();
@@ -78,7 +64,6 @@ namespace Research_Flow
             {
                 Topic topic = new Topic();
                 topic.Title = topicTitle.Text;
-                topic.Color = (topicTitle.Background as SolidColorBrush).Color.ToString();
                 topic.Completeness = completeness.Value;
                 if (deadLine.Date != null)
                     topic.Deadline = deadLine.Date.Value;
@@ -193,12 +178,6 @@ namespace Research_Flow
 
             currentTopic = e.ClickedItem as Topic;
             topicTitle.Text = currentTopic.Title;
-            string hex = currentTopic.Color.Replace("#", string.Empty);
-            byte a = (byte)(Convert.ToUInt32(hex.Substring(0, 2), 16));
-            byte r = (byte)(Convert.ToUInt32(hex.Substring(2, 2), 16));
-            byte g = (byte)(Convert.ToUInt32(hex.Substring(4, 2), 16));
-            byte b = (byte)(Convert.ToUInt32(hex.Substring(6, 2), 16));
-            topicTitle.Background = new SolidColorBrush(Color.FromArgb(a, r, g, b));
             completeness.Value = currentTopic.Completeness;
             if (currentTopic.Deadline != DateTimeOffset.MinValue)
                 deadLine.Date = currentTopic.Deadline;

@@ -13,8 +13,6 @@ namespace LogicService.Data
 
         public string Title { get; set; }
 
-        public string Color { get; set; }
-
         public double Completeness { get; set; }
 
         public DateTimeOffset Deadline { get; set; } // DateTime for only date, and DateTimeOffset for whole date and time

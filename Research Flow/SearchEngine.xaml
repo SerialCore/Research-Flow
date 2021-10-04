@@ -62,9 +62,9 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="searchName" Header="Name" IsSpellCheckEnabled="False" />
                                 <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="searchUrl" Header="Url" IsSpellCheckEnabled="False" PlaceholderText="http://***/***query=QUERY***" Margin="0,10"/>
-                                <Button Grid.Row="2" Grid.Column="0" Click="Confirm_SearchSetting"  Content="Confirm" Margin="0,0,5,0" HorizontalAlignment="Stretch" Background="LightSkyBlue"/>
-                                <Button Grid.Row="2" Grid.Column="1" Click="Leave_SearchSetting" Content="Cancel" Margin="5,0,0,0" HorizontalAlignment="Stretch" Background="LightGray"/>
-                                <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" x:Name="searchDelete" Click="Delete_SearchSetting" Content="Delete" Margin="0,10,0,10" HorizontalAlignment="Stretch" Background="Red" Visibility="Collapsed"/>
+                                <Button Grid.Row="2" Grid.Column="0" Click="Confirm_SearchSetting"  Content="Confirm" Margin="0,0,5,0" HorizontalAlignment="Stretch"/>
+                                <Button Grid.Row="2" Grid.Column="1" Click="Leave_SearchSetting" Content="Cancel" Margin="5,0,0,0" HorizontalAlignment="Stretch"/>
+                                <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" x:Name="searchDelete" Click="Delete_SearchSetting" Content="Delete" Margin="0,10,0,10" HorizontalAlignment="Stretch" Visibility="Collapsed"/>
                             </Grid>
                         </StackPanel>
                     </ScrollViewer>
