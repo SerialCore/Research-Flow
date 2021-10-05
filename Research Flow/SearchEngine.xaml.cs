@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -58,9 +57,9 @@ namespace Research_Flow
                 // for new user, remember to load default feed from file, not the follows
                 SearchSources = new Dictionary<string, string>()
                 {
+                    { "arXiv", "https://arxiv.org/search/?query=QUERY&searchtype=all" },
+                    { "Bing", "https://cn.bing.com/academic/search?q=QUERY&FORM=HDRSC4" },
                     { "ACS", "https://pubs.acs.org/action/doSearch?AllField=QUERY" },
-                    { "arXiv All", "https://arxiv.org/search/?query=QUERY&searchtype=all" },
-                    { "Bing Academic", "https://cn.bing.com/academic/search?q=QUERY&FORM=HDRSC4" },
                 };
                 LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "search.list", SearchSources);
             }
@@ -138,30 +137,27 @@ namespace Research_Flow
 
         private async void Delete_SearchSetting(object sender, RoutedEventArgs e)
         {
-            var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.");
-            messageDialog.Commands.Add(new UICommand("True", new UICommandInvokedHandler(this.DeleteInvokedHandler)));
-            messageDialog.Commands.Add(new UICommand("Joke", new UICommandInvokedHandler(this.CancelInvokedHandler)));
+            ContentDialog dialog = new ContentDialog();
+            dialog.Title = "Delete application data?";
+            dialog.PrimaryButtonText = "Yeah";
+            dialog.CloseButtonText = "Forget it";
+            dialog.DefaultButton = ContentDialogButton.Primary;
 
-            messageDialog.DefaultCommandIndex = 0;
-            messageDialog.CancelCommandIndex = 1;
-            await messageDialog.ShowAsync();
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                SearchSources.Remove(searchName.Text);
+
+                searchlist.ItemsSource = null;
+                searchlist.ItemsSource = SearchSources.Keys;
+                searchlist.SelectedIndex = 0;
+                source_list.ItemsSource = null;
+                source_list.ItemsSource = SearchSources;
+                LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "search.list", SearchSources);
+
+                ClearSettings();
+            }
         }
-
-        private void DeleteInvokedHandler(IUICommand command)
-        {
-            SearchSources.Remove(searchName.Text);
-
-            searchlist.ItemsSource = null;
-            searchlist.ItemsSource = SearchSources.Keys;
-            searchlist.SelectedIndex = 0;
-            source_list.ItemsSource = null;
-            source_list.ItemsSource = SearchSources;
-            LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "search.list", SearchSources);
-
-            ClearSettings();
-        }
-
-        private void CancelInvokedHandler(IUICommand command) => ClearSettings();
 
         private void Leave_SearchSetting(object sender, RoutedEventArgs e) => ClearSettings();
 

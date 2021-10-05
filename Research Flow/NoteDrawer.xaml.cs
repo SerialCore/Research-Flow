@@ -1,5 +1,6 @@
 ﻿using LogicService.Application;
 using LogicService.Data;
+using LogicService.Drawing;
 using LogicService.Storage;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,6 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI.Input.Inking;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -29,6 +29,8 @@ namespace Research_Flow
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+
+            InitializePanel();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -57,9 +59,20 @@ namespace Research_Flow
             InitializeNote();
         }
 
-        /// <summary>
-        /// Add file, rename file or delete file, then re-Initialize
-        /// </summary>
+        private void InitializePanel()
+        {
+            colorlist.ItemsSource = ColorCollection.PaneColors;
+            penlist.ItemsSource = new ObservableCollection<PenCollection>()
+            {
+                new PenCollection { Pen = new UsualPen(), Name = "Usual Pen", Image = "ms-appx:///Images/UsualPen.jpg" },
+                new PenCollection { Pen = new MarkerPen(), Name = "Marker Pen", Image = "ms-appx:///Images/MarkerPen.jpg" },
+                new PenCollection { Pen = new CalligraphyPen(), Name = "Calligraphy Pen", Image = "ms-appx:///Images/CalligraphyPen.jpg" },
+                new PenCollection { Pen = new PencilBrush(), Name = "Pencil Brush", Image = "ms-appx:///Images/PencilBrush.jpg" },
+                new PenCollection { Pen = new InkBrush(), Name = "Ink Brush", Image = "ms-appx:///Images/InkBrush.jpg" }
+            };
+            inkToolbar.Loaded += InkToolbar_Loaded;
+        }
+
         private async void InitializeNote()
         {
             namelist.Clear();
@@ -148,6 +161,32 @@ namespace Research_Flow
             return pixels;
         }
 
+        #endregion
+
+        #region Panel Setting
+
+        private void InkToolbar_Loaded(object sender, RoutedEventArgs e)
+        {
+            InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
+            drawingAttributes.IgnorePressure = false;
+            drawingAttributes.FitToCurve = true;
+
+            inkToolbar.ActiveTool = inkToolbar.GetToolButton(InkToolbarTool.BallpointPen);
+            customPen.CustomPen = new UsualPen();
+            customPen.Palette = ColorCollection.ToolColors;
+        }
+
+        private void ColorList_ItemClick(object sender, ItemClickEventArgs e)
+            => paneColor.Fill = (e.ClickedItem as ColorCollection).ColorBrush;
+
+        private void PenList_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            customPen.CustomPen = (e.ClickedItem as PenCollection).Pen;
+            // to activate the CustomPen
+            customPen.SelectedStrokeWidth = 1;
+            customPen.SelectedStrokeWidth = 2;
+        }
+
         private void ChooseInputDevice(object sender, RoutedEventArgs e)
         {
             var button = sender as AppBarButton;
@@ -156,13 +195,13 @@ namespace Research_Flow
                 this.inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Mouse
                 | Windows.UI.Core.CoreInputDeviceTypes.Touch;
                 button.Tag = "touch";
-                button.Icon = new SymbolIcon((Symbol)0xEDC6);
+                button.Icon = new SymbolIcon((Symbol)0xED5F);
             }
             else
             {
                 this.inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Pen;
                 button.Tag = "pen";
-                button.Icon = new SymbolIcon((Symbol)0xED5F);
+                button.Icon = new SymbolIcon((Symbol)0xEDC6);
             }
         }
 
@@ -242,11 +281,6 @@ namespace Research_Flow
             notefilename.Text = name;
         }
 
-        /// <summary>
-        /// will be recorded
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
         private async void notefilename_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             string notename; // without extention
@@ -277,27 +311,32 @@ namespace Research_Flow
 
         private async void Delete_Note(object sender, RoutedEventArgs e)
         {
-            var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.");
-            messageDialog.Commands.Add(new UICommand("True", new UICommandInvokedHandler(this.DeleteInvokedHandler)));
-            messageDialog.Commands.Add(new UICommand("Joke", new UICommandInvokedHandler(this.CancelInvokedHandler)));
+            ContentDialog dialog = new ContentDialog();
+            dialog.Title = "Delete application data?";
+            dialog.PrimaryButtonText = "Yeah";
+            dialog.CloseButtonText = "Forget it";
+            dialog.DefaultButton = ContentDialogButton.Primary;
 
-            messageDialog.DefaultCommandIndex = 0;
-            messageDialog.CancelCommandIndex = 1;
-            await messageDialog.ShowAsync();
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                var name = notelist.SelectedItem as string;
+                LocalStorage.GeneralDeleteAsync(LocalStorage.GetNoteFolderAsync(), name + ".rfn");
+                namelist.Remove(name);
+                notefilename.Text = "";
+            }
         }
-
-        private void DeleteInvokedHandler(IUICommand command)
-        {
-            var name = notelist.SelectedItem as string;
-            LocalStorage.GeneralDeleteAsync(LocalStorage.GetNoteFolderAsync(), name + ".rfn");
-            namelist.Remove(name);
-            notefilename.Text = "";
-        }
-
-        private void CancelInvokedHandler(IUICommand command) { }
 
         #endregion
 
     }
 
+    class PenCollection
+    {
+        public string Name { get; set; }
+
+        public string Image { get; set; }
+
+        public InkToolbarCustomPen Pen { get; set; }
+    }
 }

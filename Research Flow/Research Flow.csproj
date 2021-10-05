@@ -162,11 +162,13 @@
     <Content Include="Assets\StoreLogo.scale-200.png" />
     <Content Include="Assets\Wide310x150Logo.scale-100.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
-    <Content Include="Images\OneDrive_icon.png" />
-    <Content Include="Images\OneDrive_icon_trans.png" />
-    <Content Include="Images\OneDrive_logo.png" />
-    <Content Include="Images\ResearchFlow_logo.jpg" />
+    <Content Include="Images\CalligraphyPen.jpg" />
+    <Content Include="Images\InkBrush.jpg" />
+    <Content Include="Images\MarkerPen.jpg" />
+    <Content Include="Images\PencilBrush.jpg" />
+    <Content Include="Images\Research Flow.jpg" />
     <Content Include="Images\ResearchFlow_splash.png" />
+    <Content Include="Images\UsualPen.jpg" />
     <Content Include="Properties\Default.rd.xml" />
     <None Include="Research Flow_StoreKey.pfx" />
   </ItemGroup>

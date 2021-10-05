@@ -4,11 +4,8 @@ using LogicService.Security;
 using LogicService.Storage;
 using System;
 using System.Collections.ObjectModel;
-using Windows.UI;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -134,27 +131,24 @@ namespace Research_Flow
 
         private async void DeleteTopic(object sender, RoutedEventArgs e)
         {
-            var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.", "Operation confirming");
-            messageDialog.Commands.Add(new UICommand("True", new UICommandInvokedHandler(this.DeleteInvokedHandler)));
-            messageDialog.Commands.Add(new UICommand("Joke", new UICommandInvokedHandler(this.CancelInvokedHandler)));
+            ContentDialog dialog = new ContentDialog();
+            dialog.Title = "Delete application data?";
+            dialog.PrimaryButtonText = "Yeah";
+            dialog.CloseButtonText = "Forget it";
+            dialog.DefaultButton = ContentDialogButton.Primary;
 
-            messageDialog.DefaultCommandIndex = 0;
-            messageDialog.CancelCommandIndex = 1;
-            await messageDialog.ShowAsync();
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                string topicID = currentTopic.ID;
+                topics.Remove(currentTopic);
+                LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "topic.list", topics);
+                ClearTopicSetting();
+
+                // cancel notification
+                await ApplicationNotification.CancelAlarmToast(topicID);
+            }
         }
-
-        private async void DeleteInvokedHandler(IUICommand command)
-        {
-            string topicID = currentTopic.ID;
-            topics.Remove(currentTopic);
-            LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "topic.list", topics);
-            ClearTopicSetting();
-
-            // cancel notification
-            await ApplicationNotification.CancelAlarmToast(topicID);
-        }
-
-        private void CancelInvokedHandler(IUICommand command) => ClearTopicSetting();
 
         private void CancelTopic(object sender, RoutedEventArgs e) => ClearTopicSetting();
 

@@ -23,16 +23,64 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                <AppBarButton Click="ChooseInputDevice" Tag="pen" Height="40" Width="38">
-                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xED5F;" />
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                <AppBarButton Tapped="Flyout_Tapped" Width="40">
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE790;" />
+                    <FlyoutBase.AttachedFlyout>
+                        <Flyout>
+                            <ListView x:Name="colorlist" IsItemClickEnabled="True" ItemClick="ColorList_ItemClick">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Height="48">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="24"/>
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <Rectangle Grid.Column="0" Fill="{Binding ColorBrush}" Height="20" Width="20"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding Name}" Margin="24,0,0,0" Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Flyout>
+                    </FlyoutBase.AttachedFlyout>
                 </AppBarButton>
-                <InkToolbar TargetInkCanvas="{x:Bind inkCanvas}"/>
+                <AppBarButton Tapped="Flyout_Tapped" Width="40">
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE88F;" />
+                    <FlyoutBase.AttachedFlyout>
+                        <Flyout>
+                            <ListView x:Name="penlist" IsItemClickEnabled="True" ItemClick="PenList_ItemClick">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Padding="5">
+                                            <Image Source="{Binding Image}" Width="200"/>
+                                            <TextBlock Text="{Binding Name}" Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center" Margin="10"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Flyout>
+                    </FlyoutBase.AttachedFlyout>
+                </AppBarButton>
+                <AppBarButton Click="ChooseInputDevice" Tag="pen" Width="40">
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEDC6;" />
+                </AppBarButton>
             </StackPanel>
+
+            <InkToolbar Grid.Row="0" Grid.Column="1" x:Name="inkToolbar" TargetInkCanvas="{x:Bind inkCanvas}" HorizontalAlignment="Center">
+                <InkToolbarCustomPenButton x:Name="customPen" MinStrokeWidth="1" MaxStrokeWidth="20" SelectedStrokeWidth="2">
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE88F;" />
+                    <InkToolbarCustomPenButton.ConfigurationContent>
+                        <InkToolbarPenConfigurationControl />
+                    </InkToolbarCustomPenButton.ConfigurationContent>
+                </InkToolbarCustomPenButton>
+            </InkToolbar>
 
             <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <AppBarButton Icon="Undo" ToolTipService.ToolTip="Undo" Click="UndoInk" Width="40"/>
                 <AppBarButton Icon="Redo" ToolTipService.ToolTip="Redo" Click="RedoInk" Width="40"/>
+                <AppBarSeparator />
+                <AppBarButton Icon="OpenWith" ToolTipService.ToolTip="Open File" Click="Import_Note" Width="40"/>
                 <AppBarButton Icon="Share" ToolTipService.ToolTip="Share" Tapped="Flyout_Tapped" Width="40">
                     <FlyoutBase.AttachedFlyout>
                         <MenuFlyout>
@@ -41,8 +89,9 @@
                         </MenuFlyout>
                     </FlyoutBase.AttachedFlyout>
                 </AppBarButton>
-                <AppBarButton Icon="OpenWith" ToolTipService.ToolTip="Open File" Click="Import_Note" Width="40"/>
-                <AppBarButton Icon="List" ToolTipService.ToolTip="Documents" Click="Open_Document" Width="40"/>
+                <AppBarSeparator />
+                <AppBarButton Icon="Delete" ToolTipService.ToolTip="Delete File" Click="Delete_Note" Width="40"/>
+                <AppBarButton Icon="Save" ToolTipService.ToolTip="Documents" Click="Open_Document" Width="40"/>
             </StackPanel>
 
             <ScrollViewer Grid.Row="1" Grid.ColumnSpan="3" x:Name="paintpanel" ZoomMode="Enabled" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
@@ -50,7 +99,7 @@
                     <toolkit:DropShadowPanel BlurRadius="8" ShadowOpacity="0.5" Color="Black"
                                   OffsetX="2" OffsetY="2" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Grid>
-                            <Rectangle Fill="White" Height="4096" Width="2048"/>
+                            <Rectangle x:Name="paneColor" Fill="White" Height="4096" Width="2048"/>
                             <InkCanvas x:Name="inkCanvas"/>
                         </Grid>
                     </toolkit:DropShadowPanel>
@@ -72,9 +121,6 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <CommandBar Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                    <AppBarButton Icon="Delete" Click="Delete_Note" LabelPosition="Collapsed"/>
-                </CommandBar>
             </StackPanel>
         </muxc:TeachingTip>
 

@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.UI.Core;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -124,25 +123,22 @@ namespace Research_Flow
 
         private async void Delete_RSSSetting(object sender, RoutedEventArgs e)
         {
-            var messageDialog = new MessageDialog("You are about to delete application data, please tell me that is not true.");
-            messageDialog.Commands.Add(new UICommand("True", new UICommandInvokedHandler(this.DeleteInvokedHandler)));
-            messageDialog.Commands.Add(new UICommand("Joke", new UICommandInvokedHandler(this.CancelInvokedHandler)));
+            ContentDialog dialog = new ContentDialog();
+            dialog.Title = "Delete application data?";
+            dialog.PrimaryButtonText = "Yeah";
+            dialog.CloseButtonText = "Forget it";
+            dialog.DefaultButton = ContentDialogButton.Primary;
 
-            messageDialog.DefaultCommandIndex = 0;
-            messageDialog.CancelCommandIndex = 1;
-            await messageDialog.ShowAsync();
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                FeedSources.Remove(modifiedRSS);
+                LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "rss.list", FeedSources);
+                // check
+                Feed.DBDeleteByPID(modifiedRSS.ID);
+                ClearSettings();
+            }
         }
-
-        private void DeleteInvokedHandler(IUICommand command)
-        {
-            FeedSources.Remove(modifiedRSS);
-            LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "rss.list", FeedSources);
-            // check
-            Feed.DBDeleteByPID(modifiedRSS.ID);
-            ClearSettings();
-        }
-
-        private void CancelInvokedHandler(IUICommand command) => ClearSettings();
 
         private void Leave_FeedSetting(object sender, RoutedEventArgs e) => ClearSettings();
 

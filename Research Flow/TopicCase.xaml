@@ -16,16 +16,12 @@
                               CanDragItems="True" CanReorderItems="True" AllowDrop="True" DragItemsCompleted="TopicList_DragItemsCompleted">
                 <GridView.ItemTemplate>
                     <DataTemplate>
-                        <Grid Height="200" Width="200" Padding="10" Background="{Binding Color}">
-                            <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Margin="0,0,0,40"/>
+                        <Grid Height="200" Width="200" Padding="10">
+                            <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Margin="0,0,0,4"/>
+                            <muxc:ProgressBar Value="{Binding Completeness}" Height="4" VerticalAlignment="Bottom"/>
                         </Grid>
                     </DataTemplate>
                 </GridView.ItemTemplate>
-                <GridViewItem >
-                    <Grid Height="200" Width="200" Padding="10" Background="LightSkyBlue">
-                        <TextBlock Text="+" Style="{StaticResource TitleTextBlockStyle}"/>
-                    </Grid>
-                </GridViewItem>
             </GridView>
             <GridViewItem Tapped="AddTopicSetting" HorizontalAlignment="Left" Margin="0,5,0,0">
                 <Grid Height="200" Width="200" Padding="10">
