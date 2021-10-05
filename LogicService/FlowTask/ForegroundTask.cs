@@ -4,6 +4,12 @@ namespace LogicService.FlowTask
 {
     public abstract class ForegroundTask
     {
+        public ForegroundTask()
+        {
+            this.id = "";
+            this.isrunning = false;
+            this.isavailable = false;
+        }
 
         protected string id;
         protected bool isrunning;

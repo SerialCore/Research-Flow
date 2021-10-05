@@ -35,13 +35,13 @@ namespace Research_Flow
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
-            ConfigureUI();
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
             if (rootFrame == null)
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
+                ConfigureUI(rootFrame);
                 rootFrame.NavigationFailed += OnNavigationFailed;
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
@@ -75,10 +75,10 @@ namespace Research_Flow
             if (args.Kind == ActivationKind.Protocol)
             {
                 Frame rootFrame = Window.Current.Content as Frame;
-                ConfigureUI();
                 if (rootFrame == null)
                 {
                     rootFrame = new Frame();
+                    ConfigureUI(rootFrame);
                     rootFrame.NavigationFailed += OnNavigationFailed;
                     Window.Current.Content = rootFrame;
                 }
@@ -96,10 +96,10 @@ namespace Research_Flow
             if (file != null)
             {
                 Frame rootFrame = Window.Current.Content as Frame;
-                ConfigureUI();
                 if (rootFrame == null)
                 {
                     rootFrame = new Frame();
+                    ConfigureUI(rootFrame);
                     rootFrame.NavigationFailed += OnNavigationFailed;
                     Window.Current.Content = rootFrame;
                 }
@@ -119,10 +119,10 @@ namespace Research_Flow
             {
                 Uri link = await shareOperation.Data.GetWebLinkAsync();
                 Frame rootFrame = Window.Current.Content as Frame;
-                ConfigureUI();
                 if (rootFrame == null)
                 {
                     rootFrame = new Frame();
+                    ConfigureUI(rootFrame);
                     rootFrame.NavigationFailed += OnNavigationFailed;
                     Window.Current.Content = rootFrame;
                 }
@@ -135,7 +135,7 @@ namespace Research_Flow
             Window.Current.Activate();
         }
 
-        private void ConfigureUI()
+        private void ConfigureUI(Frame frame)
         {
             var coreTitleBar = Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar;
             var appTitleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
@@ -147,6 +147,22 @@ namespace Research_Flow
             //appTitleBar.ButtonHoverForegroundColor = Colors.Transparent;
             appTitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
             //appTitleBar.ButtonInactiveForegroundColor = Colors.Transparent;
+
+            if (ApplicationSetting.ContainKey("Theme"))
+            {
+                if (ApplicationSetting.EqualKey("Theme", "Light"))
+                    frame.RequestedTheme = ElementTheme.Light;
+                if (ApplicationSetting.EqualKey("Theme", "Dark"))
+                    frame.RequestedTheme = ElementTheme.Dark;
+            }
+            else
+            {
+                frame.RequestedTheme = ElementTheme.Default;
+                if (frame.ActualTheme == ElementTheme.Light)
+                    ApplicationSetting.Theme = "Light";
+                if (frame.ActualTheme == ElementTheme.Dark)
+                    ApplicationSetting.Theme = "Dark";
+            }
         }
 
         /// <summary>

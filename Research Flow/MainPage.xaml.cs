@@ -190,67 +190,6 @@ namespace Research_Flow
 
         #endregion
 
-        #region Account
-
-        //private async void Login()
-        //{
-        //    if (await GraphService.OneDriveLogin())
-        //    {
-        //        string name = await GraphService.GetDisplayName();
-        //        string email = await GraphService.GetPrincipalName();
-        //        BitmapImage image = new BitmapImage();
-        //        image.UriSource = new Uri("ms-appx:///Images/ResearchFlow_logo.jpg");
-        //        accountName1.Text = name;
-        //        accountName2.Text = name;
-        //        accountEmail.Text = email;
-        //        accountPhoto1.ProfilePicture = image;
-        //        accountPhoto2.ProfilePicture = image;
-
-        //        ApplicationSetting.AccountName = email;
-        //    }
-        //    else
-        //    {
-        //        accountName1.Text = "Offline";
-        //        accountName2.Text = "Offline";
-        //        if (ApplicationSetting.ContainKey("AccountName"))
-        //            accountEmail.Text = ApplicationSetting.AccountName;
-        //    }
-        //}
-
-        //private void Logout()
-        //{
-        //    GraphService.OneDriveLogout();
-        //    accountName1.Text = "";
-        //    accountName2.Text = "";
-        //    accountEmail.Text = "";
-        //}
-
-        private void AccountLogin_Click(object sender, RoutedEventArgs e) { }
-
-        private void AccountLogout_Click(object sender, RoutedEventArgs e)
-        {
-            //if (ApplicationSetting.ContainKey("AccountName"))
-            //{
-            //    var messageDialog = new MessageDialog("Are you sure to log out?");
-            //    messageDialog.Commands.Add(new UICommand(
-            //        "True",
-            //        new UICommandInvokedHandler(this.DeleteInvokedHandler)));
-            //    messageDialog.Commands.Add(new UICommand(
-            //        "Joke",
-            //        new UICommandInvokedHandler(this.CancelInvokedHandler)));
-
-            //    messageDialog.DefaultCommandIndex = 0;
-            //    messageDialog.CancelCommandIndex = 1;
-            //    await messageDialog.ShowAsync();
-            //}
-        }
-
-        //private void DeleteInvokedHandler(IUICommand command) => Logout();
-
-        private void CancelInvokedHandler(IUICommand command) { }
-
-        #endregion
-
         #region Content
 
         private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)

@@ -53,7 +53,7 @@
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Padding="5">
-                                            <Image Source="{Binding Image}" Width="200"/>
+                                            <Image Source="{Binding Image}" Height="40" Width="40"/>
                                             <TextBlock Text="{Binding Name}" Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center" Margin="10"/>
                                         </StackPanel>
                                     </DataTemplate>
@@ -61,9 +61,6 @@
                             </ListView>
                         </Flyout>
                     </FlyoutBase.AttachedFlyout>
-                </AppBarButton>
-                <AppBarButton Click="ChooseInputDevice" Tag="pen" Width="40">
-                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEDC6;" />
                 </AppBarButton>
             </StackPanel>
 

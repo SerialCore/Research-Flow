@@ -4,27 +4,28 @@ namespace LogicService.Application
 {
     public class ApplicationSetting
     {
-        public static string AccountName
+
+        public static string Theme
         {
             get
             {
-                return ApplicationData.Current.LocalSettings.Values["AccountName"] as string;
+                return ApplicationData.Current.LocalSettings.Values["Theme"] as string;
             }
             set
             {
-                ApplicationData.Current.LocalSettings.Values["AccountName"] = value;
+                ApplicationData.Current.LocalSettings.Values["Theme"] = value;
             }
         }
 
-        public static string Configured
+        public static string InkInput
         {
             get
             {
-                return ApplicationData.Current.LocalSettings.Values["Configured"] as string;
+                return ApplicationData.Current.LocalSettings.Values["InkInput"] as string;
             }
             set
             {
-                ApplicationData.Current.LocalSettings.Values["Configured"] = value;
+                ApplicationData.Current.LocalSettings.Values["InkInput"] = value;
             }
         }
 
@@ -37,30 +38,6 @@ namespace LogicService.Application
             set
             {
                 ApplicationData.Current.LocalSettings.Values["Updated"] = value;
-            }
-        }
-
-        public static string WorkingTime
-        {
-            get
-            {
-                return ApplicationData.Current.LocalSettings.Values["WorkingTime"] as string;
-            }
-            set
-            {
-                ApplicationData.Current.LocalSettings.Values["WorkingTime"] = value;
-            }
-        }
-
-        public static string RelaxingTime
-        {
-            get
-            {
-                return ApplicationData.Current.LocalSettings.Values["RelaxingTime"] as string;
-            }
-            set
-            {
-                ApplicationData.Current.LocalSettings.Values["RelaxingTime"] = value;
             }
         }
 
@@ -77,7 +54,7 @@ namespace LogicService.Application
             if (!ContainKey(key))
                 return false;
 
-            if (ApplicationData.Current.LocalSettings.Values[key] == value)
+            if (ApplicationData.Current.LocalSettings.Values[key].Equals(value))
                 return true;
             else
                 return false;

@@ -1,4 +1,5 @@
 ﻿using LogicService.Application;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -15,45 +16,38 @@ namespace Research_Flow
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            // https://www.microsoft.com/store/apps/9P8CHR55RS31
-            // ms-windows-store://pdp/?productid=9P8CHR55RS31
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            InitializeSetting();
             DisplaySystemInfo();
+        }
+
+        private void InitializeSetting()
+        {
+            if (ApplicationSetting.ContainKey("Theme"))
+                applicationTheme.IsOn = ApplicationSetting.EqualKey("Theme", "Dark");
+            if (ApplicationSetting.ContainKey("InkInput"))
+                inkInput.IsOn = ApplicationSetting.EqualKey("InkInput", "Touch");
         }
 
         private void DisplaySystemInfo()
         {
             applicationName.Text = ApplicationInfo.AppName;
-
             applicationVersion.Text = ApplicationInfo.AppVersion;
-
             firstVersion.Text = ApplicationInfo.FirstVersionInstalled;
-
             cultureInfo.Text = ApplicationInfo.Culture.DisplayName;
-
             oSVersion.Text = ApplicationInfo.OperatingSystemVersion.ToString();
-
             deviceModel.Text = ApplicationInfo.DeviceModel;
-
             availableMemory.Text = ApplicationInfo.AvailableMemory.ToString();
-
             firstVersionInstalled.Text = ApplicationInfo.FirstVersionInstalled;
-
             firstUseTime.Text = ApplicationInfo.FirstUseTime.ToString();
-
             launchTime.Text = ApplicationInfo.LaunchTime.ToString();
-
             lastLaunchTime.Text = ApplicationInfo.LastLaunchTime.ToString();
-
             lastResetTime.Text = ApplicationInfo.LastResetTime.ToString();
-
             launchCount.Text = ApplicationInfo.LaunchCount.ToString();
-
             totalLaunchCount.Text = ApplicationInfo.TotalLaunchCount.ToString();
-
             appUptime.Text = ApplicationInfo.AppUptime.ToString("G");
         }
 
@@ -61,6 +55,35 @@ namespace Research_Flow
             => await ApplicationInfo.ShowRatingReviewDialog();
 
         #region Settings
+
+        private void ApplicationTheme_Toggled(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (applicationTheme.IsOn)
+            {
+                ApplicationSetting.Theme = "Dark";
+            }
+            else
+            {
+                ApplicationSetting.Theme = "Light";
+            }
+
+            if (ApplicationSetting.EqualKey("Theme", "Light"))
+                (Window.Current.Content as Frame).RequestedTheme = ElementTheme.Light;
+            if (ApplicationSetting.EqualKey("Theme", "Dark"))
+                (Window.Current.Content as Frame).RequestedTheme = ElementTheme.Dark;
+        }
+
+        private void InkInput_Toggled(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (inkInput.IsOn)
+            {
+                ApplicationSetting.InkInput = "Touch";
+            }
+            else
+            {
+                ApplicationSetting.InkInput = "Pen";
+            }
+        }
 
         //private async void Paper_UnCompress(object sender, RoutedEventArgs e)
         //{

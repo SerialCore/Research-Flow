@@ -56,6 +56,7 @@ namespace Research_Flow
                 }
             }
 
+            InitializeInput();
             InitializeNote();
         }
 
@@ -71,6 +72,23 @@ namespace Research_Flow
                 new PenCollection { Pen = new InkBrush(), Name = "Ink Brush", Image = "ms-appx:///Images/InkBrush.jpg" }
             };
             inkToolbar.Loaded += InkToolbar_Loaded;
+        }
+
+        private void InitializeInput()
+        {
+            if (ApplicationSetting.ContainKey("InkInput"))
+            {
+                if (ApplicationSetting.EqualKey("InkInput", "Pen"))
+                    inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Pen;
+                if (ApplicationSetting.EqualKey("InkInput", "Touch"))
+                    inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Mouse
+                        | Windows.UI.Core.CoreInputDeviceTypes.Touch;
+            }
+            else
+            {
+                inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Pen;
+                ApplicationSetting.InkInput = "Pen";
+            }
         }
 
         private async void InitializeNote()
@@ -185,24 +203,6 @@ namespace Research_Flow
             // to activate the CustomPen
             customPen.SelectedStrokeWidth = 1;
             customPen.SelectedStrokeWidth = 2;
-        }
-
-        private void ChooseInputDevice(object sender, RoutedEventArgs e)
-        {
-            var button = sender as AppBarButton;
-            if (button.Tag.Equals("pen"))
-            {
-                this.inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Mouse
-                | Windows.UI.Core.CoreInputDeviceTypes.Touch;
-                button.Tag = "touch";
-                button.Icon = new SymbolIcon((Symbol)0xED5F);
-            }
-            else
-            {
-                this.inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Pen;
-                button.Tag = "pen";
-                button.Icon = new SymbolIcon((Symbol)0xEDC6);
-            }
         }
 
         #endregion

@@ -10,14 +10,32 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <Pivot Margin="20,0,20,10">
+            <PivotItem Header="Setting">
+                <StackPanel Padding="20">
+                    <StackPanel>
+                        <ToggleSwitch x:Name="applicationTheme" Header="Application theme" 
+                                      OnContent="Dark" OffContent="Light" Toggled="ApplicationTheme_Toggled" Margin="0,10"/>
+                        <ToggleSwitch x:Name="inkInput" Header="Drawing note with" 
+                                      OnContent="Touch | Mouse" OffContent="Pen" Toggled="InkInput_Toggled" Margin="0,10"/>
+                    </StackPanel>
+                </StackPanel>
+            </PivotItem>
             <PivotItem Header="Information">
-                <ScrollViewer>
-                    <Grid >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Margin="10">
+                <ScrollViewer Padding="20">
+                    <StackPanel>
+                        <TextBlock Text="Feedback" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,10"/>
+                        <HyperlinkButton Content="Rate on Microsoft Store" Click="Give_Rate" Margin="0,2"/>
+                        <HyperlinkButton Content="serialcore@outlook.com" NavigateUri="mailto:serialcore@outlook.com"/>
+                        <TextBlock Text="Privacy Policy" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,20"/>
+                        <TextBlock TextWrapping="Wrap">
+                            <Run >
+                                Please note that this app would never utilize any user data for malignant purpose. 
+                                The major data contained in this app should be user settings, rss feeds, website links, papers and Microsoft account. 
+                                Some data will be found explicitly in OneDrive folder with user’s confirmation and synchronization.
+                            </Run>
+                        </TextBlock>
+                        <TextBlock Text="Application" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,20"/>
+                        <TextBlock>
                             <Run Text="Application name:   " FontWeight="Bold"/>                          
                             <Run x:Name="applicationName"/><LineBreak/><LineBreak/>
                             <Run Text="Application version:   " FontWeight="Bold"/>
@@ -49,33 +67,7 @@
                             <Run Text="App uptime:   " FontWeight="Bold"/>
                             <Run x:Name="appUptime"/>
                         </TextBlock>
-                        <ScrollViewer Grid.Column="1">
-                            <StackPanel Margin="5,0">
-                                <TextBlock Text="Feedback" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,10"/>
-                                <HyperlinkButton Content="Rate on Microsoft Store" Click="Give_Rate" Margin="0,2"/>
-                                <HyperlinkButton Content="serialcore@outlook.com" NavigateUri="mailto:serialcore@outlook.com"/>
-
-                                <TextBlock Text="Privacy Policy" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,10"/>
-                                <TextBlock TextWrapping="Wrap">
-                                    <Run >
-                                        Please note that this app would never utilize any user data for malignant purpose. 
-                                        The major data contained in this app should be user settings, rss feeds, website links, papers and Microsoft account. 
-                                        Some data will be found explicitly in OneDrive folder with user’s confirmation and synchronization.
-                                    </Run>
-                                </TextBlock>
-
-                                <TextBlock Text="Question - Answer" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,10"/>
-                                <TextBlock TextWrapping="Wrap">
-                                    <Run Text="What if I got a malformed database disk image?" FontWeight="SemiBold"/><LineBreak/>
-                                    <Run >
-                                        Maybe you got a poor network connection causing interrupt when the database file was synchronizing.
-                                        Or you closed app without checking the writing process on database. The simplest solution:
-                                        synchronize files-uninstall app-remove the malformed database in OneDrive-reinstall app.
-                                    </Run>
-                                </TextBlock>
-                            </StackPanel>
-                        </ScrollViewer>
-                    </Grid>
+                    </StackPanel>
                 </ScrollViewer>
             </PivotItem>
 

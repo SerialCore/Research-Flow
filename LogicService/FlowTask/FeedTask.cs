@@ -11,13 +11,6 @@ namespace LogicService.FlowTask
 
         public event EventHandler<TaskCompletedEventArgs> TaskCompleted;
 
-        public FeedTask()
-        {
-            this.id = "";
-            this.isrunning = false;
-            this.isavailable = false;
-        }
-
         public override async void Run()
         {
             isrunning = true;
