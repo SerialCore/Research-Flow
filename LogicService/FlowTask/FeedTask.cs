@@ -12,7 +12,6 @@ namespace LogicService.FlowTask
 
         public event TaskHandle TaskCompleted;
 
-        // TODO: refer the method in Feed.class
         public override async void Run()
         {
             IsRunning = true;
@@ -30,34 +29,23 @@ namespace LogicService.FlowTask
             {
                 foreach (FeedSource source in sources)
                 {
-                    RssService.BeginGetFeed(
-                        source.Uri, (items) =>
-                        {
-                            List<Feed> feeds = items as List<Feed>;
-                            Feed.DBInsert(feeds);
-                            source.LastUpdateTime = DateTime.Now;
-                            LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "rss.list", sources);
-                            LocalStorage.GeneralLogAsync<Feed>("FeedTask.log", "feed updated-" + source.Name);
-
-                            IsRunning = false;
-                            args.Log += "feed updated-" + source.Name + "\r\n";
-                            if (TaskCompleted != null)
-                            {
-                                TaskCompleted(args);
-                            }
-                        },
-                        (exception) =>
-                        {
-                            LocalStorage.GeneralLogAsync<Feed>("FeedTask.log", exception + "-" + source.Name);
-
-                            IsRunning = false;
-                            args.Log += exception + "-" + source.Name + "\r\n";
-                            if (TaskCompleted != null)
-                            {
-                                TaskCompleted(args);
-                            }
-                        }, null);
+                    try
+                    {
+                        List<Feed> feeds = FeedService.TryGetFeed(source.Uri);
+                        Feed.DBInsert(feeds);
+                        args.Log += $"{source.Name} updated\t\n";
+                    }
+                    catch (Exception exception)
+                    {
+                        args.Log += $"{source.Name} {exception}\t\n";
+                    }
                 }
+            }
+
+            IsRunning = false;
+            if (TaskCompleted != null)
+            {
+                TaskCompleted(args);
             }
         }
     }

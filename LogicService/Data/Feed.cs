@@ -1,4 +1,5 @@
-﻿using LogicService.Storage;
+﻿using LogicService.Service;
+using LogicService.Storage;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,6 @@ namespace LogicService.Data
         public double Star { get; set; }
 
         public bool IsRSS { get; set; }
-
-        //public bool IsNotificationOn { get; set; }
-
-        public DateTime LastUpdateTime { get; set; }
 
         #region Equals
 
@@ -207,51 +204,6 @@ namespace LogicService.Data
             FileList.DBInsertTrace("Data", DataStorage.FeedData.Database);
 
             return affectedRows;
-        }
-
-        #endregion
-
-        #region Helper
-
-        public static XmlNodeList GetNodes(string xml)
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xml);
-            return doc.DocumentElement.ChildNodes;
-        }
-
-        public static string GetID(string xml)
-        {
-            string doi = string.Empty;
-            string guid = string.Empty;
-            foreach (XmlNode node in GetNodes(xml))
-            {
-                if (node.Name.Equals("doi"))
-                    doi = node.InnerText;
-                if (node.Name.Equals("guid"))
-                    guid = node.InnerText;
-            }
-            return string.IsNullOrEmpty(doi) ? guid : doi;
-        }
-
-        public static string GetAuthor(string xml)
-        {
-            foreach (XmlNode node in GetNodes(xml))
-            {
-                if (node.Name.Equals("author"))
-                    return node.InnerText;
-            }
-            return "";
-        }
-
-        public static string GetCategory(string xml)
-        {
-            foreach (XmlNode node in GetNodes(xml))
-            {
-                if (node.Name.Equals("category"))
-                    return node.InnerText;
-            }
-            return "";
         }
 
         #endregion

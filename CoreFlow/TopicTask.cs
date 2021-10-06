@@ -15,7 +15,10 @@ namespace CoreFlow
             {
                 Topic topic = await Topic.GetRandomTopic();
                 if (topic != null)
+                {
+                    ApplicationNotification.CancelLiveTile();
                     ApplicationNotification.ShowTextTile("Topic", topic.Title);
+                }
             }
 
             deferral.Complete();

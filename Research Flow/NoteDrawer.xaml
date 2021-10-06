@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Research_Flow"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -93,13 +92,10 @@
 
             <ScrollViewer Grid.Row="1" Grid.ColumnSpan="3" x:Name="paintpanel" ZoomMode="Enabled" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
                 <Viewbox Stretch="Uniform" StretchDirection="Both" Margin="20">
-                    <toolkit:DropShadowPanel BlurRadius="8" ShadowOpacity="0.5" Color="Black"
-                                  OffsetX="2" OffsetY="2" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Grid>
-                            <Rectangle x:Name="paneColor" Fill="White" Height="4096" Width="2048"/>
-                            <InkCanvas x:Name="inkCanvas"/>
-                        </Grid>
-                    </toolkit:DropShadowPanel>
+                    <Grid>
+                        <Rectangle x:Name="paneColor" Fill="White" Height="4096" Width="2048"/>
+                        <InkCanvas x:Name="inkCanvas"/>
+                    </Grid>
                 </Viewbox>
             </ScrollViewer>
 

@@ -9,19 +9,19 @@ using Windows.Web.Syndication;
 
 namespace LogicService.Service
 {
-    public class RssService
+    public class FeedService
     {
 
         /// <summary>
         /// run as a thread
         /// </summary>
-        /// <param name="rssFeed"></param>
+        /// <param name="source"></param>
         /// <param name="onGetRssItemsCompleted"></param>
         /// <param name="onError"></param>
         /// <param name="onFinally"></param>
-        public static void BeginGetFeed(string rssFeed, Action<IEnumerable<Feed>> onGetRssItemsCompleted = null, Action<string> onError = null, Action onFinally = null)
+        public static void BeginGetFeed(string source, Action<IEnumerable<Feed>> onGetRssItemsCompleted = null, Action<string> onError = null, Action onFinally = null)
         {
-            var request = HttpWebRequest.Create(rssFeed);
+            var request = HttpWebRequest.Create(source);
             request.Method = "GET";
 
             request.BeginGetResponse((result) => // stop here in backgroundtask
@@ -35,7 +35,7 @@ namespace LogicService.Service
                         using (StreamReader reader = new StreamReader(stream))
                         {
                             string content = reader.ReadToEnd();
-                            string parentID = HashEncode.MakeMD5(rssFeed);
+                            string parentID = HashEncode.MakeMD5(source);
                             List<Feed> rssItems = new List<Feed>();
                             SyndicationFeed feeds = new SyndicationFeed();
                             feeds.Load(content);
@@ -59,13 +59,6 @@ namespace LogicService.Service
 
                     }
                 }
-                catch (WebException webEx)
-                {
-                    if (onError != null)
-                    {
-                        onError(webEx.Message);
-                    }
-                }
                 catch (Exception e)
                 {
                     if (onError != null)
@@ -83,11 +76,12 @@ namespace LogicService.Service
             }, request);
         }
 
-        public static void GetFeed(string rssFeed, Action<IEnumerable<Feed>> onGetRssItemsCompleted = null, Action<string> onError = null, Action onFinally = null)
+        public static List<Feed> TryGetFeed(string source)
         {
-            var request = HttpWebRequest.Create(rssFeed);
+            var request = HttpWebRequest.Create(source);
             request.Method = "GET";
 
+            List<Feed> feedlist = new List<Feed>();
             try
             {
                 using (Stream stream = request.GetResponse().GetResponseStream())
@@ -95,13 +89,12 @@ namespace LogicService.Service
                     using (StreamReader reader = new StreamReader(stream))
                     {
                         string content = reader.ReadToEnd();
-                        string parentID = HashEncode.MakeMD5(rssFeed);
-                        List<Feed> rssItems = new List<Feed>();
+                        string parentID = HashEncode.MakeMD5(source);
                         SyndicationFeed feeds = new SyndicationFeed();
                         feeds.Load(content);
                         foreach (SyndicationItem f in feeds.Items)
                         {
-                            rssItems.Add(new Feed
+                            feedlist.Add(new Feed
                             {
                                 ID = HashEncode.MakeMD5(f.Links[0].Uri.AbsoluteUri),
                                 ParentID = parentID,
@@ -111,34 +104,15 @@ namespace LogicService.Service
                                 Summary = WebUtility.HtmlDecode(Regex.Replace(f.Summary.Text, "<[^>]+?>", ""))
                             });
                         }
-                        if (onGetRssItemsCompleted != null)
-                        {
-                            onGetRssItemsCompleted(rssItems);
-                        }
                     }
                 }
             }
-            catch (WebException webEx)
+            catch (Exception exception)
             {
-                if (onError != null)
-                {
-                    onError(webEx.Message);
-                }
+                throw exception;
             }
-            catch (Exception e)
-            {
-                if (onError != null)
-                {
-                    onError(e.Message);
-                }
-            }
-            finally
-            {
-                if (onFinally != null)
-                {
-                    onFinally();
-                }
-            }
+
+            return feedlist;
         }
     }
 }

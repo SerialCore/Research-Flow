@@ -204,6 +204,10 @@ namespace LogicService.Application
                     {
                         Content = new TileBindingContentAdaptive()
                         {
+                            PeekImage = new TilePeekImage()
+                            {
+                                Source = "Assets/Square150x150Logo.scale-200.png"
+                            },
                             Children =
                             {
                                 new AdaptiveText()
@@ -214,6 +218,7 @@ namespace LogicService.Application
                                 new AdaptiveText()
                                 {
                                     Text = body,
+                                    HintWrap = true,
                                     HintStyle = AdaptiveTextStyle.CaptionSubtle
                                 }
                             }
@@ -224,6 +229,10 @@ namespace LogicService.Application
                     {
                         Content = new TileBindingContentAdaptive()
                         {
+                            PeekImage = new TilePeekImage()
+                            {
+                                Source = "Assets/Wide310x150Logo.scale-200.png"
+                            },
                             Children =
                             {
                                 new AdaptiveText()
@@ -235,6 +244,7 @@ namespace LogicService.Application
                                 new AdaptiveText()
                                 {
                                     Text = body,
+                                    HintWrap = true,
                                     HintStyle = AdaptiveTextStyle.CaptionSubtle
                                 }
                             }
@@ -243,8 +253,14 @@ namespace LogicService.Application
 
                     TileLarge = new TileBinding()
                     {
+                        Branding = TileBranding.NameAndLogo,
+                        DisplayName = "Research Flow",
                         Content = new TileBindingContentAdaptive()
                         {
+                            PeekImage = new TilePeekImage()
+                            {
+                                Source = "Assets/LargeTile.scale-200.png"
+                            },
                             Children =
                             {
                                 new AdaptiveText()
@@ -256,6 +272,7 @@ namespace LogicService.Application
                                 new AdaptiveText()
                                 {
                                     Text = body,
+                                    HintWrap = true,
                                     HintStyle = AdaptiveTextStyle.CaptionSubtle
                                 }
                             }

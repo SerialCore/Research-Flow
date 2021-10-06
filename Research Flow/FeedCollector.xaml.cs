@@ -99,7 +99,6 @@ namespace Research_Flow
                 if (modifiedRSS != null)
                 {
                     // create new and remain other data
-                    source.LastUpdateTime = modifiedRSS.LastUpdateTime;
                     FeedSources[FeedSources.IndexOf(modifiedRSS)] = source;
                 }
                 else
@@ -222,7 +221,7 @@ namespace Research_Flow
             int selectedFeedIndex = FeedSources.IndexOf(source); // now you can modify source while fetching feed
 
             waiting_feed.IsActive = true;
-            RssService.BeginGetFeed(
+            FeedService.BeginGetFeed(
                 source.Uri,
                 async (items) =>
                 {
@@ -233,8 +232,6 @@ namespace Research_Flow
                         waiting_feed.IsActive = false;
                     });
                     Feed.DBInsert(feeds);
-                    FeedSources[selectedFeedIndex].LastUpdateTime = DateTime.Now;
-                    LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "rss.list", FeedSources);
                 },
                 async (exception) =>
                 {
