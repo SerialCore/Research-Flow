@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace LogicService.Data
 {
@@ -50,6 +51,30 @@ namespace LogicService.Data
         public override int GetHashCode()
         {
             return ID.GetHashCode();
+        }
+
+        #endregion
+
+        #region Topic Helper
+
+        public static async Task<Topic> GetRandomTopic()
+        {
+            List<Topic> topics = null;
+            try
+            {
+                topics = await LocalStorage.ReadJsonAsync<List<Topic>>(LocalStorage.GetLocalCacheFolder(), "topic.list");
+            }
+            catch { }
+
+            if (topics != null && topics.Count != 0)
+            {
+                int index = (int)Math.Round((decimal)new Random().Next(0, 100) * (topics.Count - 1) / 100);
+                return topics[index];
+            }
+            else
+            {
+                return null;
+            }
         }
 
         #endregion

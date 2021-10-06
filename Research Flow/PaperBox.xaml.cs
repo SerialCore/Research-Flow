@@ -42,10 +42,10 @@ namespace Research_Flow
                 }
             }
 
-            InitializePaper();
+            UpdatePaper();
         }
 
-        private void InitializePaper()
+        private void UpdatePaper()
         {
             papers = Paper.DBSelectByLimit(100);
             paperlist.ItemsSource = papers;
@@ -127,8 +127,7 @@ namespace Research_Flow
         {
             if (string.IsNullOrEmpty(paperid.Text) || string.IsNullOrEmpty(papertitle.Text))
             {
-                ApplicationMessage.SendMessage(new ShortMessage { Title = "PaperWarning", Content = "There must be Title and ID", Time = DateTimeOffset.Now },
-                    ApplicationMessage.MessageType.InApp);
+                ApplicationMessage.SendMessage(new MessageEventArgs { Title = "PaperWarning", Content = "There must be Title and ID", Type = MessageType.InApp, Time = DateTimeOffset.Now });
                 return;
             }
 
@@ -163,7 +162,7 @@ namespace Research_Flow
                 });
             }
 
-            InitializePaper();
+            UpdatePaper();
         }
 
         private async void SavePdfFile(object sender, RoutedEventArgs e)
@@ -181,8 +180,7 @@ namespace Research_Flow
                     }
                     catch (Exception ex)
                     {
-                        ApplicationMessage.SendMessage(new ShortMessage { Title = "PdfException", Content = ex.Message, Time = DateTimeOffset.Now },
-                            ApplicationMessage.MessageType.InApp);
+                        ApplicationMessage.SendMessage(new MessageEventArgs { Title = "PdfException", Content = ex.Message, Type = MessageType.InApp, Time = DateTimeOffset.Now });
                     }
                 }
             }
@@ -224,8 +222,7 @@ namespace Research_Flow
                 }
                 catch (Exception ex)
                 {
-                    ApplicationMessage.SendMessage(new ShortMessage { Title = "PdfException", Content = ex.Message, Time = DateTimeOffset.Now },
-                        ApplicationMessage.MessageType.InApp);
+                    ApplicationMessage.SendMessage(new MessageEventArgs { Title = "PdfException", Content = ex.Message, Type = MessageType.InApp, Time = DateTimeOffset.Now });
                 }
             }
 

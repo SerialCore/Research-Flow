@@ -24,10 +24,10 @@ namespace Research_Flow
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            InitializeTopic();
+            UpdateTopic();
         }
 
-        private async void InitializeTopic()
+        private async void UpdateTopic()
         {
             try
             {
@@ -35,7 +35,6 @@ namespace Research_Flow
             }
             catch
             {
-                // for new user, remember to load default feed from file, not the follows
                 topics = new ObservableCollection<Topic>();
                 LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "topic.list", topics);
             }
@@ -44,6 +43,8 @@ namespace Research_Flow
                 topiclist.ItemsSource = topics;
             }
         }
+
+        #region Topic Managment
 
         private ObservableCollection<Topic> topics;
 
@@ -123,8 +124,7 @@ namespace Research_Flow
                 }
                 catch (ArgumentException)
                 {
-                    ApplicationMessage.SendMessage(new ShortMessage { Title = "TopicWarning", Content = "Research Flow does not offer Time-Machine", Time = DateTimeOffset.Now },
-                        ApplicationMessage.MessageType.InApp);
+                    ApplicationMessage.SendMessage(new MessageEventArgs { Title = "TopicWarning", Content = "Research Flow does not offer Time-Machine", Type = MessageType.InApp, Time = DateTimeOffset.Now });
                 }
             }
         }
@@ -183,6 +183,8 @@ namespace Research_Flow
         {
             LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "topic.list", topics);
         }
+
+        #endregion
 
     }
 }

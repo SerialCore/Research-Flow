@@ -29,6 +29,18 @@ namespace LogicService.Application
             }
         }
 
+        public static string LiveTile
+        {
+            get
+            {
+                return ApplicationData.Current.LocalSettings.Values["LiveTile"] as string;
+            }
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values["LiveTile"] = value;
+            }
+        }
+
         public static string Updated
         {
             get

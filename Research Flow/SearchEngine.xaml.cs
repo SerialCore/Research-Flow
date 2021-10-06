@@ -21,7 +21,6 @@ namespace Research_Flow
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
             InitializeSearch();
-            webView.Source = new Uri("https://github.com/SerialCore");
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -69,6 +68,8 @@ namespace Research_Flow
                 searchlist.SelectedIndex = 1;
                 source_list.ItemsSource = SearchSources;
             }
+
+            webView.Source = new Uri("https://github.com/SerialCore");
         }
 
         #region Search Engine

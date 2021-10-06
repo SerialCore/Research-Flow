@@ -8,48 +8,57 @@ namespace LogicService.FlowTask
 {
     public class FeedTask : ForegroundTask
     {
+        public delegate void TaskHandle(TaskCompletedEventArgs args);
 
-        public event EventHandler<TaskCompletedEventArgs> TaskCompleted;
+        public event TaskHandle TaskCompleted;
 
+        // TODO: refer the method in Feed.class
         public override async void Run()
         {
-            isrunning = true;
+            IsRunning = true;
             TaskCompletedEventArgs args = new TaskCompletedEventArgs();
+            args.Task = typeof(FeedTask);
 
-            List<FeedSource> FeedSources;
+            List<FeedSource> sources = null;
             try
             {
-                FeedSources = await LocalStorage.ReadJsonAsync<List<FeedSource>>(LocalStorage.GetLocalCacheFolder(), "rss.list");
+                sources = await LocalStorage.ReadJsonAsync<List<FeedSource>>(LocalStorage.GetLocalCacheFolder(), "rss.list");
             }
-            catch
+            catch { }
+
+            if (sources != null)
             {
-                FeedSources = new List<FeedSource>();
+                foreach (FeedSource source in sources)
+                {
+                    RssService.BeginGetFeed(
+                        source.Uri, (items) =>
+                        {
+                            List<Feed> feeds = items as List<Feed>;
+                            Feed.DBInsert(feeds);
+                            source.LastUpdateTime = DateTime.Now;
+                            LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "rss.list", sources);
+                            LocalStorage.GeneralLogAsync<Feed>("FeedTask.log", "feed updated-" + source.Name);
+
+                            IsRunning = false;
+                            args.Log += "feed updated-" + source.Name + "\r\n";
+                            if (TaskCompleted != null)
+                            {
+                                TaskCompleted(args);
+                            }
+                        },
+                        (exception) =>
+                        {
+                            LocalStorage.GeneralLogAsync<Feed>("FeedTask.log", exception + "-" + source.Name);
+
+                            IsRunning = false;
+                            args.Log += exception + "-" + source.Name + "\r\n";
+                            if (TaskCompleted != null)
+                            {
+                                TaskCompleted(args);
+                            }
+                        }, null);
+                }
             }
-
-            foreach (FeedSource source in FeedSources)
-            {
-                RssService.BeginGetFeed(
-                    source.Uri, (items) =>
-                    {
-                        List<Feed> feeds = items as List<Feed>;
-                        Feed.DBInsert(feeds);
-                        source.LastUpdateTime = DateTime.Now;
-                        LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "rss.list", FeedSources);
-
-                        args.Log += "feed updated-" + source.Name + "\r\n";
-                        LocalStorage.GeneralLogAsync<Feed>("FeedTask.log", "feed updated-" + source.Name);
-                        isrunning = false;
-                    },
-                    (exception) =>
-                    {
-                        args.Log += exception + "-" + source.Name + "\r\n";
-                        LocalStorage.GeneralLogAsync<Feed>("FeedTask.log", exception + "-" + source.Name);
-                        isrunning = false;
-                    }, null);
-            }
-
-            //TaskCompleted(typeof(FeedTask), args);
         }
-
     }
 }

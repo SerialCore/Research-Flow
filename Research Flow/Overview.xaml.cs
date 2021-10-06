@@ -37,26 +37,24 @@ namespace Research_Flow
         private async void InitBackgroundTask()
         {
             await ApplicationTask.RegisterTopicTask();
-            await ApplicationTask.RegisterTagTask();
         }
 
         private void InitForegroundTask()
         {
             if (ApplicationInfo.IsNetworkAvailable)
             {
-                var task = new FeedTask();
-                task.Run();
-                task.TaskCompleted += Task_TaskCompleted;
-                //StoreServicesCustomEventLogger.GetDefault().Log("FeedTask");
+                var feedtask = new FeedTask();
+                feedtask.TaskCompleted += Feedtask_TaskCompleted;
+                feedtask.Run();
+                feedtask.TaskCompleted -= Feedtask_TaskCompleted;
             }
         }
 
         #region Tasks
 
-        private void Task_TaskCompleted(object sender, TaskCompletedEventArgs e)
+        private void Feedtask_TaskCompleted(TaskCompletedEventArgs args)
         {
-            ApplicationMessage.SendMessage(new ShortMessage { Title = "Task", Content = "FeedTask Completed", Time = DateTimeOffset.Now },
-                ApplicationMessage.MessageType.Toast);
+            ApplicationMessage.SendMessage(new MessageEventArgs { Title = "Task", Content = "FeedTask Completed", Type = MessageType.Banner, Time = DateTimeOffset.Now });
         }
 
         #endregion
@@ -68,13 +66,7 @@ namespace Research_Flow
         public static async Task<BackgroundTaskRegistration> RegisterTopicTask()
         {
             return await RegisterBackgroundTask(typeof(CoreFlow.TopicTask),
-                "TopicTask", new TimeTrigger(45, false));
-        }
-
-        public static async Task<BackgroundTaskRegistration> RegisterTagTask()
-        {
-            return await RegisterBackgroundTask(typeof(CoreFlow.TagTask),
-                "TagTask", new TimeTrigger(30, false));
+                "TopicTask", new TimeTrigger(30, false));
         }
 
         public static IReadOnlyDictionary<Guid, IBackgroundTaskRegistration> ListBackgroundTask()

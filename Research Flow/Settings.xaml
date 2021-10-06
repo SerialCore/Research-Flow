@@ -17,6 +17,7 @@
                                       OnContent="Dark" OffContent="Light" Toggled="ApplicationTheme_Toggled" Margin="0,10"/>
                         <ToggleSwitch x:Name="inkInput" Header="Drawing note with" 
                                       OnContent="Touch | Mouse" OffContent="Pen" Toggled="InkInput_Toggled" Margin="0,10"/>
+                        <ComboBox x:Name="liveTile" Header="Show live tile" SelectionChanged="LiveTile_SelectionChanged" Margin="0,10"/>
                     </StackPanel>
                 </StackPanel>
             </PivotItem>

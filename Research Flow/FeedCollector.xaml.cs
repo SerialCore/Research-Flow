@@ -26,10 +26,10 @@ namespace Research_Flow
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
-            InitializeRSS();
+            InitializeFeed();
         }
 
-        private async void InitializeRSS()
+        private async void InitializeFeed()
         {
             try
             {
@@ -55,7 +55,7 @@ namespace Research_Flow
             }
         }
 
-        #region RSS Source
+        #region Feed Source
 
         public ObservableCollection<FeedSource> FeedSources { get; set; }
 
@@ -108,8 +108,7 @@ namespace Research_Flow
                     {
                         if (item == source) // require the Equals method
                         {
-                            ApplicationMessage.SendMessage(new ShortMessage { Title = "RssWarning", Content = "There has been the same url.", Time = DateTimeOffset.Now },
-                                ApplicationMessage.MessageType.InApp);
+                            ApplicationMessage.SendMessage(new MessageEventArgs { Title = "RssWarning", Content = "There has been the same url.", Type = MessageType.InApp, Time = DateTimeOffset.Now });
                             ClearSettings();
                             return;
                         }
@@ -166,7 +165,7 @@ namespace Research_Flow
 
         #endregion
 
-        #region RSS Feed
+        #region Feed
 
         private Feed selectedFeed = null;
 
@@ -214,8 +213,7 @@ namespace Research_Flow
             }
             catch (Exception exception)
             {
-                ApplicationMessage.SendMessage(new ShortMessage { Title = "RssException", Content = exception.Message, Time = DateTimeOffset.Now },
-                    ApplicationMessage.MessageType.InApp);
+                ApplicationMessage.SendMessage(new MessageEventArgs { Title = "RssException", Content = exception.Message, Type = MessageType.InApp, Time = DateTimeOffset.Now });
             }
         }
 
@@ -242,8 +240,7 @@ namespace Research_Flow
                 {
                     await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
-                        ApplicationMessage.SendMessage(new ShortMessage { Title = "RssException", Content = exception, Time = DateTimeOffset.Now },
-                            ApplicationMessage.MessageType.InApp);
+                        ApplicationMessage.SendMessage(new MessageEventArgs { Title = "RssException", Content = exception, Type = MessageType.InApp, Time = DateTimeOffset.Now });
                         waiting_feed.IsActive = false;
                     });
                 }, null);

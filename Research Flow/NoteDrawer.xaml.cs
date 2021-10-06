@@ -49,15 +49,14 @@ namespace Research_Flow
                         }
                         catch (Exception ex)
                         {
-                            ApplicationMessage.SendMessage(new ShortMessage { Title = "NoteException", Content = ex.Message, Time = DateTimeOffset.Now },
-                                ApplicationMessage.MessageType.InApp);
+                            ApplicationMessage.SendMessage(new MessageEventArgs { Title = "NoteException", Content = ex.Message, Type = MessageType.InApp, Time = DateTimeOffset.Now });
                         }
                     }
                 }
             }
 
-            InitializeInput();
-            InitializeNote();
+            UpdateInput();
+            UpdateNote();
         }
 
         private void InitializePanel()
@@ -74,7 +73,7 @@ namespace Research_Flow
             inkToolbar.Loaded += InkToolbar_Loaded;
         }
 
-        private void InitializeInput()
+        private void UpdateInput()
         {
             if (ApplicationSetting.ContainKey("InkInput"))
             {
@@ -91,7 +90,7 @@ namespace Research_Flow
             }
         }
 
-        private async void InitializeNote()
+        private async void UpdateNote()
         {
             namelist.Clear();
             var filelist = await LocalStorage.GetNoteFolderAsync().GetFilesAsync();
@@ -147,8 +146,7 @@ namespace Research_Flow
             }
             catch (Exception ex)
             {
-                ApplicationMessage.SendMessage(new ShortMessage { Title = "NoteException", Content = ex.Message, Time = DateTimeOffset.Now },
-                    ApplicationMessage.MessageType.InApp);
+                ApplicationMessage.SendMessage(new MessageEventArgs { Title = "NoteException", Content = ex.Message, Type = MessageType.InApp, Time = DateTimeOffset.Now });
             }
         }
 
@@ -165,8 +163,7 @@ namespace Research_Flow
             }
             catch (Exception ex)
             {
-                ApplicationMessage.SendMessage(new ShortMessage { Title = "NoteException", Content = ex.Message, Time = DateTimeOffset.Now },
-                    ApplicationMessage.MessageType.InApp);
+                ApplicationMessage.SendMessage(new MessageEventArgs { Title = "NoteException", Content = ex.Message, Type = MessageType.InApp, Time = DateTimeOffset.Now });
             }
         }
 
@@ -299,8 +296,7 @@ namespace Research_Flow
             FileList.DBInsertList(LocalStorage.GetNoteFolderAsync().Name, notename + ".rfn");
             FileList.DBInsertTrace(LocalStorage.GetNoteFolderAsync().Name, notename + ".rfn");
 
-            ApplicationMessage.SendMessage(new ShortMessage { Title = "Note", Content = notename + " is saved", Time = DateTime.Now },
-                ApplicationMessage.MessageType.Banner);
+            ApplicationMessage.SendMessage(new MessageEventArgs { Title = "Note", Content = notename + " is saved", Type = MessageType.Banner, Time = DateTime.Now });
             foreach (string item in namelist)
             {
                 if (item.Equals(notename))

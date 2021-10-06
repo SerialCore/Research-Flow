@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.UI.Notifications;
+using Windows.UI.StartScreen;
 
 namespace LogicService.Application
 {
     public class ApplicationNotification
     {
-        #region Operation 
+
+        #region Toast 
 
         public static void ShowTextToast(string title, string content)
         {
@@ -37,6 +39,11 @@ namespace LogicService.Application
             });
         }
 
+        public static IReadOnlyList<ScheduledToastNotification> ListAlarmToast()
+        {
+            return ToastNotificationManager.CreateToastNotifier().GetScheduledToastNotifications();
+        }
+
         public async static Task CancelAlarmToast(string id)
         {
             await Task.Run(() =>
@@ -50,11 +57,6 @@ namespace LogicService.Application
             });
         }
 
-        public static IReadOnlyList<ScheduledToastNotification> ListAlarmToast()
-        {
-            return ToastNotificationManager.CreateToastNotifier().GetScheduledToastNotifications();
-        }
-
         public async static Task CancelAllToast()
         {
             await Task.Run(() =>
@@ -66,10 +68,6 @@ namespace LogicService.Application
                 }
             });
         }
-
-        #endregion
-
-        #region Toast
 
         private static ToastContent GetTextToast(string title, string content)
         {
@@ -178,6 +176,92 @@ namespace LogicService.Application
                 //{
                 //    Src = new Uri("ms-appx:///Assets/NewMessage.mp3")
                 //}
+            };
+        }
+
+        #endregion
+
+        #region Tile
+
+        public static void ShowTextTile(string title, string body)
+        {
+            var notification = new TileNotification(GetTileContent(title, body).GetXml());
+            TileUpdateManager.CreateTileUpdaterForApplication().Update(notification);
+        }
+
+        public static void CancelLiveTile()
+        {
+            TileUpdateManager.CreateTileUpdaterForApplication().Clear();
+        }
+
+        public static TileContent GetTileContent(string title, string body)
+        {
+            return new TileContent()
+            {
+                Visual = new TileVisual()
+                {
+                    TileMedium = new TileBinding()
+                    {
+                        Content = new TileBindingContentAdaptive()
+                        {
+                            Children =
+                            {
+                                new AdaptiveText()
+                                {
+                                    Text = title
+                                },
+
+                                new AdaptiveText()
+                                {
+                                    Text = body,
+                                    HintStyle = AdaptiveTextStyle.CaptionSubtle
+                                }
+                            }
+                        }
+                    },
+
+                    TileWide = new TileBinding()
+                    {
+                        Content = new TileBindingContentAdaptive()
+                        {
+                            Children =
+                            {
+                                new AdaptiveText()
+                                {
+                                    Text = title,
+                                    HintStyle = AdaptiveTextStyle.Title
+                                },
+
+                                new AdaptiveText()
+                                {
+                                    Text = body,
+                                    HintStyle = AdaptiveTextStyle.CaptionSubtle
+                                }
+                            }
+                        }
+                    },
+
+                    TileLarge = new TileBinding()
+                    {
+                        Content = new TileBindingContentAdaptive()
+                        {
+                            Children =
+                            {
+                                new AdaptiveText()
+                                {
+                                    Text = title,
+                                    HintStyle = AdaptiveTextStyle.Title
+                                },
+
+                                new AdaptiveText()
+                                {
+                                    Text = body,
+                                    HintStyle = AdaptiveTextStyle.CaptionSubtle
+                                }
+                            }
+                        }
+                    }
+                }
             };
         }
 

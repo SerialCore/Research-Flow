@@ -4,22 +4,19 @@ namespace LogicService.FlowTask
 {
     public abstract class ForegroundTask
     {
+
         public ForegroundTask()
         {
-            this.id = "";
-            this.isrunning = false;
-            this.isavailable = false;
+            this.ID = "";
+            this.IsRunning = false;
+            this.IsAvailable = false;
         }
 
-        protected string id;
-        protected bool isrunning;
-        protected bool isavailable;
+        public string ID { get; protected set; }
 
-        public string ID { get { return id; } }
+        public bool IsRunning { get; protected set; }
 
-        public bool IsRunning { get { return isrunning; } }
-
-        public bool IsAvailable { get { return isavailable; } }
+        public bool IsAvailable { get; protected set; }
 
         public abstract void Run();
 
@@ -27,12 +24,8 @@ namespace LogicService.FlowTask
 
     public class TaskCompletedEventArgs : EventArgs
     {
-        private string log;
+        public Type Task { get; set; }
 
-        public string Log
-        {
-            get { return log; }
-            set { log = value; }
-        }
+        public string Log { get; set; }
     }
 }

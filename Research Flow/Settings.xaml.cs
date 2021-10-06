@@ -1,4 +1,7 @@
 ﻿using LogicService.Application;
+using LogicService.Data;
+using System.Collections.Generic;
+using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -16,20 +19,27 @@ namespace Research_Flow
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
+
+            InitializeSetting();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            InitializeSetting();
+            UpdateSetting();
             DisplaySystemInfo();
         }
 
         private void InitializeSetting()
         {
-            if (ApplicationSetting.ContainKey("Theme"))
-                applicationTheme.IsOn = ApplicationSetting.EqualKey("Theme", "Dark");
-            if (ApplicationSetting.ContainKey("InkInput"))
-                inkInput.IsOn = ApplicationSetting.EqualKey("InkInput", "Touch");
+            tilelist = new List<string>() { "none", "topic" };
+            liveTile.ItemsSource = tilelist;
+        }
+
+        private void UpdateSetting()
+        {
+            applicationTheme.IsOn = ApplicationSetting.EqualKey("Theme", "Dark");
+            inkInput.IsOn = ApplicationSetting.EqualKey("InkInput", "Touch");
+            liveTile.SelectedItem = tilelist.FirstOrDefault(p => p.Equals(ApplicationSetting.LiveTile));
         }
 
         private void DisplaySystemInfo()
@@ -51,10 +61,12 @@ namespace Research_Flow
             appUptime.Text = ApplicationInfo.AppUptime.ToString("G");
         }
 
+        #region Settings
+
+        private List<string> tilelist;
+
         private async void Give_Rate(object sender, Windows.UI.Xaml.RoutedEventArgs e)
             => await ApplicationInfo.ShowRatingReviewDialog();
-
-        #region Settings
 
         private void ApplicationTheme_Toggled(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
@@ -82,6 +94,27 @@ namespace Research_Flow
             else
             {
                 ApplicationSetting.InkInput = "Pen";
+            }
+        }
+
+        private async void LiveTile_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string tilemode = liveTile.SelectedItem as string;
+            ApplicationSetting.LiveTile = tilemode;
+
+            if (tilemode.Equals("none"))
+            {
+                ApplicationNotification.CancelLiveTile();
+            }
+            else if (tilemode.Equals("topic"))
+            {
+                Topic topic = await Topic.GetRandomTopic();
+                if (topic != null)
+                    ApplicationNotification.ShowTextTile("Topic", topic.Title);
+            }
+            else
+            {
+
             }
         }
 

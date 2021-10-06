@@ -2,32 +2,33 @@
 
 namespace LogicService.Application
 {
+    public enum MessageType
+    {
+        /// <summary>
+        /// Real-time Message in App
+        /// </summary>
+        Banner,
+        /// <summary>
+        /// Robot Message
+        /// </summary>
+        Chat,
+        /// <summary>
+        /// Exception
+        /// </summary>
+        InApp,
+        /// <summary>
+        /// Background Notification
+        /// </summary>
+        Toast
+    }
+
     /// <summary>
     /// Instance of customized event handle
     /// </summary>
     public class ApplicationMessage
     {
-        public enum MessageType
-        {
-            /// <summary>
-            /// Real-time Message in App
-            /// </summary>
-            Banner,
-            /// <summary>
-            /// Robot Message
-            /// </summary>
-            Chat,
-            /// <summary>
-            /// Exception
-            /// </summary>
-            InApp,
-            /// <summary>
-            /// Background Notification
-            /// </summary>
-            Toast
-        }
 
-        public delegate void MessageHandle(ShortMessage message, MessageType type);
+        public delegate void MessageHandle(MessageEventArgs args);
         // public static event EventHandler<MessageEventArgs> MessageReceived;
 
         /// <summary>
@@ -41,21 +42,23 @@ namespace LogicService.Application
         /// </summary>
         /// <param name="text">message</param>
         /// <param name="span">time span for message in second</param>
-        public static void SendMessage(ShortMessage message, MessageType type)
+        public static void SendMessage(MessageEventArgs args)
         {
             if (MessageReceived != null)
             {
-                MessageReceived(message, type);
+                MessageReceived(args);
             }
         }
 
     }
 
-    public class ShortMessage
+    public class MessageEventArgs : EventArgs
     {
         public string Title { get; set; }
 
         public string Content { get; set; }
+
+        public MessageType Type { get; set; }
 
         public DateTimeOffset Time { get; set; }
     }

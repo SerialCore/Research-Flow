@@ -45,38 +45,63 @@ namespace Research_Flow
 
             if (ApplicationInfo.IsFirstUse)
             {
-                ApplicationConfig.ConfigureDB();
-                ApplicationConfig.ConfigureVersion();
+                ConfigureDB();
+                ConfigureVersion();
             }
             //if (ApplicationSetting.ContainKey("AccountName"))
             //    Login();
-            ApplicationConfig.ConfigureUpdate();
+            ConfigureUpdate();
             //InitializeChat();
         }
 
-        private async void AppMessage_MessageReceived(ShortMessage message, ApplicationMessage.MessageType type)
+        private async void AppMessage_MessageReceived(MessageEventArgs args)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-             {
-                 switch (type)
+            {
+                 switch (args.Type)
                  {
-                     case ApplicationMessage.MessageType.Banner:
-                         BannerMessage.Title = message.Title;
-                         BannerMessage.Subtitle = message.Content;
+                     case MessageType.Banner:
+                         BannerMessage.Title = args.Title;
+                         BannerMessage.Subtitle = args.Content;
                          BannerMessage.IsOpen = true;
                          break;
-                     case ApplicationMessage.MessageType.Chat:
+                     case MessageType.Chat:
                          ChatBlade.IsOpen = true;
-                         IdentifyChat(new ChatBlock { Comment = message.Title + "\t\n" + message.Content, IsSelf = false, Published = message.Time });
+                         IdentifyChat(new ChatBlock { Comment = args.Title + "\t\n" + args.Content, IsSelf = false, Published = args.Time });
                          break;
-                     case ApplicationMessage.MessageType.InApp:
-                         InAppNotification.Show(message.Title + ": " + message.Content);
+                     case MessageType.InApp:
+                         InAppNotification.Show(args.Title + ": " + args.Content);
                          break;
-                     case ApplicationMessage.MessageType.Toast:
-                         ApplicationNotification.ShowTextToast(message.Title, message.Content);
+                     case MessageType.Toast:
+                         ApplicationNotification.ShowTextToast(args.Title, args.Content);
                          break;
                  }
-             });
+            });
+        }
+
+        private void ConfigureDB()
+        {
+            FileList.DBInitializeTrace();
+            FileList.DBInitializeList();
+            Feed.DBInitialize();
+            Paper.DBInitialize();
+            PaperFile.DBInitialize();
+        }
+
+        private void ConfigureVersion()
+        {
+            ApplicationSetting.Updated = ApplicationVersion.CurrentVersion().ToString();
+        }
+
+        private void ConfigureUpdate()
+        {
+            // updated version must be greater than the previous published version
+            // can be lighter than the next publish version
+            if (ApplicationVersion.Parse(ApplicationSetting.Updated) < new ApplicationVersion(3, 42, 108, 0))
+            {
+                // TODO
+                ApplicationSetting.Updated = "3.42.108.0";
+            }
         }
 
         private async void InitializeChat()
@@ -221,8 +246,7 @@ namespace Research_Flow
                 await encode.FlushAsync();
             }
 
-            ApplicationMessage.SendMessage(new ShortMessage { Title = "Screenshot", Content = "Saved to Pictures Library", Time = DateTimeOffset.Now },
-                    ApplicationMessage.MessageType.Banner);
+            ApplicationMessage.SendMessage(new MessageEventArgs { Title = "Screenshot", Content = "Saved to Pictures Library", Type = MessageType.Banner, Time = DateTimeOffset.Now });
         }
 
         private void FullScreen_Click(object sender, RoutedEventArgs e)

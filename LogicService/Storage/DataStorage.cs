@@ -147,8 +147,7 @@ namespace LogicService.Storage
             catch (SqliteException ex)
             {
                 if (ifnotify)
-                    ApplicationMessage.SendMessage(new ShortMessage { Title = "DatabaseException", Content = ex.Message, Time = DateTimeOffset.Now },
-                        ApplicationMessage.MessageType.InApp);
+                    ApplicationMessage.SendMessage(new MessageEventArgs { Title = "DatabaseException", Content = ex.Message, Type = MessageType.InApp, Time = DateTimeOffset.Now });
             }
 
             _conn.Close();
@@ -176,8 +175,7 @@ namespace LogicService.Storage
             catch (SqliteException ex)
             {
                 if (ifnotify)
-                    ApplicationMessage.SendMessage(new ShortMessage { Title = "DatabaseException", Content = ex.Message, Time = DateTimeOffset.Now },
-                        ApplicationMessage.MessageType.InApp);
+                    ApplicationMessage.SendMessage(new MessageEventArgs { Title = "DatabaseException", Content = ex.Message, Type = MessageType.InApp, Time = DateTimeOffset.Now });
 
                 _conn.Close();
                 _conn.Dispose();

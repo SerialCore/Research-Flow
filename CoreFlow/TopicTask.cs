@@ -1,19 +1,22 @@
-﻿using Windows.ApplicationModel.Background;
+﻿using LogicService.Application;
+using LogicService.Data;
+using Windows.ApplicationModel.Background;
 
 namespace CoreFlow
 {
     public sealed class TopicTask : IBackgroundTask
     {
 
-        public void Run(IBackgroundTaskInstance taskInstance)
+        public async void Run(IBackgroundTaskInstance taskInstance)
         {
             var deferral = taskInstance.GetDeferral();
 
-            //List<RSSSource> FeedSources = Task.Run(async () =>
-            //{
-            //    return await LocalStorage.ReadJsonAsync<List<RSSSource>>(await LocalStorage.GetDataFolderAsync(), "rss.list");
-            //}).Result;
-            //ApplicationNotification.ShowTextToast("TopicTask", "");
+            if (ApplicationSetting.EqualKey("LiveTile", "topic"))
+            {
+                Topic topic = await Topic.GetRandomTopic();
+                if (topic != null)
+                    ApplicationNotification.ShowTextTile("Topic", topic.Title);
+            }
 
             deferral.Complete();
         }

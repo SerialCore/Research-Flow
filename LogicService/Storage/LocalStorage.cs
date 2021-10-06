@@ -89,8 +89,7 @@ namespace LogicService.Storage
             }
             catch (Exception ex)
             {
-                ApplicationMessage.SendMessage(new ShortMessage { Title = "StorageException", Content = ex.Message, Time = DateTimeOffset.Now },
-                    ApplicationMessage.MessageType.InApp);
+                ApplicationMessage.SendMessage(new MessageEventArgs { Title = "StorageException", Content = ex.Message, Type = MessageType.InApp, Time = DateTimeOffset.Now });
             }
         }
 
