@@ -202,6 +202,8 @@ namespace LogicService.Application
                 {
                     TileMedium = new TileBinding()
                     {
+                        Branding = TileBranding.Name,
+                        DisplayName = "Research Flow",
                         Content = new TileBindingContentAdaptive()
                         {
                             PeekImage = new TilePeekImage()

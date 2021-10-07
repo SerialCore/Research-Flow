@@ -1,8 +1,10 @@
-﻿using LogicService.Data;
+﻿using LogicService.Application;
+using LogicService.Data;
 using LogicService.Service;
 using LogicService.Storage;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LogicService.FlowTask
 {
@@ -23,29 +25,47 @@ namespace LogicService.FlowTask
             {
                 sources = await LocalStorage.ReadJsonAsync<List<FeedSource>>(LocalStorage.GetLocalCacheFolder(), "rss.list");
             }
-            catch { }
-
-            if (sources != null)
+            catch
             {
-                foreach (FeedSource source in sources)
-                {
-                    try
-                    {
-                        List<Feed> feeds = FeedService.TryGetFeed(source.Uri);
-                        Feed.DBInsert(feeds);
-                        args.Log += $"{source.Name} updated\t\n";
-                    }
-                    catch (Exception exception)
-                    {
-                        args.Log += $"{source.Name} {exception}\t\n";
-                    }
-                }
+                sources = new List<FeedSource>();
             }
 
-            IsRunning = false;
-            if (TaskCompleted != null)
+            int count = 0;
+            foreach (FeedSource source in sources)
             {
-                TaskCompleted(args);
+                FeedService.BeginGetFeed(
+                    source.Uri,
+                    (items) =>
+                    {
+                        List<Feed> feeds = items as List<Feed>;
+                        Feed.DBInsert(feeds);
+                        args.Log += $"{source.Name} updated\t\n";
+
+                        count++;
+                        if (count == sources.Count)
+                        {
+                            IsRunning = false;
+                            if (TaskCompleted != null)
+                            {
+                                TaskCompleted(args);
+                            }
+                        }
+                    },
+                    (exception) =>
+                    {
+                        ApplicationMessage.SendMessage(new MessageEventArgs { Title = "RssException", Content = exception, Type = MessageType.InApp, Time = DateTimeOffset.Now });
+                        args.Log += $"{source.Name} {exception}\t\n";
+
+                        count++;
+                        if (count == sources.Count)
+                        {
+                            IsRunning = false;
+                            if (TaskCompleted != null)
+                            {
+                                TaskCompleted(args);
+                            }
+                        }
+                    }, null);
             }
         }
     }

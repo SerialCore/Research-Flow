@@ -11,14 +11,6 @@ namespace LogicService.Service
 {
     public class FeedService
     {
-
-        /// <summary>
-        /// run as a thread
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="onGetRssItemsCompleted"></param>
-        /// <param name="onError"></param>
-        /// <param name="onFinally"></param>
         public static void BeginGetFeed(string source, Action<IEnumerable<Feed>> onGetRssItemsCompleted = null, Action<string> onError = null, Action onFinally = null)
         {
             var request = HttpWebRequest.Create(source);
@@ -74,45 +66,6 @@ namespace LogicService.Service
                     }
                 }
             }, request);
-        }
-
-        public static List<Feed> TryGetFeed(string source)
-        {
-            var request = HttpWebRequest.Create(source);
-            request.Method = "GET";
-
-            List<Feed> feedlist = new List<Feed>();
-            try
-            {
-                using (Stream stream = request.GetResponse().GetResponseStream())
-                {
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        string content = reader.ReadToEnd();
-                        string parentID = HashEncode.MakeMD5(source);
-                        SyndicationFeed feeds = new SyndicationFeed();
-                        feeds.Load(content);
-                        foreach (SyndicationItem f in feeds.Items)
-                        {
-                            feedlist.Add(new Feed
-                            {
-                                ID = HashEncode.MakeMD5(f.Links[0].Uri.AbsoluteUri),
-                                ParentID = parentID,
-                                Title = f.Title.Text,
-                                Published = f.PublishedDate.ToString(),
-                                Link = f.Links[0].Uri.AbsoluteUri,
-                                Summary = WebUtility.HtmlDecode(Regex.Replace(f.Summary.Text, "<[^>]+?>", ""))
-                            });
-                        }
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                throw exception;
-            }
-
-            return feedlist;
         }
     }
 }

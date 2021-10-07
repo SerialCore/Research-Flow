@@ -13,6 +13,25 @@ namespace LogicService.Service
 {
     public class CrawlerService
     {
+
+        public CrawlerService(string _url)
+        {
+            this._url = Uri.UnescapeDataString(_url);
+            m_url = new Uri(_url);
+            m_links = new List<Crawlable>();
+            m_html = "";
+            m_content = "";
+            m_title = "";
+            m_good = true;
+            if (_url.EndsWith(".rar") || _url.EndsWith(".dat") || _url.EndsWith(".msi"))
+            {
+                m_good = false;
+                return;
+            }
+        }
+
+        #region private
+
         private string _url;
         private Uri m_url;
         private List<Crawlable> m_links;
@@ -23,94 +42,6 @@ namespace LogicService.Service
         private int m_pagesize;
         private string m_linkfilter;
         private static Dictionary<string, CookieContainer> webcookies = new Dictionary<string, CookieContainer>();
-
-        /// <summary>
-        /// Url
-        /// </summary>
-        public string Url
-        {
-            get { return m_url.AbsoluteUri; }
-        }
-
-        /// <summary>
-        /// Site title
-        /// </summary>
-        public string Title
-        {
-            get
-            {
-                if (m_title == "")
-                {
-                    Regex reg = new Regex(@"(?m)<title[^>]*>(?<title>(?:\w|\W)*?)</title[^>]*>", RegexOptions.Multiline | RegexOptions.IgnoreCase);
-                    Match mc = reg.Match(m_html);
-                    if (mc.Success)
-                        m_title = mc.Groups["title"].Value.Trim();
-                }
-                return m_title;
-            }
-        }
-
-        /// <summary>
-        /// Html text
-        /// </summary>
-        public string Html
-        {
-            get { return m_html == null ? "" : m_html; }
-        }
-
-        /// <summary>
-        /// All links
-        /// </summary>
-        public List<Crawlable> Links
-        {
-            get { return m_links.Count == 0 ? GetLinks() : m_links; }
-        }
-
-        /// <summary>
-        /// All text
-        /// </summary>
-        public string Content
-        {
-            get { return m_content == "" ? GetContent(Int16.MaxValue) : m_content; }
-        }
-
-        /// <summary>
-        /// Page Size
-        /// </summary>
-        public int PageSize
-        {
-            get { return m_pagesize; }
-        }
-
-        /// <summary>
-        /// Links start with host
-        /// </summary>
-        public List<Crawlable> InsiteLinks
-        {
-            get { return GetSpecialLinksByUrl("^http(s://|://)" + m_url.Host, Int16.MaxValue); }
-        }
-
-        /// <summary>
-        /// If this site is available
-        /// </summary>
-        public bool IsGood
-        {
-            get { return m_good; }
-        }
-
-        /// <summary>
-        /// Host of web site
-        /// </summary>
-        public string Host
-        {
-            get { return m_url.Host; }
-        }
-
-        public string LinkFilters
-        {
-            get { return m_linkfilter == null ? "" : m_linkfilter; }
-            set { m_linkfilter = value; }
-        }
 
         private List<Crawlable> GetLinks()
         {
@@ -168,7 +99,69 @@ namespace LogicService.Service
             return m_content.Length > firstN ? m_content.Substring(0, firstN) : m_content;
         }
 
-        // contains text with links
+        #endregion
+
+        public string Url
+        {
+            get { return m_url.AbsoluteUri; }
+        }
+
+        public string Title
+        {
+            get
+            {
+                if (m_title == "")
+                {
+                    Regex reg = new Regex(@"(?m)<title[^>]*>(?<title>(?:\w|\W)*?)</title[^>]*>", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+                    Match mc = reg.Match(m_html);
+                    if (mc.Success)
+                        m_title = mc.Groups["title"].Value.Trim();
+                }
+                return m_title;
+            }
+        }
+
+        public string Html
+        {
+            get { return m_html == null ? "" : m_html; }
+        }
+
+        public List<Crawlable> Links
+        {
+            get { return m_links.Count == 0 ? GetLinks() : m_links; }
+        }
+
+        public string Content
+        {
+            get { return m_content == "" ? GetContent(Int16.MaxValue) : m_content; }
+        }
+
+        public int PageSize
+        {
+            get { return m_pagesize; }
+        }
+
+        public List<Crawlable> InsiteLinks
+        {
+            get { return GetSpecialLinksByUrl("^http(s://|://)" + m_url.Host, Int16.MaxValue); }
+        }
+
+        public bool IsGood
+        {
+            get { return m_good; }
+        }
+
+        public string Host
+        {
+            get { return m_url.Host; }
+        }
+
+        public string LinkFilters
+        {
+            get { return m_linkfilter == null ? "" : m_linkfilter; }
+            set { m_linkfilter = value; }
+        }
+
         public string GetContent(int firstN)
         {
             return GetContentFromHtml(m_html, firstN, true);
@@ -220,24 +213,6 @@ namespace LogicService.Service
             return string.Empty;
         }
 
-        // init private member
-        public CrawlerService(string _url)
-        {
-            this._url = Uri.UnescapeDataString(_url);
-            m_url = new Uri(_url);
-            m_links = new List<Crawlable>();
-            m_html = "";
-            m_content = "";
-            m_title = "";
-            m_good = true;
-            if (_url.EndsWith(".rar") || _url.EndsWith(".dat") || _url.EndsWith(".msi"))
-            {
-                m_good = false;
-                return;
-            }
-        }
-
-        // net work
         public async void BeginGetResponse(Action<CrawlerService> onGetCrawlerCompleted = null, Action<string> onError = null, Action onFinally = null)
         {
             await Task.Run(() =>
@@ -317,13 +292,6 @@ namespace LogicService.Service
                         onGetCrawlerCompleted(this);
                     }
                 }
-                catch (WebException webEx)
-                {
-                    if (onError != null)
-                    {
-                        onError(webEx.Message);
-                    }
-                }
                 catch (Exception e)
                 {
                     if (onError != null)
@@ -339,8 +307,6 @@ namespace LogicService.Service
                     }
                 }
             });
-
         }
     }
-
 }

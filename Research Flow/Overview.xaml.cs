@@ -46,7 +46,6 @@ namespace Research_Flow
                 var feedtask = new FeedTask();
                 feedtask.TaskCompleted += Feedtask_TaskCompleted;
                 feedtask.Run();
-                feedtask.TaskCompleted -= Feedtask_TaskCompleted;
             }
         }
 
