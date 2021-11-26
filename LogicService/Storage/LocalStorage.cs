@@ -70,6 +70,11 @@ namespace LogicService.Storage
             }
         }
 
+        public static async Task<StorageFile> GeneralCreateAsync(StorageFolder folder, string name)
+        {
+            return await folder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
+        }
+
         public static async void GeneralDeleteAsync(StorageFolder folder, string name, bool record = true)
         {
             // create then delete, equils to get and delete

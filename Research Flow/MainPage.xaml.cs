@@ -11,7 +11,6 @@ using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Core;
-using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -81,6 +80,11 @@ namespace Research_Flow
 
         private void ConfigureDB()
         {
+            //await LocalStorage.GeneralCreateAsync(LocalStorage.GetRoamingFolder(), "filetrace.db");
+            //await LocalStorage.GeneralCreateAsync(LocalStorage.GetLocalCacheFolder(), "filelist.db");
+            //await LocalStorage.GeneralCreateAsync(LocalStorage.GetLocalCacheFolder(), "feed.db");
+            //await LocalStorage.GeneralCreateAsync(LocalStorage.GetLocalCacheFolder(), "paper.db");
+
             FileList.DBInitializeTrace();
             FileList.DBInitializeList();
             Feed.DBInitialize();

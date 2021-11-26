@@ -65,7 +65,7 @@ namespace Research_Flow
             finally
             {
                 searchlist.ItemsSource = SearchSources.Keys;
-                searchlist.SelectedIndex = 1;
+                searchlist.SelectedIndex = 0;
                 source_list.ItemsSource = SearchSources;
             }
 

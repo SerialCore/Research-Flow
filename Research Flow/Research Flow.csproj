@@ -22,7 +22,7 @@
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>500160B225D2E4AFFB8D8E3B5C500CD7D4DDB606</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>A6327814F14642172C56B73E4757EB88A38333ED</PackageCertificateThumbprint>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppInstallerUpdateFrequency>0</AppInstallerUpdateFrequency>
     <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
@@ -216,13 +216,13 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.12</Version>
+      <Version>6.2.13</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
-      <Version>7.1.0</Version>
+      <Version>7.1.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls.DataGrid">
-      <Version>7.1.0</Version>
+      <Version>7.1.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">
       <Version>2.7.0</Version>

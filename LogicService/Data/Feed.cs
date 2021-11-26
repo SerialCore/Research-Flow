@@ -146,28 +146,16 @@ namespace LogicService.Data
             return affectedRows;
         }
 
-        public static void DBUpdate()
-        {
-
-        }
-
-        public static List<Feed> DBSelectByLimit(int limit)
-        {
-            string sql = "select * from Feed limit @Limit;";
-            var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@Limit", limit } });
-            return DBReader(reader);
-        }
-
         public static List<Feed> DBSelectByPID(string pid, int limit = 100)
         {
-            string sql = "select * from Feed where ParentID = @ParentID limit @Limit;";
+            string sql = "select * from Feed where ParentID = @ParentID order by Published desc limit @Limit;";
             var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@Limit", limit }, { "@ParentID", pid } });
             return DBReader(reader);
         }
 
         public static List<Feed> DBSelectByText(string pattern, int limit = 100)
         {
-            string sql = "select * from Feed where Title like @Pattern or Summary like @Pattern limit @Limit;";
+            string sql = "select * from Feed where Title like @Pattern or Summary like @Pattern order by Published desc limit @Limit;";
             var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@Pattern", '%' + pattern + '%' }, { "@Limit", limit } });
             return DBReader(reader);
         }

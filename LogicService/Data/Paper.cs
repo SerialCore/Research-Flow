@@ -93,11 +93,6 @@ namespace LogicService.Data
             return affectedRows;
         }
 
-        public static void DBUpdate()
-        {
-
-        }
-
         public static List<Paper> DBSelectByLimit(int limit)
         {
             string sql = "select * from Paper limit @Limit;";
@@ -116,6 +111,13 @@ namespace LogicService.Data
         {
             string sql = "select * from Paper where ParentID = @ParentID;";
             var reader = DataStorage.PaperData.ExecuteRead(sql, new Dictionary<string, object> { { "@ParentID", pid } });
+            return DBReader(reader);
+        }
+
+        public static List<Paper> DBSelectByText(string pattern, int limit)
+        {
+            string sql = "select * from Paper where Title like @Patter order by Published desc limit @Limit;";
+            var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@Pattern", '%' + pattern + '%' }, { "@Limit", limit } });
             return DBReader(reader);
         }
 
