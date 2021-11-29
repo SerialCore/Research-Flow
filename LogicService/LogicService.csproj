@@ -125,7 +125,6 @@
     <Compile Include="Data\Crawlable.cs" />
     <Compile Include="Data\Feed.cs" />
     <Compile Include="Data\FileList.cs" />
-    <Compile Include="Data\Paper.cs" />
     <Compile Include="Helper\SerializeHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\HashEncode.cs" />
@@ -140,6 +139,9 @@
     <EmbeddedResource Include="Properties\LogicService.rd.xml" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack">
+      <Version>1.11.38</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Data.Sqlite">
       <Version>5.0.12</Version>
     </PackageReference>

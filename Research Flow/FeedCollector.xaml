@@ -94,8 +94,7 @@
                 <TextBlock x:Name="feedTitle" Style="{ThemeResource TitleTextBlockStyle}"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <AppBarButton Icon="Link" ToolTipService.ToolTip="Browser" Click="Browse_Feed" Height="50" Width="40"/>
-                    <AppBarButton Icon="OutlineStar" ToolTipService.ToolTip="Favorite" Click="Favorite_Feed" Height="50" Width="40"/>
-                    <AppBarButton Icon="Page2" ToolTipService.ToolTip="Paper" Click="Flow_Feed" Height="50" Width="40"/>
+                    <AppBarButton Icon="Bookmarks" ToolTipService.ToolTip="Bookmark" Click="Favorite_Feed" Height="50" Width="40"/>
                 </StackPanel>
                 <HyperlinkButton x:Name="feedLink"/>
                 <TextBlock x:Name="feedPublished" Style="{ThemeResource BodyTextBlockStyle}"/>

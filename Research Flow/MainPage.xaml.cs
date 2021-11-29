@@ -83,13 +83,10 @@ namespace Research_Flow
             //await LocalStorage.GeneralCreateAsync(LocalStorage.GetRoamingFolder(), "filetrace.db");
             //await LocalStorage.GeneralCreateAsync(LocalStorage.GetLocalCacheFolder(), "filelist.db");
             //await LocalStorage.GeneralCreateAsync(LocalStorage.GetLocalCacheFolder(), "feed.db");
-            //await LocalStorage.GeneralCreateAsync(LocalStorage.GetLocalCacheFolder(), "paper.db");
 
             FileList.DBInitializeTrace();
             FileList.DBInitializeList();
             Feed.DBInitialize();
-            Paper.DBInitialize();
-            PaperFile.DBInitialize();
         }
 
         private void ConfigureVersion()
@@ -139,7 +136,7 @@ namespace Research_Flow
         {
             ("Overview", typeof(Overview)),
             ("Feed", typeof(FeedCollector)),
-            ("Paper", typeof(PaperBox)),
+            ("Bookmark", typeof(Bookmark)),
             ("Search", typeof(SearchEngine)),
             ("Topic", typeof(TopicCase)),
             ("Note", typeof(NoteDrawer)),

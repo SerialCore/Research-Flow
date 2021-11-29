@@ -88,9 +88,8 @@ namespace LogicService.Storage
         {
             try
             {
-                StorageFile file = await LocalStorage.GetLocalCacheFolder().CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
-                await FileIO.AppendTextAsync(file,
-                                    "[" + DateTime.Now.ToString() + "]" + typeof(T).Name + " : " + line + "\n");
+                StorageFile file = await GetTemporaryFolder().CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
+                await FileIO.AppendTextAsync(file, "[" + DateTime.Now.ToString() + "]" + typeof(T).Name + "\t" + line + "\n");
             }
             catch (Exception ex)
             {

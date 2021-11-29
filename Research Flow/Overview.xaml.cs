@@ -29,7 +29,6 @@ namespace Research_Flow
             if (IsPageFirstLoaded)
             {
                 InitBackgroundTask();
-                InitForegroundTask();
                 IsPageFirstLoaded = false;
             }
         }
@@ -37,27 +36,18 @@ namespace Research_Flow
         private async void InitBackgroundTask()
         {
             await ApplicationTask.RegisterTopicTask();
+            await ApplicationTask.RegisterFeedTask();
         }
 
-        private void InitForegroundTask()
-        {
-            if (ApplicationInfo.IsNetworkAvailable)
-            {
-                var feedtask = new FeedTask();
-                feedtask.TaskCompleted += Feedtask_TaskCompleted;
-                feedtask.Run();
-            }
-        }
-
-        #region Tasks
-
-        private void Feedtask_TaskCompleted(TaskCompletedEventArgs args)
-        {
-            ApplicationMessage.SendMessage(new MessageEventArgs { Title = "Task", Content = "FeedTask Completed", Type = MessageType.Banner, Time = DateTimeOffset.Now });
-        }
-
-        #endregion
-
+        //private void InitForegroundTask()
+        //{
+        //    if (ApplicationInfo.IsNetworkAvailable)
+        //    {
+        //        var feedtask = new FeedTask();
+        //        feedtask.TaskCompleted += Feedtask_TaskCompleted;
+        //        feedtask.Run();
+        //    }
+        //}
     }
 
     public class ApplicationTask
@@ -66,6 +56,12 @@ namespace Research_Flow
         {
             return await RegisterBackgroundTask(typeof(CoreFlow.TopicTask),
                 "TopicTask", new TimeTrigger(30, false));
+        }
+
+        public static async Task<BackgroundTaskRegistration> RegisterFeedTask()
+        {
+            return await RegisterBackgroundTask(typeof(CoreFlow.FeedTask),
+                "FeedTask", new TimeTrigger(180, false));
         }
 
         public static IReadOnlyDictionary<Guid, IBackgroundTaskRegistration> ListBackgroundTask()

@@ -116,8 +116,8 @@
     <Compile Include="Overview.xaml.cs">
       <DependentUpon>Overview.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PaperBox.xaml.cs">
-      <DependentUpon>PaperBox.xaml</DependentUpon>
+    <Compile Include="Bookmark.xaml.cs">
+      <DependentUpon>Bookmark.xaml</DependentUpon>
     </Compile>
     <Compile Include="FeedCollector.xaml.cs">
       <DependentUpon>FeedCollector.xaml</DependentUpon>
@@ -189,7 +189,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PaperBox.xaml">
+    <Page Include="Bookmark.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -219,9 +219,6 @@
       <Version>6.2.13</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
-      <Version>7.1.2</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls.DataGrid">
       <Version>7.1.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">

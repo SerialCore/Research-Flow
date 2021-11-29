@@ -194,7 +194,7 @@ namespace LogicService.Application
             TileUpdateManager.CreateTileUpdaterForApplication().Clear();
         }
 
-        public static TileContent GetTileContent(string title, string body)
+        private static TileContent GetTileContent(string title, string body)
         {
             return new TileContent()
             {

@@ -189,20 +189,8 @@ namespace Research_Flow
         private void Browse_Feed(object sender, RoutedEventArgs e)
             => this.Frame.Navigate(typeof(SearchEngine), selectedFeed.Link);
 
-        private void Flow_Feed(object sender, RoutedEventArgs e)
-            => this.Frame.Navigate(typeof(PaperBox), selectedFeed);
-
         private void Favorite_Feed(object sender, RoutedEventArgs e)
-        {
-            Crawlable.AddtoFavorite(new Crawlable()
-            {
-                ID = HashEncode.MakeMD5(selectedFeed.Link),
-                ParentID = "",
-                Text = selectedFeed.Title,
-                Url = selectedFeed.Link,
-                Content = selectedFeed.Summary,
-            });
-        }
+            => Feed.DBInsertBookmark(selectedFeed);
 
         private void LoadFeed(FeedSource source)
         {

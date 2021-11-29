@@ -59,6 +59,7 @@ namespace Research_Flow
                     { "arXiv", "https://arxiv.org/search/?query=QUERY&searchtype=all" },
                     { "Bing", "https://cn.bing.com/academic/search?q=QUERY&FORM=HDRSC4" },
                     { "ACS", "https://pubs.acs.org/action/doSearch?AllField=QUERY" },
+                    { "inspirehep", "https://inspirehep.net/literature?sort=mostrecent&size=25&page=1&q=QUERY" },
                 };
                 LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "search.list", SearchSources);
             }

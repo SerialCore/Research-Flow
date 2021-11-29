@@ -24,7 +24,7 @@
 
                 <NavigationViewItemSeparator/>
                 <NavigationViewItem Content="Feed" Tag="Feed"/>
-                <NavigationViewItem Content="Paper" Tag="Paper"/>
+                <NavigationViewItem Content="Bookmark" Tag="Bookmark"/>
                 <NavigationViewItem Content="Search" Tag="Search"/>
 
                 <NavigationViewItemSeparator/>

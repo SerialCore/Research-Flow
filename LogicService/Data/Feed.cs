@@ -1,9 +1,6 @@
-﻿using LogicService.Service;
-using LogicService.Storage;
+﻿using LogicService.Storage;
 using Microsoft.Data.Sqlite;
-using System;
 using System.Collections.Generic;
-using System.Xml;
 
 namespace LogicService.Data
 {
@@ -65,7 +62,11 @@ namespace LogicService.Data
 
         public string ParentID { get; set; }
 
+        public string ArticleID { get; set; }
+
         public string Title { get; set; }
+
+        public string Authors { get; set; }
 
         public string Published { get; set; }
 
@@ -115,30 +116,67 @@ namespace LogicService.Data
             string sql = @"create table if not exists [Feed] (
                     [ID] varchar(50) not null primary key,
                     [ParentID] varchar(50) not null,
+                    [ArticleID] varchar(100),
                     [Title] varchar(100) not null,
-                    [Published] varchar(50) not null,
-                    [Link] varchar(100) not null,
+                    [Authors] varchar(100),
+                    [Published] varchar(50),
+                    [Link] varchar(100),
+                    [Summary] varchar(500));";
+            string sql2 = @"create table if not exists [Bookmark] (
+                    [ID] varchar(50) not null primary key,
+                    [ParentID] varchar(50) not null,
+                    [ArticleID] varchar(100),
+                    [Title] varchar(100) not null,
+                    [Authors] varchar(100),
+                    [Published] varchar(50),
+                    [Link] varchar(100),
                     [Summary] varchar(500));";
             DataStorage.FeedData.ExecuteWrite(sql);
+            DataStorage.FeedData.ExecuteWrite(sql2);
         }
 
         public static int DBInsert(List<Feed> feeds)
         {
             int affectedRows = 0;
-            string sql = @"insert into Feed(ID, ParentID, Title, Published, Link, Summary)
-                values(@ID, @ParentID, @Title, @Published, @Link, @Summary);";
+            string sql = @"insert into Feed(ID, ParentID, ArticleID, Title, Authors, Published, Link, Summary)
+                values(@ID, @ParentID, @ArticleID, @Title, @Authors, @Published, @Link, @Summary);";
             foreach (Feed feed in feeds)
             {
                 affectedRows += DataStorage.FeedData.ExecuteWrite(sql, new Dictionary<string, object>
                 {
                     { "@ID", feed.ID },
                     { "@ParentID", feed.ParentID },
+                    { "@ArticleID", feed.ArticleID },
                     { "@Title", feed.Title },
+                    { "@Authors", feed.Authors },
                     { "@Published", feed.Published },
                     { "@Link", feed.Link },
                     { "@Summary", feed.Summary }
                 }, false);
             }
+
+            FileList.DBInsertList("Data", DataStorage.FeedData.Database);
+            FileList.DBInsertTrace("Data", DataStorage.FeedData.Database);
+
+            return affectedRows;
+        }
+
+        public static int DBInsertBookmark(Feed feed)
+        {
+            int affectedRows = 0;
+            string sql = @"insert into Bookmark(ID, ParentID, ArticleID, Title, Authors, Published, Link, Summary)
+                values(@ID, @ParentID, @ArticleID, @Title, @Authors, @Published, @Link, @Summary);";
+            affectedRows += DataStorage.FeedData.ExecuteWrite(sql, new Dictionary<string, object>
+                {
+                    { "@ID", feed.ID },
+                    { "@ParentID", feed.ParentID },
+                    { "@ArticleID", feed.ArticleID },
+                    { "@Title", feed.Title },
+                    { "@Authors", feed.Authors },
+                    { "@Published", feed.Published },
+                    { "@Link", feed.Link },
+                    { "@Summary", feed.Summary }
+                }, false);
 
             FileList.DBInsertList("Data", DataStorage.FeedData.Database);
             FileList.DBInsertTrace("Data", DataStorage.FeedData.Database);
@@ -160,6 +198,13 @@ namespace LogicService.Data
             return DBReader(reader);
         }
 
+        public static List<Feed> DBSelectBookmark(int limit = 100)
+        {
+            string sql = "select * from Bookmark order by Published desc limit @Limit;";
+            var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@Limit", limit } });
+            return DBReader(reader);
+        }
+
         private static List<Feed> DBReader(SqliteDataReader reader)
         {
             List<Feed> feeds = new List<Feed>();
@@ -171,10 +216,12 @@ namespace LogicService.Data
                     {
                         ID = reader.GetString(0),
                         ParentID = reader.GetString(1),
-                        Title = reader.GetString(2),
-                        Published = reader.GetString(3),
-                        Link = reader.GetString(4),
-                        Summary = reader.GetString(5)
+                        ArticleID = reader.GetString(2),
+                        Title = reader.GetString(3),
+                        Authors = reader.GetString(4),
+                        Published = reader.GetString(5),
+                        Link = reader.GetString(6),
+                        Summary = reader.GetString(7)
                     });
                 }
                 reader.Close();
@@ -186,6 +233,18 @@ namespace LogicService.Data
         {
             int affectedRows = 0;
             string sql = "delete from Feed where ParentID = @ParentID;";
+            affectedRows = DataStorage.FeedData.ExecuteWrite(sql, new Dictionary<string, object> { { "@ParentID", pid } });
+
+            FileList.DBInsertList("Data", DataStorage.FeedData.Database);
+            FileList.DBInsertTrace("Data", DataStorage.FeedData.Database);
+
+            return affectedRows;
+        }
+
+        public static int DBDeleteBookmarkByPID(string pid)
+        {
+            int affectedRows = 0;
+            string sql = "delete from Bookmark where ParentID = @ParentID;";
             affectedRows = DataStorage.FeedData.ExecuteWrite(sql, new Dictionary<string, object> { { "@ParentID", pid } });
 
             FileList.DBInsertList("Data", DataStorage.FeedData.Database);

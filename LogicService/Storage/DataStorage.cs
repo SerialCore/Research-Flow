@@ -22,12 +22,8 @@ namespace LogicService.Storage
         {
             switch (type)
             {
-                //case DataType.CrawlData:
-                //    _dbname = "crawlable.db";
-                //    _dbpath = LocalStorage.GetLocalCacheFolder().Path + "\\" + _dbname;
-                //    break;
-                case DataType.PaperData:
-                    _dbname = "paper.db";
+                case DataType.CrawlData:
+                    _dbname = "crawlable.db";
                     _dbpath = LocalStorage.GetLocalCacheFolder().Path + "\\" + _dbname;
                     break;
                 case DataType.FeedData:
@@ -48,7 +44,6 @@ namespace LogicService.Storage
         enum DataType { CrawlData, PaperData, FeedData, FileTrace, FileList }
 
         private static DataStorage _crawldata;
-        private static DataStorage _paperdata;
         private static DataStorage _feeddata;
         private static DataStorage _filetrace;
         private static DataStorage _filelist;
@@ -60,16 +55,6 @@ namespace LogicService.Storage
                 if (_crawldata == null)
                     _crawldata = new DataStorage(DataType.CrawlData);
                 return _crawldata;
-            }
-        }
-
-        public static DataStorage PaperData
-        {
-            get
-            {
-                if (_paperdata == null)
-                    _paperdata = new DataStorage(DataType.PaperData);
-                return _paperdata;
             }
         }
 
