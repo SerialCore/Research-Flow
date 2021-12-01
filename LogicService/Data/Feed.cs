@@ -191,9 +191,37 @@ namespace LogicService.Data
             return DBReader(reader);
         }
 
+        public static List<Feed> DBSelectByTitle(string pattern, int limit = 100)
+        {
+            string sql = "select * from Feed where Title like @Pattern order by Published desc limit @Limit;";
+            var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@Pattern", '%' + pattern + '%' }, { "@Limit", limit } });
+            return DBReader(reader);
+        }
+
         public static List<Feed> DBSelectByText(string pattern, int limit = 100)
         {
             string sql = "select * from Feed where Title like @Pattern or Summary like @Pattern order by Published desc limit @Limit;";
+            var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@Pattern", '%' + pattern + '%' }, { "@Limit", limit } });
+            return DBReader(reader);
+        }
+
+        public static List<Feed> DBSelectByAuthor(string pattern, int limit = 100)
+        {
+            string sql = "select * from Feed where Authors like @Pattern or Summary like @Pattern order by Published desc limit @Limit;";
+            var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@Pattern", '%' + pattern + '%' }, { "@Limit", limit } });
+            return DBReader(reader);
+        }
+
+        public static List<Feed> DBSelectByPublished(string pattern, int limit = 100)
+        {
+            string sql = "select * from Feed where Published like @Pattern or Summary like @Pattern order by Published desc limit @Limit;";
+            var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@Pattern", '%' + pattern + '%' }, { "@Limit", limit } });
+            return DBReader(reader);
+        }
+
+        public static List<Feed> DBSelectByIdentifier(string pattern, int limit = 100)
+        {
+            string sql = "select * from Feed where ArticleID like @Pattern or Summary like @Pattern order by Published desc limit @Limit;";
             var reader = DataStorage.FeedData.ExecuteRead(sql, new Dictionary<string, object> { { "@Pattern", '%' + pattern + '%' }, { "@Limit", limit } });
             return DBReader(reader);
         }

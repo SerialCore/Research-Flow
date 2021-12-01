@@ -50,6 +50,8 @@ namespace Research_Flow
             {
                 feedSource_list.ItemsSource = FeedSources;
                 feedSource_list.SelectedIndex = 0;
+                querytype.ItemsSource = new List<string> { "Title", "TitleSummary", "Authors", "Published", "Identifier" };
+                querytype.SelectedIndex = 0;
                 shownRSS = feedSource_list.SelectedItem as FeedSource;
                 LoadFeed(shownRSS);
             }
@@ -170,7 +172,25 @@ namespace Research_Flow
 
         private void SearchFeed_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            feedItem_list.ItemsSource = Feed.DBSelectByText(feedQuery.Text);
+            // { "Title", "TitleSummary", "Authors", "Published", "Identifier" }
+            switch (querytype.SelectedIndex)
+            {
+                case 0:
+                    feedItem_list.ItemsSource = Feed.DBSelectByTitle(feedQuery.Text);
+                    break;
+                case 1:
+                    feedItem_list.ItemsSource = Feed.DBSelectByText(feedQuery.Text);
+                    break;
+                case 2:
+                    feedItem_list.ItemsSource = Feed.DBSelectByAuthor(feedQuery.Text);
+                    break;
+                case 3:
+                    feedItem_list.ItemsSource = Feed.DBSelectByPublished(feedQuery.Text);
+                    break;
+                case 4:
+                    feedItem_list.ItemsSource = Feed.DBSelectByIdentifier(feedQuery.Text);
+                    break;
+            }
         }
 
         private void Feed_ItemClick(object sender, ItemClickEventArgs e)

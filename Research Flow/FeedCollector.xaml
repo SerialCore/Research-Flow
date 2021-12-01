@@ -18,7 +18,15 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
-                <AutoSuggestBox x:Name="feedQuery" QueryIcon="Find" PlaceholderText="Search Feed" QuerySubmitted="SearchFeed_QuerySubmitted" VerticalAlignment="Top" Margin="5"/>
+                <Grid VerticalAlignment="Top" Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="150"/>
+                    </Grid.ColumnDefinitions>
+                    <AutoSuggestBox Grid.Column="0" x:Name="feedQuery" QueryIcon="Find" PlaceholderText="Search Feed" QuerySubmitted="SearchFeed_QuerySubmitted"/>
+                    <ComboBox Grid.Column="1" x:Name="querytype" HorizontalAlignment="Stretch"/>
+                </Grid>
+                <!--<AutoSuggestBox x:Name="feedQuery" QueryIcon="Find" PlaceholderText="Search Feed" QuerySubmitted="SearchFeed_QuerySubmitted" VerticalAlignment="Top" Margin="5"/>-->
                 <ListView x:Name="feedItem_list" IsItemClickEnabled="True" ItemClick="Feed_ItemClick" Margin="0,40,0,0">
                     <ListView.ItemTemplate>
                         <DataTemplate>

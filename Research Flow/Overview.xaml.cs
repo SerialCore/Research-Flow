@@ -61,7 +61,7 @@ namespace Research_Flow
         public static async Task<BackgroundTaskRegistration> RegisterFeedTask()
         {
             return await RegisterBackgroundTask(typeof(CoreFlow.FeedTask),
-                "FeedTask", new TimeTrigger(180, false));
+                "FeedTask", new TimeTrigger(360, false));
         }
 
         public static IReadOnlyDictionary<Guid, IBackgroundTaskRegistration> ListBackgroundTask()
