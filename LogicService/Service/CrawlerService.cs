@@ -213,7 +213,7 @@ namespace LogicService.Service
             return string.Empty;
         }
 
-        public async void BeginGetResponse(Action<CrawlerService> onGetCrawlerCompleted = null, Action<string> onError = null, Action onFinally = null)
+        public async void BeginGetResponse(Action<CrawlerService> onGetCrawlerCompleted, Action<string> onError = null, Action onFinally = null)
         {
             await Task.Run(() =>
             {

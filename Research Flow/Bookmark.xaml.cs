@@ -1,8 +1,12 @@
 ﻿using LogicService.Application;
 using LogicService.Data;
+using LogicService.Service;
 using LogicService.Storage;
 using System;
 using System.Collections.Generic;
+using Windows.Storage;
+using Windows.System;
+using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -34,13 +38,127 @@ namespace Research_Flow
             bookmarklist.ItemsSource = bookmarks;
         }
 
-        #region List Operation
+        #region Feed Operation
 
         private List<Feed> bookmarks = new List<Feed>();
 
+        private Feed selectedFeed;
+
         private void BookmarkList_ItemClick(object sender, ItemClickEventArgs e)
         {
+            selectedFeed = e.ClickedItem as Feed;
 
+            feedTitle.Text = selectedFeed.Title;
+            feedAuthor.Text = selectedFeed.Authors;
+            feedPublished.Text = selectedFeed.Published;
+            articleID.Text = selectedFeed.ArticleID;
+            feedLink.Text = selectedFeed.Link;
+            feedSummary.Text = selectedFeed.Summary;
+        }
+
+        private void FeedLink_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            if (selectedFeed != null)
+                this.Frame.Navigate(typeof(SearchEngine), selectedFeed.Link);
+        }
+
+        private async void OpenPdf_Click(object sender, RoutedEventArgs e)
+        {
+            if (selectedFeed == null)
+                return;
+
+            StorageFile pdf = null;
+            try
+            {
+                pdf = await LocalStorage.GetLocalFolder().GetFileAsync(selectedFeed.ID + ".pdf");
+            }
+            catch { }
+
+            if (pdf != null)
+            {
+                await Launcher.LaunchFileAsync(pdf);
+            }
+            else
+            {
+                downloadpanel.IsOpen = true;
+                downloadstate.IsIndeterminate = true;
+                downloadstate.ShowPaused = false;
+                CrawlerService crawler = new CrawlerService(selectedFeed.Link);
+                crawler.BeginGetResponse(
+                    async (items) =>
+                    {
+                        await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        {
+                            downloadstate.IsIndeterminate = false;
+                            downloadlist.ItemsSource = crawler.GetSpecialLinksByUrl(@"(.pdf\z)|(/pdf/)");
+                        });
+                    },
+                    async (exception) =>
+                    {
+                        await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        {
+                            ApplicationMessage.SendMessage(new MessageEventArgs { Title = "CrawlerException", Content = exception, Type = MessageType.InApp, Time = DateTimeOffset.Now });
+                            downloadstate.IsIndeterminate = false;
+                        });
+                    });
+            }
+        }
+
+        private async void DownloadList_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            try
+            {
+                await(await LocalStorage.GetLocalFolder().GetFileAsync(selectedFeed.ID + ".pdf")).DeleteAsync();
+            }
+            catch { }
+
+            string url = (e.ClickedItem as Crawlable).Url;
+            string filename = selectedFeed.ID + ".pdf";
+            WebClientService webClient = new WebClientService();
+            webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
+            webClient.DownloadFile(url, LocalStorage.GetLocalFolder().Path, filename, async () =>
+                {
+                    try
+                    {
+                        StorageFile pdf = await LocalStorage.GetLocalFolder().GetFileAsync(filename);
+                        await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                        {
+                            await Launcher.LaunchFileAsync(pdf);
+                        });
+                    }
+                    catch { }
+                    webClient.DownloadProgressChanged -= WebClient_DownloadProgressChanged;
+                });
+        }
+
+        private async void WebClient_DownloadProgressChanged(object sender, DownloadEventArgs e)
+        {
+            await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                downloadstate.Value = (e.BytesReceived / e.TotalBytes) * 100;
+            });
+        }
+
+        private async void DeleteFeed_Click(object sender, RoutedEventArgs e)
+        {
+            ContentDialog dialog = new ContentDialog();
+            dialog.Title = "Delete application data?";
+            dialog.PrimaryButtonText = "Yeah";
+            dialog.CloseButtonText = "Forget it";
+            dialog.DefaultButton = ContentDialogButton.Primary;
+
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                Feed.DBDeleteBookmarkByPID(selectedFeed.ID);
+                UpdatePaper();
+
+                try
+                {
+                    await (await LocalStorage.GetLocalFolder().GetFileAsync(selectedFeed.ID + ".pdf")).DeleteAsync();
+                }
+                catch { }
+            }
         }
 
         #endregion

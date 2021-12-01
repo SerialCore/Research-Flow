@@ -125,7 +125,7 @@ namespace LogicService.Service
         }
 
         public async void DownloadFile(string url, string filepath, string filename,
-            Action onDownloadCompleted = null, Action<string> onError = null, Action onFinally = null)
+            Action onDownloadCompleted, Action<string> onError = null, Action onFinally = null)
         {
             await Task.Run(() =>
             {

@@ -184,15 +184,6 @@ namespace LogicService.Data
 
         #region Helper
 
-        public async static void AddtoFavorite(Crawlable crawlable)
-        {
-            var favorites = await LocalStorage.ReadJsonAsync<List<Crawlable>>(LocalStorage.GetLocalCacheFolder(), "favorite.list");
-            favorites.Add(crawlable);
-            LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "favorite.list", favorites);
-
-            DBInsert(new List<Crawlable>() { crawlable });
-        }
-
         public static List<Crawlable> LinkFilter(CrawlerService service, string filter)
         {
             Regex regex = new Regex(@"(?<header>^(Text|Url):\s(\w+$|\w+=))(?<param>\w*$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);

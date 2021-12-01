@@ -38,7 +38,7 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <ProgressRing x:Name="waiting_feed" IsActive="False"/>
+                <muxc:ProgressRing x:Name="waiting_feed" IsActive="False"/>
             </Grid>
 
             <Grid Grid.Column="1">
