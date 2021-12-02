@@ -1,11 +1,14 @@
 ﻿using LogicService.Application;
 using LogicService.Data;
-using LogicService.Security;
+using LogicService.Helper;
 using LogicService.Storage;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -25,6 +28,7 @@ namespace Research_Flow
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             UpdateTopic();
+            UpdateTag();
         }
 
         private async void UpdateTopic()
@@ -35,12 +39,36 @@ namespace Research_Flow
             }
             catch
             {
-                topics = new ObservableCollection<Topic>();
+                topics = new ObservableCollection<Topic>()
+                {
+                    new Topic(){ ID = HashEncode.MakeMD5(DateTimeOffset.Now.ToString()), Title = "@Search#glueball#", 
+                        Completeness = 33, Deadline = DateTimeOffset.Now, RemindTime = TimeSpan.FromDays(1)}
+                };
                 LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "topic.list", topics);
             }
             finally
             {
                 topiclist.ItemsSource = topics;
+            }
+        }
+
+        private async void UpdateTag()
+        {
+            try
+            {
+                tags = await LocalStorage.ReadJsonAsync<HashSet<string>>(LocalStorage.GetLocalCacheFolder(), "tag.list");
+            }
+            catch
+            {
+                tags = new HashSet<string>() // these are system tags
+                {
+                    "@Search", "glueball"
+                };
+                LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "tag.list", tags);
+            }
+            finally
+            {
+                LoadTagView();
             }
         }
 
@@ -182,6 +210,51 @@ namespace Research_Flow
         private void TopicList_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
             LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "topic.list", topics);
+        }
+
+        #endregion
+
+        #region Tag
+
+        private HashSet<string> tags;
+
+        private void LoadTagView()
+        {
+            Func<string, string> AlphaKey = (tag) =>
+            {
+                char head = tag[0];
+                if (head >= '0' && head <= '9')
+                    return "#";
+                else if (head >= 'A' && head <= 'Z' || head >= 'a' && head <= 'z')
+                    return head.ToString().ToUpper();
+                else
+                    return "@";
+            };
+
+            var groups = from t in tags
+                         orderby t
+                         group t by AlphaKey(t);
+
+            CollectionViewSource collectionVS = new CollectionViewSource();
+            collectionVS.IsSourceGrouped = true;
+            collectionVS.Source = groups;
+            taglist.ItemsSource = collectionVS.View;
+            tagKlist.ItemsSource = collectionVS.View.CollectionGroups;
+        }
+
+        private void AddTagManually(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            if (!string.IsNullOrEmpty(tagEmbed.Text))
+            {
+                tags.UnionWith(Topic.TagPick(tagEmbed.Text));
+                LoadTagView();
+                LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "tag.list", tags);
+            }
+        }
+
+        private void Taglist_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            string tag = e.ClickedItem as string;
         }
 
         #endregion

@@ -9,10 +9,6 @@ namespace LogicService.Application
         /// </summary>
         Banner,
         /// <summary>
-        /// Robot Message
-        /// </summary>
-        Chat,
-        /// <summary>
         /// Exception
         /// </summary>
         InApp,

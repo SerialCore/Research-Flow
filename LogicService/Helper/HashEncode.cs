@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace LogicService.Security
+namespace LogicService.Helper
 {
     public class HashEncode
     {

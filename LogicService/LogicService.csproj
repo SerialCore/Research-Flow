@@ -110,32 +110,27 @@
     <Compile Include="Application\ApplicationSetting.cs" />
     <Compile Include="Application\ApplicationVersion.cs" />
     <Compile Include="Drawing\ColorCollection.cs" />
-    <Compile Include="FlowTask\Flow.cs" />
-    <Compile Include="FlowTask\ForegroundTask.cs" />
-    <Compile Include="Helper\NetHelper.cs" />
-    <Compile Include="Data\ChatBlock.cs" />
     <Compile Include="Data\Topic.cs" />
-    <Compile Include="Helper\UrlHelper.cs" />
     <Compile Include="Drawing\CalligraphyPen.cs" />
     <Compile Include="Drawing\InkBrush.cs" />
     <Compile Include="Drawing\MarkerPen.cs" />
     <Compile Include="Drawing\PencilBrush.cs" />
     <Compile Include="Drawing\UsualPen.cs" />
+    <Compile Include="Service\GraphService.cs" />
     <Compile Include="Service\WebClientService.cs" />
     <Compile Include="Data\Crawlable.cs" />
     <Compile Include="Data\Feed.cs" />
     <Compile Include="Data\FileList.cs" />
     <Compile Include="Helper\SerializeHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Security\HashEncode.cs" />
-    <Compile Include="Security\TripleDES.cs" />
+    <Compile Include="Helper\HashEncode.cs" />
+    <Compile Include="Helper\TripleDES.cs" />
     <Compile Include="Application\ApplicationMessage.cs" />
     <Compile Include="Service\CrawlerService.cs" />
     <Compile Include="Storage\DataStorage.cs" />
     <Compile Include="Storage\LocalStorage.cs" />
     <Compile Include="Service\FeedService.cs" />
     <Compile Include="Application\ApplicationInfo.cs" />
-    <Compile Include="FlowTask\FeedTask.cs" />
     <EmbeddedResource Include="Properties\LogicService.rd.xml" />
   </ItemGroup>
   <ItemGroup>

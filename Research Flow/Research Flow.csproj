@@ -128,9 +128,6 @@
     <Compile Include="Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TagCenter.xaml.cs">
-      <DependentUpon>TagCenter.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TopicCase.xaml.cs">
       <DependentUpon>TopicCase.xaml</DependentUpon>
@@ -202,10 +199,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Settings.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="TagCenter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

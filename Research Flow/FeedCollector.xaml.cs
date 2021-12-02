@@ -1,6 +1,6 @@
 ﻿using LogicService.Application;
 using LogicService.Data;
-using LogicService.Security;
+using LogicService.Helper;
 using LogicService.Service;
 using LogicService.Storage;
 using System;
@@ -43,6 +43,10 @@ namespace Research_Flow
                         Name = "Physical Review Letters", Uri = "http://feeds.aps.org/rss/recent/prl.xml", Star = 5, IsRSS = true },
                     new FeedSource{ ID = HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prd.xml"),
                         Name = "Physical Review D", Uri = "http://feeds.aps.org/rss/recent/prd.xml", Star = 5, IsRSS = true },
+                    new FeedSource{ ID = HashEncode.MakeMD5("https://www.science.org/rss/express.xml"),
+                        Name = "Science Express", Uri = "https://www.science.org/rss/express.xml", Star = 3, IsRSS = true },
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://feeds.nature.com/nmeth/rss/current"),
+                        Name = "Nature Method", Uri = "http://feeds.nature.com/nmeth/rss/current", Star = 3, IsRSS = true },
                 };
                 LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "rss.list", FeedSources);
             }

@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.UI.Notifications;
-using Windows.UI.StartScreen;
 
 namespace LogicService.Application
 {

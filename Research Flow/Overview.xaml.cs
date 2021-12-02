@@ -1,6 +1,4 @@
-﻿using LogicService.Application;
-using LogicService.FlowTask;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
@@ -38,16 +36,6 @@ namespace Research_Flow
             await ApplicationTask.RegisterTopicTask();
             await ApplicationTask.RegisterFeedTask();
         }
-
-        //private void InitForegroundTask()
-        //{
-        //    if (ApplicationInfo.IsNetworkAvailable)
-        //    {
-        //        var feedtask = new FeedTask();
-        //        feedtask.TaskCompleted += Feedtask_TaskCompleted;
-        //        feedtask.Run();
-        //    }
-        //}
     }
 
     public class ApplicationTask

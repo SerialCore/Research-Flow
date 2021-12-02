@@ -69,8 +69,6 @@ namespace Research_Flow
                 searchlist.SelectedIndex = 0;
                 source_list.ItemsSource = SearchSources;
             }
-
-            webView.Source = new Uri("https://github.com/SerialCore");
         }
 
         #region Search Engine

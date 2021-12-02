@@ -11,27 +11,80 @@
 
     <Grid>
 
-        <StackPanel Margin="10">
-            <GridView x:Name="topiclist" IsItemClickEnabled="True" ItemClick="Topiclist_ItemClick" Margin="0,0,0,5"
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Margin="10">
+                <GridView x:Name="topiclist" IsItemClickEnabled="True" ItemClick="Topiclist_ItemClick" Margin="0,0,0,5"
                               CanDragItems="True" CanReorderItems="True" AllowDrop="True" DragItemsCompleted="TopicList_DragItemsCompleted">
-                <GridView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Height="200" Width="200" Padding="10">
-                            <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Margin="0,0,0,4"/>
-                            <muxc:ProgressBar Value="{Binding Completeness}" Height="4" VerticalAlignment="Bottom"/>
-                        </Grid>
-                    </DataTemplate>
-                </GridView.ItemTemplate>
-            </GridView>
-            <GridViewItem Tapped="AddTopicSetting" HorizontalAlignment="Left" Margin="0,5,0,0">
-                <Grid Height="200" Width="200" Padding="10">
-                    <TextBlock Text="+" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                </Grid>
-            </GridViewItem>
-        </StackPanel>
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Height="200" Width="200" Padding="10">
+                                <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Margin="0,0,0,4"/>
+                                <muxc:ProgressBar Value="{Binding Completeness}" Height="4" VerticalAlignment="Bottom"/>
+                            </Grid>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+                <GridViewItem Tapped="AddTopicSetting" HorizontalAlignment="Left" Margin="0,5,0,0">
+                    <Grid Height="200" Width="200" Padding="10">
+                        <TextBlock Text="+" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Grid>
+                </GridViewItem>
+            </StackPanel>
+
+            <Grid Grid.Column="1">
+                <SemanticZoom Margin="0,0,0,50">
+                    <SemanticZoom.ZoomedInView>
+                        <ListView x:Name="taglist" ScrollViewer.IsHorizontalScrollChainingEnabled="False" IsItemClickEnabled="True" ItemClick="Taglist_ItemClick">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.GroupStyle>
+                                <GroupStyle HidesIfEmpty="False">
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Key}" FontSize="25" Foreground="Red"/>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ListView.GroupStyle>
+                        </ListView>
+                    </SemanticZoom.ZoomedInView>
+                    <SemanticZoom.ZoomedOutView>
+                        <GridView x:Name="tagKlist" ScrollViewer.IsHorizontalScrollChainingEnabled="False">
+                            <GridView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Height="96" Width="96" Background="{ThemeResource SystemAccentColorLight2}" >
+                                        <TextBlock Text="{Binding Group.Key}" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+                        </GridView>
+                    </SemanticZoom.ZoomedOutView>
+                </SemanticZoom>
+                <CommandBar Background="Transparent" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed" VerticalAlignment="Bottom">
+                    <CommandBar.Content>
+                        <TextBlock Text="Tags" Style="{ThemeResource BodyTextBlockStyle}" Margin="12,16,0,0"/>
+                    </CommandBar.Content>
+                    <AppBarButton Icon="Add" Label="Add">
+                        <AppBarButton.Flyout>
+                            <Flyout >
+                                <AutoSuggestBox x:Name="tagEmbed" QueryIcon="Add" PlaceholderText="#Tag1##Tag2#" QuerySubmitted="AddTagManually" AllowFocusOnInteraction="True" Width="300"/>
+                            </Flyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
+                </CommandBar>
+            </Grid>
+        </Grid>
 
         <muxc:TeachingTip x:Name="topicSetting"
-                          PreferredPlacement="RightBottom"
+                          PreferredPlacement="Bottom"
                           PlacementMargin="20"
                           IsLightDismissEnabled="False">
             <Grid>

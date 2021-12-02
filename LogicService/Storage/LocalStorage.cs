@@ -2,7 +2,6 @@
 using LogicService.Application;
 using LogicService.Data;
 using LogicService.Helper;
-using LogicService.Security;
 using System;
 using System.Threading.Tasks;
 using Windows.Storage;

@@ -3,7 +3,6 @@ using LogicService.Data;
 using LogicService.Storage;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Graphics.Display;
@@ -50,7 +49,6 @@ namespace Research_Flow
             //if (ApplicationSetting.ContainKey("AccountName"))
             //    Login();
             ConfigureUpdate();
-            //InitializeChat();
         }
 
         private async void AppMessage_MessageReceived(MessageEventArgs args)
@@ -64,10 +62,6 @@ namespace Research_Flow
                          BannerMessage.Subtitle = args.Content;
                          BannerMessage.IsOpen = true;
                          break;
-                     case MessageType.Chat:
-                         ChatBlade.IsOpen = true;
-                         IdentifyChat(new ChatBlock { Comment = args.Title + "\t\n" + args.Content, IsSelf = false, Published = args.Time });
-                         break;
                      case MessageType.InApp:
                          InAppNotification.Show(args.Title + ": " + args.Content);
                          break;
@@ -80,10 +74,6 @@ namespace Research_Flow
 
         private void ConfigureDB()
         {
-            //await LocalStorage.GeneralCreateAsync(LocalStorage.GetRoamingFolder(), "filetrace.db");
-            //await LocalStorage.GeneralCreateAsync(LocalStorage.GetLocalCacheFolder(), "filelist.db");
-            //await LocalStorage.GeneralCreateAsync(LocalStorage.GetLocalCacheFolder(), "feed.db");
-
             FileList.DBInitializeTrace();
             FileList.DBInitializeList();
             Feed.DBInitialize();
@@ -102,28 +92,6 @@ namespace Research_Flow
             {
                 // TODO
                 ApplicationSetting.Updated = "3.42.108.0";
-            }
-        }
-
-        private async void InitializeChat()
-        {
-            try
-            {
-                chatlist = await LocalStorage.ReadJsonAsync<ObservableCollection<ChatBlock>>(LocalStorage.GetLocalCacheFolder(), "chat.list");
-            }
-            catch
-            {
-                chatlist = new ObservableCollection<ChatBlock>()
-                {
-                    new ChatBlock { Comment = "Hello", IsSelf = false },
-                };
-                LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "chat.list", chatlist);
-            }
-            finally
-            {
-                chatview.ItemsSource = chatlist;
-                chattype.ItemsSource = ChatBlock.UserCall.Keys;
-                chattype.SelectedIndex = 0;
             }
         }
 
@@ -164,31 +132,31 @@ namespace Research_Flow
                 else
                 {
                     NavView.SelectedItem = NavView.MenuItems
-                        .OfType<NavigationViewItem>()
+                        .OfType<Microsoft.UI.Xaml.Controls.NavigationViewItem>()
                         .First(n => n.Tag.Equals("Overview"));
                 }
             }
             else
             {
                 NavView.SelectedItem = NavView.MenuItems
-                    .OfType<NavigationViewItem>()
+                    .OfType<Microsoft.UI.Xaml.Controls.NavigationViewItem>()
                     .First(n => n.Tag.Equals("Overview"));
             }
         }
 
-        private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        private void NavView_SelectionChanged(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs args)
         {
             if (args.IsSettingsSelected)
             {
-                ContentFrame.Navigate(typeof(Settings));
+                ContentFrame.Navigate(typeof(Settings), null, new DrillInNavigationTransitionInfo());
             }
             else
             {
-                NavView_Navigate(args.SelectedItem as NavigationViewItem);
+                NavView_Navigate(args.SelectedItem as Microsoft.UI.Xaml.Controls.NavigationViewItem);
             }
         }
 
-        private void NavView_Navigate(NavigationViewItem pageItem)
+        private void NavView_Navigate(Microsoft.UI.Xaml.Controls.NavigationViewItem pageItem)
         {
             var item = _pages.FirstOrDefault(p => p.Tag.Equals(pageItem.Tag));
 
@@ -199,19 +167,19 @@ namespace Research_Flow
         {
             if (ContentFrame.SourcePageType == typeof(Settings))
             {
-                NavView.SelectedItem = (NavigationViewItem)NavView.SettingsItem;
+                NavView.SelectedItem = (Microsoft.UI.Xaml.Controls.NavigationViewItem)NavView.SettingsItem;
             }
             else if (ContentFrame.SourcePageType != null)
             {
                 var item = _pages.FirstOrDefault(p => p.Page == e.SourcePageType);
 
                 NavView.SelectedItem = NavView.MenuItems
-                    .OfType<NavigationViewItem>()
+                    .OfType<Microsoft.UI.Xaml.Controls.NavigationViewItem>()
                     .First(n => n.Tag.Equals(item.Tag));
             }
         }
 
-        private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+        private void NavView_BackRequested(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewBackRequestedEventArgs args)
             => ContentFrame.GoBack();
 
         #endregion
@@ -220,12 +188,6 @@ namespace Research_Flow
 
         private void Flyout_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
             => FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
-
-        private void Open_FlowBlade(object sender, RoutedEventArgs e)
-            => FlowBlade.IsOpen = true;
-
-        private void Open_ChatBlade(object sender, RoutedEventArgs e)
-            => ChatBlade.IsOpen = true;
 
         private async void ScreenShot_Upload(object sender, RoutedEventArgs e)
         {
@@ -263,42 +225,6 @@ namespace Research_Flow
             {
                 view.TryEnterFullScreenMode();
                 button.Icon = new SymbolIcon(Symbol.BackToWindow);
-            }
-        }
-
-        #endregion
-
-        #region Chat
-
-        private ObservableCollection<ChatBlock> chatlist = new ObservableCollection<ChatBlock>();
-
-        private void ChatView_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            chatscroll.ChangeView(null, double.MaxValue, null, true);
-        }
-
-        private void ChatType_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (!(chattype.SelectedItem as string).Equals("None"))
-                chatbox.Text = chattype.SelectedItem as string;
-            else
-                chatbox.Text = "";
-        }
-
-        private void IdentifyChat(ChatBlock chat)
-        {
-            chatlist.Add(chat);
-            ChatBlade.IsOpen = true;
-            // chat->topic request type
-            LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "chat.list", chatlist);
-        }
-
-        private void SubmitChat(object sender, RoutedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(chatbox.Text))
-            {
-                IdentifyChat(new ChatBlock { Comment = chatbox.Text, IsSelf = true, Published = DateTimeOffset.Now });
-                chatbox.Text = "";
             }
         }
 
