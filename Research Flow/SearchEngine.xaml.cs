@@ -57,9 +57,10 @@ namespace Research_Flow
                 SearchSources = new Dictionary<string, string>()
                 {
                     { "arXiv", "https://arxiv.org/search/?query=QUERY&searchtype=all" },
-                    { "Bing", "https://cn.bing.com/academic/search?q=QUERY&FORM=HDRSC4" },
-                    { "ACS", "https://pubs.acs.org/action/doSearch?AllField=QUERY" },
                     { "inspirehep", "https://inspirehep.net/literature?sort=mostrecent&size=25&page=1&q=QUERY" },
+                    { "ACS", "https://pubs.acs.org/action/doSearch?AllField=QUERY" },
+                    { "Bing", "https://cn.bing.com/academic/search?q=QUERY&FORM=HDRSC4" },
+                    { "google scholar", "https://scholar.google.com/scholar?hl=zh-CN&as_sdt=0%2C5&q=MIT&btnG=" },
                 };
                 LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "search.list", SearchSources);
             }

@@ -39,14 +39,39 @@ namespace Research_Flow
             {
                 FeedSources = new ObservableCollection<FeedSource>()
                 {
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/astro-ph"),
+                        Name = "arXiv Astrophysics", Uri = "http://export.arxiv.org/rss/astro-ph", Star = 5, IsRSS = true },
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/cond-mat"),
+                        Name = "arXiv Condensed Matter", Uri = "http://export.arxiv.org/rss/cond-mat", Star = 5, IsRSS = true },
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/cs"),
+                        Name = "arXiv Computer Science", Uri = "http://export.arxiv.org/rss/cs", Star = 5, IsRSS = true },
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prl.xml"),
+                        Name = "Physical Review Letters", Uri = "http://feeds.aps.org/rss/recent/prl.xml", Star = 5, IsRSS = true },
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/hep-ex"),
+                        Name = "arXiv HEP Experiment", Uri = "http://export.arxiv.org/rss/hep-ex", Star = 5, IsRSS = true },
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/hep-lat"),
+                        Name = "arXiv HEP Lattice", Uri = "http://export.arxiv.org/rss/hep-lat", Star = 5, IsRSS = true },
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/hep-ph"),
+                        Name = "arXiv HEP Phenomenology", Uri = "http://export.arxiv.org/rss/hep-ph", Star = 5, IsRSS = true },
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/hep-th"),
+                        Name = "arXiv HEP Theory", Uri = "http://export.arxiv.org/rss/hep-th", Star = 5, IsRSS = true },                  
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/math"),
+                        Name = "arXiv Mathematics", Uri = "http://export.arxiv.org/rss/math", Star = 5, IsRSS = true },
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/math-th"),
+                        Name = "arXiv Mathematical Physics", Uri = "http://export.arxiv.org/rss/math-th", Star = 5, IsRSS = true },
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/nlin"),
+                        Name = "arXiv Nonlinear Sciences", Uri = "http://export.arxiv.org/rss/nlin", Star = 5, IsRSS = true },
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/quant-th"),
+                        Name = "arXiv Quantum Physics", Uri = "http://export.arxiv.org/rss/quant-th", Star = 5, IsRSS = true },
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/nucl-ex"),
+                        Name = "arXiv Nuclear Experiment", Uri = "http://export.arxiv.org/rss/nucl-ex", Star = 5, IsRSS = true },
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/nucl-th"),
+                        Name = "arXiv Nuclear Theory", Uri = "http://export.arxiv.org/rss/nucl-th", Star = 5, IsRSS = true },
+
                     new FeedSource{ ID = HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prl.xml"),
                         Name = "Physical Review Letters", Uri = "http://feeds.aps.org/rss/recent/prl.xml", Star = 5, IsRSS = true },
                     new FeedSource{ ID = HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prd.xml"),
                         Name = "Physical Review D", Uri = "http://feeds.aps.org/rss/recent/prd.xml", Star = 5, IsRSS = true },
-                    new FeedSource{ ID = HashEncode.MakeMD5("https://www.science.org/rss/express.xml"),
-                        Name = "Science Express", Uri = "https://www.science.org/rss/express.xml", Star = 3, IsRSS = true },
-                    new FeedSource{ ID = HashEncode.MakeMD5("http://feeds.nature.com/nmeth/rss/current"),
-                        Name = "Nature Method", Uri = "http://feeds.nature.com/nmeth/rss/current", Star = 3, IsRSS = true },
                 };
                 LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "rss.list", FeedSources);
             }
