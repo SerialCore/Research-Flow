@@ -28,6 +28,12 @@
                         <TextBlock Text="Feedback" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,10"/>
                         <HyperlinkButton Content="Rate on Microsoft Store" Click="Give_Rate" Margin="0,2"/>
                         <HyperlinkButton Content="serialcore@outlook.com" NavigateUri="mailto:serialcore@outlook.com"/>
+                        <TextBlock Text="Usage Tips" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,20"/>
+                        <TextBlock TextWrapping="Wrap">
+                            <Run >
+                                Star level of Feed source = the probability that the auto-task will fetch this source: 1 star for 0%, 5 stars for 90%
+                            </Run>
+                        </TextBlock>
                         <TextBlock Text="Privacy Policy" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,20"/>
                         <TextBlock TextWrapping="Wrap">
                             <Run >
@@ -36,40 +42,43 @@
                                 Some data will be found explicitly in OneDrive folder with user’s confirmation and synchronization.
                             </Run>
                         </TextBlock>
-                        <TextBlock Text="Application" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,20"/>
-                        <TextBlock>
-                            <Run Text="Application name:   " FontWeight="Bold"/>                          
-                            <Run x:Name="applicationName"/><LineBreak/><LineBreak/>
-                            <Run Text="Application version:   " FontWeight="Bold"/>
-                            <Run x:Name="applicationVersion"/><LineBreak/><LineBreak/>
-                            <Run Text="First installed version:   " FontWeight="Bold"/>
-                            <Run x:Name="firstVersion"/><LineBreak/><LineBreak/>
-                            <Run Text="Culture info:   " FontWeight="Bold"/>
-                            <Run x:Name="cultureInfo"/><LineBreak/><LineBreak/>
-                            <Run Text="Operating system version:   " FontWeight="Bold"/>
-                            <Run x:Name="oSVersion"/><LineBreak/><LineBreak/>
-                            <Run Text="Device model:   " FontWeight="Bold"/>
-                            <Run x:Name="deviceModel"/><LineBreak/><LineBreak/>
-                            <Run Text="Available memory(MB):   " FontWeight="Bold"/>
-                            <Run x:Name="availableMemory"/><LineBreak/><LineBreak/>
-                            <Run Text="First version installed:   " FontWeight="Bold"/>
-                            <Run x:Name="firstVersionInstalled"/><LineBreak/><LineBreak/>
-                            <Run Text="First use time:   " FontWeight="Bold"/>
-                            <Run x:Name="firstUseTime"/><LineBreak/><LineBreak/>
-                            <Run Text="Launch time:   " FontWeight="Bold"/>
-                            <Run x:Name="launchTime"/><LineBreak/><LineBreak/>
-                            <Run Text="Last launch time:   " FontWeight="Bold"/>
-                            <Run x:Name="lastLaunchTime"/><LineBreak/><LineBreak/>
-                            <Run Text="Last reset time:   " FontWeight="Bold"/>
-                            <Run x:Name="lastResetTime"/><LineBreak/><LineBreak/>
-                            <Run Text="Current launch count:   " FontWeight="Bold"/>
-                            <Run x:Name="launchCount"/><LineBreak/><LineBreak/>
-                            <Run Text="Total launch count:   " FontWeight="Bold"/>
-                            <Run x:Name="totalLaunchCount"/><LineBreak/><LineBreak/>
-                            <Run Text="App uptime:   " FontWeight="Bold"/>
-                            <Run x:Name="appUptime"/>
-                        </TextBlock>
                     </StackPanel>
+                </ScrollViewer>
+            </PivotItem>
+            <PivotItem Header="Application">
+                <ScrollViewer Padding="20">
+                    <TextBlock>
+                        <Run Text="Application name:   " FontWeight="Bold"/>                          
+                        <Run x:Name="applicationName"/><LineBreak/><LineBreak/>
+                        <Run Text="Application version:   " FontWeight="Bold"/>
+                        <Run x:Name="applicationVersion"/><LineBreak/><LineBreak/>
+                        <Run Text="First installed version:   " FontWeight="Bold"/>
+                        <Run x:Name="firstVersion"/><LineBreak/><LineBreak/>
+                        <Run Text="Culture info:   " FontWeight="Bold"/>
+                        <Run x:Name="cultureInfo"/><LineBreak/><LineBreak/>
+                        <Run Text="Operating system version:   " FontWeight="Bold"/>
+                        <Run x:Name="oSVersion"/><LineBreak/><LineBreak/>
+                        <Run Text="Device model:   " FontWeight="Bold"/>
+                        <Run x:Name="deviceModel"/><LineBreak/><LineBreak/>
+                        <Run Text="Available memory(MB):   " FontWeight="Bold"/>
+                        <Run x:Name="availableMemory"/><LineBreak/><LineBreak/>
+                        <Run Text="First version installed:   " FontWeight="Bold"/>
+                        <Run x:Name="firstVersionInstalled"/><LineBreak/><LineBreak/>
+                        <Run Text="First use time:   " FontWeight="Bold"/>
+                        <Run x:Name="firstUseTime"/><LineBreak/><LineBreak/>
+                        <Run Text="Launch time:   " FontWeight="Bold"/>
+                        <Run x:Name="launchTime"/><LineBreak/><LineBreak/>
+                        <Run Text="Last launch time:   " FontWeight="Bold"/>
+                        <Run x:Name="lastLaunchTime"/><LineBreak/><LineBreak/>
+                        <Run Text="Last reset time:   " FontWeight="Bold"/>
+                        <Run x:Name="lastResetTime"/><LineBreak/><LineBreak/>
+                        <Run Text="Current launch count:   " FontWeight="Bold"/>
+                        <Run x:Name="launchCount"/><LineBreak/><LineBreak/>
+                        <Run Text="Total launch count:   " FontWeight="Bold"/>
+                        <Run x:Name="totalLaunchCount"/><LineBreak/><LineBreak/>
+                        <Run Text="App uptime:   " FontWeight="Bold"/>
+                        <Run x:Name="appUptime"/>
+                    </TextBlock>
                 </ScrollViewer>
             </PivotItem>
 

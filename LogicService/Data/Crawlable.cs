@@ -1,26 +1,11 @@
-﻿using LogicService.Service;
-using LogicService.Storage;
+﻿using LogicService.Storage;
 using Microsoft.Data.Sqlite;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 namespace LogicService.Data
 {
     public class Crawlable
     {
-        /// <summary>
-        /// Resources of links filter, service for GetSpecialLinksByUrl() or GetSpecialLinksByText()
-        /// </summary>
-        public static Dictionary<string, string> LinkType = new Dictionary<string, string>()
-        {
-            { "Text: NotEmpty", @"\S" },
-            { "Text: Has=", "" },
-            { "Text: HasPDF", "pdf" },
-            { "Url: Has=", "" },
-            { "Url: HasDoi", "doi" },
-            { "Url: HasPDF", @"(.pdf\z)|(/pdf/)" },
-            { "Url: Insite", "" }, // for tag only, not true dictionary
-        };
 
         public string ID { get; set; }
 
@@ -177,37 +162,6 @@ namespace LogicService.Data
             FileList.DBInsertTrace("Data", DataStorage.CrawlData.Database);
 
             return affectedRows;
-        }
-
-        #endregion
-
-        #region Helper
-
-        public static List<Crawlable> LinkFilter(CrawlerService service, string filter)
-        {
-            Regex regex = new Regex(@"(?<header>^(Text|Url):\s(\w+$|\w+=))(?<param>\w*$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
-            Match match = regex.Match(filter);
-            if (match.Success && service != null)
-            {
-                string header = match.Groups["header"].Value;
-                string param = match.Groups["param"].Value;
-                if (header.StartsWith("Text"))
-                {
-                    if (header.Equals("Url: Insite"))
-                        return service.InsiteLinks;
-                    else
-                        return service.GetSpecialLinksByText(Crawlable.LinkType.GetValueOrDefault(header) + param);
-                }
-                if (header.StartsWith("Url"))
-                {
-                    return service.GetSpecialLinksByUrl(Crawlable.LinkType.GetValueOrDefault(header) + param);
-                }
-                return null; // cannot reach here
-            }
-            else if (string.IsNullOrEmpty(filter))
-                return service.Links;
-            else
-                return null; // cannot reach here
         }
 
         #endregion

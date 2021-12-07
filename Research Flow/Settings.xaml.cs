@@ -1,5 +1,4 @@
 ﻿using LogicService.Application;
-using LogicService.Data;
 using System.Collections.Generic;
 using System.Linq;
 using Windows.UI.Xaml;
@@ -97,25 +96,10 @@ namespace Research_Flow
             }
         }
 
-        private async void LiveTile_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LiveTile_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string tilemode = liveTile.SelectedItem as string;
             ApplicationSetting.LiveTile = tilemode;
-
-            if (tilemode.Equals("none"))
-            {
-                ApplicationNotification.CancelLiveTile();
-            }
-            else if (tilemode.Equals("topic"))
-            {
-                Topic topic = await Topic.GetRandomTopic();
-                if (topic != null)
-                    ApplicationNotification.ShowTextTile("Topic", topic.Title);
-            }
-            else
-            {
-
-            }
         }
 
         //private async void Paper_UnCompress(object sender, RoutedEventArgs e)

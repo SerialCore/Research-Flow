@@ -82,7 +82,7 @@
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssName" Header="Title" IsSpellCheckEnabled="False" Margin="0,5"/>
-                            <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssUrl" Header="Url" PlaceholderText="Page/RSS" IsSpellCheckEnabled="False" Margin="0,5"/>
+                            <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="rssUrl" Header="Url" PlaceholderText="Page/RSS" Margin="0,5"/>
                             <CheckBox Grid.Row="2" Grid.Column="0" x:Name="isRSS" Content="Is RSS" Margin="0,5"/>
                             <RatingControl Grid.Row="2" Grid.Column="1" x:Name="rssStar"/>
                             <Button Grid.Row="3" Grid.Column="0" Click="Confirm_FeedSetting" Content="Confirm" Margin="0,0,5,0" HorizontalAlignment="Stretch"/>

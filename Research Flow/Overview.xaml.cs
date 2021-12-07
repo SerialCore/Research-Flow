@@ -33,23 +33,23 @@ namespace Research_Flow
 
         private async void InitBackgroundTask()
         {
-            await ApplicationTask.RegisterTopicTask();
+            await ApplicationTask.RegisterTileTask();
             await ApplicationTask.RegisterFeedTask();
         }
     }
 
     public class ApplicationTask
     {
-        public static async Task<BackgroundTaskRegistration> RegisterTopicTask()
+        public static async Task<BackgroundTaskRegistration> RegisterTileTask()
         {
-            return await RegisterBackgroundTask(typeof(CoreFlow.TopicTask),
-                "TopicTask", new TimeTrigger(30, false));
+            return await RegisterBackgroundTask(typeof(CoreFlow.TileTask),
+                "TileTask", new TimeTrigger(30, false));
         }
 
         public static async Task<BackgroundTaskRegistration> RegisterFeedTask()
         {
             return await RegisterBackgroundTask(typeof(CoreFlow.FeedTask),
-                "FeedTask", new TimeTrigger(360, false));
+                "FeedTask", new TimeTrigger(60, false));
         }
 
         public static IReadOnlyDictionary<Guid, IBackgroundTaskRegistration> ListBackgroundTask()
