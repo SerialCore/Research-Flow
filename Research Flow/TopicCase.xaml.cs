@@ -42,7 +42,7 @@ namespace Research_Flow
                 topics = new ObservableCollection<Topic>()
                 {
                     new Topic(){ ID = HashEncode.MakeMD5(DateTimeOffset.Now.ToString()), Title = "@Search#glueball#", 
-                        Completeness = 33, Deadline = DateTimeOffset.Now, RemindTime = TimeSpan.FromDays(1)}
+                        Completeness = 33, Deadline = DateTimeOffset.MinValue, RemindTime = TimeSpan.Zero }
                 };
                 LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "topic.list", topics);
             }
@@ -135,11 +135,18 @@ namespace Research_Flow
             }
             else if (topic.RemindTime == TimeSpan.Zero) // a deadline
             {
-                await ApplicationNotification.CancelAlarmToast(topic.ID);
-                // make a setting about default time
-                DateTimeOffset dateTime = new DateTimeOffset(topic.Deadline.Year, topic.Deadline.Month, topic.Deadline.Day,
-                    0, 0, 0, DateTimeOffset.Now.Offset);
-                ApplicationNotification.ScheduleAlarmToast(topic.ID, "Research Topic", topic.Title, dateTime);
+                try
+                {
+                    await ApplicationNotification.CancelAlarmToast(topic.ID);
+                    // make a setting about default time
+                    DateTimeOffset dateTime = new DateTimeOffset(topic.Deadline.Year, topic.Deadline.Month, topic.Deadline.Day,
+                        0, 0, 0, DateTimeOffset.Now.Offset);
+                    ApplicationNotification.ScheduleAlarmToast(topic.ID, "Research Topic", topic.Title, dateTime);
+                }
+                catch (ArgumentException)
+                {
+                    ApplicationMessage.SendMessage(new MessageEventArgs { Title = "TopicWarning", Content = "Research Flow does not offer Time-Machine", Type = MessageType.InApp, Time = DateTimeOffset.Now });
+                }
             }
             else // a deadline with alarm
             {
@@ -218,6 +225,8 @@ namespace Research_Flow
 
         private HashSet<string> tags;
 
+        private string selectedtag;
+
         private void LoadTagView()
         {
             Func<string, string> AlphaKey = (tag) =>
@@ -252,9 +261,27 @@ namespace Research_Flow
             }
         }
 
+        private async void DeleteTag(object sender, RoutedEventArgs e)
+        {
+            ContentDialog dialog = new ContentDialog();
+            dialog.Title = "Delete application data?";
+            dialog.PrimaryButtonText = "Yeah";
+            dialog.CloseButtonText = "Forget it";
+            dialog.DefaultButton = ContentDialogButton.Primary;
+
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                tags.Remove(selectedtag);
+                LoadTagView();
+                LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "tag.list", tags);
+            }
+        }
+
         private void Taglist_ItemClick(object sender, ItemClickEventArgs e)
         {
-            string tag = e.ClickedItem as string;
+            selectedtag = e.ClickedItem as string;
+            topicTitle.Text += selectedtag.StartsWith("@") ? selectedtag : "#" + selectedtag + "#";
         }
 
         #endregion

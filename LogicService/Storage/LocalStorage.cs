@@ -38,14 +38,14 @@ namespace LogicService.Storage
             return KnownFolders.SavedPictures;
         }
 
-        public static StorageFolder GetNoteFolderAsync()
+        public static async Task<StorageFolder> GetNoteFolderAsync()
         {
-            return GetLocalFolder();
+            return await GetLocalFolder().CreateFolderAsync("note", CreationCollisionOption.OpenIfExists);
         }
 
-        public static StorageFolder GetPaperFolderAsync()
+        public static async Task<StorageFolder> GetPaperFolderAsync()
         {
-            return GetLocalFolder();
+            return await GetLocalFolder().CreateFolderAsync("paper", CreationCollisionOption.OpenIfExists);
         }
 
         #endregion

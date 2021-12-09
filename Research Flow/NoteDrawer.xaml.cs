@@ -93,7 +93,7 @@ namespace Research_Flow
         private async void UpdateNote()
         {
             namelist.Clear();
-            var filelist = await LocalStorage.GetNoteFolderAsync().GetFilesAsync();
+            var filelist = await (await LocalStorage.GetNoteFolderAsync()).GetFilesAsync();
             foreach (var file in filelist)
             {
                 namelist.Add(file.DisplayName.Replace(".rfn", ""));
@@ -273,7 +273,7 @@ namespace Research_Flow
         private async void Notelist_ItemClick(object sender, ItemClickEventArgs e)
         {
             var name = e.ClickedItem as string;
-            var fileitem = await LocalStorage.GetNoteFolderAsync().GetFileAsync(name + ".rfn");
+            var fileitem = await (await LocalStorage.GetNoteFolderAsync()).GetFileAsync(name + ".rfn");
             ImportFromInk(fileitem);
             notefilename.Text = name;
         }
@@ -289,12 +289,12 @@ namespace Research_Flow
             {
                 notename = notefilename.Text.Replace(".rfn", ""); // in case of *.rfn.rfn
             }
-            StorageFile file = await LocalStorage.GetNoteFolderAsync().CreateFileAsync(notename + ".rfn", CreationCollisionOption.OpenIfExists);
+            StorageFile file = await (await LocalStorage.GetNoteFolderAsync()).CreateFileAsync(notename + ".rfn", CreationCollisionOption.OpenIfExists);
             ExportAsInk(file);
             // record
             // note and paper shall be recorded dependently from general write, and how to deal with subfolder?
-            FileList.DBInsertList(LocalStorage.GetNoteFolderAsync().Name, notename + ".rfn");
-            FileList.DBInsertTrace(LocalStorage.GetNoteFolderAsync().Name, notename + ".rfn");
+            FileList.DBInsertList((await LocalStorage.GetNoteFolderAsync()).Name, notename + ".rfn");
+            FileList.DBInsertTrace((await LocalStorage.GetNoteFolderAsync()).Name, notename + ".rfn");
 
             ApplicationMessage.SendMessage(new MessageEventArgs { Title = "Note", Content = notename + " is saved", Type = MessageType.Banner, Time = DateTime.Now });
             foreach (string item in namelist)
@@ -317,7 +317,7 @@ namespace Research_Flow
             if (result == ContentDialogResult.Primary)
             {
                 var name = notelist.SelectedItem as string;
-                LocalStorage.GeneralDeleteAsync(LocalStorage.GetNoteFolderAsync(), name + ".rfn");
+                LocalStorage.GeneralDeleteAsync((await LocalStorage.GetNoteFolderAsync()), name + ".rfn");
                 namelist.Remove(name);
                 notefilename.Text = "";
             }

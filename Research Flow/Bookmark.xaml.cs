@@ -69,7 +69,7 @@ namespace Research_Flow
             StorageFile pdf = null;
             try
             {
-                pdf = await LocalStorage.GetLocalFolder().GetFileAsync(selectedFeed.ID + ".pdf");
+                pdf = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(selectedFeed.ID + ".pdf");
             }
             catch { }
 
@@ -107,7 +107,7 @@ namespace Research_Flow
         {
             try
             {
-                await(await LocalStorage.GetLocalFolder().GetFileAsync(selectedFeed.ID + ".pdf")).DeleteAsync();
+                await (await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(selectedFeed.ID + ".pdf")).DeleteAsync();
             }
             catch { }
 
@@ -115,11 +115,11 @@ namespace Research_Flow
             string filename = selectedFeed.ID + ".pdf";
             WebClientService webClient = new WebClientService();
             webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
-            webClient.DownloadFile(url, LocalStorage.GetLocalFolder().Path, filename, async () =>
+            webClient.DownloadFile(url, (await LocalStorage.GetPaperFolderAsync()).Path, filename, async () =>
                 {
                     try
                     {
-                        StorageFile pdf = await LocalStorage.GetLocalFolder().GetFileAsync(filename);
+                        StorageFile pdf = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(filename);
                         await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                         {
                             await Launcher.LaunchFileAsync(pdf);
@@ -154,7 +154,7 @@ namespace Research_Flow
 
                 try
                 {
-                    await (await LocalStorage.GetLocalFolder().GetFileAsync(selectedFeed.ID + ".pdf")).DeleteAsync();
+                    await (await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(selectedFeed.ID + ".pdf")).DeleteAsync();
                 }
                 catch { }
             }

@@ -79,6 +79,7 @@
                             </Flyout>
                         </AppBarButton.Flyout>
                     </AppBarButton>
+                    <AppBarButton Icon="Delete" Label="Delete" Click="DeleteTag"/>
                 </CommandBar>
             </Grid>
         </Grid>
