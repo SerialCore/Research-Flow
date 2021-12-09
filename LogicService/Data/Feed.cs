@@ -269,11 +269,11 @@ namespace LogicService.Data
             return affectedRows;
         }
 
-        public static int DBDeleteBookmarkByPID(string pid)
+        public static int DBDeleteBookmarkByPID(string id)
         {
             int affectedRows = 0;
-            string sql = "delete from Bookmark where ParentID = @ParentID;";
-            affectedRows = DataStorage.FeedData.ExecuteWrite(sql, new Dictionary<string, object> { { "@ParentID", pid } });
+            string sql = "delete from Bookmark where ID = @ID;";
+            affectedRows = DataStorage.FeedData.ExecuteWrite(sql, new Dictionary<string, object> { { "@ID", id } });
 
             FileList.DBInsertList("Data", DataStorage.FeedData.Database);
             FileList.DBInsertTrace("Data", DataStorage.FeedData.Database);

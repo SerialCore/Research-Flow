@@ -36,6 +36,7 @@ namespace Research_Flow
             await ApplicationTask.RegisterTileTask();
             await ApplicationTask.RegisterFeedTask();
         }
+
     }
 
     public class ApplicationTask

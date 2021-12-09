@@ -50,7 +50,8 @@
                 </CommandBar>
                 <ScrollViewer Margin="0,50,0,0">
                     <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                        <ListView x:Name="feedSource_list" IsItemClickEnabled="True" ItemClick="RSS_SourceClick">
+                        <ListView x:Name="feedSource_list" IsItemClickEnabled="True" ItemClick="RSS_SourceClick"
+                                  CanDragItems="True" CanReorderItems="True" AllowDrop="True" DragItemsCompleted="RSS_DragItemsCompleted">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>

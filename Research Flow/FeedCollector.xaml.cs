@@ -56,7 +56,7 @@ namespace Research_Flow
                         Name = "arXiv HEP Theory", Uri = "http://export.arxiv.org/rss/hep-th", Star = 5, IsRSS = true },                  
                     new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/math"),
                         Name = "arXiv Mathematics", Uri = "http://export.arxiv.org/rss/math", Star = 2, IsRSS = true },
-                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/math-th"),
+                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/math-ph"),
                         Name = "arXiv Mathematical Physics", Uri = "http://export.arxiv.org/rss/math-ph", Star = 2, IsRSS = true },
                     new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/nucl-ex"),
                         Name = "arXiv Nuclear Experiment", Uri = "http://export.arxiv.org/rss/nucl-ex", Star = 2, IsRSS = true },
@@ -183,6 +183,9 @@ namespace Research_Flow
         private void RSS_SourceRefresh(object sender, RoutedEventArgs e)
             => SearchFeed(shownRSS);
 
+        private void RSS_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
+            => LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "rss.list", FeedSources);
+
         #endregion
 
         #region Feed
@@ -229,7 +232,10 @@ namespace Research_Flow
             => this.Frame.Navigate(typeof(SearchEngine), selectedFeed.Link);
 
         private void Favorite_Feed(object sender, RoutedEventArgs e)
-            => Feed.DBInsertBookmark(selectedFeed);
+        {
+            Feed.DBInsertBookmark(selectedFeed);
+            ApplicationMessage.SendMessage(new MessageEventArgs { Title = "Feed", Content = "added to bookmark", Type = MessageType.Banner, Time = DateTime.Now });
+        }
 
         private void LoadFeed(FeedSource source)
         {
