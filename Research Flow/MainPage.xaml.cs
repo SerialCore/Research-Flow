@@ -22,8 +22,6 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Research_Flow
 {
-    public delegate void MessageHandle(object sender);
-
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
