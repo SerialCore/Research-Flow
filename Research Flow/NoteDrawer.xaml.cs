@@ -293,8 +293,7 @@ namespace Research_Flow
             ExportAsInk(file);
             // record
             // note and paper shall be recorded dependently from general write, and how to deal with subfolder?
-            FileList.DBInsertList((await LocalStorage.GetNoteFolderAsync()).Name, notename + ".rfn");
-            FileList.DBInsertTrace((await LocalStorage.GetNoteFolderAsync()).Name, notename + ".rfn");
+            FileTrace.DBInsert((await LocalStorage.GetNoteFolderAsync()).Name, notename + ".rfn");
 
             ApplicationMessage.SendMessage(new MessageEventArgs { Title = "Note", Content = notename + " is saved", Type = MessageType.Banner, Time = DateTime.Now });
             foreach (string item in namelist)

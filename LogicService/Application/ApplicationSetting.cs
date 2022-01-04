@@ -53,6 +53,18 @@ namespace LogicService.Application
             }
         }
 
+        public static string Configured
+        {
+            get
+            {
+                return ApplicationData.Current.LocalSettings.Values["Configured"] as string;
+            }
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values["Configured"] = value;
+            }
+        }
+
         public static void RemoveKey(string key)
             => ApplicationData.Current.LocalSettings.Values.Remove(key);
 

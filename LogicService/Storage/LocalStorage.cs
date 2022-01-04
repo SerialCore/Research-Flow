@@ -23,11 +23,6 @@ namespace LogicService.Storage
             return ApplicationData.Current.LocalCacheFolder;
         }
 
-        public static StorageFolder GetRoamingFolder()
-        {
-            return ApplicationData.Current.RoamingFolder;
-        }
-
         public static StorageFolder GetTemporaryFolder()
         {
             return ApplicationData.Current.TemporaryFolder;
@@ -64,8 +59,7 @@ namespace LogicService.Storage
             await FileIO.WriteTextAsync(file, content);
             if (record)
             {
-                FileList.DBInsertList(folder.Name, name);
-                FileList.DBInsertTrace(folder.Name, name);
+                FileTrace.DBInsert(folder.Name, name);
             }
         }
 
@@ -80,7 +74,7 @@ namespace LogicService.Storage
             StorageFile file = await folder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists);
             await file.DeleteAsync();
             if (record)
-                FileList.DBDeleteList(folder.Name, name);
+                FileTrace.DBInsert(folder.Name, name);
         }
 
         public static async void GeneralLogAsync<T>(string name, string line) where T : class

@@ -37,42 +37,19 @@ namespace Research_Flow
             }
             catch
             {
-                FeedSources = new ObservableCollection<FeedSource>()
-                {
-                    new FeedSource{ ID = HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prl.xml"),
-                        Name = "Physical Review Letters", Uri = "http://feeds.aps.org/rss/recent/prl.xml", Star = 5, IsRSS = true },
-                    new FeedSource{ ID = HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prd.xml"),
-                        Name = "Physical Review D", Uri = "http://feeds.aps.org/rss/recent/prd.xml", Star = 5, IsRSS = true },
-
-                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/cs"),
-                        Name = "arXiv Computer Science", Uri = "http://export.arxiv.org/rss/cs", Star = 4, IsRSS = true },
-                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/hep-ex"),
-                        Name = "arXiv HEP Experiment", Uri = "http://export.arxiv.org/rss/hep-ex", Star = 5, IsRSS = true },
-                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/hep-lat"),
-                        Name = "arXiv HEP Lattice", Uri = "http://export.arxiv.org/rss/hep-lat", Star = 5, IsRSS = true },
-                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/hep-ph"),
-                        Name = "arXiv HEP Phenomenology", Uri = "http://export.arxiv.org/rss/hep-ph", Star = 5, IsRSS = true },
-                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/hep-th"),
-                        Name = "arXiv HEP Theory", Uri = "http://export.arxiv.org/rss/hep-th", Star = 5, IsRSS = true },                  
-                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/math"),
-                        Name = "arXiv Mathematics", Uri = "http://export.arxiv.org/rss/math", Star = 2, IsRSS = true },
-                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/math-ph"),
-                        Name = "arXiv Mathematical Physics", Uri = "http://export.arxiv.org/rss/math-ph", Star = 2, IsRSS = true },
-                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/nucl-ex"),
-                        Name = "arXiv Nuclear Experiment", Uri = "http://export.arxiv.org/rss/nucl-ex", Star = 2, IsRSS = true },
-                    new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/nucl-th"),
-                        Name = "arXiv Nuclear Theory", Uri = "http://export.arxiv.org/rss/nucl-th", Star = 2, IsRSS = true },
-                };
-                LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "rss.list", FeedSources);
+                FeedSources = new ObservableCollection<FeedSource>();
             }
             finally
             {
-                feedSource_list.ItemsSource = FeedSources;
-                feedSource_list.SelectedIndex = 0;
+                if (FeedSources.Count != 0)
+                {
+                    feedSource_list.ItemsSource = FeedSources;
+                    feedSource_list.SelectedIndex = 0;
+                    shownRSS = feedSource_list.SelectedItem as FeedSource;
+                    LoadFeed(shownRSS);
+                }
                 querytype.ItemsSource = new List<string> { "Title", "TitleSummary", "Authors", "Published", "Identifier" };
                 querytype.SelectedIndex = 0;
-                shownRSS = feedSource_list.SelectedItem as FeedSource;
-                LoadFeed(shownRSS);
             }
         }
 
@@ -134,6 +111,7 @@ namespace Research_Flow
                         }
                     }
                     FeedSources.Add(source);
+                    Feed.DBInitialize(source.ID);
                 }
                 LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "rss.list", FeedSources);
             }
@@ -194,23 +172,26 @@ namespace Research_Flow
 
         private void SearchFeed_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
+            if (shownRSS == null)
+                return;
+
             // { "Title", "TitleSummary", "Authors", "Published", "Identifier" }
             switch (querytype.SelectedIndex)
             {
                 case 0:
-                    feedItem_list.ItemsSource = Feed.DBSelectByTitle(feedQuery.Text);
+                    feedItem_list.ItemsSource = Feed.DBSelectByTitle(shownRSS.ID, feedQuery.Text);
                     break;
                 case 1:
-                    feedItem_list.ItemsSource = Feed.DBSelectByText(feedQuery.Text);
+                    feedItem_list.ItemsSource = Feed.DBSelectByText(shownRSS.ID, feedQuery.Text);
                     break;
                 case 2:
-                    feedItem_list.ItemsSource = Feed.DBSelectByAuthor(feedQuery.Text);
+                    feedItem_list.ItemsSource = Feed.DBSelectByAuthor(shownRSS.ID, feedQuery.Text);
                     break;
                 case 3:
-                    feedItem_list.ItemsSource = Feed.DBSelectByPublished(feedQuery.Text);
+                    feedItem_list.ItemsSource = Feed.DBSelectByPublished(shownRSS.ID, feedQuery.Text);
                     break;
                 case 4:
-                    feedItem_list.ItemsSource = Feed.DBSelectByIdentifier(feedQuery.Text);
+                    feedItem_list.ItemsSource = Feed.DBSelectByIdentifier(shownRSS.ID, feedQuery.Text);
                     break;
             }
         }
@@ -264,7 +245,7 @@ namespace Research_Flow
                         feedItem_list.ItemsSource = feeds;
                         waiting_feed.IsActive = false;
                     });
-                    Feed.DBInsert(feeds);
+                    Feed.DBInsert(source.ID, feeds);
                 },
                 async (exception) =>
                 {

@@ -1,4 +1,5 @@
-﻿using LogicService.Storage;
+﻿using LogicService.Helper;
+using LogicService.Storage;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -103,6 +104,16 @@ namespace LogicService.Data
         }
 
         #endregion
+
+        public static void Initialize()
+        {
+            List<Topic> topics = new List<Topic>()
+                {
+                    new Topic(){ ID = HashEncode.MakeMD5(DateTimeOffset.Now.ToString()), Title = "@Search#glueball#",
+                        Completeness = 33, Deadline = DateTimeOffset.MinValue, RemindTime = TimeSpan.Zero }
+                };
+            LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "topic.list", topics);
+        }
 
     }
 }

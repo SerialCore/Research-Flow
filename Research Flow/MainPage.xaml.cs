@@ -39,10 +39,15 @@ namespace Research_Flow
         {
             NavParameter = e.Parameter;
 
-            if (ApplicationInfo.IsFirstUse)
+            if (ApplicationInfo.IsFirstUse || !ApplicationSetting.ContainKey("Configured"))
             {
-                ConfigureDB();
-                ConfigureVersion();
+                ApplicationSetting.Updated = ApplicationVersion.CurrentVersion().ToString();
+                FileTrace.DBInitialize();
+                Feed.DBInitializeBookmark();
+                FeedSource.Initialize();
+                Topic.Initialize();
+
+                ApplicationSetting.Configured = "true";
             }
             //if (ApplicationSetting.ContainKey("AccountName"))
             //    Login();
@@ -68,18 +73,6 @@ namespace Research_Flow
                          break;
                  }
             });
-        }
-
-        private void ConfigureDB()
-        {
-            FileList.DBInitializeTrace();
-            FileList.DBInitializeList();
-            Feed.DBInitialize();
-        }
-
-        private void ConfigureVersion()
-        {
-            ApplicationSetting.Updated = ApplicationVersion.CurrentVersion().ToString();
         }
 
         private void ConfigureUpdate()

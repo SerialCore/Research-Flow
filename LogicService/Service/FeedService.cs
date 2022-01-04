@@ -93,7 +93,7 @@ namespace LogicService.Service
             feeds.Load(content);
             foreach (SyndicationItem f in feeds.Items)
             {
-                string doi = "";
+                string doi = f.Id;
                 string author = "";
                 foreach (var ext in f.ElementExtensions)
                 {
@@ -105,11 +105,10 @@ namespace LogicService.Service
                 rssItems.Add(new Feed
                 {
                     ID = HashEncode.MakeMD5(f.Links[0].Uri.AbsoluteUri),
-                    ParentID = HashEncode.MakeMD5(source),
-                    ArticleID = doi,
                     Title = f.Title.Text,
                     Authors = author,
-                    Published = f.PublishedDate.ToString(),
+                    ArticleID = doi,
+                    Published = f.PublishedDate.Year == 1601? DateTimeOffset.Now.ToString("yyyy-MM-dd") : f.PublishedDate.ToString("yyyy-MM-dd"),
                     Link = f.Links[0].Uri.AbsoluteUri,
                     Summary = Regex.Replace(Regex.Replace(f.Summary.Text, "<[^>]>", ""), "<[^>]+?>", " ")
                 });

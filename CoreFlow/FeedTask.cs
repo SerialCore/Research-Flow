@@ -36,9 +36,9 @@ namespace CoreFlow
                     (items) =>
                     {
                         List<Feed> feeds = items as List<Feed>;
-                        Feed.DBInsert(feeds);
+                        Feed.DBInsert(source.ID, feeds);
                         LocalStorage.GeneralLogAsync<FeedTask>("feed.log", source.Name + " updated");
-                        if (random.Next(1) > (source.Star - 1) / 5)
+                        if (random.Next(1) < (source.Star - 1) / 5)
                         {
                             ApplicationNotification.ShowTextToast("Feed Task", source.Name + " updated");
                         }

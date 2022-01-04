@@ -62,7 +62,7 @@ namespace LogicService.Data
                     [Text] varchar(100) not null,
                     [Url] varchar(100) not null,
                     [Content] varchar(1000));";
-            DataStorage.CrawlData.ExecuteWrite(sql);
+            new DataStorage("crawlable").ExecuteWrite(sql);
         }
 
         public static int DBInsert(List<Crawlable> crawlablelist)
@@ -70,12 +70,13 @@ namespace LogicService.Data
             int affectedRows = 0;
             string sql = @"insert into Crawlable(ID, ParentID, Text, Url, Content)
                 values(@ID, @ParentID, @Text, @Url, @Content);";
+            DataStorage crawdb = new DataStorage("crawlable");
 
             foreach (Crawlable crawlable in crawlablelist)
             {
                 if (string.IsNullOrEmpty(crawlable.Text) || string.IsNullOrEmpty(crawlable.Url))
                     continue;
-                affectedRows = DataStorage.CrawlData.ExecuteWrite(sql, new Dictionary<string, object>
+                affectedRows = crawdb.ExecuteWrite(sql, new Dictionary<string, object>
                 {
                     { "@ID", crawlable.ID },
                     { "@ParentID", crawlable.ParentID },
@@ -85,49 +86,43 @@ namespace LogicService.Data
                 }, false);
             }
 
-            FileList.DBInsertList("Data", DataStorage.CrawlData.Database);
-            FileList.DBInsertTrace("Data", DataStorage.CrawlData.Database);
+            FileTrace.DBInsert("Data", crawdb.Database);
 
             return affectedRows;
-        }
-
-        public static void DBUpdate()
-        {
-
         }
 
         public static List<Crawlable> DBSelectByLimit(int limit)
         {
             string sql = "select * from Crawlable limit @Limit;";
-            var reader = DataStorage.CrawlData.ExecuteRead(sql, new Dictionary<string, object> { { "@Limit", limit } });
+            var reader = new DataStorage("crawlable").ExecuteRead(sql, new Dictionary<string, object> { { "@Limit", limit } });
             return DBReader(reader);
         }
 
         public static List<Crawlable> DBSelectByID(string id)
         {
             string sql = "select * from Crawlable where ID = @ID;";
-            var reader = DataStorage.CrawlData.ExecuteRead(sql, new Dictionary<string, object> { { "@ID", id } });
+            var reader = new DataStorage("crawlable").ExecuteRead(sql, new Dictionary<string, object> { { "@ID", id } });
             return DBReader(reader);
         }
 
         public static List<Crawlable> DBSelectByPID(string pid)
         {
             string sql = "select * from Crawlable where ParentID = @ParentID;";
-            var reader = DataStorage.CrawlData.ExecuteRead(sql, new Dictionary<string, object> { { "@ParentID", pid } });
+            var reader = new DataStorage("crawlable").ExecuteRead(sql, new Dictionary<string, object> { { "@ParentID", pid } });
             return DBReader(reader);
         }
 
         public static List<Crawlable> DBSelectByContent(string content)
         {
             string sql = "select * from Crawlable where Content like @Content;";
-            var reader = DataStorage.CrawlData.ExecuteRead(sql, new Dictionary<string, object> { { "@Content", '%' + content + '%' } });
+            var reader = new DataStorage("crawlable").ExecuteRead(sql, new Dictionary<string, object> { { "@Content", '%' + content + '%' } });
             return DBReader(reader);
         }
 
         public static List<Crawlable> DBSelectByTextContent(string text)
         {
             string sql = "select * from Crawlable where Text like @Text or Content like @Text;";
-            var reader = DataStorage.CrawlData.ExecuteRead(sql, new Dictionary<string, object> { { "@Text", '%' + text + '%' } });
+            var reader = new DataStorage("crawlable").ExecuteRead(sql, new Dictionary<string, object> { { "@Text", '%' + text + '%' } });
             return DBReader(reader);
         }
 
@@ -156,10 +151,9 @@ namespace LogicService.Data
         {
             int affectedRows = 0;
             string sql = "delete from Crawlable where ID = @ID;";
-            affectedRows = DataStorage.CrawlData.ExecuteWrite(sql, new Dictionary<string, object> { { "@ID", id } });
+            affectedRows = new DataStorage("crawlable").ExecuteWrite(sql, new Dictionary<string, object> { { "@ID", id } });
 
-            FileList.DBInsertList("Data", DataStorage.CrawlData.Database);
-            FileList.DBInsertTrace("Data", DataStorage.CrawlData.Database);
+            FileTrace.DBInsert("Data", new DataStorage("crawlable").Database);
 
             return affectedRows;
         }

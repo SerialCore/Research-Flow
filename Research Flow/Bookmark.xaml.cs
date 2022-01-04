@@ -149,7 +149,7 @@ namespace Research_Flow
             var result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
-                Feed.DBDeleteBookmarkByPID(selectedFeed.ID);
+                Feed.DBDeleteBookmarkByID(selectedFeed.ID);
                 UpdatePaper();
 
                 try

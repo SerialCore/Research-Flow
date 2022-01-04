@@ -39,12 +39,7 @@ namespace Research_Flow
             }
             catch
             {
-                topics = new ObservableCollection<Topic>()
-                {
-                    new Topic(){ ID = HashEncode.MakeMD5(DateTimeOffset.Now.ToString()), Title = "@Search#glueball#", 
-                        Completeness = 33, Deadline = DateTimeOffset.MinValue, RemindTime = TimeSpan.Zero }
-                };
-                LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "topic.list", topics);
+                topics = new ObservableCollection<Topic>();
             }
             finally
             {
