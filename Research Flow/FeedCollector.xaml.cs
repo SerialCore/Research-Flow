@@ -76,7 +76,7 @@ namespace Research_Flow
                     rssName.Text = item.Name;
                     rssUrl.Text = item.Uri;
                     rssStar.Value = item.Star;
-                    isRSS.IsChecked = item.IsRSS;
+                    rssNotify.IsChecked = item.Notify;
                     rssUrl.IsReadOnly = true;
                 }
             }
@@ -92,7 +92,7 @@ namespace Research_Flow
                     Name = rssName.Text,
                     Uri = rssUrl.Text,
                     Star = rssStar.Value,
-                    IsRSS = (bool)(isRSS.IsChecked)
+                    Notify = (bool)(rssNotify.IsChecked)
                 };
                 if (modifiedRSS != null)
                 {
@@ -145,7 +145,7 @@ namespace Research_Flow
             rssName.Text = "";
             rssUrl.Text = "";
             rssStar.Value = -1;
-            isRSS.IsChecked = false;
+            rssNotify.IsChecked = false;
 
             rssUrl.IsReadOnly = false;
             rssDelete.Visibility = Visibility.Collapsed;

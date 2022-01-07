@@ -33,9 +33,9 @@
                             <Run >
                                 1). Star level of Feed source = the probability that the auto-task will fetch this source: 1 star for 0%, 5 stars for 80%
                             </Run>
-                            <LineBreak/><Run >
+                            <!--<LineBreak/><Run >
                                 2). @Search#tag# in topic = let the auto-task @Search #tag# from the in-app database, and remind user
-                            </Run>
+                            </Run>-->
                         </TextBlock>
                         <TextBlock Text="Privacy Policy" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,20"/>
                         <TextBlock TextWrapping="Wrap">

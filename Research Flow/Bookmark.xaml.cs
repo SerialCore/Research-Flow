@@ -67,9 +67,11 @@ namespace Research_Flow
                 return;
 
             StorageFile pdf = null;
+            string[] articleid = selectedFeed.ArticleID.Split('/');
+            string filename = articleid[articleid.Length - 1] + ".pdf";
             try
             {
-                pdf = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(selectedFeed.ID + ".pdf");
+                pdf = await (await LocalStorage.GetPaperFolderAsync()).GetFileAsync(filename);
             }
             catch { }
 
@@ -82,6 +84,7 @@ namespace Research_Flow
                 downloadpanel.IsOpen = true;
                 downloadstate.IsIndeterminate = true;
                 downloadstate.ShowPaused = false;
+                downloadlist.ItemsSource = null;
                 CrawlerService crawler = new CrawlerService(selectedFeed.Link);
                 crawler.BeginGetResponse(
                     async (items) =>
@@ -112,7 +115,8 @@ namespace Research_Flow
             catch { }
 
             string url = (e.ClickedItem as Crawlable).Url;
-            string filename = selectedFeed.ID + ".pdf";
+            string[] articleid = selectedFeed.ArticleID.Split('/');
+            string filename = articleid[articleid.Length - 1] + ".pdf";
             WebClientService webClient = new WebClientService();
             webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
             webClient.DownloadFile(url, (await LocalStorage.GetPaperFolderAsync()).Path, filename, async () =>

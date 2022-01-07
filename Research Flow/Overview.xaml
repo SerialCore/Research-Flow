@@ -10,6 +10,37 @@
 
     <Grid>
 
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <GridViewItem Height="200" Width="200" Tapped="GridViewItem_Tapped">
+                <StackPanel VerticalAlignment="Center" BorderThickness="10">
+                    <TextBlock Text="Feed" FontSize="25" HorizontalAlignment="Center"/>
+                    <SymbolIcon Symbol="Read" Height="50" Width="50" HorizontalAlignment="Center"/>
+                    <TextBlock Text="receive and read rss feeds from journals" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </GridViewItem>
+            <GridViewItem Height="200" Width="200" Tapped="GridViewItem_Tapped_1">
+                <StackPanel VerticalAlignment="Center" BorderThickness="10">
+                    <TextBlock Text="Search" FontSize="25" HorizontalAlignment="Center"/>
+                    <SymbolIcon Symbol="Link" Height="50" Width="50" HorizontalAlignment="Center"/>
+                    <TextBlock Text="search papers with search engines in webview" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </GridViewItem>
+            <GridViewItem Height="200" Width="200" Tapped="GridViewItem_Tapped_2">
+                <StackPanel VerticalAlignment="Center" BorderThickness="10">
+                    <TextBlock Text="Topic" FontSize="25" HorizontalAlignment="Center"/>
+                    <SymbolIcon Symbol="Tag" Height="50" Width="50" HorizontalAlignment="Center"/>
+                    <TextBlock Text="notes, reminders, alarms, projects, tasks" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </GridViewItem>
+            <GridViewItem Height="200" Width="200" Tapped="GridViewItem_Tapped_3">
+                <StackPanel VerticalAlignment="Center" BorderThickness="10">
+                    <TextBlock Text="Note" FontSize="25" HorizontalAlignment="Center"/>
+                    <SymbolIcon Symbol="Highlight" Height="50" Width="50" HorizontalAlignment="Center"/>
+                    <TextBlock Text="drawable notes, manuscripts, discussions" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </GridViewItem>
+        </StackPanel>
+        
     </Grid>
 
 </Page>

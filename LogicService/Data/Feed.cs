@@ -16,7 +16,7 @@ namespace LogicService.Data
 
         public double Star { get; set; }
 
-        public bool IsRSS { get; set; }
+        public bool Notify { get; set; }
 
         #region Equals
 
@@ -59,28 +59,28 @@ namespace LogicService.Data
              List<FeedSource> FeedSources = new List<FeedSource>()
                 {
                     new FeedSource{ ID = HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prl.xml"),
-                        Name = "Physical Review Letters", Uri = "http://feeds.aps.org/rss/recent/prl.xml", Star = 5, IsRSS = true },
+                        Name = "Physical Review Letters", Uri = "http://feeds.aps.org/rss/recent/prl.xml", Star = 5, Notify = false },
                     new FeedSource{ ID = HashEncode.MakeMD5("http://feeds.aps.org/rss/recent/prd.xml"),
-                        Name = "Physical Review D", Uri = "http://feeds.aps.org/rss/recent/prd.xml", Star = 5, IsRSS = true },
+                        Name = "Physical Review D", Uri = "http://feeds.aps.org/rss/recent/prd.xml", Star = 5, Notify = true },
 
                     new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/cs"),
-                        Name = "arXiv Computer Science", Uri = "http://export.arxiv.org/rss/cs", Star = 4, IsRSS = true },
+                        Name = "arXiv Computer Science", Uri = "http://export.arxiv.org/rss/cs", Star = 4, Notify = true },
                     new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/hep-ex"),
-                        Name = "arXiv HEP Experiment", Uri = "http://export.arxiv.org/rss/hep-ex", Star = 5, IsRSS = true },
+                        Name = "arXiv HEP Experiment", Uri = "http://export.arxiv.org/rss/hep-ex", Star = 5, Notify = true },
                     new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/hep-lat"),
-                        Name = "arXiv HEP Lattice", Uri = "http://export.arxiv.org/rss/hep-lat", Star = 5, IsRSS = true },
+                        Name = "arXiv HEP Lattice", Uri = "http://export.arxiv.org/rss/hep-lat", Star = 5, Notify = true },
                     new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/hep-ph"),
-                        Name = "arXiv HEP Phenomenology", Uri = "http://export.arxiv.org/rss/hep-ph", Star = 5, IsRSS = true },
+                        Name = "arXiv HEP Phenomenology", Uri = "http://export.arxiv.org/rss/hep-ph", Star = 5, Notify = false },
                     new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/hep-th"),
-                        Name = "arXiv HEP Theory", Uri = "http://export.arxiv.org/rss/hep-th", Star = 5, IsRSS = true },
+                        Name = "arXiv HEP Theory", Uri = "http://export.arxiv.org/rss/hep-th", Star = 5, Notify = false },
                     new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/math"),
-                        Name = "arXiv Mathematics", Uri = "http://export.arxiv.org/rss/math", Star = 2, IsRSS = true },
+                        Name = "arXiv Mathematics", Uri = "http://export.arxiv.org/rss/math", Star = 2, Notify = false },
                     new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/math-ph"),
-                        Name = "arXiv Mathematical Physics", Uri = "http://export.arxiv.org/rss/math-ph", Star = 2, IsRSS = true },
+                        Name = "arXiv Mathematical Physics", Uri = "http://export.arxiv.org/rss/math-ph", Star = 2, Notify = false },
                     new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/nucl-ex"),
-                        Name = "arXiv Nuclear Experiment", Uri = "http://export.arxiv.org/rss/nucl-ex", Star = 2, IsRSS = true },
+                        Name = "arXiv Nuclear Experiment", Uri = "http://export.arxiv.org/rss/nucl-ex", Star = 2, Notify = false },
                     new FeedSource{ ID = HashEncode.MakeMD5("http://export.arxiv.org/rss/nucl-th"),
-                        Name = "arXiv Nuclear Theory", Uri = "http://export.arxiv.org/rss/nucl-th", Star = 2, IsRSS = true },
+                        Name = "arXiv Nuclear Theory", Uri = "http://export.arxiv.org/rss/nucl-th", Star = 2, Notify = false },
                 };
             LocalStorage.WriteJson(LocalStorage.GetLocalCacheFolder(), "rss.list", FeedSources);
             foreach (FeedSource source in FeedSources)
@@ -292,7 +292,8 @@ namespace LogicService.Data
 
         public static void DBDeleteByPID(string pid)
         {
-            LocalStorage.GeneralDeleteAsync(LocalStorage.GetLocalCacheFolder(), pid + ".db");
+            // this file is used by another process
+            //LocalStorage.GeneralDeleteAsync(LocalStorage.GetLocalCacheFolder(), pid + ".db");
         }
 
         public static int DBDeleteBookmarkByID(string id)

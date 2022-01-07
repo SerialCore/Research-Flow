@@ -37,6 +37,25 @@ namespace Research_Flow
             await ApplicationTask.RegisterFeedTask();
         }
 
+        private void GridViewItem_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(FeedCollector));
+        }
+
+        private void GridViewItem_Tapped_1(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(SearchEngine));
+        }
+
+        private void GridViewItem_Tapped_2(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(TopicCase));
+        }
+
+        private void GridViewItem_Tapped_3(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(NoteDrawer));
+        }
     }
 
     public class ApplicationTask

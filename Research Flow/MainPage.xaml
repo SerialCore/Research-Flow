@@ -19,16 +19,16 @@
                         BackRequested="NavView_BackRequested">
 
             <muxc:NavigationView.MenuItems>
-                <muxc:NavigationViewItem Content="Overview" Tag="Overview"/>
+                <muxc:NavigationViewItem Content="Overview" Icon="Home" Tag="Overview"/>
 
                 <muxc:NavigationViewItemSeparator/>
-                <muxc:NavigationViewItem Content="Feed" Tag="Feed"/>
-                <muxc:NavigationViewItem Content="Bookmark" Tag="Bookmark"/>
-                <muxc:NavigationViewItem Content="Search" Tag="Search"/>
+                <muxc:NavigationViewItem Content="Feed" Icon="Read" Tag="Feed"/>
+                <muxc:NavigationViewItem Content="Bookmark" Icon="Bookmarks" Tag="Bookmark"/>
+                <muxc:NavigationViewItem Content="Search" Icon="Link" Tag="Search"/>
 
                 <muxc:NavigationViewItemSeparator/>
-                <muxc:NavigationViewItem Content="Topic" Tag="Topic"/>
-                <muxc:NavigationViewItem Content="Note" Tag="Note"/>
+                <muxc:NavigationViewItem Content="Topic" Icon="Tag" Tag="Topic"/>
+                <muxc:NavigationViewItem Content="Note" Icon="HighLight" Tag="Note"/>
             </muxc:NavigationView.MenuItems>
 
             <muxc:NavigationView.PaneFooter>
@@ -62,7 +62,6 @@
                         </FlyoutBase.AttachedFlyout>
                     </ListViewItem>-->
                     <AppBarButton Icon="AttachCamera" Click="ScreenShot_Upload" ToolTipService.ToolTip="ScreenShot" Width="40"/>
-                    <!--<AppBarButton Icon="Message" Click="Open_ChatBlade" ToolTipService.ToolTip="Chat" Width="42" Height="42"/>-->
                     <AppBarButton Icon="FullScreen" Click="FullScreen_Click" ToolTipService.ToolTip="FullScreen" Width="40"/>
                 </StackPanel>
             </muxc:NavigationView.PaneFooter>
