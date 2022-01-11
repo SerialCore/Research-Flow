@@ -108,9 +108,9 @@ namespace LogicService.Service
                     Title = f.Title.Text,
                     Authors = author,
                     ArticleID = doi,
-                    Published = f.PublishedDate.Year == 1601? DateTimeOffset.Now.ToString("yyyy-MM-dd") : f.PublishedDate.ToString("yyyy-MM-dd"),
+                    Published = f.PublishedDate.Year == 1601 ? DateTimeOffset.Now.ToString("yyyy-MM-dd") : f.PublishedDate.ToString("yyyy-MM-dd"),
                     Link = f.Links[0].Uri.AbsoluteUri,
-                    Summary = Regex.Replace(Regex.Replace(f.Summary.Text, "<[^>]>", ""), "<[^>]+?>", " ")
+                    Summary = Regex.Replace(Regex.Replace(f.Summary.Text, "<[^>]>", ""), "<[^>]+?>", " ").Replace('\n', ' ')
                 });
             }
             return rssItems;

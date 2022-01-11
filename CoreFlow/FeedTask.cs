@@ -22,13 +22,13 @@ namespace CoreFlow
             }
             catch { }
 
-            FeedSource source = GetRandomFeedSource(sources);
+            FeedSource source = GetRandomItem(sources);
             if (source != null)
             {
                 Random random = new Random();
                 while (source == null || random.Next(1) > (source.Star - 1) / 5)
                 {
-                    source = GetRandomFeedSource(sources);
+                    source = GetRandomItem(sources);
                 }
 
                 FeedService.GetFeed(
@@ -40,7 +40,8 @@ namespace CoreFlow
                         LocalStorage.GeneralLogAsync<FeedTask>("feed.log", source.Name + " updated");
                         if (source.Notify)
                         {
-                            ApplicationNotification.ShowTextToast("Feed Task", source.Name + " updated");
+                            Feed feed =  GetRandomItem(feeds);
+                            ApplicationNotification.ShowTextToast(feed.Title, feed.Authors, source.Name);
                         }
                     },
                     (exception) =>
@@ -52,16 +53,16 @@ namespace CoreFlow
             deferral.Complete();
         }
 
-        private FeedSource GetRandomFeedSource(List<FeedSource> sources)
+        private T GetRandomItem<T>(List<T> objs)
         {
-            if (sources != null && sources.Count != 0)
+            if (objs != null && objs.Count != 0)
             {
-                int index = (int)Math.Round((decimal)new Random().Next(0, 100) * (sources.Count - 1) / 100);
-                return sources[index];
+                int index = (int)Math.Round((decimal)new Random().Next(0, 100) * (objs.Count - 1) / 100);
+                return (T)objs[index];
             }
             else
             {
-                return null;
+                return default(T);
             }
         }
 

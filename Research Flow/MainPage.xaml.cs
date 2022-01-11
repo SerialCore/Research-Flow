@@ -69,7 +69,7 @@ namespace Research_Flow
                          InAppNotification.Show(args.Title + ": " + args.Content);
                          break;
                      case MessageType.Toast:
-                         ApplicationNotification.ShowTextToast(args.Title, args.Content);
+                         ApplicationNotification.ShowTextToast(args.Title, args.Content, "");
                          break;
                  }
             });

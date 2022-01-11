@@ -11,9 +11,9 @@ namespace LogicService.Application
 
         #region Toast 
 
-        public static void ShowTextToast(string title, string content)
+        public static void ShowTextToast(string title, string content, string comment)
         {
-            ToastNotificationManager.CreateToastNotifier().Show(new ToastNotification(GetTextToast(title, content).GetXml()));
+            ToastNotificationManager.CreateToastNotifier().Show(new ToastNotification(GetTextToast(title, content, comment).GetXml()));
         }
 
         public static void ScheduleAlarmToast(string id, string title, string content, DateTimeOffset dateTime)
@@ -68,11 +68,13 @@ namespace LogicService.Application
             });
         }
 
-        private static ToastContent GetTextToast(string title, string content)
+        private static ToastContent GetTextToast(string title, string content, string comment)
         {
             return new ToastContent()
             {
                 Scenario = ToastScenario.Reminder,
+
+                //Launch = "",
 
                 Visual = new ToastVisual()
                 {
@@ -88,6 +90,11 @@ namespace LogicService.Application
                             new AdaptiveText()
                             {
                                 Text = content
+                            },
+
+                            new AdaptiveText()
+                            {
+                                Text = comment
                             }
                         },
 
@@ -99,7 +106,7 @@ namespace LogicService.Application
 
                         Attribution = new ToastGenericAttributionText()
                         {
-                            Text = "Via Research Flow"
+                            Text = "Research Flow"
                         }
                     }
                 }
@@ -137,7 +144,7 @@ namespace LogicService.Application
 
                         Attribution = new ToastGenericAttributionText()
                         {
-                            Text = "Via Research Flow"
+                            Text = "Research Flow"
                         }
                     }
                 },
@@ -213,7 +220,8 @@ namespace LogicService.Application
                             {
                                 new AdaptiveText()
                                 {
-                                    Text = title
+                                    Text = title,
+                                    HintWrap = true
                                 },
 
                                 new AdaptiveText()
@@ -239,7 +247,7 @@ namespace LogicService.Application
                                 new AdaptiveText()
                                 {
                                     Text = title,
-                                    HintStyle = AdaptiveTextStyle.Title
+                                    HintWrap = true
                                 },
 
                                 new AdaptiveText()
@@ -267,14 +275,15 @@ namespace LogicService.Application
                                 new AdaptiveText()
                                 {
                                     Text = title,
-                                    HintStyle = AdaptiveTextStyle.Title
+                                    HintWrap = true,
+                                    HintStyle = AdaptiveTextStyle.Subtitle
                                 },
 
                                 new AdaptiveText()
                                 {
                                     Text = body,
                                     HintWrap = true,
-                                    HintStyle = AdaptiveTextStyle.CaptionSubtle
+                                    HintStyle = AdaptiveTextStyle.SubtitleSubtle
                                 }
                             }
                         }

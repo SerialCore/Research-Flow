@@ -72,7 +72,7 @@ namespace Research_Flow
 
         protected override void OnActivated(IActivatedEventArgs args)
         {
-            if (args.Kind == ActivationKind.Protocol)
+            if (args.Kind == ActivationKind.ToastNotification)
             {
                 Frame rootFrame = Window.Current.Content as Frame;
                 if (rootFrame == null)

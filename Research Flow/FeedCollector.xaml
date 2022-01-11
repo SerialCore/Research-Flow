@@ -32,7 +32,7 @@
                             <StackPanel Padding="10">
                                 <TextBlock Text="{Binding Title}" Style="{ThemeResource SubtitleTextBlockStyle}" MaxLines="1"/>
                                 <TextBlock Text="{Binding Published}" Style="{ThemeResource BodyTextBlockStyle}"/>
-                                <TextBlock Text="{Binding Summary}" Style="{ThemeResource BodyTextBlockStyle}" MaxLines="2"/>
+                                <TextBlock Text="{Binding Authors}" Style="{ThemeResource BodyTextBlockStyle}" MaxLines="2"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>

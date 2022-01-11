@@ -23,27 +23,43 @@ namespace CoreFlow
                 }
                 catch { }
 
-                Topic topic = GetRandomTopic(topics);
+                Topic topic = GetRandomItem(topics);
                 if (topic != null)
                 {
                     ApplicationNotification.CancelLiveTile();
-                    ApplicationNotification.ShowTextTile("Topic", topic.Title);
+                    ApplicationNotification.ShowTextTile(topic.Title, (topic.Completeness / 100).ToString("P0"));
+                }
+            }
+            else if (ApplicationSetting.EqualKey("LiveTile", "bookmark"))
+            {
+                List<Feed> feeds = null;
+                try
+                {
+                    feeds = Feed.DBSelectBookmark();
+                }
+                catch { }
+
+                Feed feed = GetRandomItem(feeds);
+                if (feed != null)
+                {
+                    ApplicationNotification.CancelLiveTile();
+                    ApplicationNotification.ShowTextTile(feed.Title, feed.Authors);
                 }
             }
 
             deferral.Complete();
         }
 
-        private Topic GetRandomTopic(List<Topic> topics)
+        private T GetRandomItem<T>(List<T> objs)
         {
-            if (topics != null && topics.Count != 0)
+            if (objs != null && objs.Count != 0)
             {
-                int index = (int)Math.Round((decimal)new Random().Next(0, 100) * (topics.Count - 1) / 100);
-                return topics[index];
+                int index = (int)Math.Round((decimal)new Random().Next(0, 100) * (objs.Count - 1) / 100);
+                return (T)objs[index];
             }
             else
             {
-                return null;
+                return default(T);
             }
         }
 

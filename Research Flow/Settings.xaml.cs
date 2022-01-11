@@ -30,7 +30,7 @@ namespace Research_Flow
 
         private void InitializeSetting()
         {
-            tilelist = new List<string>() { "none", "topic" };
+            tilelist = new List<string>() { "none", "topic", "bookmark" };
             liveTile.ItemsSource = tilelist;
         }
 
