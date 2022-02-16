@@ -91,11 +91,6 @@ namespace LogicService.Application
                             {
                                 Text = content
                             },
-
-                            new AdaptiveText()
-                            {
-                                Text = comment
-                            }
                         },
 
                         AppLogoOverride = new ToastGenericAppLogo()
@@ -106,7 +101,7 @@ namespace LogicService.Application
 
                         Attribution = new ToastGenericAttributionText()
                         {
-                            Text = "Research Flow"
+                            Text = comment
                         }
                     }
                 }

@@ -117,6 +117,8 @@ namespace Research_Flow
             string url = (e.ClickedItem as Crawlable).Url;
             string[] articleid = selectedFeed.ArticleID.Split('/');
             string filename = articleid[articleid.Length - 1] + ".pdf";
+            downloadstate.IsIndeterminate = true;
+            downloadstate.ShowPaused = false;
             WebClientService webClient = new WebClientService();
             webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
             webClient.DownloadFile(url, (await LocalStorage.GetPaperFolderAsync()).Path, filename, async () =>
@@ -138,6 +140,7 @@ namespace Research_Flow
         {
             await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
+                downloadstate.IsIndeterminate = false;
                 downloadstate.Value = (e.BytesReceived / e.TotalBytes) * 100;
             });
         }

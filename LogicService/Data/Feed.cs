@@ -299,7 +299,7 @@ namespace LogicService.Data
         public static int DBDeleteBookmarkByID(string id)
         {
             int affectedRows = 0;
-            string sql = "delete from Bookmark where ID = @ID;";
+            string sql = "delete from Feed where ID = @ID;";
             affectedRows = new DataStorage("bookmark").ExecuteWrite(sql, new Dictionary<string, object> { { "@ID", id } });
 
             FileTrace.DBInsert("Data", id + ".db");
